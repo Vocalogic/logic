@@ -1,0 +1,227 @@
+/* =====================
+    Newslatter scss 
+ ========================== */
+.newsletter-section {
+    .newsletter-box {
+        border-radius: 5px;
+        position: relative;
+
+        &-2 {
+            &:after {
+                @include pos;
+                @include pseudowh;
+                top: 0;
+                left: 0;
+                background-image: url("../images/vegetable/newsletter/1.jpg");
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                display: block;
+                z-index: -1;
+
+                [dir="rtl"] & {
+                    transform: scaleX(-1);
+                    filter: FlipH;
+                }
+            }
+        }
+
+        &-3 {
+            &:after {
+                @include pos;
+                @include pseudowh;
+                top: 0;
+                left: 0;
+                background-image: url("../images/vegetable/newsletter/2.jpg");
+                background-size: cover;
+                background-position: center center;
+                background-repeat: no-repeat;
+                display: block;
+                z-index: -1;
+
+                [dir="rtl"] & {
+                    transform: scaleX(-1);
+                    filter: FlipH;
+                }
+            }
+        }
+
+        .newsletter-contain {
+            .newsletter-detail {
+                h2 {
+                    font-weight: 700;
+                    color: $white;
+                    margin-bottom: 10px;
+                }
+
+                h5 {
+                    font-weight: 600;
+                    color: #FFBC5D;
+                    margin-bottom: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+                    font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+                }
+
+                .input-box {
+                    position: relative;
+
+                    ::placeholder {
+                        font-size: 14px;
+                        color: $content-color;
+
+                        @include mq-max(2xs) {
+                            padding-left: 0;
+                        }
+                    }
+
+                    input {
+                        height: calc(41px + (52 - 41) * ((100vw - 320px) / (1920 - 320)));
+                        border-radius: 5px;
+                        border: none;
+                        padding-left: 45px;
+                        padding-right: 140px;
+
+                        @include mq-max(sm) {
+                            padding-right: 42px;
+                        }
+
+                        [dir="rtl"] & {
+                            text-align: left;
+                        }
+
+                        @include mq-max(2xs) {
+                            padding-left: 12px;
+                        }
+                    }
+
+                    .arrow {
+                        @include center(vertical);
+                        position: absolute;
+                        padding: 8px;
+                        background-color: rgba(var(--theme-color-rgb), .1);
+                        font-size: 15px;
+                        left: 8px;
+                        -webkit-text-stroke: 1px var(--theme-color);
+                        color: transparent;
+
+                        @include mq-max(2xs) {
+                            display: none;
+                        }
+                    }
+
+                    .sub-btn {
+                        @include center(vertical);
+                        background-color: $danger-color;
+                        position: absolute;
+                        right: 3px;
+                        border-radius: 3px;
+                        border: none;
+                        padding: calc(10px + (12 - 10) * ((100vw - 320px) / (1920 - 320))) calc(8px + (21 - 8) * ((100vw - 320px) / (1920 - 320)));
+                        font-size: calc(14px + (15 - 14) * ((100vw - 320px) / (1920 - 320)));
+                        color: $white;
+                        font-weight: 500;
+                        display: flex;
+                        align-items: center;
+
+                        i {
+                            margin-left: 6px;
+
+                            [dir="rtl"] & {
+                                margin-left: unset;
+                                margin-right: 6px;
+                            }
+
+                            @include mq-max(sm) {
+                                margin-left: 0;
+
+                                [dir="rtl"] & {
+                                    margin-left: unset;
+                                    margin-right: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.newsletter-section-2 {
+    .newsletter-box {
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+
+        .newsletter-detail {
+            @include pseudowh;
+            padding: calc(50px + (20 - 50) * ((100vw - 320px) / (1920 - 320))) calc(20px + (130 - 20) * ((100vw - 320px) / (1920 - 320)));
+            z-index: 1;
+
+            h2 {
+                font-size: calc(22px + (36 - 22) * ((100vw - 320px) / (1920 - 320)));
+                margin-bottom: 10px;
+                margin-top: -4px;
+            }
+
+            h4 {
+                margin-bottom: 8px;
+                font-size: calc(18px + (20 - 18) * ((100vw - 320px) / (1920 - 320)));
+                line-height: 1.3;
+                font-weight: 300;
+            }
+
+            .download-app {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+
+                @include mq-max(md) {
+                    display: block;
+                }
+
+                h3 {
+                    margin-right: 15px;
+                    font-weight: 400;
+
+                    [dir="rtl"] & {
+                        margin-right: unset;
+                        margin-left: 15px;
+                    }
+
+                    @include mq-max(md) {
+                        margin-bottom: 10px;
+                    }
+                }
+
+                .download-app-image {
+                    margin: 0 -3px;
+                    display: flex;
+
+                    li {
+                        margin: 0 3px;
+                        display: flex;
+                    }
+                }
+            }
+        }
+
+        .shape-box {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+
+            &:after {
+                @include pos;
+                @include pseudowh;
+                background-image: url(../images/veg-3/shape/circle.png);
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center;
+                animation: rounded infinite 30s linear;
+                right: 0;
+                top: 0;
+                z-index: -1;
+            }
+        }
+    }
+}

@@ -1,0 +1,68 @@
+.theme-color-1 {
+    --theme-color: #d99f46;
+}
+
+.theme-color-2 {
+    --theme-color: #0baf9a;
+}
+
+.theme-color-3 {
+    --theme-color: #239698;
+}
+
+// utils
+@import "utils/dark_variables";
+@import "utils/mixin/animation";
+@import "utils/mixin/common";
+@import "utils/mixin/breakpoints";
+
+// components
+@import "components/alert";
+@import "components/breadscrumb";
+@import "components/button";
+@import "components/cookie_bar";
+@import "components/counter";
+@import "components/form";
+@import "components/label";
+@import "components/lazyload";
+@import "components/loader";
+@import "components/modal";
+@import "components/nav-tabs";
+@import "components/pagination";
+@import "components/ratio";
+@import "components/slider";
+@import "components/tab";
+@import "components/tap-to-top";
+@import "components/theme-setting";
+@import "components/timer";
+@import "components/title";
+@import "components/tooltip";
+
+// Base
+@import "base/reset";
+@import "base/typography";
+
+// Layout
+@import "layout/banner";
+@import "layout/blog";
+@import "layout/category";
+@import "layout/footer";
+@import "layout/header";
+@import "layout/home";
+@import "layout/item";
+@import "layout/nav";
+@import "layout/newsletter";
+@import "layout/offer";
+@import "layout/product";
+@import "layout/review";
+@import "layout/service";
+
+// Pages
+@import "pages/coming-soon";
+@import "pages/inner_pages";
+@import "pages/shop_page";
+@import "pages/product_page";
+
+// Themes
+@import "themes/rtl";
+@import "themes/dark";

@@ -1,0 +1,54 @@
+/**=====================
+    breakpoint mixins scss
+==========================**/
+// min width
+@mixin mq-min($breakpoint) {
+    @if map-has-key($min-breakpoints, $breakpoint) {
+        $breakpoint-value: map-get($min-breakpoints, $breakpoint);
+
+        @media (min-width: $breakpoint-value) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+}
+
+// max width
+@mixin mq-max($breakpoint) {
+    @if map-has-key($max-breakpoints, $breakpoint) {
+        $breakpoint-value: map-get($max-breakpoints, $breakpoint);
+
+        @media (max-width: ($breakpoint-value)) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn 'Invalid breakpoint: #{$breakpoint}.';
+    }
+}
+
+// min and max
+@mixin mq-between($lower, $upper) {
+    @if map-has-key($max-breakpoints, $lower) and map-has-key($min-breakpoints, $upper) {
+        $lower-breakpoint: map-get($max-breakpoints, $lower);
+        $upper-breakpoint: map-get($min-breakpoints, $upper);
+
+        @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
+            @content;
+        }
+    }
+
+    @else {
+        @if (map-has-key($max-breakpoints, $lower)==false) {
+            @warn 'Your lower breakpoint was invalid: #{$lower}.';
+        }
+
+        @if (map-has-key($min-breakpoints, $upper)==false) {
+            @warn 'Your upper breakpoint was invalid: #{$upper}.';
+        }
+    }
+}

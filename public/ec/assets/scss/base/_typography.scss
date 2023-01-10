@@ -1,0 +1,145 @@
+/**=====================
+     typography scss
+==========================**/
+body {
+    font-family: $public-sans;
+    position: relative;
+    font-size: 14px;
+    color: $title-color;
+    margin: 0;
+    background-color: $white;
+    transition: all 0.3s ease-in-out;
+    padding-right: 0 !important;
+
+    ::selection {
+        color: $white;
+        background-color: var(--theme-color);
+    }
+}
+
+.bg-overlay {
+    @include pseudowh($width: 100vw, $height: 100vh);
+    background-color: $title-color;
+    position: fixed;
+    z-index: 9;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.5s;
+
+    &.show {
+        visibility: visible;
+        opacity: 0.5;
+    }
+}
+
+ul {
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+li {
+    display: inline-block;
+    font-size: 14px;
+}
+
+p {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+a {
+    color: var(--theme-color);
+    transition: 0.5s ease;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: none;
+        transition: 0.5s ease;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+button {
+    &:focus {
+        outline: none;
+    }
+}
+
+.btn-close {
+    &:focus {
+        box-shadow: none;
+    }
+}
+
+:focus {
+    outline: none;
+}
+
+.form-control {
+    background-color: $white;
+
+    &:focus {
+        box-shadow: none;
+        border-color: var(--theme-color);
+    }
+}
+
+h1 {
+    font-size: calc(40px + (70 - 40) * ((100vw - 320px) / (1920 - 320)));
+    font-weight: 600;
+    line-height: 1.1;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+h2 {
+    font-size: calc(22px + (28 - 22) * ((100vw - 320px) / (1920 - 320)));
+    font-weight: 600;
+    line-height: 1;
+    text-transform: capitalize;
+    margin: 0;
+}
+
+h3 {
+    font-size: calc(16px + (20 - 16) * ((100vw - 320px) / (1920 - 320)));
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0;
+}
+
+h4 {
+    font-size: calc(17px + (18 - 17) * ((100vw - 320px) / (1920 - 320)));
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 400;
+}
+
+h5 {
+    font-size: calc(15px + (16 - 15) * ((100vw - 320px) / (1920 - 320)));
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 400;
+}
+
+h6 {
+    font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
+    line-height: 1.2;
+    margin: 0;
+    font-weight: 400;
+}
+
+span {
+    display: inline-block;
+}
+
+.theme-color {
+    color: var(--theme-color) !important;
+}
+
+.theme-bg-color {
+    background: var(--theme-color) !important;
+}

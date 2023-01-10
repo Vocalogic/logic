@@ -1,0 +1,16 @@
+/**=====================
+     Tolltip scss
+==========================**/
+.tooltip {
+    .tooltip-arrow {
+        &::before {
+            border-top-color: var(--theme-color);
+        }
+    }
+
+    .tooltip-inner {
+        font-weight: 500;
+        background-color: var(--theme-color);
+        color: $white;
+    }
+}

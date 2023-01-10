@@ -1,0 +1,254 @@
+/**=====================
+     breadscrumb scss
+==========================**/
+.breadscrumb-section {
+    background-color: $light-gray;
+    position: relative;
+    overflow: hidden;
+
+    .breadscrumb-contain {
+        padding: calc(26px + (40 - 26) * ((100vw - 320px) / (1920 - 320))) 0;
+        text-align: center;
+        color: $title-color;
+        font-family: $public-sans;
+        display: flex;
+        align-items: center;
+
+        @include mq-max(xs) {
+            display: block;
+        }
+
+        h2 {
+            font-weight: 700;
+            font-size: calc(16px + (22 - 16) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 0;
+
+            @include mq-max(xs) {
+                text-align: center;
+                margin-bottom: 8px;
+            }
+        }
+
+        .search-box-breadscrumb {
+            position: relative;
+            width: 70%;
+            margin: 0 auto;
+
+            @include mq-max(sm) {
+                width: 90%;
+            }
+
+            @include mq-max(2xs) {
+                width: 100%;
+            }
+
+            input {
+                width: 100%;
+                border: none;
+                border-radius: 6px;
+                font-size: 15px;
+            }
+
+            i {
+                @include center(vertical);
+                position: absolute;
+                right: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+                color: $content-color;
+                font-size: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+
+        nav {
+            margin-left: auto;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: auto;
+            }
+
+            .breadcrumb {
+                @include flex_common;
+
+                .breadcrumb-item {
+                    font-weight: 500;
+
+                    i {
+                        color: $content-color;
+                    }
+
+                    &.active {
+                        color: $black;
+                        margin-top: 2px;
+                    }
+
+                    +.breadcrumb-item {
+                        position: relative;
+
+                        [dir="rtl"] & {
+                            padding-left: 0;
+                            padding-right: 8px;
+                        }
+
+                        &::before {
+                            @include font;
+                            content: "\f105";
+                            color: $content-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .breadscrumb-order {
+        display: block;
+
+        .order-box {
+            .order-image {
+                @include pseudowh($width: calc(170px + (250 - 170) * ((100vw - 320px) / (1920 - 320))), $height: auto);
+                margin: 0 auto calc(16px + (28 - 16) * ((100vw - 320px) / (1920 - 320)));
+
+                img {
+                    @include pseudowh;
+                }
+            }
+
+            .order-contain {
+                h3 {
+                    font-size: calc(21px + (24 - 21) * ((100vw - 320px) / (1920 - 320)));
+                    font-weight: 700;
+                    margin-bottom: 6px;
+                }
+
+                h5 {
+                    margin-bottom: 8px;
+                    line-height: 1.4;
+                }
+            }
+        }
+    }
+}
+
+.faq-breadscrumb {
+    background-color: $light-gray;
+    position: relative;
+    overflow: hidden;
+
+    .breadscrumb-contain {
+        padding: calc(26px + (60 - 26) * ((100vw - 320px) / (1920 - 320))) 0;
+        text-align: center;
+        color: $title-color;
+        display: block;
+
+        h2 {
+            font-size: calc(22px + (48 - 22) * ((100vw - 320px) / (1920 - 320)));
+            font-weight: 700;
+            margin-top: -6px;
+        }
+
+        p {
+            margin: calc(11px + (16 - 11) * ((100vw - 320px) / (1920 - 320))) auto 0;
+            color: $content-color;
+            width: 50%;
+            line-height: 1.7;
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+
+            @include mq-max(4xl) {
+                width: 60%;
+            }
+
+            @include mq-max(2xl) {
+                width: 70%;
+            }
+
+            @include mq-max(lg) {
+                width: 90%;
+            }
+
+            @include mq-max(md) {
+                width: 100%;
+            }
+
+            span {
+                display: inline;
+            }
+        }
+
+        .faq-form-tag {
+            position: relative;
+            margin: calc(18px + (35 - 18) * ((100vw - 320px) / (1920 - 320))) auto 0;
+            width: 50%;
+
+            @include mq-max(4xl) {
+                width: 60%;
+            }
+
+            @include mq-max(2xl) {
+                width: 70%;
+            }
+
+            @include mq-max(lg) {
+                width: 90%;
+            }
+
+            @include mq-max(md) {
+                width: 100%;
+            }
+
+            .input-group {
+                background-color: $white;
+
+                i {
+                    display: flex;
+                    align-items: center;
+                    padding: 0 calc(12px + (20 - 12) * ((100vw - 320px) / (1920 - 320)));
+                    color: var(--theme-color);
+                    font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+                }
+
+                .form-control {
+                    padding-left: 0;
+                    border: none;
+
+                    [dir="rtl"] & {
+                        padding-left: unset;
+                        padding-right: 0;
+                    }
+
+                    &:focus {
+                        background-color: transparent;
+                    }
+                }
+
+                .faq-dropdown-menu {
+                    li {
+                        display: block;
+                    }
+                }
+
+                .faq-dropdown-button {
+                    font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+                    font-weight: 600;
+                    color: var(--theme-color);
+                    z-index: 0;
+
+                    &::after {
+                        content: unset;
+                    }
+
+                    i {
+                        position: relative;
+                        padding: 0;
+                        margin-left: 5px;
+                        font-size: calc(13px + (14 - 13) * ((100vw - 320px) / (1920 - 320)));
+
+                        [dir="rtl"] & {
+                            margin-left: unset;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

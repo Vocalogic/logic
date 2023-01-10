@@ -1,0 +1,132 @@
+/**=====================
+     Offer scss
+==========================**/
+.offer-box {
+    position: relative;
+    z-index: 0;
+
+    .offer-contain {
+        @include flex_common;
+        @include pseudowh;
+
+        @include mq-max(lg) {
+            display: block;
+            text-align: center;
+            background-color: rgba($white, $alpha: .5);
+        }
+
+        .offer-detail {
+            h2 {
+                text-transform: none;
+                line-height: calc(27px + (43 - 27) * ((100vw - 320px) / (1920 - 320)));
+                font-weight: 400;
+            }
+
+            p {
+                font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+                margin-top: calc(4px + (12 - 4) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+
+        .offer-timing {
+            margin-left: 24px;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: 24px;
+            }
+
+            @include mq-max(2xs) {
+                margin-left: 0;
+
+                [dir="rtl"] & {
+                    margin-left: unset;
+                    margin-right: 0;
+                }
+            }
+
+            .time {
+                ul {
+                    [dir="rtl"] & {
+                        padding-right: 0;
+                    }
+
+                    li {
+                        position: relative;
+
+                        +li {
+                            margin-left: 16px;
+
+                            [dir="rtl"] & {
+                                margin-left: unset;
+                                margin-right: 16px;
+                            }
+
+                            &::before {
+                                @include pos($pos: absolute, $content: ":");
+                                @include center(vertical);
+                                left: -12px;
+                                font-size: 20px;
+
+                                [dir="rtl"] & {
+                                    left: unset;
+                                    right: -12px;
+                                }
+                            }
+                        }
+
+                        .counter {
+                            background-color: $danger-color;
+                            color: $white;
+                            border-radius: 5px;
+
+                            div {
+                                @include pseudowh($width: calc(46px + (61 - 46) * ((100vw - 320px) / (1920 - 320))), $height: calc(50px + (73 - 50) * ((100vw - 320px) / (1920 - 320))));
+                                @include flex_common;
+
+                                h3 {
+                                    font-size: calc(16px + (24 - 16) * ((100vw - 320px) / (1920 - 320)));
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.offer-section {
+    .offer-box {
+        @include flex_common;
+        background-image: url(../images/grocery/banner/10.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        padding: calc(20px + (35 - 20) * ((100vw - 320px) / (1920 - 320)));
+        border-radius: 6px;
+
+        @include mq-max(sm) {
+            display: block;
+            text-align: center;
+        }
+
+        h2 {
+            color: $white;
+            font-weight: 700;
+            font-size: calc(24px + (40 - 24) * ((100vw - 320px) / (1920 - 320)));
+            margin-top: -4px;
+            margin-bottom: -5px;
+
+
+            @include mq-max(sm) {
+                line-height: 1.3;
+            }
+
+            span {
+                font-weight: 500;
+                font-size: calc(18px + (26 - 18) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+    }
+}

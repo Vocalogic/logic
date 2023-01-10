@@ -1,0 +1,139 @@
+/**=====================
+     Coming Soon Scss
+==========================**/
+.coming-soon-section {
+    @include pseudowh($width: 100vw, $height: 100vh);
+    @include flex_common;
+    background-image: url(../images/inner-page/coming-soon.jpg);
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+    .coming-box {
+        text-align: center;
+        z-index: 1;
+
+        .coming-text {
+            width: 90%;
+            margin: 12px auto 0;
+            font-size: calc(14px + (15 - 14) * ((100vw - 320px) / (1920 - 320)));
+            line-height: 1.6;
+            color: $content-color;
+
+            @include mq-max(xs) {
+                width: 100%;
+            }
+        }
+
+        .coming-title {
+            h2 {
+                font-size: calc(27px + (38 - 27) * ((100vw - 320px) / (1920 - 320)));
+                font-weight: 400;
+                margin-top: -5px;
+            }
+        }
+
+        .coming-timer {
+            margin-top: 24px;
+
+            ul {
+                @include flex_common;
+                flex-wrap: wrap;
+                gap: 28px;
+
+                li {
+                    @include pseudowh($width: 90px, $height: 90px);
+                    @include flex_common;
+                    position: relative;
+                    background-color: $white;
+                    border-radius: 10px;
+
+                    +li {
+                        &::after {
+                            @include pos($pos: absolute, $content: ":");
+                            @include center(vertical);
+                            left: -17px;
+                            font-size: 30px;
+                            color: var(--theme-color);
+
+                            [dir="rtl"] & {
+                                left: unset;
+                                right: -17px;
+                            }
+                        }
+                    }
+
+                    @media (max-width: 357px) {
+                        &:nth-child(3) {
+                            &::after {
+                                content: none;
+                            }
+                        }
+                    }
+
+                    .counter {
+                        h6 {
+                            font-size: calc(22px + (27 - 22) * ((100vw - 320px) / (1920 - 320)));
+                            font-weight: 600;
+                            color: var(--theme-color);
+                        }
+
+                        p {
+                            margin-bottom: 0;
+                            margin-top: 5px;
+                            color: $content-color;
+                            font-size: calc(15px + (17 - 15) * ((100vw - 320px) / (1920 - 320)));
+                        }
+                    }
+                }
+            }
+        }
+
+        .coming-contain {
+            margin-top: calc(19px + (38 - 19) * ((100vw - 320px) / (1920 - 320)));
+
+            .coming-form {
+                position: relative;
+                width: 90%;
+                margin: 22px auto 0;
+                border-radius: 4px;
+                overflow: hidden;
+                border: 1px solid var(--theme-color);
+
+                .form-control {
+                    border: none;
+                    border-radius: 0;
+
+                    [dir="rtl"] & {
+                        text-align: left;
+                    }
+
+                    &:focus {
+                        border-color: transparent;
+                        background-color: $white;
+                        box-shadow: none;
+                        color: $content-color;
+                        z-index: 0;
+                    }
+                }
+
+                @include mq-max(xs) {
+                    width: 100%;
+                }
+
+                .coming-button {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    height: 100%;
+                    border: none;
+                    padding: 0 calc(15px + (25 - 15) * ((100vw - 320px) / (1920 - 320)));
+                    background: var(--theme-color2);
+                    color: $white;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+}

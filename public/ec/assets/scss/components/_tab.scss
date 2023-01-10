@@ -1,0 +1,43 @@
+/**=====================
+     Tab scss
+==========================**/
+.tab-style-color {
+    @include flex_wrap ($dis: flex, $wrap: nowrap, $gap: 20px);
+    border: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    @media (max-width: 1265px) {
+        margin-top: 13px;
+    }
+
+    .nav-item {
+        .nav-link {
+            border: none;
+            color: $title-color;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            white-space: nowrap;
+            background-color: $white;
+            border: 1px solid var(--theme-color);
+            padding: 10px 30px;
+            margin: 0;
+
+            &.active,
+            &:hover {
+                background-color: var(--theme-color);
+                color: $white;
+            }
+
+            img {
+                margin-right: 5px;
+
+                [dir="rtl"] & {
+                    margin-right: unset;
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+}

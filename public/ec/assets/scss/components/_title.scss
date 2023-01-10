@@ -1,0 +1,206 @@
+/**=====================
+     title scss
+==========================**/
+.title-leaf {
+    width: 140px;
+    text-align: center;
+    margin-top: 7px;
+    position: relative;
+    z-index: 0;
+
+    &::before {
+        @include pos;
+        @include center(vertical);
+        @include pseudowh($width: 100%, $height: 1px);
+        left: 0;
+        background-color: var(--theme-color);
+        z-index: -1;
+    }
+
+    svg {
+        background-color: $white;
+        width: 45px;
+        z-index: 1;
+
+        &.bg-gray {
+            background-color: $light-gray;
+        }
+    }
+}
+
+.title {
+    margin-bottom: calc(16px + (30 - 16) * ((100vw - 320px) / (1920 - 320)));
+    display: inline-block;
+    position: relative;
+
+    h2 {
+        font-weight: 700;
+        color: $title-color;
+        position: relative;
+    }
+
+    p {
+        line-height: 1.5;
+        margin: calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320))) 0 0;
+        font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+        color: $content-color;
+    }
+
+    &-flex {
+        @include flex_common ($dis: flex, $align: center, $justify: space-between);
+
+        @media (max-width: 1265px) {
+            display: block;
+        }
+
+        .timing-box {
+            display: inline-block;
+
+            .timing {
+                @include flex_common;
+                background-color: $danger-color;
+                color: $white;
+                padding: 12px 11px;
+                border-radius: 5px;
+
+                @media (max-width: 1265px) {
+                    margin-top: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+                }
+
+                i {
+                    -webkit-text-stroke: 1px $white;
+                    color: transparent;
+                    margin-right: 9px;
+                }
+
+                .feather {
+                    @include pseudowh($width: 17px, $height: 17px);
+                    margin-right: 9px;
+
+                    [dir="rtl"] & {
+                        margin-left: 9px;
+                        margin-right: unset;
+                    }
+                }
+
+                .name {
+                    font-weight: 600;
+                    margin-right: 8px;
+
+                    [dir="rtl"] & {
+                        margin-left: 8px;
+                        margin-right: unset;
+                    }
+                }
+
+                .time {
+                    ul {
+                        display: flex;
+                        align-items: center;
+
+                        [dir="rtl"] & {
+                            padding-left: unset;
+                            padding-right: 0;
+                        }
+
+                        li {
+                            @include flex_common;
+                            position: relative;
+
+                            +li {
+                                margin-left: 15px;
+
+                                [dir="rtl"] & {
+                                    margin-left: unset;
+                                    margin-right: 15px;
+                                }
+
+                                &::after {
+                                    @include pos($pos: absolute, $content: ":");
+                                    @include center(vertical);
+                                    font-weight: bolder;
+                                    left: -10px;
+
+                                    [dir="rtl"] & {
+                                        left: unset;
+                                        right: -10px;
+                                    }
+                                }
+                            }
+
+                            .counter {
+                                h6 {
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .product-tabs {
+        border: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        .nav-item {
+            position: relative;
+
+            .nav-link {
+                border: none;
+                border-radius: unset;
+                color: $content-color;
+                position: relative;
+                font-weight: 400;
+                font-size: 16px;
+
+                &.active {
+                    font-weight: 500;
+                    color: var(--theme-color);
+
+                    &::before {
+                        @include pos;
+                        @include pseudowh($width: 50px, $height: 2px);
+                        bottom: 0;
+                        left: 17px;
+                        border-radius: 50px;
+                        background-color: var(--theme-color);
+                    }
+
+                    &::after {
+                        @include pos;
+                        @include pseudowh($width: 4px, $height: 2px);
+                        bottom: 0;
+                        left: 75px;
+                        border-radius: 50px;
+                        background-color: var(--theme-color);
+                    }
+                }
+            }
+
+            +.nav-item {
+                margin-left: 10px;
+
+                &::before {
+                    @include pos;
+                    @include pseudowh($width: 13px, $height: 13px);
+                    top: 9px;
+                    left: -11px;
+                    background-image: url(../svg/bag.svg);
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    background-position: center;
+                }
+            }
+        }
+    }
+
+    &-border {
+        border-bottom: 1px solid $border-color;
+        padding-bottom: calc(14px + (20 - 14) * ((100vw - 320px) / (1920 - 320)));
+        margin-bottom: calc(5px + (10 - 5) * ((100vw - 320px) / (1920 - 320)));
+    }
+}

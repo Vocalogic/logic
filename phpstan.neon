@@ -1,0 +1,23 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+
+parameters:
+
+    paths:
+        - app
+
+    # The level 9 is the highest level
+    level: 5
+
+    ignoreErrors:
+        - '#PHPDoc#'
+        - '#Function cache#'
+        - '#Redirector#'
+        - '#Access to an undefined property object::#'
+        - '#Using nullsafe property access#'
+
+    excludePaths:
+        - ./*/*/FileToBeExcluded.php
+
+    checkMissingIterableValueType: false
+    treatPhpDocTypesAsCertain: false

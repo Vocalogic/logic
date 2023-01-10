@@ -1,0 +1,414 @@
+/**=====================
+     Slider scss
+==========================**/
+.product-wrapper {
+     .slick-dots {
+          position: relative;
+          bottom: 0;
+          margin-top: calc(5px + (20 - 5) * ((100vw - 320px) / (1920 - 320)));
+
+          li {
+               @include pseudowh($width: auto, $height: auto);
+
+               button {
+                    @include pseudowh($width: 8px, $height: 8px);
+                    border-radius: 4px;
+                    padding: 0;
+                    margin: 0;
+                    background-color: rgba(35, 35, 35, 0.2);
+                    transition: all 0.5s ease;
+
+                    &::before {
+                         display: none;
+                    }
+               }
+
+               &.slick-active {
+                    button {
+                         margin: 0;
+                         width: 40px;
+                         background-color: var(--theme-color);
+                         transition: all 0.5s ease;
+                    }
+               }
+          }
+     }
+
+     .timer {
+          position: absolute;
+          top: 15px;
+          left: 0;
+          right: 0;
+          text-align: center;
+     }
+
+     &.slick-slider {
+          &.slick-dotted {
+               margin-bottom: -2px;
+          }
+     }
+}
+
+.no-arrow {
+     .slick-arrow {
+          display: none !important;
+     }
+}
+
+.no-space {
+     .slick-list {
+          margin: 0 !important;
+
+          .slick-slide {
+
+               >div,
+               >ul {
+                    margin: 0 !important;
+
+                    [dir="rtl"] & {
+                         direction: rtl;
+                    }
+               }
+          }
+     }
+}
+
+.category-slider {
+     .slick-list {
+          margin: 0;
+
+          .slick-slide {
+
+               padding: 0 10px;
+
+               >div,
+               >ul {
+
+                    [dir="rtl"] & {
+                         direction: rtl;
+                    }
+               }
+          }
+     }
+
+     &.slick-dotted {
+          margin-bottom: 0;
+     }
+}
+
+.slick-slider {
+     .slick-list {
+          margin: 0 -10px;
+
+          @include mq-max(sm) {
+               margin: 0 -6px;
+          }
+
+          .slick-slide {
+
+               >div,
+               >ul {
+                    margin: 0 10px;
+
+                    [dir="rtl"] & {
+                         direction: rtl;
+                    }
+
+                    @include mq-max(sm) {
+                         margin: 0 6px;
+                    }
+               }
+          }
+     }
+
+     &.slick-dotted {
+          margin-bottom: 0;
+     }
+}
+
+.slick-top {
+     .slick-list {
+          .slick-track {
+               >div {
+                    margin: 3px 0;
+               }
+          }
+     }
+}
+
+.left-slider {
+     .slick-list {
+          .slick-track {
+               .slick-slide {
+                    img {
+                         filter: grayscale(20%) blur(1px);
+                         opacity: 0.8;
+                    }
+
+                    &.slick-current {
+                         img {
+                              transition: all 0.3s ease-in-out;
+                              filter: grayscale(0) blur(0);
+                              opacity: 1;
+                              box-shadow: 0 0 8px rgba($title-color, 0.16);
+                         }
+                    }
+               }
+          }
+     }
+}
+
+.arrow-slider {
+
+     .slick-prev,
+     .slick-next {
+          @include pseudowh($width: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))), $height: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))));
+          background-color: $white;
+          box-shadow: 0px 1px 4px rgba($title-color, .14);
+          position: absolute;
+          top: calc(-28px + (-43 - -28) * ((100vw - 320px) / (1920 - 320)));
+          border-radius: 5px;
+          transition: all 0.3s ease-in-out;
+
+          &::before {
+               @include font;
+               color: var(--theme-color);
+               font-size: calc(17px + (20 - 17) * ((100vw - 320px) / (1920 - 320)));
+          }
+
+          &:hover {
+               background-color: var(--theme-color);
+
+               &::before {
+                    color: $white;
+               }
+          }
+     }
+
+     .slick-prev {
+          left: unset;
+          right: 60px;
+
+          [dir="rtl"] & {
+               right: unset;
+               left: 0;
+          }
+
+          &::before {
+               content: "\f104";
+          }
+
+          @include mq-max(sm) {
+               right: 45px;
+          }
+     }
+
+     .slick-next {
+          right: 5px;
+
+          [dir="rtl"] & {
+               right: unset;
+               left: 50px;
+          }
+
+          &::before {
+               content: "\f105";
+          }
+
+          @include mq-max(sm) {
+               [dir="rtl"] & {
+                    left: 40px;
+               }
+          }
+     }
+}
+
+.arrow-slider-2 {
+
+     .slick-prev,
+     .slick-next {
+          top: -42px;
+
+          @include mq-max(3xl) {
+               top: -38px;
+          }
+
+          @include mq-max(xl) {
+               top: -37px;
+          }
+
+          @include mq-max(md) {
+               top: -33px;
+          }
+
+          @include mq-max(xs) {
+               top: -31px;
+          }
+
+          @include mq-max(2xs) {
+               top: -29px;
+          }
+     }
+
+     .slick-prev {
+          left: unset;
+          right: 50px;
+
+          [dir="rtl"] & {
+               right: unset;
+               left: 0;
+          }
+
+          &::before {
+               @include font;
+               content: "\f053";
+               color: $title-color;
+               transition: all 0.3s ease-in-out;
+          }
+
+          &:hover {
+               &::before {
+                    color: var(--theme-color);
+               }
+          }
+     }
+
+     .slick-next {
+          right: 5px;
+
+          [dir="rtl"] & {
+               right: unset;
+               left: 30px;
+          }
+
+          &::before {
+               @include font;
+               content: "\f054";
+               color: $title-color;
+          }
+
+          &:hover {
+               &::before {
+                    color: var(--theme-color);
+               }
+          }
+     }
+}
+
+.img-slider {
+     img {
+          display: initial;
+     }
+}
+
+.product-arrow {
+
+     .slick-prev,
+     .slick-next {
+          @include flex_common;
+          @include pseudowh($width: calc(28px + (40 - 28) * ((100vw - 320px) / (1920 - 320))), $height: calc(28px + (40 - 28) * ((100vw - 320px) / (1920 - 320))));
+          background-color: $border-color;
+          border-radius: 5px;
+          z-index: 1;
+          transition: all 0.3s ease;
+
+          &::before {
+               @include font;
+          }
+     }
+
+     .slick-prev {
+          left: 0;
+
+          &::before {
+               color: $black;
+               content: "\f104";
+          }
+
+          &:hover,
+          &:focus {
+               background-color: var(--theme-color);
+
+               &::before {
+                    color: $white;
+               }
+          }
+     }
+
+     .slick-next {
+          right: 0;
+
+          [dir="rtl"] & {
+               right: unset;
+               left: 91%;
+          }
+
+          &:before {
+               color: $black;
+               content: "\f105";
+          }
+
+          &:hover,
+          &:focus {
+               background-color: var(--theme-color);
+
+               &::before {
+                    color: $white;
+               }
+          }
+     }
+}
+
+.product-box-arrow {
+
+     .slick-prev,
+     .slick-next {
+          @include flex_common;
+          @include pseudowh($width: calc(28px + (40 - 28) * ((100vw - 320px) / (1920 - 320))), $height: calc(28px + (40 - 28) * ((100vw - 320px) / (1920 - 320))));
+          border-radius: 50%;
+          z-index: 1;
+          transition: all .3s ease;
+          background-color: $white;
+          box-shadow: 0px 3px 4px rgba($black, .14);
+          color: $content-color;
+
+          &::before {
+               @include font;
+               color: $black;
+               font-size: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320)));
+          }
+
+          &:hover,
+          &:focus {
+               background-color: var(--theme-color);
+
+               &::before {
+                    color: $white;
+               }
+          }
+     }
+
+     .slick-prev {
+          left: -28px;
+
+          @include mq-max(sm) {
+               left: -8px;
+          }
+
+          &::before {
+               content: "\f104";
+          }
+     }
+
+     .slick-next {
+          right: -28px;
+
+          @include mq-max(sm) {
+               right: -8px;
+          }
+
+          &:before {
+               content: "\f105";
+          }
+     }
+}

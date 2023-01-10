@@ -1,0 +1,40 @@
+/**=====================
+     Tap to top scss
+==========================**/
+.theme-option {
+    position: fixed;
+    bottom: calc(10px + (25 - 10) * ((100vw - 320px) / (1920 - 320)));
+    right: calc(10px + (25 - 10) * ((100vw - 320px) / (1920 - 320)));
+    z-index: 1;
+
+    [dir="rtl"] & {
+        right: unset;
+        left: calc(10px + (25 - 10) * ((100vw - 320px) / (1920 - 320)));
+    }
+
+    @include mq-max(md) {
+        bottom: calc(75px + (80 - 75) * ((100vw - 320px) / (1920 - 320)))
+    }
+
+    .back-to-top {
+        background-color: var(--theme-color);
+        padding: 0;
+        border-radius: 5px;
+        z-index: 1;
+        margin-top: 12px;
+
+        [dir="rtl"] & {
+            right: unset;
+            left: calc(10px + (25 - 10) * ((100vw - 320px) / (1920 - 320)));
+        }
+
+        a {
+            @include flex_common;
+            @include pseudowh($width: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))), $height: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))));
+
+            i {
+                color: $white;
+            }
+        }
+    }
+}

@@ -1,0 +1,50 @@
+:root {
+    --theme-color: #0da487;
+    --theme-color-rgb: 13, 164, 135;
+    --theme-color1: #0e947a;
+    --theme-color1-rgb: 14, 148, 122;
+    --theme-color2: linear-gradient(90.56deg, var(--theme-color1) 8.46%, var(--theme-color) 62.97%)
+}
+
+$white: #ffffff;
+$black: #000000;
+$title-color: #222222;
+$content-color: #4a5568;
+$light-gray: #f8f8f8;
+$danger-color: #ff4f4f;
+$rating-color: #ffb321;
+$border-color: #ececec;
+
+// font family
+$public-sans: 'Public Sans',
+sans-serif;
+$exo-sarif:'Exo 2',
+sans-serif;
+$russo-sarif: 'Russo One',
+sans-serif;
+$pacifico: 'Pacifico',
+cursive;
+$kaushan: 'Kaushan Script',
+cursive;
+$indie: 'Indie Flower',
+cursive;
+$great: 'Great Vibes',
+cursive;
+$fontawesome: 'Font Awesome 6 Free';
+
+// Breakepoints
+$min-breakpoints: (lg: 992px,
+    xl: 1200px,
+    2xl: 1366px,
+);
+
+$max-breakpoints: (2xs: 360px,
+    xs: 480px,
+    sm: 575px,
+    md: 767px,
+    lg: 991px,
+    xl: 1199px,
+    2xl: 1366px,
+    3xl: 1460px,
+    4xl: 1660px,
+);

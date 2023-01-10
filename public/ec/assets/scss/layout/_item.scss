@@ -1,0 +1,82 @@
+/**=====================
+     Item scss
+==========================**/
+.button-item {
+    @include flex_common;
+    @include center(vertical);
+    @include pseudowh($width: 50px, $height: 50px);
+    position: fixed;
+    right: 0;
+    border-radius: 7px 0 0 7px;
+    background-color: var(--theme-color);
+    z-index: 9;
+
+    .item-btn {
+        .icli {
+            font-size: 22px;
+        }
+    }
+}
+
+.item-section {
+    @include center(vertical);
+    position: fixed;
+    right: -130px;
+    background-color: var(--theme-color);
+    color: $white;
+    border-radius: 7px 0 0 7px;
+    padding: 15px;
+    transition: all 0.3s ease-in-out;
+    z-index: 9;
+
+    &.active {
+        right: 0;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 0;
+        color: $white;
+        border: none;
+        background-color: transparent;
+    }
+
+    h6 {
+        @include flex_common;
+        flex-wrap: nowrap;
+        gap: 5px;
+        margin-top: 10px;
+        font-weight: bold;
+
+        .icli {
+            font-size: 22px;
+        }
+    }
+
+    .items-image {
+        @include flex_common;
+        margin: 10px 0;
+
+        li {
+            @include flex_common;
+            @include pseudowh($width: 30px, $height: 30px);
+            background-color: $white;
+            border-radius: 50%;
+            border: 1px solid var(--theme-color);
+            color: var(--theme-color);
+            font-weight: 600;
+            font-size: 13px;
+
+            +li {
+                margin-left: -10px;
+            }
+
+            img {
+                @include pseudowh($width: 15px, $height: 15px);
+                object-fit: contain;
+            }
+        }
+    }
+}

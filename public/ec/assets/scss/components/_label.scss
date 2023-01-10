@@ -1,0 +1,40 @@
+/**=====================
+     Label scss
+==========================**/
+.label-flex {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    .discount {
+        background-color: var(--theme-color);
+        color: $white;
+        padding: 4px calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320)));
+        border-radius: 4px;
+
+        &.sm-discount {
+            label {
+                font-size: 12px;
+            }
+        }
+
+        label {
+            @include flex_common;
+            margin: -2px 0;
+        }
+    }
+
+    .wishlist {
+        font-size: calc(16px + (22 - 16) * ((100vw - 320px) / (1920 - 320)));
+        color: $content-color;
+        margin-left: auto;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: auto;
+        }
+    }
+}

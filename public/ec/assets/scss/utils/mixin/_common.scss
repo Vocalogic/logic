@@ -1,0 +1,71 @@
+/**=====================
+     Common scss
+==========================**/
+/* ======= Display Flex Css Start ======= */
+@mixin flex_common ($dis: flex, $align: center, $justify: center) {
+    display: $dis;
+    align-items: $align;
+    justify-content: $justify;
+}
+
+/* ======= Display Flex Css End ======= */
+
+/* ======= Gap Flex Css Start ======= */
+@mixin flex_wrap ($dis: flex, $wrap: wrap, $gap: 15px) {
+    display: $dis;
+    flex-wrap: $wrap;
+    gap: $gap;
+}
+
+/* ======= Gap Flex Css End ======= */
+
+/*======= position css starts  ======= */
+@mixin pos($pos: absolute, $content: "") {
+    content: $content;
+    position: $pos;
+}
+
+@mixin pseudowh($width: 100%, $height: 100%) {
+    width: $width;
+    height: $height;
+}
+
+@mixin center($position) {
+    @if $position=="vertical" {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    @else if $position=="horizontal" {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    @else if $position=="both" {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/*======= position css ends  ======= */
+
+/*======= font awesome css start  ======= */
+@mixin font($weight: 900, $family: $fontawesome) {
+    font-family: $family;
+    font-weight: $weight;
+}
+
+/*======= font awesome css ends  ======= */
+
+/*======= align css starts  ======= */
+@mixin rtl($property, $ltr-value, $rtl-value) {
+    #{$property}: $ltr-value;
+
+    [dir="rtl"] & {
+        #{$property}: $rtl-value;
+    }
+}
+
+// @include rtl(float, left, right);
+/*======= align css ends  ======= */

@@ -1,0 +1,49 @@
+
+# Created by https://www.toptal.com/developers/gitignore/api/laravel
+# Edit at https://www.toptal.com/developers/gitignore?templates=laravel
+
+### Laravel ###
+/vendor/
+node_modules/
+npm-debug.log
+yarn-error.log
+
+*.html
+
+# Laravel 4 specific
+bootstrap/compiled.php
+
+# Laravel 5 & Lumen specific
+public/storage
+public/hot
+public/sitemap.xml
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+storage/logs/*
+storage/framework/cache/data/*
+storage/framework/views/*
+storage/framework/sessions/*
+storage/app/*
+storage/pdf/*
+storage/*.key
+Modules/*
+app/.phpdoc
+!storage/framework/cache/data/.gitkeep
+!storage/framework/views/.gitkeep
+!storage/framework/sessions/.gitkeep
+!storage/app/.gitkeep
+
+.env
+Homestead.yaml
+Homestead.json
+/.vagrant
+.phpunit.result.cache
+
+public/js/app.js
+public/js/cart.js
+# Laravel IDE helper
+*.meta.*
+_ide_*
+.idea
+# End of https://www.toptal.com/developers/gitignore/api/laravel

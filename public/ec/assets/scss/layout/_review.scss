@@ -1,0 +1,63 @@
+/**=====================
+     Review scss
+==========================**/
+.review-box {
+    &:hover {
+        .review-profile {
+            .review-image {
+                border-radius: 6px;
+            }
+        }
+    }
+
+    .review-contain {
+        margin-bottom: 40px;
+
+        h5 {
+            font-size: 16px;
+            line-height: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: $content-color;
+            line-height: 27px;
+            margin-bottom: 0;
+        }
+    }
+
+    .review-profile {
+        display: flex;
+        align-items: center;
+
+        .review-image {
+            @include pseudowh($width: 70px, $height: 70px);
+            border-radius: 50%;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .review-detail {
+            padding-left: 12px;
+
+            [dir="rtl"] & {
+                padding-left: unset;
+                padding-right: 12px;
+            }
+
+            h5 {
+                font-size: 18px;
+                margin-bottom: 7px;
+                font-weight: 500;
+                color: $title-color;
+            }
+
+            h6 {
+                font-size: 16px;
+                font-weight: 500;
+                color: $content-color;
+            }
+        }
+    }
+}

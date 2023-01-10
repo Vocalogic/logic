@@ -1,0 +1,150 @@
+/**=====================
+     buttons scss
+==========================**/
+.btn {
+    @include flex_common;
+    color: $title-color;
+    padding: calc(7px + (14 - 7) * ((100vw - 320px) / (1920 - 320))) calc(14px + (32 - 14) * ((100vw - 320px) / (1920 - 320)));
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    border: none;
+    font-size: calc(14px + (18 - 14) * ((100vw - 320px) / (1920 - 320)));
+    z-index: 0;
+    white-space: nowrap;
+
+    &:focus {
+        box-shadow: none;
+    }
+
+    &:hover {
+        .icon {
+            transform: translateX(3px);
+        }
+    }
+
+    &.dark-button {
+        background: linear-gradient(93.33deg, #222221 12.35%, #2F2F2D 99.38%) !important;
+    }
+
+    .icon {
+        margin-left: calc(6px + (12 - 6) * ((100vw - 320px) / (1920 - 320)));
+        transition: 0.3s ease;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: calc(6px + (12 - 6) * ((100vw - 320px) / (1920 - 320)));
+        }
+
+        &-2 {
+            margin-left: 6px;
+            transition: 0.3s ease;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: 6px;
+            }
+        }
+    }
+
+    &-animation {
+        @include flex_common;
+        overflow: hidden;
+        color: $white;
+        border-radius: 5px;
+        font-weight: 600;
+        background: transparent;
+        transition: all 0.3s ease;
+        position: relative;
+        background: #ff6b6b;
+        background: linear-gradient(90deg, #ff6b6b 0%, #ff4f4f 100%);
+        border: none;
+        z-index: 0;
+
+        i {
+            transition: 0.3s ease;
+        }
+
+        &::after {
+            @include pos;
+            @include pseudowh($width: 100%, $height: 0);
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+            border-radius: 5px;
+            background: #ff4f4f;
+            background: linear-gradient(90deg, #ff4f4f 0%, #ff6b6b 100%);
+            transition: all 0.3s ease;
+        }
+
+        &:hover {
+            color: $white;
+
+            i {
+                transform: translateX(3px);
+            }
+
+            &::after {
+                top: 0;
+                height: 100%;
+            }
+        }
+    }
+
+    &-md {
+        padding: calc(8px + (11 - 8) * ((100vw - 320px) / (1920 - 320))) calc(16px + (24 - 16) * ((100vw - 320px) / (1920 - 320)));
+        font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+        font-weight: 500;
+    }
+
+    &-sm {
+        padding: 8px 16px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    &-2 {
+        padding: 9px 25px;
+        font-size: calc(14px + (18 - 14) * ((100vw - 320px) / (1920 - 320)));
+        font-weight: 400;
+
+        &:hover {
+            &::after {
+                top: 0;
+                height: 100%;
+            }
+        }
+
+        &-animation {
+            @include flex_common;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            background: #0da487;
+            background: linear-gradient(90deg, #0da487 0%, #0e947a 100%);
+            border: none;
+            z-index: 0;
+
+            &::after {
+                @include pos;
+                @include pseudowh($width: 100%, $height: 0);
+                bottom: 0;
+                left: 0;
+                z-index: -1;
+                border-radius: 5px;
+                background: #0da487;
+                background: linear-gradient(90deg, #0e947a 0%, #0da487 100%);
+                transition: all 0.3s ease;
+            }
+        }
+    }
+
+    &-category {
+        padding: calc(6px + (8 - 6) * ((100vw - 320px) / (1920 - 320))) calc(16px + (27 - 16) * ((100vw - 320px) / (1920 - 320)));
+        letter-spacing: 0.8px;
+        font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+        font-weight: 700;
+        border-radius: 50px;
+    }
+}

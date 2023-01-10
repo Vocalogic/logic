@@ -1,0 +1,259 @@
+/**=====================
+     reset scss
+==========================**/
+@media (min-width: 1464px) {
+    .container {
+        max-width: 1440px;
+    }
+}
+
+.fw-300 {
+    font-weight: 300;
+}
+
+.w-60 {
+    width: 60% !important;
+}
+
+.section-small-space {
+    padding: calc(18px + (42 - 18) * ((100vw - 320px) / (1920 - 320))) 0;
+}
+
+.section-big-space {
+    padding: calc(40px + (160 - 40) * ((100vw - 320px) / (1920 - 320))) 0;
+}
+
+.section-lg-space {
+    padding: calc(30px + (70 - 30) * ((100vw - 320px) / (1920 - 320))) 0;
+}
+
+section,
+.section-t-space {
+    padding-top: calc(30px + (50 - 30) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.section-b-space {
+    padding-bottom: calc(30px + (50 - 30) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.container-fluid-lg {
+    padding: 0 calc(12px + (160 - 12) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.section-small-space {
+    padding: 30px 0;
+}
+
+// Position Top
+.p-top-left {
+    display: flex;
+    justify-content: flex-start;
+
+    [dir="rtl"] & {
+        justify-content: flex-end;
+    }
+}
+
+.p-top-center {
+    display: flex;
+    justify-content: center;
+}
+
+.p-top-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+// Position Center
+.p-center-left {
+    @include flex_common ($dis: flex, $align: center, $justify: flex-start);
+
+    [dir="rtl"] & {
+        justify-content: flex-end;
+    }
+}
+
+.p-center {
+    @include flex_common;
+}
+
+.p-center-right {
+    @include flex_common ($dis: flex, $align: center, $justify: flex-end);
+
+    [dir="rtl"] & {
+        justify-content: flex-start;
+    }
+}
+
+// Position Bottom
+.p-bottom-left {
+    @include flex_common ($dis: flex, $align: flex-end, $justify: flex-start);
+
+    [dir="rtl"] & {
+        justify-content: flex-end;
+    }
+}
+
+.p-bottom-center {
+    @include flex_common ($dis: flex, $align: flex-end, $justify: center);
+}
+
+.p-bottom-right {
+    @include flex_common ($dis: flex, $align: flex-end, $justify: flex-end);
+}
+
+.p-sticky {
+    position: sticky;
+    top: 10px;
+}
+
+.ls-expanded {
+    letter-spacing: 12px;
+    margin-right: -12px;
+}
+
+.ls-resize-expanded {
+    letter-spacing: calc(4px + (10 - 4) * ((100vw - 320px) / (1920 - 320)));
+}
+
+.g-8 {
+    margin: -8px;
+
+    >div {
+        padding: 8px;
+    }
+}
+
+// Svg Width
+.icon-width {
+    @include pseudowh($width: 25px, $height: 25px);
+}
+
+// Rating
+.rating {
+    display: flex;
+    align-items: center;
+
+    @include mq-max(2xs) {
+        display: flex;
+        align-items: center;
+    }
+
+    [dir="rtl"] & {
+        padding-left: unset;
+        padding-right: 0;
+    }
+
+    li {
+        line-height: 0;
+
+        +li {
+            margin-left: 2px;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: 2px;
+            }
+        }
+
+        .feather {
+            @include pseudowh($width: 14px, $height: 14px);
+            stroke: $rating-color;
+
+            &.fill {
+                fill: $rating-color;
+            }
+        }
+    }
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+
+    span {
+        color: $content-color;
+        font-size: 12px;
+        margin-left: 5px;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: 5px;
+        }
+    }
+}
+
+.mend-auto {
+    margin-right: auto !important;
+    text-align: left;
+}
+
+.fw-500 {
+    font-weight: 500;
+}
+
+// colors
+.text-theme {
+    color: var(--theme-color);
+}
+
+.bg-gray {
+    background-color: $light-gray;
+}
+
+.text-title {
+    color: $title-color !important;
+}
+
+.text-content {
+    color: $content-color;
+}
+
+.text-yellow {
+    color: $rating-color !important;
+}
+
+.text-danger {
+    color: $danger-color !important;
+}
+
+.bg-gray {
+    background-color: $light-gray !important;
+}
+
+// Font Family
+.text-exo {
+    font-family: $exo-sarif;
+}
+
+.text-russo {
+    font-family: $russo-sarif;
+}
+
+.text-pacifico {
+    font-family: $pacifico;
+}
+
+.text-kaushan {
+    font-family: $kaushan;
+}
+
+.text-great {
+    font-family: $great;
+}
+
+.w-58 {
+    width: 58% !important;
+}
+
+.colorpick-eyedropper-input-trigger {
+    display: none;
+}
+
+// Hover Effect Scss
+.hover-effect {
+    &:hover {
+        opacity: 1;
+        animation: flash 1.5s;
+    }
+}

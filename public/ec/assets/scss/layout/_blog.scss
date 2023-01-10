@@ -1,0 +1,202 @@
+/* =====================
+    Blog scss 
+ ========================== */
+.blog-box {
+    &:hover {
+        .blog-box-image {
+            a {
+                transform: scale(1.12) rotate(3deg);
+                overflow: hidden;
+            }
+        }
+
+        .blog-detail {
+            h5 {
+                color: var(--theme-color);
+            }
+        }
+    }
+
+    .blog-box-image {
+        overflow: hidden;
+        border-radius: 5px;
+
+        .blog-image {
+            transition: all 0.3s ease-in-out;
+        }
+    }
+
+    .blog-detail {
+        margin-top: 15px;
+        display: block;
+
+        &.blog-contain {
+            background-color: $danger-color;
+        }
+
+        h6 {
+            color: $content-color;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        h5 {
+            color: $title-color;
+            line-height: 1.5;
+            font-weight: 600;
+            font-size: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320)));
+            transition: all 0.3s ease-in-out;
+        }
+    }
+}
+
+.blog-section {
+    .blog-box {
+        padding-bottom: 1px;
+        border-radius: 10px;
+        border: 1px solid $border-color;
+        overflow: hidden;
+        position: relative;
+        height: 100%;
+
+        &:hover {
+            .blog-box-image {
+                a {
+                    transform: scale(1.12) rotate(3deg);
+                    overflow: hidden;
+                }
+            }
+
+            .blog-detail {
+                label {
+                    color: $white;
+
+                    &::before {
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .blog-box-image {
+            overflow: hidden;
+            border-radius: 0;
+
+            a {
+                transition: all 0.3s ease-in-out;
+            }
+        }
+
+        .blog-image {
+            position: relative;
+
+            label {
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                background-color: var(--theme-color);
+                color: $white;
+                border-radius: 5px;
+                border: none;
+                padding: 8px 10px;
+                font-size: 12px;
+                letter-spacing: 0.9px;
+                box-shadow: 3px 3px 6px rgba($black, 0.2);
+            }
+        }
+
+        .blog-detail {
+            padding: 20px;
+            margin-top: 0;
+
+            h2 {
+                font-size: 22px;
+                line-height: 1.4;
+            }
+
+            label {
+                font-size: 12px;
+                padding: 7px 11px;
+                border-radius: 50px;
+                color: var(--theme-color);
+                margin-bottom: 12px;
+                position: relative;
+                overflow: hidden;
+                z-index: 0;
+                transition: all 0.3s ease-in-out;
+
+                &::before {
+                    @include pos;
+                    @include pseudowh;
+                    top: 0;
+                    left: 0;
+                    background-color: var(--theme-color);
+                    opacity: .1;
+                    z-index: -1;
+                    transition: all 0.3s ease-in-out;
+                }
+            }
+
+            a {
+                color: $title-color;
+            }
+
+            h3 {
+                line-height: 1.4;
+                margin-bottom: 5px;
+                font-weight: 600;
+            }
+
+            h5 {
+                font-size: 15px;
+                margin-top: 10px;
+                font-weight: 500;
+                color: $content-color;
+            }
+
+            .blog-list {
+                @include flex_common ($dis: flex, $align: center, $justify: flex-start);
+                margin-top: 15px;
+                gap: calc(14px + (22 - 14) * ((100vw - 320px) / (1920 - 320)));
+
+                span {
+                    color: $content-color;
+                    margin-bottom: -5px;
+                }
+
+                .blog-social-icon {
+                    position: relative;
+
+                    .icon {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        display: flex;
+                        align-items: center;
+                        background-color: $white;
+                        transition: all 0.3s ease-in-out;
+                        opacity: 0;
+
+                        li {
+                            @include flex_common;
+                            @include pseudowh($width: 20px, $height: 20px);
+                            transition: all 0.3s ease-in-out;
+
+                            .fab {
+                                font-size: 14px;
+                                color: $content-color;
+                            }
+
+                        }
+                    }
+
+                    &:hover {
+                        .icon {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

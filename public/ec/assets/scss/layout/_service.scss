@@ -1,0 +1,154 @@
+/**=====================
+     Service scss
+==========================**/
+.service-contain {
+    @include flex_common ($dis: flex, $align: center, $justify: space-between);
+    flex-wrap: wrap;
+    padding-bottom: calc(30px + (50 - 30) * ((100vw - 320px) / (1920 - 320)));
+
+    @include mq-max(md) {
+        display: none;
+    }
+
+    .service-box {
+        display: flex;
+        align-items: center;
+        position: relative;
+
+        @include mq-max(2xl) {
+            width: 50%;
+        }
+
+        &:nth-child(-n+2) {
+            @include mq-max(2xl) {
+                margin-bottom: 15px;
+            }
+        }
+
+        &:nth-child(3) {
+            &::before {
+                @include mq-max(2xl) {
+                    display: none;
+                }
+            }
+        }
+
+        &::before {
+            @include mq-max(md) {
+                display: none;
+            }
+        }
+
+        +.service-box {
+            &::before {
+                @include pos;
+                @include center(vertical);
+                @include pseudowh($width: 1px, $height: 50%);
+                left: -104px;
+                border: 1px dashed #c1c1c1;
+
+                [dir="rtl"] & {
+                    left: unset;
+                    right: -104px;
+                }
+
+                @include mq-max(4xl) {
+                    left: -70px;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: -70px;
+                    }
+                }
+
+                @include mq-max(3xl) {
+                    left: -36px;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: -36px;
+                    }
+                }
+
+                @include mq-max(2xl) {
+                    left: -31px;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: -31px;
+                    }
+                }
+            }
+        }
+
+        .service-image {
+            img {
+                @include pseudowh($width: calc(35px + (40 - 35) * ((100vw - 320px) / (1920 - 320))), $height: calc(35px + (40 - 35) * ((100vw - 320px) / (1920 - 320))));
+                object-fit: contain;
+            }
+        }
+
+        .service-detail {
+            margin-left: 20px;
+
+            [dir="rtl"] & {
+                margin-left: unset;
+                margin-right: 20px;
+            }
+
+            h5 {
+                font-weight: 500;
+                color: $title-color;
+            }
+        }
+    }
+}
+
+.service-contain-2 {
+    display: flex;
+    align-items: center;
+    padding: calc(14px + (25 - 14) * ((100vw - 320px) / (1920 - 320)));
+    border-radius: 5px;
+    background-color: rgba(#bfbfbf, $alpha: .2);
+    height: 100%;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: var(--theme-color);
+
+        svg {
+            fill: $white;
+        }
+
+        .service-detail {
+
+            h3,
+            h6 {
+                color: $white;
+            }
+        }
+    }
+
+    svg {
+        @include pseudowh($width: 42px, $height: 42px);
+        fill: var(--theme-color);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .service-detail {
+        margin-left: 25px;
+        transition: all 0.3s ease-in-out;
+
+        [dir="rtl"] & {
+            margin-left: unset;
+            margin-right: 25px;
+        }
+
+        h3 {
+            letter-spacing: 0.8px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease-in-out;
+            font-weight: 600;
+        }
+    }
+}

@@ -1,0 +1,145 @@
+/**=====================
+     timer scss
+==========================**/
+.timer {
+    ul {
+        display: flex;
+        align-items: center;
+
+        [dir="rtl"] & {
+            padding-left: unset;
+            padding-right: 0;
+        }
+
+        @include mq-max(2xs) {
+            justify-content: space-between;
+        }
+
+        @include mq-max(sm) {
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        li {
+            @include flex_common;
+            @include pseudowh($width: 50px, $height: 50px);
+            position: relative;
+            background-color: $border-color;
+            padding: 8px;
+            border-radius: 5px;
+
+            @include mq-max(sm) {
+                @include pseudowh($width: 40px, $height: 40px);
+            }
+
+            +li {
+                margin-left: 15px;
+
+                [dir="rtl"] & {
+                    margin-left: unset;
+                    margin-right: 15px;
+                }
+
+                &::after {
+                    @include pos($pos: absolute, $content: ":");
+                    @include center(vertical);
+                    font-weight: bolder;
+                    left: -10px;
+
+                    [dir="rtl"] & {
+                        left: unset;
+                        right: -10px;
+                    }
+                }
+            }
+
+            .counter {
+                h4 {
+                    font-weight: 500;
+
+                    @include mq-max(sm) {
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.timer-2 {
+    margin-left: 40px;
+
+    @include mq-max(sm) {
+        margin-left: 0;
+    }
+
+    ul {
+        li {
+            @include pseudowh($width: 60px, $height: 60px);
+            color: $black;
+            border: 1px solid $title-color;
+            background-color: transparent;
+
+            &.bg-color {
+                background-color: var(--theme-color);
+                color: $white;
+            }
+
+            +li {
+                &::after {
+                    color: $content-color;
+                }
+            }
+        }
+    }
+}
+
+.timer-box {
+    ul {
+        display: flex;
+        align-items: center;
+
+        @include mq-max(2xs) {
+            justify-content: space-between;
+        }
+
+        @include mq-max(sm) {
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        li {
+            @include flex_common;
+            @include pseudowh($width: 50px, $height: 50px);
+            position: relative;
+            background-color: $border-color;
+            padding: 8px;
+            border-radius: 5px;
+
+            @include mq-max(sm) {
+                @include pseudowh($width: 40px, $height: 40px);
+            }
+
+            +li {
+                margin-left: 15px;
+
+                &::after {
+                    @include pos($pos: absolute, $content: ":");
+                    font-weight: bolder;
+                    @include center(vertical);
+                    left: -10px;
+                }
+            }
+
+            .counter {
+                h4 {
+                    font-weight: 500;
+
+                    @include mq-max(sm) {
+                        font-size: 15px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,667 @@
+/**=====================
+     Banner scss
+==========================**/
+.banner-contain {
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+
+    .banner-details {
+        [dir="rtl"] & {
+            text-align: left;
+        }
+
+        &.banner-b-space {
+            padding: calc(27px + (45 - 27) * ((100vw - 320px) / (1920 - 320))) calc(20px + (140 - 20) * ((100vw - 320px) / (1920 - 320)));
+        }
+
+        .banner-box {
+            position: absolute;
+            top: 30px;
+            left: 0;
+            background-color: rgba($white, $alpha: .5);
+            padding: calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320))) calc(30px + (39 - 30) * ((100vw - 320px) / (1920 - 320))) calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320))) calc(8px + (12 - 8) * ((100vw - 320px) / (1920 - 320)));
+            border-radius: 0px 60px 60px 0px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0px 11px 10px rgba($content-color, .06);
+
+            h5 {
+                margin: calc(4px + (6 - 4) * ((100vw - 320px) / (1920 - 320))) 0;
+                font-size: calc(14px + (18 - 14) * ((100vw - 320px) / (1920 - 320)));
+                font-weight: 600;
+            }
+        }
+
+        .banner-button {
+            position: absolute;
+            bottom: calc(8px + (16 - 8) * ((100vw - 320px) / (1920 - 320)));
+            left: calc(14px + (22 - 14) * ((100vw - 320px) / (1920 - 320)));
+            color: $white;
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 {
+            font-size: calc(20px + (42 - 20) * ((100vw - 320px) / (1920 - 320)));
+
+            &.banner-title {
+                font-size: calc(31px + (50 - 31) * ((100vw - 320px) / (1920 - 320)));
+                font-weight: 700;
+            }
+        }
+
+        h3 {
+            font-size: calc(20px + (30 - 20) * ((100vw - 320px) / (1920 - 320)));
+            margin-top: -7px;
+        }
+
+        h4 {
+            font-size: calc(20px + (24 - 20) * ((100vw - 320px) / (1920 - 320)));
+            line-height: 1.6;
+        }
+
+        .coupon-code {
+            padding: calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320))) calc(9px + (15 - 9) * ((100vw - 320px) / (1920 - 320)));
+            background-color: rgba(10, 104, 86, 0.4);
+            border: 2px dashed rgba($white, 0.5);
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 13px;
+
+            [class="dark"] & {
+                border: 2px dashed rgba(255, 255, 255, 0.5);
+            }
+
+            &.code-2 {
+                background-color: rgba(153, 105, 31, 0.5);
+            }
+        }
+
+        p {
+            color: $content-color;
+            line-height: 1.5;
+
+            [dir="rtl"] & {
+                margin-right: auto;
+            }
+
+            &.banner-text {
+                width: 62%;
+
+                @include mq-max(sm) {
+                    width: 80%;
+                }
+
+                @include mq-max(xs) {
+                    width: 100%;
+                }
+            }
+        }
+
+        .banner-timing {
+            @include pseudowh($width: 100%, $height: 210px);
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(181.97deg, rgba($black, 0.3) 1.66%, rgba($black, 0) 95.27%);
+            backdrop-filter: blur(2px);
+            text-align: center;
+            color: $white;
+
+            .time {
+                margin-top: 25px;
+
+                ul {
+                    @include flex_common ($dis: flex, $align: center, $justify: space-evenly);
+
+                    li {
+                        .counter {
+                            @include pseudowh($width: 55px, $height: 70px);
+                            @include flex_common;
+                            border: 1px dashed $white;
+
+                            h5 {
+                                font-weight: 600;
+                                margin-bottom: 4px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.banner-contain-2 {
+    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+
+    .banner-detail {
+        @include pseudowh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: calc(14px + (25 - 14) * ((100vw - 320px) / (1920 - 320))) calc(19px + (25 - 19) * ((100vw - 320px) / (1920 - 320)));
+
+        [dir="rtl"] & {
+            left: unset;
+            right: 0;
+            text-align: left;
+        }
+
+        .banner-detail-box {
+            position: relative;
+            padding: 7px 0;
+
+            &::before {
+                @include pos;
+                @include pseudowh($width: 2px, $height: 100%);
+                top: 0;
+                left: -10px;
+                background-color: var(--theme-color);
+            }
+
+            &-2 {
+                padding: 7px 0 7px 17px;
+
+                &::before {
+                    width: 5px;
+                    border-radius: 50px;
+                    left: 0;
+
+                    [dir="rtl"] & {
+                        left: 0;
+                        right: unset;
+                    }
+                }
+            }
+        }
+
+        h3 {
+            font-size: calc(27px + (34 - 27) * ((100vw - 320px) / (1920 - 320)));
+
+            .brand-name {
+                font-weight: bold;
+                background-color: var(--theme-color);
+                color: $white;
+                padding: calc(6px + (10 - 6) * ((100vw - 320px) / (1920 - 320))) calc(8px + (10 - 8) * ((100vw - 320px) / (1920 - 320)));
+                position: relative;
+                z-index: 0;
+
+                &::before {
+                    @include pos;
+                    @include pseudowh;
+                    top: calc(3px + (7 - 3) * ((100vw - 320px) / (1920 - 320)));
+                    left: calc(3px + (6 - 3) * ((100vw - 320px) / (1920 - 320)));
+                    border: calc(1px + (2 - 1) * ((100vw - 320px) / (1920 - 320))) solid $title-color;
+                    z-index: -1;
+                }
+            }
+        }
+
+        h2 {
+            font-size: calc(42px + (59 - 42) * ((100vw - 1199px) / (1920 - 1199)));
+            font-weight: 700;
+        }
+
+        h4 {
+            font-weight: 600;
+            font-size: calc(17px + (21 - 17) * ((100vw - 320px) / (1920 - 320)));
+            color: $title-color;
+        }
+    }
+}
+
+.banner-contain-3 {
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+
+    .social-image {
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .delivery-bike {
+        text-align: center;
+
+        img {
+            margin-top: -16px;
+        }
+    }
+
+    &.banner-contain-bg {
+        background-image: url(../images/grocery/banner/11-bg.png);
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        display: block;
+    }
+
+    .banner-detail-2 {
+        h2 {
+            font-size: calc(25px + (40 - 25) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 10px;
+            text-transform: none;
+        }
+
+        h3 {
+            font-size: 35px;
+        }
+
+        h4 {
+            font-size: 40px;
+        }
+    }
+
+    .banner-minus-position {
+        margin-top: -13px;
+
+        @include mq-max(sm) {
+            margin-top: 0;
+        }
+    }
+
+    .banner-detail-deliver {
+        @media (max-width: 1660px) {
+            width: 60% !important;
+            margin-left: auto;
+        }
+
+        @include mq-max(sm) {
+            width: 100% !important;
+            background: #eaf5f5;
+        }
+    }
+
+    .banner-detail {
+        @include pseudowh;
+        position: absolute;
+        top: 0%;
+        left: 0;
+        padding: calc(20px + (50 - 20) * ((100vw - 320px) / (1920 - 320)));
+
+        &.banner-half-width {
+            width: 50%;
+        }
+
+        &.banner-p-sm {
+            padding: calc(15px + (30 - 15) * ((100vw - 320px) / (1920 - 320))) !important;
+        }
+
+        h2 {
+            font-size: calc(25px + (45 - 25) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 3px;
+
+            &.sale-name {
+                font-size: calc(25px + (38 - 25) * ((100vw - 320px) / (1920 - 320)));
+            }
+        }
+
+        h3 {
+            font-size: calc(18px + (32 - 18) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 10px;
+            line-height: 1.4;
+
+            &.banner-contain {
+                font-size: 33px;
+                font-weight: bold;
+                margin-bottom: 0;
+
+                @media (max-width: 1500px) {
+                    font-size: 20px;
+                }
+            }
+        }
+
+        h4 {
+            font-size: calc(16px + (22 - 16) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 5px;
+            line-height: 1.4;
+
+            .delivery-contain {
+                @media (max-width: 1500px) {
+                    font-size: 16px;
+                }
+            }
+        }
+
+        h5 {
+            font-size: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320)));
+            letter-spacing: 1px;
+        }
+
+        h6 {
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: calc(10px + (20 - 10) * ((100vw - 320px) / (1920 - 320)));
+        }
+
+        p {
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+            margin-bottom: 0;
+            line-height: 1.5;
+            color: $content-color;
+            letter-spacing: .8px;
+        }
+
+        .banner-list {
+            @include flex_wrap ($dis: flex, $wrap: wrap, $gap: 10px);
+
+            [dir="rtl"] & {
+                padding-right: 0;
+            }
+
+            li {
+                display: block;
+                width: 100%;
+
+                .delivery-box {
+                    @include flex_wrap ($dis: flex, $wrap: nowrap, $gap: 11px);
+                    align-items: center;
+
+                    .check-icon {
+                        @include flex_common;
+                        @include pseudowh($width: 20px, $height: 20px);
+                        background-color: #6BBE66;
+                        color: $white;
+                        border-radius: 100%;
+                        font-size: 11px;
+                    }
+
+                    .check-contain {
+                        h5 {
+                            @media (max-width: 1500px) {
+                                font-size: 14px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .shop-now-button {
+            @include flex_common;
+            padding: 0;
+            color: $white;
+            font-size: 15px;
+
+            i {
+                font-size: 14px;
+                margin-left: 8px;
+                margin-top: -2px;
+
+                [dir="rtl"] & {
+                    margin-left: unset;
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}
+
+.offer-banner {
+    border-radius: 15px;
+    overflow: hidden;
+    position: relative;
+
+    &:hover {
+        .banner-detail {
+            border-radius: 5px;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+
+    .banner-detail {
+        position: absolute;
+        top: calc(9px + (18 - 9) * ((100vw - 320px) / (1920 - 320)));
+        left: calc(9px + (18 - 9) * ((100vw - 320px) / (1920 - 320)));
+        padding: calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320))) calc(21px + (26 - 21) * ((100vw - 320px) / (1920 - 320))) calc(7px + (10 - 7) * ((100vw - 320px) / (1920 - 320))) calc(10px + (15 - 10) * ((100vw - 320px) / (1920 - 320)));
+        border-radius: 5px 30px 30px 5px;
+        box-shadow: 0px 3px 4px rgba($title-color, .14);
+        z-index: 0;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+        background-color: rgba($white, $alpha: .95);
+
+        h5 {
+            letter-spacing: 0.6px;
+            margin-bottom: 3px;
+            font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+        }
+
+        h6 {
+            letter-spacing: 1.7px;
+            color: $content-color;
+        }
+    }
+
+    .offer-box {
+        position: absolute;
+        bottom: calc(7px + (18 - 7) * ((100vw - 320px) / (1920 - 320)));
+        right: calc(7px + (18 - 7) * ((100vw - 320px) / (1920 - 320)));
+        background-color: var(--theme-color);
+        border-radius: 50px;
+
+        a {
+            color: $white;
+            padding: calc(4px + (8 - 4) * ((100vw - 320px) / (1920 - 320))) calc(15px + (21 - 15) * ((100vw - 320px) / (1920 - 320)));
+            display: block;
+
+            span {
+                letter-spacing: 1.5px;
+                font-size: calc(16px + (18 - 16) * ((100vw - 320px) / (1920 - 320)));
+                font-weight: 500;
+            }
+        }
+    }
+}
+
+.bank-section {
+    .bank-offer {
+        border-radius: calc(9px + (20 - 9) * ((100vw - 320px) / (1920 - 320)));
+        overflow: hidden;
+
+        &:hover {
+            .bank-footer {
+                &-1 {
+                    .bank-coupon {
+                        &::after {
+                            top: 0;
+                            height: 100%;
+                        }
+                    }
+                }
+
+                &-2 {
+                    .bank-coupon {
+                        &::after {
+                            top: 0;
+                            height: 100%;
+                        }
+                    }
+
+                }
+
+                &-3 {
+                    .bank-coupon {
+                        &::after {
+                            top: 0;
+                            height: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bank-header {
+            background: linear-gradient(76.68deg, #E6E6E6 -9.39%, #FAFAFA 78.76%, #F0F0F0 101.45%, #FFFFFF 112.78%);
+            padding: calc(21px + (35 - 21) * ((100vw - 320px) / (1920 - 320)));
+            display: flex;
+            align-items: center;
+
+            .bank-left {
+                .bank-image {
+                    @include pseudowh($width: 120px, $height: auto);
+                    margin-bottom: 12px;
+                }
+
+                .bank-name {
+                    h2 {
+                        color: #BB0032;
+                        font-weight: 700;
+                        margin-bottom: 7px;
+                        font-size: calc(22px + (31 - 22) * ((100vw - 320px) / (1920 - 320)));
+
+                        &.bank-offer-2 {
+                            color: #239BF0;
+                        }
+
+                        &.bank-offer-3 {
+                            color: #E73718;
+                        }
+                    }
+
+                    h5 {
+                        font-size: calc(14px + (16 - 14) * ((100vw - 320px) / (1920 - 320)));
+
+                        &.valid {
+                            margin-top: calc(22px + (69 - 22) * ((100vw - 320px) / (1920 - 320)));
+                        }
+                    }
+                }
+            }
+
+        }
+
+        .bank-footer {
+            padding: calc(7px + (17 - 7) * ((100vw - 320px) / (1920 - 320))) calc(13px + (26 - 13) * ((100vw - 320px) / (1920 - 320)));
+            color: $white;
+            display: flex;
+            align-items: center;
+
+            &-1 {
+                background: linear-gradient(85.8deg, #BB0032 -4.64%, #FF584D 109.73%, #FF8C75 131.73%);
+
+                .bank-coupon {
+                    background: linear-gradient(85.8deg, #FF584D -4.64%, rgba(187, 0, 50, 0.1) 131.73%);
+
+                    &::after {
+                        @include pos;
+                        @include pseudowh($width: 100%, $height: 0);
+                        bottom: 0;
+                        left: 0;
+                        z-index: -1;
+                        border-radius: 5px;
+                        transition: all 0.3s ease;
+                        background: #FF584D;
+                        background: linear-gradient(85.8deg, rgba(187, 0, 50, 0.1) 131.73%, #FF584D -4.64%);
+                    }
+                }
+            }
+
+            &-2 {
+                background: linear-gradient(90deg, #2395E8 15.92%, #4EB5FF 49.57%);
+
+                .bank-coupon {
+                    background: linear-gradient(90deg, #2395E8 15.92%, #4EB5FF 49.57%);
+
+                    &::after {
+                        @include pos;
+                        @include pseudowh($width: 100%, $height: 0);
+                        bottom: 0;
+                        left: 0;
+                        z-index: -1;
+                        border-radius: 5px;
+                        transition: all 0.3s ease;
+                        background: #4EB5FF;
+                        background: linear-gradient(90deg, #4EB5FF 15.92%, #2395E8 49.57%);
+                    }
+                }
+
+            }
+
+            &-3 {
+                background: linear-gradient(85.8deg, #FFB321 -4.64%, #FF584D 109.73%, #FF8C75 131.73%);
+
+                .bank-coupon {
+                    background: linear-gradient(85.8deg, #FFB321 -4.64%, #FF584D 109.73%, #FF8C75 131.73%);
+
+                    &::after {
+                        @include pos;
+                        @include pseudowh($width: 100%, $height: 0);
+                        bottom: 0;
+                        left: 0;
+                        z-index: -1;
+                        border-radius: 5px;
+                        transition: all 0.3s ease;
+                        background: #FFB321;
+                        background: linear-gradient(-90deg, rgba(255, 140, 117, 0) -4.64%, rgba(255, 88, 77, 0.1) 109.73, #FFB321 131.73%);
+                    }
+                }
+            }
+
+            h4 {
+                font-weight: 500;
+                font-size: calc(15px + (18 - 15) * ((100vw - 320px) / (1920 - 320)));
+
+                input {
+                    pointer-events: none;
+                    background-color: transparent;
+                    color: $white;
+                    border: none;
+                    font-weight: 600;
+                    width: 60%;
+                }
+            }
+
+            .bank-coupon {
+                margin-left: auto;
+                color: $white;
+                font-weight: 600;
+                padding: 6px 21px;
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                z-index: 0;
+
+                [dir="rtl"] & {
+                    margin-left: unset;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+}
+
+.shop-banner {
+    width: 52% !important;
+
+    @include mq-max(sm) {
+        width: 100% !important;
+    }
+
+    >div {
+        padding: calc(20px + (32 - 20) * ((100vw - 320px) / (1920 - 320)));
+        background: var(--theme-color);
+        color: $white;
+        border-radius: 9px;
+
+        h2 {
+            font-size: calc(21px + (37 - 21) * ((100vw - 320px) / (1920 - 320))) !important;
+            font-weight: 700 !important;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: calc(19px + (30 - 19) * ((100vw - 320px) / (1920 - 320))) !important;
+            margin-top: 18px;
+            margin-bottom: -2px;
+        }
+    }
+}

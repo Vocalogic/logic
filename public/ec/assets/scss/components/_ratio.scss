@@ -1,0 +1,132 @@
+/**=====================
+     Ratio scss
+==========================**/
+.ratio_30 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 30%;
+            display: block;
+        }
+    }
+}
+
+.ratio_35 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 35%;
+            display: block;
+        }
+    }
+}
+
+.ratio_45 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 45.4%;
+            display: block;
+        }
+    }
+}
+
+.ratio_50 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 50%;
+            display: block;
+        }
+    }
+}
+
+.ratio_60 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 60%;
+            display: block;
+        }
+    }
+}
+
+.ratio_65 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 65%;
+            display: block;
+        }
+    }
+}
+
+.ratio_87 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 87%;
+            display: block;
+        }
+    }
+}
+
+.ratio_125 {
+    .bg-size {
+        &::before {
+            content: "";
+            padding-top: 125%;
+            display: block;
+        }
+    }
+}
+
+.ratio_148 {
+    .bg-size {
+        &::before {
+            content: "";
+            padding-top: 148%;
+            display: block;
+        }
+    }
+}
+
+.ratio_156 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 156%;
+            display: block;
+        }
+    }
+}
+
+.ratio_medium {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 134%;
+            display: block;
+        }
+    }
+}
+
+.ratio_180 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 180%;
+            display: block;
+        }
+    }
+}
+
+.ratio_209 {
+    .bg-size {
+        &:before {
+            content: "";
+            padding-top: 209%;
+            display: block;
+        }
+    }
+}

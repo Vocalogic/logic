@@ -1,0 +1,45 @@
+
+@import "themes/bars-1to10.css";
+@import "themes/bars-movie.css";
+@import "themes/bars-square.css";
+@import "themes/bars-pill.css";
+@import "themes/bars-reversed.css";
+@import "themes/bars-horizontal.css";
+@import "themes/css-stars.css";
+@import "themes/fontawesome-stars-o.css";
+@import "themes/fontawesome-stars.css";
+
+/* project theme custome style */
+.br-theme-bars-1to10 .br-widget{ height: auto; }
+.br-theme-bars-1to10 .br-widget a.br-active,
+.br-theme-bars-1to10 .br-widget a.br-selected,
+.br-theme-bars-movie .br-widget a.br-active,
+.br-theme-bars-movie .br-widget a.br-selected{
+    background-color: var(--primary-color);
+    opacity: 1;
+}
+.br-theme-bars-1to10 .br-widget a,
+.br-theme-bars-movie .br-widget a{
+    opacity: 0.4;
+    background-color: var(--primary-color);
+}
+.br-theme-bars-1to10 .br-widget .br-current-rating,
+.br-theme-bars-movie .br-widget .br-current-rating{
+    color: var(--primary-color);
+}
+
+.br-theme-bars-pill .br-widget a.br-active,
+.br-theme-bars-pill .br-widget a.br-selected,
+.br-theme-bars-reversed .br-widget a.br-active,
+.br-theme-bars-reversed .br-widget a.br-selected{
+    background-color: var(--secondary-color);
+    opacity: 1;
+}
+.br-theme-bars-pill .br-widget a,
+.br-theme-bars-reversed .br-widget a{
+    opacity: 0.4;
+    background-color: var(--secondary-color);
+}
+.br-theme-bars-reversed .br-widget .br-current-rating{
+    color: var(--secondary-color);
+}

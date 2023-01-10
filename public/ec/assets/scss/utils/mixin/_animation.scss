@@ -1,0 +1,134 @@
+/* =====================
+    Animation scss 
+ ========================== */
+@keyframes scaleUpDown {
+
+    0%,
+    100% {
+        transform: scaleY(1) scaleX(1);
+    }
+
+    50%,
+    90% {
+        transform: scaleY(1.1);
+    }
+
+    75% {
+        transform: scaleY(0.95);
+    }
+
+    80% {
+        transform: scaleX(0.95);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: skewX(0) scale(1);
+    }
+
+    50% {
+        transform: skewX(5deg) scale(0.9);
+    }
+}
+
+@keyframes particleUp {
+    0% {
+        opacity: 0;
+    }
+
+    20% {
+        opacity: 1;
+    }
+
+    80% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        top: -100%;
+        transform: scale(0.5);
+    }
+}
+
+@keyframes shape {
+    0% {
+        background-position: 100% 0;
+    }
+
+    50% {
+        background-position: 50% 50%;
+    }
+
+    100% {
+        background-position: 0 100%;
+    }
+}
+
+@keyframes rounded {
+    0% {
+        transform: rotate(0);
+    }
+
+    50% {
+        transform: rotate(180deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes move {
+    0% {
+        transform: scale(1) rotate(0deg) translate3d(0, 0, 1px);
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        z-index: 10;
+        transform: scale(0) rotate(360deg) translate3d(0, 0, 1px);
+    }
+}
+
+@keyframes mover {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes flash {
+    0% {
+        opacity: 0.4;
+        transition: 0.3s ease-in-out;
+    }
+
+    100% {
+        opacity: 1;
+        transition: 0.3s ease-in-out;
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translate(3px, 0);
+    }
+
+    50% {
+        transform: translate(-3px, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

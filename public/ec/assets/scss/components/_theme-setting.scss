@@ -1,0 +1,168 @@
+/**=====================
+     Theme Setting scss
+==========================**/
+.setting-box {
+    background-color: var(--theme-color);
+    padding: 0;
+    border-radius: 5px;
+    z-index: 1;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+
+    .setting-button {
+        @include flex_common;
+        @include pseudowh($width: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))), $height: calc(30px + (40 - 30) * ((100vw - 320px) / (1920 - 320))));
+        padding: 0;
+        color: $white;
+    }
+
+    .theme-setting-2 {
+        position: absolute;
+        bottom: calc(40px + (46 - 40) * ((100vw - 320px) / (1920 - 320)));
+        right: 12px;
+        width: 360px;
+        background-color: $white;
+        padding: 12px;
+        border-radius: 8px 8px 0 8px;
+        box-shadow: 0 4px 8px rgba($title-color, 0.12);
+        transform: scale(0);
+        transform-origin: bottom right;
+        transition: all 0.3s ease-in-out;
+
+        [dir="rtl"] & {
+            transform-origin: bottom left;
+        }
+
+        [dir="rtl"] & {
+            right: unset;
+            left: 12px;
+            border-radius: 8px 8px 8px 0;
+        }
+
+        @include mq-max(2xs) {
+            width: 275px;
+        }
+
+        &.active {
+            transform: scale(1);
+            transform-origin: bottom right;
+
+            [dir="rtl"] & {
+                transform-origin: bottom left;
+            }
+        }
+
+        .theme-box {
+            ul {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 22px;
+                gap: calc(7px + (15 - 7) * ((100vw - 320px) / (1920 - 320)));
+
+                [dir="rtl"] & {
+                    padding-right: 0;
+                }
+
+                li {
+                    display: flex;
+                    align-items: center;
+                    width: 100%;
+                    padding-bottom: 14px;
+                    gap: 20px;
+                    border-bottom: 1px dashed $border-color;
+
+                    &:last-child {
+                        padding-bottom: 0;
+                        border: none;
+                    }
+
+                    &.color-box {
+                        display: block;
+                        gap: 19px;
+                    }
+
+                    .setting-name {
+                        margin-bottom: 0;
+                        width: 15%;
+                    }
+
+                    .theme-setting-button {
+                        @include flex_wrap ($dis: flex, $wrap: nowrap, $gap: 10px);
+                        align-items: center;
+                        padding-top: 0;
+                        width: 85%;
+
+                        button {
+                            width: 100%;
+                            background-color: var(--theme-color);
+                            color: $white;
+                            font-size: calc(14px + (15 - 14) * ((100vw - 320px) / (1920 - 320)));
+
+                            &.outline {
+                                color: var(--theme-color);
+                                border: 1px solid var(--theme-color);
+                                background-color: $white;
+                            }
+
+                            &.rtl-outline {
+                                color: var(--theme-color);
+                                border: 1px solid var(--theme-color);
+                                background-color: $white;
+
+                                [dir="rtl"] & {
+                                    color: $white;
+                                    border: 1px solid transparent;
+                                    background-color: var(--theme-color);
+                                }
+                            }
+
+                            &.rtl-unline {
+                                color: $white;
+                                border: 1px solid transparent;
+                                background-color: var(--theme-color);
+
+                                [dir="rtl"] & {
+                                    color: var(--theme-color);
+                                    border: 1px solid var(--theme-color);
+                                    background-color: $white;
+                                }
+                            }
+                        }
+
+                        &.color-picker {
+                            padding: 0;
+                            border: none;
+                            background-color: transparent;
+                            box-shadow: none;
+
+                            .form-control {
+                                @include flex_wrap ($dis: flex, $wrap: nowrap, $gap: 15px);
+                                padding: 0;
+                                border: none;
+                                align-items: center;
+
+                                .form-control-color {
+                                    @include pseudowh($width: 38px, $height: auto);
+                                    padding: 0;
+                                    font-size: 13px;
+                                    border: none;
+
+                                    [dir="rtl"] & {
+                                        max-width: 100%;
+                                    }
+                                }
+
+                                .form-label {
+                                    width: auto;
+                                    font-size: 16px;
+                                    color: $content-color;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

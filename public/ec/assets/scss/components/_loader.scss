@@ -1,0 +1,64 @@
+/**=====================
+     Loader scss
+==========================**/
+.fullpage-loader {
+    @include pseudowh($width: 100vw, $height: 100vh);
+    @include flex_common;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: $white;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity .5s;
+
+    span {
+        @include pseudowh($width: 6vmin, $height: 6vmin);
+        background-color: var(--theme-color);
+        border-radius: 100%;
+        backface-visibility: hidden;
+        position: absolute;
+        animation-name: move;
+        animation-timing-function: cubic-bezier(0.4, 0, 1, 0.8);
+        animation-iteration-count: infinite;
+        animation-duration: 3s;
+        top: calc(50% - 4vmin);
+        left: 50%;
+        transform-origin: -4vmin center;
+
+        &:nth-child(1) {
+            animation-delay: -0.5s;
+            opacity: 0;
+        }
+
+        &:nth-child(2) {
+            animation-delay: -1s;
+            opacity: 0;
+        }
+
+        &:nth-child(3) {
+            animation-delay: -1.5s;
+            opacity: 0;
+        }
+
+        &:nth-child(4) {
+            animation-delay: -2s;
+            opacity: 0;
+        }
+
+        &:nth-child(5) {
+            animation-delay: -2.5s;
+            opacity: 0;
+        }
+
+        &:nth-child(6) {
+            animation-delay: -3s;
+            opacity: 0;
+        }
+    }
+}
+
+.fullpage-loader--invisible {
+    opacity: 0;
+}
