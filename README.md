@@ -44,7 +44,7 @@ further fund development and grow the project.
 
 If you would rather just download and host the project yourself on your own servers, you can do so using the steps
 below. Feel free to reach out for support contract options for large production environments to help further
-fund development of this application.
+fund development of this application. Please refer to the [full installation guide](https://logic.readme.io/docs) for more information.
 
 #### Create a MySQL Database
 
@@ -82,10 +82,11 @@ DB_PASSWORD=                    # Database Password
 #### Finish using Upgrade Command
 
 ````
+./artisan key:generate
 ./artisan logic:upgrade
 ````
 
-**NOTE**: If you receive any errors from the above command, please review the step-by-step installation guide for
+**NOTE**: If you receive any errors from the above command, please review the [step-by-step installation guide](https://logic.readme.io/docs) for
 additional help.
 
 #### Final Commands
@@ -102,7 +103,7 @@ and initial admin user.
 
 ### User Manual
 
-Please refer to the user manual on how to get started.
+Please refer to the [user manual](https://logic.readme.io/docs) on how to get started.
 
 ### Contributing
 
