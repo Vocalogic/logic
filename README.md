@@ -9,6 +9,11 @@ download the quote or start services completely unassisted. We also needed flexi
 options, contract signing and more. Vocal (the phone side) and Logic (the business process) prides itself
 on efficiency for admins to perform tasks, and customer experience for the end user.
 
+#### Who is Logic For?
+Logic is designed for anyone that runs a service-based business, that needs a way to track leads, quotes, 
+automate billing, take credit cards, process ACH transactions, and give their customers a portal to login and
+review their services, pay invoices, or get help.
+
 #### Logic Provides:
 
 * A branded customer portal where customers can update credit cards, see services, get support, order services, etc.
@@ -20,6 +25,7 @@ on efficiency for admins to perform tasks, and customer experience for the end u
 * Cash flow tools
 * Account management for monthly services
 * Flexible configuration and branding
+* Integration Support - such as syncing invoices and payments to Quickbooks Online.
 
 ### Check out the [live demo here](https://demo.logic.host).
 
@@ -37,8 +43,9 @@ This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2
 
 ### Cloud Hosting and Management
 
-If you just want to use the application and host with Vocalogic, please contact **sales@vocalogic.com**. This helps
-further fund development and grow the project.
+If you just want to use the application and host with Vocalogic, 
+please visit [www.vocalogic.com/hosting](https://www.vocalogic.com/hosting).
+This helps further fund development and grow the project.
 
 ### Self-Hosted Installation Steps
 
