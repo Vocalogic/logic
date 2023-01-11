@@ -10,7 +10,8 @@ options, contract signing and more. Vocal (the phone side) and Logic (the busine
 on efficiency for admins to perform tasks, and customer experience for the end user.
 
 #### Who is Logic For?
-Logic is designed for anyone that runs a service-based business, that needs a way to track leads, quotes, 
+
+Logic is designed for anyone that runs a service-based business, that needs a way to track leads, quotes,
 automate billing, take credit cards, process ACH transactions, and give their customers a portal to login and
 review their services, pay invoices, or get help.
 
@@ -43,7 +44,7 @@ This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2
 
 ### Cloud Hosting and Management
 
-If you just want to use the application and host with Vocalogic, 
+If you just want to use the application and host with Vocalogic,
 please visit [www.vocalogic.com/hosting](https://www.vocalogic.com/hosting).
 This helps further fund development and grow the project.
 
@@ -130,7 +131,12 @@ As this is open sourced software, supporting this project financially is always 
 few ways you can contribute to Logic.
 
 * Donations - Support our developers on [Patreon](https://patreon.com/vocalogic)
-* [Hosting](https://www.vocalogic.com/hosting) with Vocalogic - Get a cloud server with Vocalogic or have us host your Logic instance.
-* Pizza. You could send Pizza to our offices at 190 Bluegrass Valley Parkway, Alpharetta, GA. 30005. Just no pineapple please.
+* Have your Logic users sign up with [LogicPay](https://www.vocalogic.com/logicpay) for credit card and ACH
+  transactions. This integration is provided as one of the base Logic merchant integrations. We receive a tiny
+  percentage of all transactions. This service is provided through FiServ.
+* [Hosting Logic](https://www.vocalogic.com/hosting) with Vocalogic - Get a cloud server with Vocalogic or have us host
+  your Logic instance.
+* Pizza. You could send Pizza to our offices at 190 Bluegrass Valley Parkway, Alpharetta, GA. 30005. Just no pineapple
+  please.
 
 
