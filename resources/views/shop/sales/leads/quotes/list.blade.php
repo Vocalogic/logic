@@ -56,7 +56,7 @@
 
                                 @if($service->price < $service->item->msrp)
                                     <del class="text-content">
-                                        ${{moenyFormat($service->item->msrp)}}</del>
+                                        ${{moneyFormat($service->item->msrp)}}</del>
                                 @endif
                             </h5>
                             @if($service->price < $service->item->msrp)
