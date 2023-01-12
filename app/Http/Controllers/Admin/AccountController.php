@@ -477,7 +477,7 @@ class AccountController extends Controller
             return redirect()->back();
         }
         session()->flash('message',
-            "A payment of $" . number_format($amount, 2) . " was applied to Invoice #$invoice->id.");
+            "A payment of $" . moneyFormat($amount) . " was applied to Invoice #$invoice->id.");
         return redirect()->to("/admin/accounts/$account->id?active=invoices");
     }
 
