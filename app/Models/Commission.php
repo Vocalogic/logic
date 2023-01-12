@@ -66,7 +66,7 @@ class Commission extends Model
      */
     public function getAmountHumanAttribute(): string
     {
-        return "$" . number_format($this->amount,2);
+        return "$" . moneyFormat($this->amount);
     }
 
     /**
