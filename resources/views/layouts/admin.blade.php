@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{$title ?? "Title"}}</title>
     @if(setting('brandImage.icon'))
-        <link rel="icon" href="{{_file(setting('brandImage.icon'))->relative}}" type="image/png"> <!-- Favicon-->
+        <link rel="icon" href="{{_file(setting('brandImage.icon'))?->relative}}" type="image/png"> <!-- Favicon-->
     @endif
     <!-- plugin css file  -->
 
