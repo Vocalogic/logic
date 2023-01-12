@@ -42,7 +42,7 @@ class Addon extends Model
         foreach ($this->options()->orderBy('price')->get() as $option)
         {
             $opts[$option->id] = sprintf("%s (%s$%s)", $option->name, $option->price > -1 ? "+" : "-",
-                number_format($option->price, 2));
+                moneyFormat($option->price));
         }
         return $opts;
     }
@@ -61,7 +61,7 @@ class Addon extends Model
         return match ($type)
         {
             'name' => $addon->name,
-            'price' => number_format($addon->price,2),
+            'price' => moneyFormat($addon->price),
             'qty' => $addon->qty,
             default => $addon->addon_option_id
         };
@@ -81,7 +81,7 @@ class Addon extends Model
         return match ($type)
         {
             'name' => $addon->name,
-            'price' => number_format($addon->price,2),
+            'price' => moneyFormat($addon->price),
             'qty' => $addon->qty,
             default => $addon->addon_option_id,
         };
