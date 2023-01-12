@@ -8,7 +8,7 @@
     <x-seo::meta />
 
 @if(setting('brandImage.icon'))
-        <link rel="icon" href="{{_file(setting('brandImage.icon'))->relative}}" type="image/png"> <!-- Favicon-->
+        <link rel="icon" href="{{_file(setting('brandImage.icon'))?->relative}}" type="image/png"> <!-- Favicon-->
     @endif
 
     <!-- Google font -->
