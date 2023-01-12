@@ -102,7 +102,7 @@
                             <img class="img-fluid" src="/icons/1728946.png"></div>
                         <div class="flex-fill ms-3 text-truncate">
                             <div class="small text-uppercase">Potential MRR</div>
-                            <div><span class="h6 mb-0 fw-bold">${{number_format($lead->primaryMrr,2)}}</span> </div>
+                            <div><span class="h6 mb-0 fw-bold">${{moneyFormat($lead->primaryMrr,2)}}</span> </div>
                         </div>
                     </div>
                 </div>
