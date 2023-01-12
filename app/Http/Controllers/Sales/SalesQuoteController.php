@@ -29,7 +29,7 @@ class SalesQuoteController extends Controller
         $quote->save();
         $quote->refresh();
         $cart->removeAll();
-        sysact(ActivityType::LeadQuote, $lead->id, "created Quote #$quote->id for ");
+        sysact(ActivityType::LeadQuote, $quote->id, "created <a href='/admin/leads/{$lead->id}/quotes/{$quote->id}'>Quote #$quote->id</a> for {$lead->company}");
         if ($lead->quotes()->where('preferred', true)->count() == 0)
         {
             $quote->update(['preferred' => true]);
