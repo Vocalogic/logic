@@ -622,11 +622,12 @@ if (!function_exists('setting'))
     /**
      * Take a float value (generally from an input) and return
      * the integer form
-     * @param float|null $value
+     * @param string|null $value
      * @return int
      */
-    function convertMoney(?float $value = null) : int
+    function convertMoney(string $value = null) : int
     {
+        $value = onlyNumbers($value);
         if (!$value) return 0;
         return $value * 100;
     }
