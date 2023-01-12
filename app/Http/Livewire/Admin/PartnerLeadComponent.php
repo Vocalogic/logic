@@ -22,9 +22,13 @@ class PartnerLeadComponent extends Component
         $this->getLeadUpdates();
     }
 
+    /**
+     * Render the partner component for a lead.
+     * @return View
+     */
     public function render(): View
     {
-        return view('simplelead::admin.leads.partner.component');
+        return view('admin.leads.partner.component');
     }
 
     /**
