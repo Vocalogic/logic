@@ -403,6 +403,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
     Route::get('quotes', [QuoteController::class, 'index']);
     Route::get('quotes/{quote}', [QuoteController::class, 'show']);
+    Route::get('quotes/{quote}/approve', [QuoteController::class, 'approve']);
     Route::get('quotes/{quote}/items/{item}/addons', [QuoteController::class, 'addons']);
     Route::post('quotes/{quote}/items/{item}/addons', [QuoteController::class, 'saveAddons']);
     Route::get('quotes/{quote}/items/{item}/meta', [QuoteController::class, 'showMeta']);

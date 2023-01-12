@@ -41,18 +41,18 @@ class UserController extends Controller
     public function update(User $user, Request $request): RedirectResponse
     {
         $user->update([
-            'name'             => $request->name,
-            'email'            => $request->email,
-            'color'            => $request->color,
-            'phone'            => onlyNumbers($request->phone),
-            'goal_monthly'     => $request->goal_monthly,
-            'goal_quarterly'   => $request->goal_quarterly ?: $request->goal_monthly * 3,
-            'goal_f_monthly'   => $request->goal_f_monthly,
-            'goal_f_quarterly' => $request->goal_f_quarterly ?: $request->goal_f_monthly * 3,
-            'agent_comm_spiff' => onlyNumbers($request->agent_comm_spiff),
-            'agent_comm_mrc'   => onlyNumbers($request->agent_comm_mrc),
-            'acl'              => $request->acl
-
+            'name'              => $request->name,
+            'email'             => $request->email,
+            'color'             => $request->color,
+            'phone'             => onlyNumbers($request->phone),
+            'goal_monthly'      => $request->goal_monthly,
+            'goal_quarterly'    => $request->goal_quarterly ?: $request->goal_monthly * 3,
+            'goal_f_monthly'    => $request->goal_f_monthly,
+            'goal_f_quarterly'  => $request->goal_f_quarterly ?: $request->goal_f_monthly * 3,
+            'agent_comm_spiff'  => onlyNumbers($request->agent_comm_spiff),
+            'agent_comm_mrc'    => onlyNumbers($request->agent_comm_mrc),
+            'acl'               => $request->acl,
+            'requires_approval' => (bool)$request->requires_approval
         ]);
         return redirect()->to("/admin/users");
     }

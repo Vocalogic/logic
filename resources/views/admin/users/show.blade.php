@@ -1,7 +1,7 @@
 <p class="mb-3">
     Team members added here will be sent an invite and password reset link to login.
 </p>
-<form method="post" action="/admin/users/{{$u->id}}">
+<form method="post" action="/admin/users/{{$u->id}}" class="formAnchor">
     @method('PUT')
     @csrf
     <div class="row g-3 mb-3">
@@ -45,6 +45,16 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-xxl-12 col-md-12">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" {{$u->requires_approval ? "checked" : null}} role="switch" value="1" id="approval"
+                           name="requires_approval">
+                    <label class="form-check-label" for="approval">Require Approval for Quotes</label>
+                </div>
+            </div>
         </div>
 
         <div class="row mt-3">
@@ -104,7 +114,7 @@
 
 
         <div class="col-lg-12 col-md-12 mt-3">
-            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".modal" value="Save">
+            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".formAnchor" value="Save">
 
             <a class="confirm mt-3 btn btn-light-primary pull-right" data-method="GET"
                data-message="Are you sure you want to send a password reset request?"

@@ -17,7 +17,6 @@
                     @include('shop.sales.menu', ['quote' => $quote])
                 </div>
                 <div class="col-xxl-9 col-lg-8">
-
                     @include('shop.sales.leads.quotes.list')
 
                 </div>

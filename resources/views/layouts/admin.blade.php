@@ -34,6 +34,9 @@
     <link rel="stylesheet" href="/assets/css/luno.style.css">
     <link rel="stylesheet" href="/assets/css/logic.css">
     <link rel="stylesheet" href="/assets/css/bootstrapdatepicker.min.css">
+
+
+
     <style>
         .popover {
             background-color: {{currentMode() == 'dark' ? 'var(--dark-color)' : 'var(--white-color)'}};
@@ -333,6 +336,7 @@
 <script src="/assets/js/jquery.signaturepad.min.js"></script>
 <script src="/assets/bundles/apexcharts.bundle.js"></script>
 <script src="/assets/bundles/fullcalendar.bundle.js"></script>
+
 @livewireScripts
 <script type="text/javascript" src="{{mix('/js/app.js')}}"></script>
 @yield('javascript')

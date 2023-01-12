@@ -39,6 +39,8 @@ $(document).ready(function () {
     }
 
 
+
+
     /**
      * Init all Tooltips
      * @type {*[]}

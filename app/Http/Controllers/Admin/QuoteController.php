@@ -424,4 +424,19 @@ class QuoteController extends Controller
         }
         return redirect()->back()->with('message', "Requirements saved successfully.");
     }
+
+    /**
+     * Approve quote for sending.
+     * @param Quote $quote
+     * @return string[]
+     */
+    public function approve(Quote $quote) : array
+    {
+        $quote->update([
+            'approved' => true,
+            'approved_by' => user()->id,
+            'approved_on' => now()
+        ]);
+        return ['callback' => 'reload'];
+    }
 }
