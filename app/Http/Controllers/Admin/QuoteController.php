@@ -346,7 +346,7 @@ class QuoteController extends Controller
                         'addon_id'        => $key,
                         'quote_item_id'   => $item->id,
                         'addon_option_id' => $val,
-                        'price'           => $request->get("price_$key") ? onlyNumbers($request->get("price_$key")) : $price,
+                        'price'           => $request->get("price_$key") ? convertMoney($request->get("price_$key")) : $price,
                         'qty'             => $request->get("qty_$key") ?: 1,
                         'name'            => $oitem->name
                     ]);
@@ -357,7 +357,7 @@ class QuoteController extends Controller
                         'addon_id'        => $key,
                         'quote_item_id'   => $item->id,
                         'addon_option_id' => $val,
-                        'price'           => $request->get("price_$key") ? onlyNumbers($request->get("price_$key")) : $price,
+                        'price'           => $request->get("price_$key") ? convertMoney($request->get("price_$key")) : $price,
                         'qty'             => $request->get("qty_$key") ?: 1,
                         'name'            => $oitem->name
                     ]);
