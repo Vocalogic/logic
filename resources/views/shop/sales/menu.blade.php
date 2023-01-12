@@ -10,14 +10,13 @@
                     Make Quote Presentable
                 @endif
             </a>
+    @if(user()->requires_approval && $quote->approved)
             <a class="btn btn-primary bg-info btn-sm text-white mb-3" href="/sales/leads/{{$lead->id}}/quotes/{{$quote->id}}/send">
                 <i class="fa fa-mail-forward"></i> &nbsp; Send Quote to Customer</a>
+    @endif
             <a class="btn btn-primary bg-primary btn-sm text-white mb-3 wait" data-message="Generating Quote.." href="/sales/leads/{{$lead->id}}/quotes/{{$quote->id}}/download">
                 <i class="fa fa-download"></i> &nbsp; Download Quote
             </a>
-
-
-
 @endif
 
 

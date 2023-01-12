@@ -40,6 +40,17 @@
                     it will be reflected instantly on the customer's side.
                 </div>
             @endif
+            @if(!$quote->approved && $quote->lead->agent && $quote->lead->agent->requires_approval)
+                <div class="alert alert-dark">
+                    <i class="fa fa-exclamation-circle"></i> This quote has not been approved.
+                    @if(!user()->requires_approval)
+                        <a class="confirm"
+                           data-message="Are you sure you want to approve this quote?"
+                           data-method="GET"
+                           href="/admin/quotes/{{$quote->id}}/approve">Approve quote for sending.</a>
+                    @endif
+                </div>
+            @endif
             @include('admin.quotes.builder')
         </div>
     </div>

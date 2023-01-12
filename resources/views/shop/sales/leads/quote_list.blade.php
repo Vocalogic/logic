@@ -52,11 +52,16 @@
                                 class="fa fa-exclamation-triangle text-warning"></i></a>
                     @endif
 
-
+                    @if(user()->requires_approval && !$quote->approved)
+                        <a href="#" class="p-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Quote awaiting Approval">
+                            <i class="fa fa-exclamation text-danger"></i>
+                        </a>
+                        @else
                     <a href="/sales/leads/{{$lead->id}}/quotes/{{$quote->id}}/send" class="p-2"
                        data-method="GET"
                        data-message="Are you sure you want to send this quote?"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="Send Quote"><i class="fa fa-mail-forward"></i></a>
+                    @endif
                     <a href="/sales/leads/{{$lead->id}}/quotes/{{$quote->id}}/decline" class="p-2 live"
                        data-bs-toggle="tooltip" data-bs-placement="top" title="Decline Quote"><i class="fa fa-trash text-danger"></i>
                     </a>
