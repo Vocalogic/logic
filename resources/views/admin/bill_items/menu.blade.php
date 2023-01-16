@@ -18,6 +18,12 @@
     <i class="fa fa-arrow-right"></i> Change Category
 </a>
 
+@if($item->photo_id)
+    <div class="mt-2 mb-2">
+        <img class="img-fluid" src="{{_file($item->photo_id)?->relative}}">
+    </div>
+@endif
+
 
 <div class="card mt-4 mb-3">
     <div class="card-body">
