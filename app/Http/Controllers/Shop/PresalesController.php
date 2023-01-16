@@ -8,7 +8,7 @@ use App\Models\Lead;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class PresalesController extends Controller
 {

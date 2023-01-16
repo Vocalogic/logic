@@ -14,7 +14,7 @@ use App\Models\QuoteItem;
 use App\Models\QuoteItemAddon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class QuoteController extends Controller
 {
@@ -414,11 +414,11 @@ class QuoteController extends Controller
                 $x = explode("_", $key); // key could be a_3 or a_3_1
                 if (!isset($x[2]))
                 {
-                    $item->updateMeta($x[1], $val);
+                    $item->updateMeta((int)$x[1], $val);
                 }
                 else
                 {
-                    $item->updateMeta($x[1], $val, $x[2]);
+                    $item->updateMeta((int)$x[1], $val, (int)$x[2]);
                 }
             }
         }

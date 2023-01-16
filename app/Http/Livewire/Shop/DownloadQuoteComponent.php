@@ -7,7 +7,7 @@ use App\Models\BillItem;
 use App\Models\Lead;
 use App\Models\Quote;
 use Illuminate\Support\Facades\Session;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class DownloadQuoteComponent extends Component

@@ -2,12 +2,10 @@
 
 namespace App\Http\Livewire\Shop;
 
-use App\Enums\Core\ActivityType;
 use App\Enums\Core\PaymentMethod;
 use App\Exceptions\LogicException;
 use App\Models\Invoice;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class PayInvoiceComponent extends Component

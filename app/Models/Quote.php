@@ -124,9 +124,9 @@ class Quote extends Model
 
     /**
      * Get MRR For Quote
-     * @return float
+     * @return int
      */
-    public function getMrrAttribute(): float
+    public function getMrrAttribute(): int
     {
         $total = 0;
         foreach ($this->services as $service)
@@ -153,9 +153,9 @@ class Quote extends Model
 
     /**
      * Get NRC for Quote
-     * @return float
+     * @return int
      */
-    public function getNrcAttribute(): float
+    public function getNrcAttribute(): int
     {
         $total = 0;
         foreach ($this->products as $product)
@@ -170,7 +170,7 @@ class Quote extends Model
      * Get the total for the quote.
      * @return float
      */
-    public function getTotalAttribute(): float
+    public function getTotalAttribute(): int
     {
         return $this->mrr + $this->nrc;
     }
@@ -188,7 +188,7 @@ class Quote extends Model
      * Get Opex for a Quote (for reporting)
      * @return float
      */
-    public function getOpexAttribute(): float
+    public function getOpexAttribute(): int
     {
         return $this->getAnalysisAttribute()->opexSolo;
     }
@@ -197,7 +197,7 @@ class Quote extends Model
      * Get quote capex
      * @return float
      */
-    public function getCapexAttribute(): float
+    public function getCapexAttribute(): int
     {
         return $this->getAnalysisAttribute()->capex;
     }
@@ -206,7 +206,7 @@ class Quote extends Model
      * Get Commissionable amount based on user logged in.
      * @return float
      */
-    public function getCommissionableAttribute(): float
+    public function getCommissionableAttribute(): int
     {
         $total = 0;
         if (user()->agent_comm_mrc)

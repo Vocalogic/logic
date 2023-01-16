@@ -101,9 +101,9 @@ class Invoice extends Model
 
     /**
      * Get total for invoice.
-     * @return float
+     * @return int
      */
-    public function getTotalAttribute(): float
+    public function getTotalAttribute(): int
     {
         $total = 0;
         foreach ($this->items as $item)
@@ -126,9 +126,9 @@ class Invoice extends Model
 
     /**
      * Get balance on an invoice.
-     * @return float
+     * @return int
      */
-    public function getBalanceAttribute(): float
+    public function getBalanceAttribute(): int
     {
         $total = $this->total;
         foreach ($this->transactions as $transaction)
@@ -341,12 +341,12 @@ class Invoice extends Model
     /**
      * Apply or process a payment on an invoice
      * @param PaymentMethod $method
-     * @param float         $amount
+     * @param int           $amount
      * @param mixed         $details
      * @return Transaction
      * @throws LogicException
      */
-    public function processPayment(PaymentMethod $method, float $amount, mixed $details): Transaction
+    public function processPayment(PaymentMethod $method, int $amount, mixed $details): Transaction
     {
         $this->createCommission();
         $this->refresh();

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\BillItem;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -51,7 +51,7 @@ class MarketingGeneratorComponent extends Component
     public function getResponse(string $question): string
     {
         config(['openai.api_key' => $this->apiKey]);
-
+        if (!$this->apiKey) return "OpenAI API Key not configured.";
         $result = OpenAI::completions()->create([
             'model'       => 'text-davinci-003',
             'prompt'      => $question,
@@ -115,6 +115,7 @@ class MarketingGeneratorComponent extends Component
     {
         $this->item->faqs()->delete();
         $x = explode("\n", $this->faq);
+        $question = null;
         foreach ($x as $line)
         {
             if (preg_match("/Q:/i", $line))

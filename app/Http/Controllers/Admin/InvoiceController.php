@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class InvoiceController extends Controller
 {

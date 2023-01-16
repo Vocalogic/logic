@@ -6,7 +6,7 @@ use App\Models\PackageBuild;
 use App\Models\PackageSection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class PackageSectionController
 {

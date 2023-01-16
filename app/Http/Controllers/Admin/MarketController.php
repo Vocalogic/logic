@@ -7,7 +7,7 @@ use App\Models\Setting;
 use App\Operations\API\Control;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class MarketController
 {

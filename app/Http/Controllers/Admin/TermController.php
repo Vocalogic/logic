@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\LeadType;
 use App\Models\Term;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class TermController extends Controller
 {

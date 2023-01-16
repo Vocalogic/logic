@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class SalesFunnelController extends Controller
 {

@@ -9,7 +9,7 @@ use App\Models\LeadStatus;
 use App\Models\LeadType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LeadTypeController extends Controller
 {

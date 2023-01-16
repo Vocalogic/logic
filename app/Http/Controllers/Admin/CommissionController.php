@@ -6,9 +6,9 @@ use App\Enums\Core\CommissionStatus;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Commission;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class CommissionController extends Controller
 {

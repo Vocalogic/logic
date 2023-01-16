@@ -8,7 +8,7 @@ use App\Models\PackageSection;
 use App\Models\PackageSectionQuestion;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class PackageSectionQuestionController extends Controller
 {

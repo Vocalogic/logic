@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Admin;
 use App\Operations\API\Geo\IPGeo;
 use App\Operations\Shop\ShopBus;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ShopMonitorComponent extends Component

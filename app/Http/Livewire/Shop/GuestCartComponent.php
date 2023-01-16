@@ -3,10 +3,8 @@
 namespace App\Http\Livewire\Shop;
 
 use App\Exceptions\LogicException;
-use App\Models\Addon;
-use App\Models\BillItem;
 use App\Models\Coupon;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class GuestCartComponent extends Component

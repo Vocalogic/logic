@@ -10,13 +10,12 @@ use App\Http\Controllers\Controller;
 use App\Models\BillItem;
 use App\Models\HardwareOrder;
 use App\Models\OrderItem;
-use App\Models\Order;
 use App\Models\Shipment;
 use App\Operations\Core\LoFileHandler;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ShipmentController extends Controller
 {

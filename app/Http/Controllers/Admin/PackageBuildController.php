@@ -7,7 +7,7 @@ use App\Models\PackageBuild;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class PackageBuildController extends Controller
 {

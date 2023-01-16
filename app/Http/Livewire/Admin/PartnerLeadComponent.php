@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Lead;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class PartnerLeadComponent extends Component

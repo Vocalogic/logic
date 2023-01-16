@@ -210,9 +210,9 @@ class Account extends Model
 
     /**
      * Get the current MRR on an account.
-     * @return float
+     * @return int
      */
-    public function getMrrAttribute(): float
+    public function getMrrAttribute(): int
     {
         $total = 0;
         foreach ($this->items as $item)
@@ -892,10 +892,10 @@ class Account extends Model
     /**
      * This will send a declined notification to the user if the declined flag has not been set yet.
      * @param Invoice $invoice
-     * @param float   $amount
+     * @param int     $amount
      * @return void
      */
-    public function sendDeclinedNotification(Invoice $invoice, float $amount): void
+    public function sendDeclinedNotification(Invoice $invoice, int $amount): void
     {
         if ($this->declined) return; // Do not send duplicates.
         $invoice->amt = moneyFormat($amount);

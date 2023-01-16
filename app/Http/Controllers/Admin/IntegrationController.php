@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Integration;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class IntegrationController extends Controller
 {

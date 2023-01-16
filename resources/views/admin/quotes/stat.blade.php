@@ -4,7 +4,7 @@
         <h6 class="card-title m-0">Cost/Profit Analysis</h6>
         <p class="card-text" mt-2>The following will show your profit margin and ensuring that
             the deal meets minimum profit expectations.</p>
-        <span class="h2 d-block mb-3">${{number_format($quote->analysis->profit,2)}}</span>
+        <span class="h2 d-block mb-3">${{moneyFormat($quote->analysis->profit,2)}}</span>
         <!-- Progress -->
         <div class="progress rounded-pill mb-2" style="height: 4px;">
             <div class="progress-bar {{$quote->bar->color}}" role="progressbar" style="width: {{$quote->bar->width}}%" aria-valuenow="{{$quote->bar->width}}" aria-valuemin="0"
@@ -32,32 +32,32 @@
                     <td>Gross Income <br/>
                         <small class="text-muted">Value before expenses</small>
                     </td>
-                    <td>${{number_format($quote->analysis->gross,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->gross)}}</td>
 
                 </tr>
                 <tr>
                     <td>Capital Expenses<br/>
                         <small class="text-muted">Hardware/Capex Purchases</small></td>
-                    <td>${{number_format($quote->analysis->capex,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->capex)}}</td>
                 </tr>
                 <tr>
                     <td>Operational Expenses<br/>
                         <small class="text-muted">Combined Monthly COGS</small>
                     </td>
-                    <td>${{number_format($quote->analysis->opex,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->opex)}}</td>
                 </tr>
                 @if($quote->analysis->totalCommission)
                 <tr>
                     <td>Total Commission<br/>
                         <small class="text-muted">Total Commission over Term</small>
                     </td>
-                    <td>${{number_format($quote->analysis->totalCommission,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->totalCommission)}}</td>
                 </tr>
                 <tr>
                     <td>Monthly Commission<br/>
                         <small class="text-muted">Agent Payout per Month</small>
                     </td>
-                    <td>${{number_format($quote->analysis->monthlyCommission,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->monthlyCommission)}}</td>
                 </tr>
                 @endif
                 @if($quote->analysis->agentSpiff)
@@ -65,7 +65,7 @@
                         <td>Total SPIFF Payout<br/>
                             <small class="text-muted">Total MRR Instant Payout</small>
                         </td>
-                        <td>${{number_format($quote->analysis->agentSpiff,2)}}</td>
+                        <td>${{moneyFormat($quote->analysis->agentSpiff)}}</td>
                     </tr>
                 @endif
 
@@ -75,7 +75,7 @@
                     <td>Net Value<br/>
                         <small class="text-muted">Deal Value after Expenses</small>
                     </td>
-                    <td>${{number_format($quote->analysis->profit,2)}}</td>
+                    <td>${{moneyFormat($quote->analysis->profit)}}</td>
                 </tr>
                 <tr>
                     <td>Margin

@@ -8,7 +8,7 @@ use App\Models\BillItem;
 use App\Models\PackageBuild;
 use App\Models\PackageSection;
 use App\Models\PackageSectionQuestion;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 /**

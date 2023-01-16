@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class EventController extends Controller
 {

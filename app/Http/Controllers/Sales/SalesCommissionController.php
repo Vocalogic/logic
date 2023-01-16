@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Models\Commission;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class SalesCommissionController extends Controller
 {

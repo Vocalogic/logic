@@ -9,7 +9,7 @@ use App\Models\EmailTemplate;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class InstallController extends Controller
 {

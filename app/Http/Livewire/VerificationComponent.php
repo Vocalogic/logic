@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class VerificationComponent extends Component

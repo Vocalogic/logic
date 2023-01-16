@@ -8,7 +8,7 @@ use App\Models\Tag;
 use App\Models\TagCategory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class TagController extends Controller
 {

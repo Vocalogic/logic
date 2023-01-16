@@ -12,7 +12,7 @@ use App\Models\Provisioning;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 

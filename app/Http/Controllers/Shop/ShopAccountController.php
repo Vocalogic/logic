@@ -13,9 +13,7 @@ use App\Operations\Integrations\Merchant\Merchant;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ShopAccountController extends Controller
 {

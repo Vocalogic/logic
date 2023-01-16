@@ -6,9 +6,9 @@ use App\Enums\Core\CommKey;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class AccountUserController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use Illuminate\Support\Collection;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\Redirector;
 

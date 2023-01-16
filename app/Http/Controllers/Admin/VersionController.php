@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\CommKey;
-use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Operations\API\Control;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Artisan;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class VersionController extends Controller
 {

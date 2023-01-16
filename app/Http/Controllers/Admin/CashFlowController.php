@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Operations\Core\CashFlow;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class CashFlowController extends Controller
 {

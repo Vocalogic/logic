@@ -6,7 +6,7 @@ use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ProfileController extends Controller
 {

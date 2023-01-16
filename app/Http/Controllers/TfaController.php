@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class TfaController extends Controller
 {

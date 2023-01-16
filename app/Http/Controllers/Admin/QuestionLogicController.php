@@ -9,7 +9,7 @@ use App\Models\PackageSectionQuestion;
 use App\Models\PackageSectionQuestionLogic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class QuestionLogicController extends Controller
 {

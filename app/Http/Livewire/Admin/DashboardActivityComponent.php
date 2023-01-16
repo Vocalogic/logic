@@ -4,7 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Activity;
 use Illuminate\Support\Collection;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class DashboardActivityComponent extends Component

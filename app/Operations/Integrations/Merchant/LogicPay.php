@@ -107,12 +107,12 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
     /**
      * Attempt to authorize payment for an invoice
      * @param Invoice $invoice
-     * @param float   $amount
+     * @param int     $amount
      * @return string
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function authorize(Invoice $invoice, float $amount): string
+    public function authorize(Invoice $invoice, int $amount): string
     {
         $lp = new LPCore();
         //   $result = $lp->authorizeInstance($invoice->account->merchant_payment_token, $amount, $invoice->account->name, '341', '30005', "1025");
@@ -190,12 +190,12 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
     /**
      * Attempt to process an invoice using ACH
      * @param Invoice $invoice
-     * @param float   $amount
+     * @param int     $amount
      * @return string
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function ach(Invoice $invoice, float $amount): string
+    public function ach(Invoice $invoice, int $amount): string
     {
         $lp = new LPCore();
         $result = $lp->processACH($invoice->account->merchant_ach_aba, $invoice->account->merchant_ach_account, $amount,

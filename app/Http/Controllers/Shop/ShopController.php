@@ -11,7 +11,7 @@ use App\Models\Quote;
 use App\Observers\BillItemObserver;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class ShopController extends Controller
 {

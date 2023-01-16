@@ -112,19 +112,7 @@ class AccountItem extends Model
         return $totalGross * $percOwed;
     }
 
-    /**
-     * Get a text representation of the qty allowed.
-     * @return string
-     */
-    public function getAllowanceAttribute(): string
-    {
-        return sprintf("%s Allowed: %d (Overage Rate: $%s p/%s)",
-            $this->allowed_type->getHuman(),
-            $this->allowed_qty,
-            number_format($this->allowed_overage, 3),
-            $this->allowed_type->getShort()
-        );
-    }
+
 
     /**
      * Send Immediate Termination

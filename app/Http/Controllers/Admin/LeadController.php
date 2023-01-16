@@ -7,16 +7,14 @@ use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
-use App\Models\LeadTn;
 use App\Models\Partner;
 use App\Models\User;
-use App\Operations\API\Control;
 use App\Operations\Core\LoFileHandler;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class LeadController extends Controller
 {
@@ -200,51 +198,6 @@ class LeadController extends Controller
         return ['callback' => 'reload'];
     }
 
-    /**
-     * Add telephone number to porting list
-     * @param Lead    $lead
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function addTn(Lead $lead, Request $request): RedirectResponse
-    {
-        $request->validate([
-            'number' => 'required|numeric',
-        ]);
-        $tn = $lead->tns()->create([
-            'number'      => $request->number,
-            'description' => $request->description,
-            'agency'      => $request->agency,
-            'is_btn'      => (bool)$request->is_btn,
-            'type'        => $request->type
-        ]);
-        if ($request->lookup)
-        {
-            $c = new Control();
-            $data = $c->getNumber($request->number);
-            if ($data->success)
-            {
-                $tn->update([
-                    'agency' => $data->data->carrier->name,
-                    'type'   => $data->data->carrier->type
-                ]);
-            }
-        }
-        return redirect()->to("/admin/leads/$lead->id?tab=lnp");
-    }
-
-    /**
-     * Remove a number from inventory.
-     * @param Lead   $lead
-     * @param LeadTn $tn
-     * @return string[]
-     */
-    public function delTn(Lead $lead, LeadTn $tn): array
-    {
-        $tn->delete();
-        return ['callback' => "reload"];
-    }
 
     /**
      * Close or Suspend Lead

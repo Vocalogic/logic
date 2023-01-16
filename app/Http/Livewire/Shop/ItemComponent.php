@@ -7,7 +7,7 @@ use App\Models\BillCategory;
 use App\Models\BillItem;
 use App\Models\BillItemTag;
 use App\Models\Tag;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ItemComponent extends Component

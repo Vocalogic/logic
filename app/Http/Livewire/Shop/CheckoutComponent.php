@@ -2,20 +2,14 @@
 
 namespace App\Http\Livewire\Shop;
 
-use App\Enums\Core\ACL;
-use App\Enums\Core\ActivityType;
 use App\Enums\Core\CommKey;
-use App\Enums\Core\LeadStatus;
 use App\Models\Account;
-use App\Models\Addon;
-use App\Models\AddonOption;
 use App\Models\BillItem;
 use App\Models\Quote;
 use App\Models\Term;
 use App\Models\User;
-use App\Operations\Shop\ShopOperation;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
 use Livewire\Component;
 
 class CheckoutComponent extends Component

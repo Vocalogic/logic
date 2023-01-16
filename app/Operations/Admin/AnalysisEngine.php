@@ -20,8 +20,8 @@ class AnalysisEngine
      */
     static public function byQuote(Quote $quote): object
     {
-        $mrr = moneyFormat($quote->mrr, false);
-        $nrc = moneyFormat($quote->nrc, false);
+        $mrr = $quote->mrr;
+        $nrc = $quote->nrc;
         $term = $quote->term ?: (int)setting('quotes.assumedTerm');
         $opexSolo = 0;
 

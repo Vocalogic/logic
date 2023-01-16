@@ -9,7 +9,7 @@ use App\Operations\Integrations\Merchant\LogicPay;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\Redirector;
 

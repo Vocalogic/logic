@@ -8,7 +8,7 @@ use App\Models\LeadDiscovery;
 use App\Models\LeadType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class DiscoveryController extends Controller
 {

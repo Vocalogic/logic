@@ -9,7 +9,7 @@ use App\Models\Quote;
 use App\Models\QuoteItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class SalesQuoteController extends Controller
 {

@@ -3,7 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Enums\Core\EventType;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class NotificationComponent extends Component
@@ -14,7 +14,7 @@ class NotificationComponent extends Component
      * Render Component
      * @return View
      */
-    public function render():View
+    public function render(): View
     {
         return view('admin.partials.core.notifications');
     }
@@ -23,7 +23,7 @@ class NotificationComponent extends Component
      * Mark all read.
      * @return void
      */
-    public function markRead():void
+    public function markRead(): void
     {
         user()->notifications()->where('type', EventType::SEV_NOTIFY)->update(['read' => true]);
     }

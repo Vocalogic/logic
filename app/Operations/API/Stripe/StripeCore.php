@@ -41,7 +41,7 @@ class StripeCore
     {
         $searchObject = [$method => $query];
         $customer = Customer::all($searchObject);
-        if (!empty($customer->data) && !empty($customer->data[0]->id))
+        if (!isset($customer->data) && isset($customer->data[0]->id))
         {
             return $customer->data[0]->id;
         }

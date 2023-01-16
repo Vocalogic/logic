@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\Core\AccountFileType;
 use App\Enums\Core\ACL;
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\PaymentMethod;
@@ -12,27 +11,22 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\AccountAddon;
 use App\Models\AccountItem;
-use App\Models\Activity;
 use App\Models\AddonOption;
 use App\Models\BillItem;
 use App\Models\FileCategory;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
-use App\Models\LNPOrder;
 use App\Models\LOFile;
 use App\Models\Quote;
-use App\Models\QuoteItem;
 use App\Models\User;
-use App\Operations\API\NS\Domain;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Integrations\Accounting\Finance;
 use App\Operations\Integrations\Merchant\Merchant;
 use Carbon\Carbon;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class AccountController extends Controller
 {
@@ -123,7 +117,6 @@ class AccountController extends Controller
             'profile'  => false,
             'pricing'  => false,
             'files'    => false,
-            'pbx'      => false,
             'events'   => false,
             'partner'  => false,
             'users'    => false
@@ -294,46 +287,8 @@ class AccountController extends Controller
         return redirect()->to("/admin/accounts/$account->id");
     }
 
+
     /**
-     * PBX Assignment Form
-     * @param Account $account
-     * @param Request $request
-     * @param Account $account
-     * @param Request $request
-     * @param Account $account
-     * @param Request $request
-     * @return View
-     *
-     * public function pbxAssignForm(Account $account, Request $request): View
-     * {
-     * return view('voip::admin.accounts.pbx.assign')->with('account', $account);
-     * }
-     *
-     * /**
-     * Assign or create pbx
-     * @return RedirectResponse
-     * @return RedirectResponse
-     * @throws GuzzleException
-     *
-     * public function pbxAssign(Account $account, Request $request): RedirectResponse
-     * {
-     * if ($request->domain)
-     * {
-     * // Just assign
-     * $account->update(['pbx_domain' => $request->domain]);
-     * }
-     * else
-     * {
-     * // Create new Domain
-     * $dom = sprintf("D%d", mt_rand(100000, 999999));
-     * $domain = new Domain($account->provider);
-     * $domain->create($dom, $request->newDomain);
-     * $account->update(['pbx_domain' => sprintf("%s.%s", $dom, $account->provider->territory)]);
-     * }
-     * return redirect()->back();
-     * }
-     *
-     * /**
      * Create new Quote
      */
     public function storeQuote(Account $account, Request $request): RedirectResponse
@@ -347,18 +302,6 @@ class AccountController extends Controller
             'expires_on' => now()->addDays((int)setting('quotes.length'))
         ]);
         return redirect()->to("/admin/accounts/$account->id/quotes/$quote->id");
-    }
-
-    /**
-     * Refresh the Account Stats
-     * @param Account $account
-     * @return RedirectResponse
-     * @throws GuzzleException
-     */
-    public function pbxRefresh(Account $account): RedirectResponse
-    {
-        $account->getPBXStats(true);
-        return redirect()->to("/admin/accounts/$account->id?active=pbx");
     }
 
     /**
@@ -383,7 +326,6 @@ class AccountController extends Controller
             'auth_required'    => $request->public ? 0 : 1,
             'file_category_id' => $category->id
         ]);
-
         return redirect()->to("/admin/accounts/$account->id?active=files");
     }
 

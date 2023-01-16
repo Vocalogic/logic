@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Term;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use League\CommonMark\CommonMarkConverter;
 use Livewire\Component;
 

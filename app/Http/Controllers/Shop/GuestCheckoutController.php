@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class GuestCheckoutController extends Controller
 {

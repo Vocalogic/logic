@@ -592,6 +592,7 @@ if (!function_exists('setting'))
     function moduleHook(string $location, array $data = []): ?string
     {
         $vData = null;
+        if (sizeOf(ModuleRegistry::cases()) == 0) return null; // No modules found. Base Install
         foreach (ModuleRegistry::cases() as $mod)
         {
             if ($mod->isEnabled())
@@ -629,7 +630,7 @@ if (!function_exists('setting'))
     {
         $value = onlyNumbers($value);
         if (!$value) return 0;
-        return $value * 100;
+        return (int) $value * 100;
     }
 
     /**

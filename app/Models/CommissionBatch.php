@@ -45,7 +45,11 @@ class CommissionBatch extends Model
         return $this->belongsTo(User::class, 'paid_by');
     }
 
-    public function getTotalAttribute(): float
+    /**
+     * Get the total for this batch based on the commissions assigned.
+     * @return int
+     */
+    public function getTotalAttribute(): int
     {
         $total = 0;
         foreach ($this->commissions as $commission)

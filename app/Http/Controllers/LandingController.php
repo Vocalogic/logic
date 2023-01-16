@@ -8,7 +8,7 @@ use App\Models\User;
 use App\Operations\Core\MakePDF;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 /**
  * This class is used when someone hits the default / route and where to send them.

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Vendor;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 
 class VendorController extends Controller
 {

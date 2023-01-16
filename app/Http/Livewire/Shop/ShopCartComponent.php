@@ -5,7 +5,7 @@ namespace App\Http\Livewire\Shop;
 use App\Models\Quote;
 use App\Models\QuoteItem;
 use App\Operations\Shop\ShopOperation;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
 class ShopCartComponent extends Component

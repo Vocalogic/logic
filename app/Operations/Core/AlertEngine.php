@@ -33,7 +33,7 @@ class AlertEngine
      * @param string    $description
      * @param string    $action
      * @param string    $url
-     * @return void
+     * @return object
      */
     public function instanceAlert(
         AlertType $type,

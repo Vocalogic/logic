@@ -6,7 +6,7 @@ use App\Enums\Core\CommKey;
 use App\Models\Account;
 use App\Models\Lead;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
+use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\Redirector;
 
