@@ -13,11 +13,11 @@
         </div>
         <div class="col d-flex justify-content-lg-end mt-2 mt-md-0">
             <div class="p-2 me-md-3">
-                <div><span class="h6 mb-0">${{number_format($quote->mrr,2)}}</span></div>
+                <div><span class="h6 mb-0">${{moneyFormat($quote->mrr)}}</span></div>
                 <small class="text-muted text-uppercase">MRR</small>
             </div>
             <div class="p-2 me-md-3">
-                <div><span class="h6 mb-0">${{number_format($quote->nrc,2)}}</span></div>
+                <div><span class="h6 mb-0">${{moneyFormat($quote->nrc)}}</span></div>
                 <small class="text-muted text-uppercase">NRC</small>
             </div>
             <div class="p-2 pe-lg-0">
