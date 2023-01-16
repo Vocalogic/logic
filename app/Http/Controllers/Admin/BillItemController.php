@@ -80,7 +80,7 @@ class BillItemController extends Controller
     public function create(BillCategory $cat): View
     {
         $type = Str::singular($cat->type);
-        return view("admin.bill_items.$type", [
+        return view("admin.bill_items.create_modal", [
             'cat'    => $cat,
             'item'   => new BillItem,
             'type'   => $type,
@@ -222,18 +222,354 @@ class BillItemController extends Controller
      * Show create form for new product/service
      * @param BillCategory $cat
      * @param BillItem     $item
+     * @return RedirectResponse
+     */
+    public function show(BillCategory $cat, BillItem $item): RedirectResponse
+    {
+        return redirect()->to("/admin/category/$cat->id/items/$item->id/specs");
+    }
+
+    /**
+     * Edit Specification/Definitions for Product or Service
+     * @param BillCategory $cat
+     * @param BillItem     $item
      * @return View
      */
-    public function show(BillCategory $cat, BillItem $item): View
+    public function specs(BillCategory $cat, BillItem $item): View
     {
         $type = Str::singular($cat->type);
-        return view("admin.bill_items.$type", [
+        return view("admin.bill_items.specs.index", [
             'cat'    => $cat,
             'item'   => $item,
             'type'   => $type,
             'crumbs' => $this->generateCrumbs($cat, $item)
         ]);
     }
+
+    /**
+     * Update Item Specifications
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function specsUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        $request->validate([
+            'code'        => 'required',
+            'name'        => 'required',
+            'description' => 'required'
+        ]);
+        $item->update([
+            'code'            => $request->code,
+            'name'            => $request->name,
+            'description'     => $request->description,
+            'tos_id'          => $request->tos_id,
+            'is_shipped'      => $request->is_shipped,
+            'track_qty'       => $request->track_qty,
+            'allow_backorder' => $request->allow_backorder
+        ]);
+        return redirect()
+            ->to("/admin/category/$cat->id/items/$item->id/pricing")
+            ->with('message', "Definitions updated successfully.");
+    }
+
+    /**
+     * Show Pricing Editor for a Bill Item
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function pricing(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.pricing.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Save Pricing Configuration for Item
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function pricingUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        if ($item->type == 'services')
+        {
+            $request->validate([
+                'mrc' => 'numeric|required'
+            ]);
+            $request->merge([
+                'mrc'     => convertMoney($request->mrc),
+                'ex_opex' => convertMoney($request->ex_opex)
+            ]);
+        }
+        else
+        {
+            $request->validate([
+                'nrc' => 'numeric|required'
+            ]);
+            $request->merge([
+                'nrc'      => convertMoney($request->nrc),
+                'ex_capex' => convertMoney($request->ex_capex)
+            ]);
+        }
+
+        $request->merge([
+            'msrp'      => convertMoney($request->msrp),
+            'min_price' => convertMoney($request->min_price),
+            'max_price' => convertMoney($request->max_price)
+        ]);
+
+        $item->update($request->all());
+
+        // Discount Term Updater
+        foreach ($request->all() as $key => $val)
+        {
+            if (preg_match("/sterm_/i", $key))
+            {
+                $x = explode("sterm_", $key);
+                $key = $x[1];
+                $item->changeDiscountTerm((int)$key, (float)$val);
+            }
+        }
+        return redirect()
+            ->to("/admin/category/$cat->id/items/$item->id/photos")
+            ->with('message', "Pricing updated successfully.");
+    }
+
+    /**
+     * Show Photo Uploader
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function photos(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.photos.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Update Photos for Item
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     * @throws LogicException
+     */
+    public function photosUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        try
+        {
+            $this->handleFiles($item, $request);
+        } catch (\Exception $e)
+        {
+            throw new LogicException("There was a problem uploading your photos - " . $e->getMessage());
+        }
+        return redirect()
+            ->to("/admin/category/$cat->id/items/$item->id/addons")
+            ->with('message', "Photos updated successfully.");
+    }
+
+    /**
+     * Addon Editor for Items
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function addons(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.addons.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Show tags editor for an item.
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function tags(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.tags.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Show add tag modal
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function addTag(BillCategory $cat, BillItem $item): View
+    {
+        return view('admin.bill_items.tags.add_modal', ['cat' => $cat, 'item' => $item]);
+    }
+
+    /**
+     * Apply a new tag to an item.
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function saveTag(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        $request->validate(['tag' => 'required']);
+        $item->tags()->create([
+            'tag_id' => $request->tag
+        ]);
+        return redirect()->back()->with('message', 'Tag applied successfully');
+    }
+
+    /**
+     * Show data requirements for an item
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function requirements(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.requirements.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Show Reservation Settings for a Product
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function reservation(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.reservation.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Update Reservation details
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function updateReservation(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        $item->update($request->all());
+        return redirect()->to("/admin/category/$cat->id/items/$item->id/variation")
+            ->with('message', "Reservation Details Saved");
+    }
+
+    /**
+     * Show variation editor for an item.
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function variation(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.variation.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Update Variation Details
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function variationUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        $item->update($request->all());
+        return redirect()->to("/admin/category/$cat->id/items/$item->id/shop")
+            ->with('message', "Variation Details Saved");
+    }
+
+    /**
+     * Show shop settings
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function shop(BillCategory $cat, Billitem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.shop.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
+    /**
+     * Update Shop Settings
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return RedirectResponse
+     */
+    public function shopUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
+    {
+        $item->update($request->all());
+        return redirect()->to("/admin/category/$cat->id/items");
+    }
+
+    /**
+     * Show frequently asked questions
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return View
+     */
+    public function faq(BillCategory $cat, BillItem $item): View
+    {
+        $type = Str::singular($cat->type);
+        return view("admin.bill_items.faq.index", [
+            'cat'    => $cat,
+            'item'   => $item,
+            'type'   => $type,
+            'crumbs' => $this->generateCrumbs($cat, $item)
+        ]);
+    }
+
 
     /**
      * Store a new product or service.
@@ -245,161 +581,27 @@ class BillItemController extends Controller
     public function store(BillCategory $cat, Request $request): RedirectResponse
     {
         $request->validate([
-            'code'        => 'required',
-            'name'        => 'required',
-            'description' => 'required'
+            'code'  => 'required',
+            'name'  => 'required',
+            'price' => 'required'
         ]);
         $item = (new BillItem)->create([
-            'bill_category_id'      => $cat->id,
-            'code'                  => $request->code,
-            'name'                  => $request->name,
-            'type'                  => $cat->type,
-            'description'           => $request->description,
-            'nrc'                   => convertMoney($request->nrc),
-            'mrc'                   => convertMoney($request->mrc),
-            'msrp'                  => convertMoney($request->msrp),
-            'ex_capex'              => convertMoney($request->ex_capex),
-            'ex_capex_description'  => $request->ex_capex_description,
-            'ex_capex_once'         => $request->ex_capex_once,
-            'ex_opex'               => convertMoney($request->ex_opex),
-            'ex_opex_description'   => $request->ex_opex_description,
-            'ex_opex_once'          => $request->ex_opex_once,
-            'ex_opexfreq'           => $request->ex_opexfreq,
-            'feature_headline'      => $request->feature_headline,
-            'feature_list'          => $request->feature_list,
-            'feature_priority'      => $request->feature_priority,
-            'is_shipped'            => $request->is_shipped ? 1 : 0,
-            'allowed_qty'           => $request->allowed_qty,
-            'allowed_type'          => $request->allowed_type,
-            'allowed_overage'       => $request->allowed_overage,
-            'shop_show'             => $request->shop_show,
-            'slug'                  => Str::slug($request->name),
-            'marketing_description' => $request->marketing_description,
-            'tos_id'                => $request->tos_id,
-            'on_hand'               => $request->on_hand,
-            'track_qty'             => $request->track_qty,
-            'allow_backorder'       => $request->allow_backorder,
-            'msrp_note'             => $request->msrp_note,
-            'reservation_mode'      => (bool)$request->reservation_mode,
-            'reservation_price'     => $request->reservation_price,
-            'reservation_details'   => $request->reservation_details,
-            'reservation_time'      => $request->reservation_time,
-            'reservation_refund'    => $request->reservation_refund,
-            'min_price'             => convertMoney($request->min_price),
-            'max_price'             => convertMoney($request->max_price),
+            'type'             => $cat->type,
+            'name'             => $request->name,
+            'code'             => $request->code,
+            'msrp'             => convertMoney($request->price),
+            'bill_category_id' => $cat->id,
+            'description'      => 'TODO: Change Description',
+            'shop_show'        => false
         ]);
-        if ($item->parent_id)
+        if ($cat->type == 'services')
         {
-            $item->update(['variation_name' => $request->variation_name]);
+            $item->update(['mrc' => convertMoney($request->price)]);
         }
-        else
-        {
-            $item->update([
-                'variation_name'     => $request->variation_name,
-                'variation_category' => $request->variation_category
-            ]);
-        }
-
-        foreach ($request->all() as $key => $val)
-        {
-            if (preg_match("/sterm_/i", $key))
-            {
-                $x = explode("sterm_", $key);
-                $key = $x[1];
-                $item->changeDiscountTerm((int)$key, (float)$val);
-            }
-        }
-        $this->handleFiles($item, $request);
-        return redirect()->to("/admin/category/$cat->id/items")->with('message', "$item->name created.");
+        else $item->update(['nrc' => convertMoney($request->price)]);
+        return redirect()->to("/admin/category/$cat->id/items/$item->id")->with('message', "$item->name created.");
     }
 
-    /**
-     * Update Item
-     * @param BillCategory $cat
-     * @param BillItem     $item
-     * @param Request      $request
-     * @return RedirectResponse
-     * @throws LogicException
-     */
-    public function update(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
-    {
-        if ($request->assign == 'tag')
-        {
-            $item->tags()->create([
-                'tag_id' => $request->tag
-            ]);
-            return redirect()->back();
-        }
-        $request->validate([
-            'code'        => 'required',
-            'name'        => 'required',
-            'description' => 'required'
-        ]);
-        $request->merge(['code' => strtoupper(Str::slug($request->code))]);
-        $item->update([
-            'bill_category_id'      => $cat->id,
-            'code'                  => $request->code,
-            'name'                  => $request->name,
-            'type'                  => $cat->type,
-            'description'           => $request->description,
-            'nrc'                   => convertMoney($request->nrc),
-            'mrc'                   => convertMoney($request->mrc),
-            'msrp'                  => convertMoney($request->msrp),
-            'ex_capex'              => convertMoney($request->ex_capex),
-            'ex_capex_description'  => $request->ex_capex_description,
-            'ex_capex_once'         => $request->ex_capex_once,
-            'ex_opex'               => convertMoney($request->ex_opex),
-            'ex_opex_description'   => $request->ex_opex_description,
-            'ex_opex_once'          => $request->ex_opex_once,
-            'ex_opexfreq'           => $request->ex_opexfreq,
-            'feature_headline'      => $request->feature_headline,
-            'feature_list'          => $request->feature_list,
-            'feature_priority'      => $request->feature_priority,
-            'is_shipped'            => $request->is_shipped ? 1 : 0,
-            'allowed_qty'           => $request->allowed_qty,
-            'allowed_type'          => $request->allowed_type,
-            'allowed_overage'       => $request->allowed_overage,
-            'frequency'             => $request->frequency,
-            'shop_show'             => $request->shop_show,
-            'slug'                  => Str::slug($request->name),
-            'tos_id'                => $request->tos_id,
-            'marketing_description' => $request->marketing_description,
-            'on_hand'               => $request->on_hand,
-            'track_qty'             => $request->track_qty,
-            'allow_backorder'       => $request->allow_backorder,
-            'msrp_note'             => $request->msrp_note,
-            'reservation_mode'      => (bool)$request->reservation_mode,
-            'reservation_price'     => $request->reservation_price,
-            'reservation_details'   => $request->reservation_details,
-            'reservation_time'      => $request->reservation_time,
-            'reservation_refund'    => $request->reservation_refund,
-            'min_price'             => convertMoney($request->min_price),
-            'max_price'             => convertMoney($request->max_price),
-        ]);
-        if ($item->parent_id)
-        {
-            $item->update(['variation_name' => $request->variation_name]);
-        }
-        else
-        {
-            $item->update([
-                'variation_name'     => $request->variation_name,
-                'variation_category' => $request->variation_category
-            ]);
-
-        }
-        foreach ($request->all() as $key => $val)
-        {
-            if (preg_match("/sterm_/i", $key))
-            {
-                $x = explode("sterm_", $key);
-                $key = $x[1];
-                $item->changeDiscountTerm((int)$key, (float)$val);
-            }
-        }
-        $this->handleFiles($item, $request);
-        return redirect()->to("/admin/category/$cat->id/items")->with('message', "$item->name updated.");
-    }
 
     /**
      * Remove a bill item
@@ -445,7 +647,11 @@ class BillItemController extends Controller
      */
     public function createGroupModal(BillCategory $cat, BillItem $item): View
     {
-        return view('admin.bill_items.addon_create')->with(['cat' => $cat, 'item' => $item, 'addon' => new Addon]);
+        return view('admin.bill_items.addons.add_modal')->with([
+            'cat'   => $cat,
+            'item'  => $item,
+            'addon' => new Addon
+        ]);
     }
 
     /**
@@ -476,7 +682,11 @@ class BillItemController extends Controller
      */
     public function updateGroupModal(BillCategory $cat, BillItem $item, Addon $addon): View
     {
-        return view('admin.bill_items.addon_create')->with(['cat' => $cat, 'item' => $item, 'addon' => $addon]);
+        return view('admin.bill_items.addons.add_modal')->with([
+            'cat'   => $cat,
+            'item'  => $item,
+            'addon' => $addon
+        ]);
     }
 
     /**
@@ -505,7 +715,7 @@ class BillItemController extends Controller
      */
     public function addOptionModal(BillCategory $cat, BillItem $item, Addon $addon): View
     {
-        return view('admin.bill_items.option_create')->with([
+        return view('admin.bill_items.addons.option_modal')->with([
             'cat'    => $cat,
             'item'   => $item,
             'addon'  => $addon,
@@ -524,7 +734,7 @@ class BillItemController extends Controller
     public function showOption(BillCategory $cat, BillItem $item, Addon $addon, AddonOption $option): View
     {
 
-        return view('admin.bill_items.option_create')->with([
+        return view('admin.bill_items.addons.option_modal')->with([
             'cat'    => $cat,
             'item'   => $item,
             'addon'  => $addon,
@@ -658,7 +868,7 @@ class BillItemController extends Controller
      */
     public function variationModal(BillCategory $cat, BillItem $item): View
     {
-        return view('admin.bill_items.variation_modal', ['category' => $cat, 'item' => $item]);
+        return view('admin.bill_items.variation.variation_modal', ['category' => $cat, 'item' => $item]);
     }
 
     /**
@@ -756,11 +966,7 @@ class BillItemController extends Controller
                     'description'       => $meta->description
                 ]);
             }
-
-
         }
-
-
         return redirect()->to("/admin/category/$cat->id/items/$new->id");
     }
 
@@ -772,7 +978,7 @@ class BillItemController extends Controller
      */
     public function addMeta(BillCategory $cat, BillItem $item): View
     {
-        return view('admin.bill_items.requirement_modal', [
+        return view('admin.bill_items.requirements.add_modal', [
             'cat'  => $cat,
             'item' => $item,
             'meta' => new BillItemMeta()
@@ -788,7 +994,7 @@ class BillItemController extends Controller
      */
     public function editMeta(BillCategory $cat, BillItem $item, BillItemMeta $meta): View
     {
-        return view('admin.bill_items.requirement_modal', [
+        return view('admin.bill_items.requirements.add_modal', [
             'cat'  => $cat,
             'item' => $item,
             'meta' => $meta
@@ -865,7 +1071,7 @@ class BillItemController extends Controller
      */
     public function createFaqModal(BillCategory $cat, BillItem $item): View
     {
-        return view('admin.bill_items.faq_modal', ['cat' => $cat, 'item' => $item, 'faq' => new BillItemFaq]);
+        return view('admin.bill_items.faq.faq_modal', ['cat' => $cat, 'item' => $item, 'faq' => new BillItemFaq]);
     }
 
     /**
@@ -897,7 +1103,7 @@ class BillItemController extends Controller
      */
     public function showFaqModal(BillCategory $cat, BillItem $item, BillItemFaq $faq): View
     {
-        return view('admin.bill_items.faq_modal', ['cat' => $cat, 'item' => $item, 'faq' => $faq]);
+        return view('admin.bill_items.faq.faq_modal', ['cat' => $cat, 'item' => $item, 'faq' => $faq]);
     }
 
     /**

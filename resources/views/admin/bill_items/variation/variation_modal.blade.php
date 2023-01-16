@@ -1,10 +1,8 @@
 <div class="newVariant">
     <p>
         You are about to create a variation of <code>{{$item->name}}</code>. This item will not be selectable directly
-        from
-        your product catalog or in the shop. Once you select the primary item, you will have the option to select a
-        variation
-        and then be allowed to select the variation you create here.
+        from your product catalog or in the shop. Once you select the primary item, you will have the option to select a
+        variation and then be allowed to select the variation you create here.
     </p>
     <form method="POST" action="/admin/category/{{$category->id}}/items/{{$item->id}}/variation">
         @csrf

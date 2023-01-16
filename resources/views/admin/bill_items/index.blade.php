@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-12">
             <div class="input-group">
-                <a class="btn btn-outline-secondary" href="/admin/category/{{$cat->id}}/items/create"
+                <a class="btn btn-outline-secondary live" data-title="Add {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}" href="/admin/category/{{$cat->id}}/items/create"
                    type="button"><i class="fa fa-plus"></i> New {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}
                 </a>
                 <a class="btn btn-outline-secondary" href="/admin/market"

@@ -225,8 +225,32 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('category/{cat}/items/{item}', [BillItemController::class, 'show']);
     Route::get('category/{cat}/items/{item}/marketing', [BillItemController::class, 'marketing']);
 
+    ## Bill Item Subroutes
+    Route::get('category/{cat}/items/{item}/specs', [BillItemController::class, 'specs']);
+    Route::put('category/{cat}/items/{item}/specs', [BillItemController::class, 'specsUpdate']);
+    Route::get('category/{cat}/items/{item}/pricing', [BillItemController::class, 'pricing']);
+    Route::put('category/{cat}/items/{item}/pricing', [BillItemController::class, 'pricingUpdate']);
+    Route::get('category/{cat}/items/{item}/photos', [BillItemController::class, 'photos']);
+    Route::put('category/{cat}/items/{item}/photos', [BillItemController::class, 'photosUpdate']);
+    Route::get('category/{cat}/items/{item}/addons', [BillItemController::class, 'addons']);
+    Route::get('category/{cat}/items/{item}/tags', [BillItemController::class, 'tags']);
+    Route::get('category/{cat}/items/{item}/tags/create', [BillItemController::class, 'addTag']);
+    Route::post('category/{cat}/items/{item}/tags', [BillItemController::class, 'saveTag']);
 
-    Route::put('category/{cat}/items/{item}', [BillItemController::class, 'update']);
+    Route::get('category/{cat}/items/{item}/requirements', [BillItemController::class, 'requirements']);
+    Route::get('category/{cat}/items/{item}/reservation', [BillItemController::class, 'reservation']);
+    Route::put('category/{cat}/items/{item}/reservation', [BillItemController::class, 'updateReservation']);
+
+    Route::get('category/{cat}/items/{item}/variation', [BillItemController::class, 'variation']);
+    Route::put('category/{cat}/items/{item}/variation', [BillItemController::class, 'variationUpdate']);
+    Route::get('category/{cat}/items/{item}/variation/create', [BillItemController::class, 'variationModal']);
+    Route::post('category/{cat}/items/{item}/variation', [BillItemController::class, 'createVariation']);
+
+    Route::get('category/{cat}/items/{item}/shop', [BillItemController::class, 'shop']);
+    Route::put('category/{cat}/items/{item}/shop', [BillItemController::class, 'shopUpdate']);
+
+    Route::get('category/{cat}/items/{item}/faq', [BillItemController::class, 'faq']);
+
     Route::get('category/{cat}/items/{item}/remove/{tag}', [BillItemController::class, 'removeTag']);
     Route::delete('category/{cat}/items/{item}', [BillItemController::class, 'destroyItem']);
     Route::get('category/{cat}/items/{item}/meta', [BillItemController::class, 'addMeta']);
@@ -240,8 +264,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('category/{cat}/items/{item}/category', [BillItemController::class, 'changeCategory']);
 
 
-    Route::get('category/{cat}/items/{item}/variation', [BillItemController::class, 'variationModal']);
-    Route::post('category/{cat}/items/{item}/variation', [BillItemController::class, 'createVariation']);
+
 
 
     Route::get('category/{cat}/items/{item}/addons/create', [BillItemController::class, 'createGroupModal']);
