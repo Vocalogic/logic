@@ -69,21 +69,7 @@
                     </div>
 
                     @if(setting('quotes.selfterm') == 'Yes' && $item->id)
-                        <div class="card mt-3">
-                            <div class="card-body">
 
-                                <h5 class="card-title mt-3">
-                                    Self-Checkout Contract Discounts
-                                </h5>
-                                <p>
-                                    You currently have guest self-contracting enabled. This means that
-                                    if a customer opts to automatically enroll in a contract with you
-                                    for monthly services, you can set discount percentages
-                                    <code>based on the MSRP</code> to show customers instant savings.
-                                </p>
-                                @include('admin.bill_items.term_discount')
-                            </div>
-                        </div>
                     @endif
 
 
@@ -135,17 +121,16 @@
                     @endif
 
 
-
-
                 </div>
             </div> <!-- .row end -->
             <div class="row mt-3">
-                    @include('admin.bill_items.pricingHelper', ['item' => $item])
+                @include('admin.bill_items.pricingHelper', ['item' => $item])
             </div>
-            <div class="row mt-3">
-                @include('admin.bill_items.pricing.term_discount')
-            </div>
-
+            @if(setting('quotes.selfterm') == 'Yes')
+                <div class="row mt-3">
+                    @include('admin.bill_items.pricing.term_discount')
+                </div>
+            @endif
 
             <div class="row mt-3">
                 <div class="col-xl-6">
