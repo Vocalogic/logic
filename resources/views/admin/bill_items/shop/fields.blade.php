@@ -31,6 +31,20 @@
                         </div>
                     </div>
 
+                    <div class="row mt-3">
+                        <div class="row g-2">
+                            <div class="col-md-12 col-12">
+                                <div class="form-floating">
+                                        <textarea class="form-control" style="height: 200px;"
+                                                  name="marketing_description">{!! $item->marketing_description !!}</textarea>
+                                    <label>Marketing Description (Shop)</label>
+                                    <span
+                                        class="helper-text">Enter markdown-enabled description for shop details.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="row mt-3">
                         <div class="col-lg-12">
