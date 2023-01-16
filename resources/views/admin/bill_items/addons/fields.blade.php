@@ -1,8 +1,9 @@
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">
+
+        <h6 class="card-title">
             Product and Service Addons
-        </h5>
+        </h6>
         <p class="card-text">
             Addons allow you to discount or bundle different products and services into a base service. These
             are default prices that you can customize once added to a quote or account service (if a service).
@@ -10,6 +11,10 @@
         </p>
     </div>
 </div>
+<a class="btn btn-{{bm()}}primary mt-3 live"
+   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/addons/create" data-title="Create new Addon Group"><i
+        class="fa fa-plus"></i> Create new Addon Group</a>
+
 <table class="table mt-3">
     <thead>
     <tr>
@@ -51,9 +56,7 @@
     @endforeach
     </tbody>
 </table>
-<a class="btn btn-{{bm()}}primary mt-2 live"
-   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/addons/create" data-title="Create new Addon Group"><i
-        class="fa fa-plus"></i> Create new Addon Group</a>
 
-
-
+<a class="btn btn-{{bm()}}primary mt-3"
+   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/tags">
+    Save and Continue</a>

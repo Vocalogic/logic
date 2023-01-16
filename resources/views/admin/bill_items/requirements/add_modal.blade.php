@@ -67,7 +67,7 @@
             <input type="submit" class="btn btn-{{bm()}}primary" value="Save">
             @if($meta->id)
                 <a href="/admin/category/{{$cat->id}}/items/{{$item->id}}/meta/{{$meta->id}}"
-                   class="btn btn-danger confirm"
+                   class="btn btn-danger confirm pull-right"
                     data-message="Are you sure you want to remove this item?"
                    data-method="DELETE">
                     <i class="fa fa-trash"></i> Remove Requirement
