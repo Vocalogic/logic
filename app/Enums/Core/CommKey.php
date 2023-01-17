@@ -116,7 +116,7 @@ enum CommKey: string
         return match ($this)
         {
             self::GlobalCartCache => now()->addMinutes(30),
-            self::GlobalVersionSummaryCache, self::GlobalVersionCache, self::GlobalLicenseCache => now()->addMinutes(5),
+            self::GlobalLicenseCache => now()->addMinutes(5),
             self::GlobalIPInventoryCache => now()->addMonth(),
             default => now()->addHour()
         };
