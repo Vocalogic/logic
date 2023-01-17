@@ -35,7 +35,7 @@ class PayInvoiceComponent extends Component
         {
             try
             {
-                $method = PaymentMethod::from('Credit Card');
+                $method = PaymentMethod::CreditCard;
                 $this->invoice->processPayment($method, $this->invoice->balance, "Authorized from Customer (via Shop)");
                 $this->invoice->refresh();
                 $this->errorMessage = '';

@@ -468,7 +468,7 @@ class Invoice extends Model
         else $this->update(['status' => InvoiceStatus::PARTIAL]);
         sysact(ActivityType::NewTransaction, $transaction->id,
             "made a payment of $" . moneyFormat($amount) .
-            " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> via ");
+            " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> for {$this->account->name} via ");
         return $transaction;
     }
 
