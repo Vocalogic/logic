@@ -9,7 +9,7 @@
 
             <ul class="list-unstyled mb-5">
                 <li class="mb-4">
-                    <span class="d-block mb-1 fs-4 fw-light">Welcome to Logic v{{currentVersion()}}</span>
+                    <span class="d-block mb-1 fs-4 fw-light">Welcome to Logic v{{currentVersion()->version}}</span>
                     <span class="color-600">We need to get some information to finish your initial Logic setup.</span>
                 </li>
 
