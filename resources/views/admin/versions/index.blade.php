@@ -28,7 +28,7 @@
                     <div class="card-body">
                         <h6 class="d-inline-block mb-0"><span class="badge bg-{{bm()}}info fw-light">v{{$version->version}}</span></h6>
                         <span class="text-muted">&nbsp;{{\Carbon\Carbon::parse($version->stamp)->format("m/d/y")}} - {{$version->summary}}
-                        @if(setting('version') != $version->version)
+                        @if(currentVersion()->version != $version->version)
                             <br/><br/><a class="m-3 btn btn-{{bm()}}success confirm"
                                data-method="GET"
                                data-message="Are you sure you want to upgrade to v{{$version->version}}? Upon clicking proceed, the upgrade will be scheduled and will be done within the next 60 seconds."

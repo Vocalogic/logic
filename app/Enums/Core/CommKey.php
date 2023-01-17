@@ -87,15 +87,10 @@ enum CommKey: string
     case GlobalLicenseCache = 'logic_license';
 
     /**
-     * Contains the current version actively running
+     * Get the remote master version. This is used to inform customers to upgrade
+     * if they want the latest features.
      */
-    case GlobalVersionCache = 'logic_version';
-
-    /**
-     * Contains the summary of the current/up to date version to be shown on the
-     * dashboard.
-     */
-    case GlobalVersionSummaryCache = 'logic_version_summary';
+    case GlobalLatestVersionCache = 'logic_latest';
 
     /**
      * When a user hits the site a session is generated, submitted to the bus,
