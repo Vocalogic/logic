@@ -61,24 +61,12 @@ class UpgradeCommand extends Command
             if (!$process->isSuccessful())
             {
                 $this->warn("Error Executing.." . $process->getErrorOutput());
-                info("Error Executing: $command - ". $process->getErrorOutput());
+                info("Error Executing: $command - " . $process->getErrorOutput());
             }
             $this->info($command . " - " . $process->getOutput());
             info("Ran $command - " . $process->getOutput());
         }
-        // Set Latest Verion
-        $c = new Control();
-        $versions = $c->getVersions();
-        foreach ($versions as $version)
-        {
-            if ($version->latest)
-            {
-                $this->alert('Setting Version v' . $version->version);
-                setting('version', $version->version);
-            }
-        }
-        Cache::forget(CommKey::GlobalVersionCache->value);
-        Cache::forget(CommKey::GlobalVersionSummaryCache->value);
+        $this->alert('You are running Logic v' . currentVersion()->version);
         return 0;
     }
 }
