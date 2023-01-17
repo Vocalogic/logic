@@ -3,15 +3,23 @@
 @section('content')
 
     <div class="row row-deck mb-2">
-        @if (currentVersion() != setting('version') && currentVersion() != 'Unknown')
+        @if (currentVersion()->version != latestVersion()->version)
             <div class="col-lg-12">
                 <div class="card mb-3 text-center bg-primary-gradient">
                     <div class="card-body d-flex align-items-center justify-content-center">
                         <div>
-                            <h4 class="mt-4">Logic v{{currentVersion()}} Available</h4>
-                            <p class="card-text fs-6 mb-5">{{getNewVersionSummary()}}</p>
-                            <a class="btn btn-lg bg-info text-uppercase px-4 lift" href="/admin/versions" title=""><i
-                                    class="fa fa-upload"></i> View Details/Upgrade</a>
+                            <h4 class="mt-4">Logic v{{latestVersion()->version}} Available</h4>
+                            <p class="card-text fs-6 mb-5">{{latestVersion()->summary}}</p>
+
+                            <a class="btn btn-lg bg-info text-uppercase px-4 lift confirm"
+                               data-method="GET"
+                               data-message="Are you sure you want to upgrade to v{{latestVersion()->version}}? Upon clicking proceed, the upgrade will be scheduled and will be done within the next 60 seconds."
+                               href="/admin/upgrade"><i class="fa fa-angle-up"></i> Upgrade to v{{latestVersion()->version}}
+                            </a>
+
+                            <a class="btn btn-lg bg-info text-uppercase px-4 lift" href="{{latestVersion()->changelog}}" title="">
+                                <i
+                                    class="fa fa-book"></i> Review Changelog</a>
                         </div>
                     </div>
                 </div>

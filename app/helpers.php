@@ -518,43 +518,36 @@ if (!function_exists('setting'))
     }
 
     /**
-     * Get Current Version
+     * Get Current Version running. This will be used
+     * to compare against the latest version to see if
+     * customers should be asked to upgrade.
      *
-     * @return string
-     * @throws GuzzleException|\App\Exceptions\LogicException
+     * @return object
      */
-    function currentVersion(): string
+    function currentVersion(): object
     {
-        if (cache(CommKey::GlobalVersionCache->value)) return cache(CommKey::GlobalVersionCache->value);
-        $x = new Control();
-        try
-        {
-            $versions = $x->getVersions();
-        } catch (Exception)
-        {
-            return 'Unknown';
-        }
-        foreach ($versions as $version)
-        {
-            if ($version->latest)
-            {
-                cache([CommKey::GlobalVersionCache->value => $version->version],
-                    CommKey::GlobalVersionCache->getLifeTime());
-                cache([CommKey::GlobalVersionSummaryCache->value => $version->summary],
-                    CommKey::GlobalVersionSummaryCache->getLifeTime());
-                return $version->version;
-            }
-        }
-        return 'Unknown';
+        return json_decode(file_get_contents(app_path() . "/logic_version.json"));
     }
 
     /**
-     * Get Current Version Summary.
-     * @return string
+     * Get the latest version from master.
+     * @return object
      */
-    function getNewVersionSummary(): ?string
+    function latestVersion(): object
     {
-        return cache(CommKey::GlobalVersionSummaryCache->value);
+        try
+        {
+            $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/logic_version.json");
+            return json_decode($file);
+        } catch (Exception)
+        {
+            // Don't crash if file doesn't exist for some reason.
+            return (object)[
+                'version'   => "N/A",
+                'summary'   => "N/A",
+                'changelog' => "#"
+            ];
+        }
     }
 
 
@@ -576,7 +569,7 @@ if (!function_exists('setting'))
             return null;
         }
         if (!$lic || !$lic->success) return null;
-        $obj = (object) [];
+        $obj = (object)[];
 
         $obj->partner_code = $lic->partner_code;
 
@@ -613,11 +606,11 @@ if (!function_exists('setting'))
      * @param bool     $formatted
      * @return string
      */
-    function moneyFormat(?int $value = 0, bool $formatted = true) : string
+    function moneyFormat(?int $value = 0, bool $formatted = true): string
     {
         if ($value == 0 || !$value) return '0.00';
         $value = $value / 100;
-        return $formatted ? number_format($value,2) : $value;
+        return $formatted ? number_format($value, 2) : $value;
     }
 
     /**
@@ -626,11 +619,11 @@ if (!function_exists('setting'))
      * @param string|null $value
      * @return int
      */
-    function convertMoney(string $value = null) : int
+    function convertMoney(string $value = null): int
     {
         $value = onlyNumbers($value);
         if (!$value) return 0;
-        return (int) $value * 100;
+        return (int)$value * 100;
     }
 
     /**
