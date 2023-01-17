@@ -537,7 +537,7 @@ if (!function_exists('setting'))
     {
         try
         {
-            $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/logic_version.json");
+            $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/app/logic_version.json");
             return json_decode($file);
         } catch (Exception)
         {
