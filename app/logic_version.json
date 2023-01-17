@@ -1,5 +1,5 @@
 {
-    "version" : "1.1.5",
-    "summary" : "Initial Public Release. Completed a number of re-designs including the product catalog, and more.",
-    "changelog" : "https://logic.readme.io/changelog/logic-v115-changelog"
+    "version" : "1.1.6",
+    "summary" : "Invoice due date, Shop assistant updates, and updates to activity widget on dashboard.",
+    "changelog" : "https://logic.readme.io/v1.1.6/changelog/logic-v116-changelog"
 }
