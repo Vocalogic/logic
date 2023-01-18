@@ -21,7 +21,11 @@
                                      <small class="text-muted">{{$act->created_at->diffForHumans()}}</small></div>
                             @if($act->post)
                                 <div class="card p-3">
+                                    @if(preg_match("/\<|\>/i", $act->post))
+                                        {!! $act->post !!}
+                                    @else
                                     {!! nl2br($act->post) !!}
+                                    @endif
                                 </div>
                             @endif
                         </div>
