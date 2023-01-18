@@ -537,8 +537,8 @@ if (!function_exists('setting'))
      */
     function isInDevelopment(): bool
     {
-        $current = (int) str_replace(".","", currentVersion()->version);
-        $stable = (int) str_replace(".","", latestVersion()->version);
+        $current = (int)str_replace(".", "", currentVersion()->version);
+        $stable = (int)str_replace(".", "", latestVersion()->version);
         return $current > $stable;
     }
 
@@ -549,7 +549,9 @@ if (!function_exists('setting'))
     function latestVersion(): object
     {
         if (cache(CommKey::GlobalLatestVersionCache->value))
+        {
             return cache(CommKey::GlobalLatestVersionCache->value);
+        }
         try
         {
             $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/app/logic_version.json");
@@ -640,7 +642,8 @@ if (!function_exists('setting'))
     {
         $value = onlyNumbers($value);
         if (!$value) return 0;
-        return (int)$value * 100;
+        $value = $value * 100;
+        return (int)$value;
     }
 
     /**
