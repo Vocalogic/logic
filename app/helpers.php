@@ -530,6 +530,19 @@ if (!function_exists('setting'))
     }
 
     /**
+     * If our version is higher than the master, then we should show
+     * the user that this is the development instance and not show the
+     * "upgrade is available" on the dashboard
+     * @return bool
+     */
+    function isInDevelopment(): bool
+    {
+        $current = (int) str_replace(".","", currentVersion()->version);
+        $stable = (int) str_replace(".","", latestVersion()->version);
+        return $current > $stable;
+    }
+
+    /**
      * Get the latest version from master.
      * @return object
      */

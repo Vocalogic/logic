@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="row row-deck mb-2">
-        @if (currentVersion()->version != latestVersion()->version)
+        @if (!isInDevelopment() && (currentVersion()->version != latestVersion()->version))
             <div class="col-lg-12">
                 <div class="card mb-3 text-center bg-primary-gradient">
                     <div class="card-body d-flex align-items-center justify-content-center">
@@ -58,10 +58,6 @@
 
                 @livewire('admin.shop-monitor-component')
             @livewire('admin.dashboard-activity-component')
-
-
-
-
         </div>
     </div>
 
