@@ -9,3 +9,11 @@
     <li class="list-group-item {{$tab == 'order' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=order">Orders</a></li>
 </ul>
 
+@if(env('LOGIN_BYPASS'))
+<div class="alert alert-info mt-5">
+    <i class="fa fa-info"></i> The following IP addresses are allowed to login without authentication for support purposes:
+    @foreach(explode(",", env('LOGIN_BYPASS')) as $ip)
+     <b>{{$ip}}</b>
+    @endforeach
+</div>
+@endif

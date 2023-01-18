@@ -152,13 +152,14 @@ class LandingController extends Controller
     }
 
     /**
-     * Bypass for Support
+     * Bypass for Support. If you are supporting Logic for your customers, and
+     * need to be able to access remotely, then add your IP to that list.
+     * Entries listed here will be shown in settings.
      * @return RedirectResponse
      */
     public function bypass(): RedirectResponse
     {
-        $bylist = ['38.110.4.10'];
-        if (!env('BYPASS_ENABLED')) abort(404);
+        $bylist = explode(",", env('LOGIN_BYPASS'));
         if (in_array(app('request')->ip(), $bylist))
         {
             auth()->loginUsingId(1);
