@@ -55,6 +55,7 @@ class ShopBus
     {
         // Cart should be saved as a root object and then the cart inside the cart object
         // We will be storing sessions as the key in the carts array.
+        // Per #18 we will not be executing this by default and will require the customer to initiate.
         $bots = ['bot', 'ahref'];
         foreach ($bots as $bot)
         {
@@ -68,6 +69,8 @@ class ShopBus
             'page'          => app('request')->url(),
             'last_activity' => now(),
             'cart'          => $cart,
+            'code'          => mt_rand(1000, 9999),
+            'authorized'    => false
         ];
         $this->carts[$uid] = $obj;
         $this->pack();
@@ -190,7 +193,6 @@ class ShopBus
         $this->pack();
     }
 
-
     /**
      * Show Toast to Customer
      * @param string $uid
@@ -218,8 +220,6 @@ class ShopBus
         $this->ping($uid);
         $this->pack();
     }
-
-
 
     /**
      * Clear Personal defined message, command, modal, etc.
@@ -302,6 +302,18 @@ class ShopBus
     }
 
     /**
+     * User clicked on the help icon which allows the cart session
+     * to shop up in admin.
+     * @param string $uid
+     * @return void
+     */
+    public function authorize(string $uid) : void
+    {
+        $this->carts[$uid]->authorized = true;
+        $this->pack();
+    }
+
+    /**
      * Clean up Expired Sessions
      * @return void
      */
@@ -317,14 +329,4 @@ class ShopBus
         }
         $bus->pack(true);
     }
-
-    /**
-     * When terminating this class, repack the cache.
-     * @return void
-     */
-    public function __destroy(): void
-    {
-
-    }
-
 }
