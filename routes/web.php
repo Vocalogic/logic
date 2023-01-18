@@ -402,6 +402,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::get('invoices/{invoice}/send', [InvoiceController::class, 'send']);
     Route::get('invoices/{invoice}/order', [InvoiceController::class, 'createOrder']);
+
+    Route::get('invoices/{invoice}/due', [InvoiceController::class, 'dueModal']);
+    Route::post('invoices/{invoice}/due', [InvoiceController::class, 'dueUpdate']);
+
     Route::delete('invoices/{invoice}/rem/{item}', [InvoiceController::class, 'remItem']);
     Route::post('invoices/{invoice}/items/{item}/live', [InvoiceController::class, 'liveUpdate']);
 

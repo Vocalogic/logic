@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -134,5 +135,34 @@ class InvoiceController extends Controller
         $invoice->items()->delete();
         $invoice->delete();
         return ['callback' => "redirect:/admin/accounts/$account->id?active=invoices"];
+    }
+
+    /**
+     * Show update due date modal
+     * @param Invoice $invoice
+     * @return View
+     */
+    public function dueModal(Invoice $invoice): View
+    {
+        return view('admin.invoices.due_modal', ['invoice' => $invoice]);
+    }
+
+    /**
+     * Update Invoice Due Date
+     * @param Invoice $invoice
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function dueUpdate(Invoice $invoice, Request $request): RedirectResponse
+    {
+        try {
+            $due = Carbon::parse($request->due_on);
+            $invoice->update(['due_on' => $due]);
+            return redirect()->back()->with('message', "Due date updated successfully.");
+        } catch(\Exception $e)
+        {
+            throw new \LogicException("Unable to set due date - " . $e->getMessage());
+        }
+        return redirect()->back();
     }
 }
