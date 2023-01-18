@@ -137,6 +137,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('feedback', [AdminDashboardController::class, 'feedback']);
     Route::get('bug', [AdminDashboardController::class, 'bugs']);
     Route::get('account_item/{item}', [AccountController::class, 'redirectItem']);
+
+    // Account Import
+    Route::get('accounts/import/csv', [AccountController::class, 'importModal']);
+    Route::post('accounts/import/csv', [AccountController::class, 'import']);
     // Account User Actions
     Route::get('accounts/{account}/users/{user}/reset', [AccountUserController::class, 'resetUser']);
     Route::get('accounts/{account}/users/{user}/shadow', [AccountUserController::class, 'shadow']);
@@ -402,6 +406,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::get('invoices/{invoice}/send', [InvoiceController::class, 'send']);
     Route::get('invoices/{invoice}/order', [InvoiceController::class, 'createOrder']);
+
+    Route::get('invoices/{invoice}/due', [InvoiceController::class, 'dueModal']);
+    Route::post('invoices/{invoice}/due', [InvoiceController::class, 'dueUpdate']);
+
     Route::delete('invoices/{invoice}/rem/{item}', [InvoiceController::class, 'remItem']);
     Route::post('invoices/{invoice}/items/{item}/live', [InvoiceController::class, 'liveUpdate']);
 
@@ -509,7 +517,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 Route::get('shop', [ShopController::class, 'index']);
 Route::group(['prefix' => 'shop'], function () {
 
-
+    Route::get('authorize', [ShopController::class, 'auth']);
     Route::group(['middleware' => ['auth']], function () {
         Route::get('account', [ShopAccountController::class, 'index']);
         Route::get('account/services', [ShopAccountController::class, 'services']);

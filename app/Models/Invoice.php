@@ -163,7 +163,7 @@ class Invoice extends Model
         {
             return $pdf->streamFromData($data);
         }
-        else return storage_path() . "/" . $pdf->saveFromData($data);
+        return storage_path() . "/" . $pdf->saveFromData($data);
     }
 
     /**
@@ -265,8 +265,9 @@ class Invoice extends Model
             Finance::syncInvoice($this);
         }
         // Put a notice on the dashboard.
+        $actData = "Balance: $".moneyFormat($this->balance) ." / Due on " . $this->due_on->format("m/d/y");
         sysact(ActivityType::InvoiceSend, $this->id,
-            "sent <a href='/admin/accounts/{$this->account->id}'>{$this->account->name}</a>", true);
+            "sent <a href='/admin/accounts/{$this->account->id}'>{$this->account->name}</a>", $actData, true);
     }
 
     /**
@@ -468,7 +469,7 @@ class Invoice extends Model
         else $this->update(['status' => InvoiceStatus::PARTIAL]);
         sysact(ActivityType::NewTransaction, $transaction->id,
             "made a payment of $" . moneyFormat($amount) .
-            " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> via ");
+            " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> for {$this->account->name} via ");
         return $transaction;
     }
 

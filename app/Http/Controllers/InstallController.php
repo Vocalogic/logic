@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 
 class InstallController extends Controller
 {
@@ -57,6 +58,14 @@ class InstallController extends Controller
             'active'     => 1,
         ]);
 
+        // Run a few auto increment updates based on answer.
+        $start = $request->invoices ?? 1053;
+        if (!is_numeric($start)) $start = 1053;
+        DB::statement("ALTER table leads AUTO_INCREMENT=$start");
+        DB::statement("ALTER table quotes AUTO_INCREMENT=$start");
+        DB::statement("ALTER table invoices AUTO_INCREMENT=$start");
+        DB::statement("ALTER table shipments AUTO_INCREMENT=$start");
+        DB::statement("ALTER table orders AUTO_INCREMENT=$start");
 
         $user->update(['account_id' => $account->id]);
         $user->authorizeIp();

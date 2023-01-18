@@ -6,8 +6,8 @@
                 <h6 class="card-title">Active Carts</h6>
                 @foreach($carts as $uid => $cart)
                 <div class="mb-3">
-                    <div class="mb-0 fw-bold">{{$cart->ip}} <a href="/admin/cart/{{$uid}}">
-                            <span class="badge bg-primary"><i class="fa fa-chevron-right"></i> view</span>
+                    <div class="mb-0 fw-bold">{{$cart->ip}} <a href="/admin/cart/{{$cart->id}}">
+                            <span class="badge bg-primary"><i class="fa fa-chevron-right"></i> {{$cart->code}}</span>
                         </a></div>
                     <small class="text-muted">{{\Illuminate\Support\Str::limit($cart->browser, 40)}} /
                         Total ${{moneyFormat($cart->cart->get('total'))}} /

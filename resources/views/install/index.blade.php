@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center">
+        <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
 
 
             <!-- List Checked -->
@@ -17,7 +17,7 @@
         </div>
 
 
-        <div class="col-lg-6 d-flex justify-content-center align-items-center">
+        <div class="col-lg-7 d-flex justify-content-center align-items-center">
             <div class="card shadow-sm w-100 p-4 p-md-5" style="max-width: 32rem;">
                 <!-- Form -->
                 <form method="post" action="/install" class="row g-3">
@@ -48,6 +48,11 @@
                     <div class="col-12">
                         <label class="form-label">Confirm password</label>
                         <input type="password" name="password2" required class="form-control form-control-lg">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Start Leads, Quotes, Invoices at #</label>
+                        <input type="text" name="invoices" value="1053" required class="form-control form-control-lg">
                     </div>
 
                     <div class="col-12 text-center mt-4">

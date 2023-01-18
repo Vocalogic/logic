@@ -131,4 +131,16 @@ class ShopController extends Controller
         return $quote->simplePDF();
     }
 
+    /**
+     * Show customer authorization modal
+     * @return View
+     */
+    public function auth() : View
+    {
+        //info(print_r(cart(),true));
+        $cart = sbus()->get(cart()->uid);
+        sbus()->authorize(cart()->uid);
+        return view('shop.authorize_modal', ['cart' => $cart]);
+    }
+
 }

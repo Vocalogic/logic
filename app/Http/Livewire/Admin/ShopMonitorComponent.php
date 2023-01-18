@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin;
 
 use App\Operations\API\Geo\IPGeo;
 use App\Operations\Shop\ShopBus;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
@@ -35,12 +36,17 @@ class ShopMonitorComponent extends Component
     /**
      * Update our carts
      * @return void
-     * @throws GuzzleException
      */
     public function loadActivity() : void
     {
         ShopBus::cleanUp();
-        $this->carts = cache('cart_list') ?: [];
+        $carts = cache('cart_list') ?: [];
+        // We need to cleanup our cart array.
+        $this->carts = [];
+        foreach ($carts as $cart)
+        {
+            if ($cart->authorized) $this->carts[] = $cart;
+        }
         $x = new IPGeo();
         foreach ($this->carts as $cart)
         {
@@ -51,7 +57,7 @@ class ShopMonitorComponent extends Component
                     $this->ipLocators[$cart->id] = $ip;
                 }
 
-            } catch(\Exception $e)
+            } catch(Exception)
             {
                 info("Failed to get IP. Skipping");
             }
