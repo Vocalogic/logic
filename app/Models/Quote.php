@@ -16,16 +16,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @property mixed $services
- * @property mixed $products
- * @property mixed $nrc
- * @property mixed $mrr
- * @property mixed $term
- * @property mixed $lead
- * @property mixed $analysis
- * @property mixed $account
- * @property mixed     $presentable
- * @property mixed     $net_terms
+ * @property mixed        $services
+ * @property mixed        $products
+ * @property mixed        $nrc
+ * @property mixed        $mrr
+ * @property mixed        $term
+ * @property mixed        $lead
+ * @property mixed        $analysis
+ * @property mixed        $account
+ * @property mixed        $presentable
+ * @property mixed        $net_terms
  * @property mixed        $id
  * @property mixed        $items
  * @property mixed        $coterm
@@ -168,7 +168,7 @@ class Quote extends Model
 
     /**
      * Get the total for the quote.
-     * @return float
+     * @return int
      */
     public function getTotalAttribute(): int
     {
@@ -186,7 +186,7 @@ class Quote extends Model
 
     /**
      * Get Opex for a Quote (for reporting)
-     * @return float
+     * @return int
      */
     public function getOpexAttribute(): int
     {
@@ -195,7 +195,7 @@ class Quote extends Model
 
     /**
      * Get quote capex
-     * @return float
+     * @return int
      */
     public function getCapexAttribute(): int
     {
@@ -204,7 +204,7 @@ class Quote extends Model
 
     /**
      * Get Commissionable amount based on user logged in.
-     * @return float
+     * @return int
      */
     public function getCommissionableAttribute(): int
     {
@@ -219,6 +219,19 @@ class Quote extends Model
             $total += $this->mrr * user()->agent_comm_spiff;
         }
         return $total;
+    }
+
+    /**
+     * Create a small card for rendering the activity widget
+     * with some details on the quote.
+     * @return string
+     */
+    public function getActivityWidgetAttribute(): string
+    {
+        return "MRR: $" .
+            moneyFormat($this->mrr) .
+            " / NRC: $" .
+            moneyFormat($this->nrc);
     }
 
     /**
@@ -288,7 +301,7 @@ class Quote extends Model
             template($view, $this->lead->agent, [$this, $this->lead->agent], [$this->simplePDF(true)]);
 
             $this->lead->update(['status' => LeadStatus::QuoteSent->value]);
-            sysact(ActivityType::LeadQuote, $this->id, "sent a quote ($amt) ");
+            sysact(ActivityType::LeadQuote, $this->id, "sent a quote ($amt) ", $this->getActivityWidgetAttribute());
         } // if lead
         else
         {
@@ -298,13 +311,14 @@ class Quote extends Model
                 template('account.coterm', $this->account->admin, [$this, $this->account->agent],
                     [$this->simplePDF(true)]);
                 sysact(ActivityType::AccountQuote, $this->id,
-                    "sent a cotermed quote ($amt)");
+                    "sent a cotermed quote ($amt)", $this->getActivityWidgetAttribute());
                 return;
 
             }
             // If this is an established account, send to the primary account holder.
             template($view, $this->account->admin, [$this, $this->account->agent], [$this->simplePDF(true)]);
-            sysact(ActivityType::AccountQuote, $this->id, "sent a new quote ($amt) ");
+            sysact(ActivityType::AccountQuote, $this->id, "sent a new quote ($amt) ",
+                $this->getActivityWidgetAttribute());
         }
     }
 

@@ -409,10 +409,11 @@ if (!function_exists('setting'))
      * @param ActivityType $type
      * @param int          $refid
      * @param string       $action
+     * @param string|null  $postData
      * @param bool         $forceAsSystem
      * @return void
      */
-    function sysact(ActivityType $type, int $refid, string $action, bool $forceAsSystem = false): void
+    function sysact(ActivityType $type, int $refid, string $action, ?string $postData = '', bool $forceAsSystem = false): void
     {
         $user = auth()->guest() ? 0 : user()->id;
         if ($forceAsSystem) $user = 0;
@@ -420,7 +421,7 @@ if (!function_exists('setting'))
             'type'     => $type->value,
             'refid'    => $refid,
             'system'   => true,
-            'post'     => '',
+            'post'     => $postData,
             'activity' => $action,
             'user_id'  => $user
         ]);
