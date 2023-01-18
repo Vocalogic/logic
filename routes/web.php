@@ -137,6 +137,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('feedback', [AdminDashboardController::class, 'feedback']);
     Route::get('bug', [AdminDashboardController::class, 'bugs']);
     Route::get('account_item/{item}', [AccountController::class, 'redirectItem']);
+
+    // Account Import
+    Route::get('accounts/import/csv', [AccountController::class, 'importModal']);
+    Route::post('accounts/import/csv', [AccountController::class, 'import']);
     // Account User Actions
     Route::get('accounts/{account}/users/{user}/reset', [AccountUserController::class, 'resetUser']);
     Route::get('accounts/{account}/users/{user}/shadow', [AccountUserController::class, 'shadow']);

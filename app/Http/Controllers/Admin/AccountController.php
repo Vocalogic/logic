@@ -842,5 +842,59 @@ class AccountController extends Controller
         return redirect()->to("/admin/accounts/{$item->account->id}?active=services");
     }
 
+    /**
+     * Import New Account List from CSV
+     * @return View
+     */
+    public function importModal(): View
+    {
+        return view('admin.accounts.import_modal');
+    }
+
+    /**
+     * Import Leads
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws LogicException
+     */
+    public function import(Request $request): RedirectResponse
+    {
+        if (!$request->hasFile('import_file'))
+        {
+            throw new LogicException("You must attach a CSV for importing.");
+        }
+        $file = fopen($request->file('import_file')->getRealPath(), 'r');
+        $count = 0;
+        while (($line = fgetcsv($file)) !== false)
+        {
+            if ($line[0] == 'Company Name') continue;                // Ignore Headers
+            if (Account::where('name', $line[0])->count()) continue; // Don't duplicate
+            if (User::where('email', $line[3])->count()) continue;   // Don't duplicate user either.
+            if (!isset($line[1]) || !$line[1]) continue;
+            if (!isset($line[9]) || !$line[9]) continue; // Make sure we have all fields
+            // Create Account
+            $account = Account::create([
+                'name'     => $line[0],
+                'active'   => true,
+                'agent_id' => 1,
+                'address'  => $line[5],
+                'address2' => $line[6],
+                'city'     => $line[7],
+                'state'    => $line[8],
+                'postcode' => $line[9],
+                'website'  => $line[4],
+                'hash'     => uniqid('A-')
+            ]);
+            User::create([
+                'name'       => $line[1],
+                'email'      => $line[3],
+                'acl'        => ACL::ADMIN->value,
+                'account_id' => $account->id,
+                'password'   => uniqid()
+            ]);
+            $count++;
+        }
+        return redirect()->back()->with('message', $count . " Accounts Imported Successfully");
+    }
 }
 
