@@ -548,10 +548,14 @@ if (!function_exists('setting'))
      */
     function latestVersion(): object
     {
+        if (cache(CommKey::GlobalLatestVersionCache->value))
+            return cache(CommKey::GlobalLatestVersionCache->value);
         try
         {
             $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/app/logic_version.json");
-            return json_decode($file);
+            $obj = json_decode($file);
+            cache([CommKey::GlobalLatestVersionCache->value => $obj], CommKey::GlobalLatestVersionCache->getLifeTime());
+            return $obj;
         } catch (Exception)
         {
             // Don't crash if file doesn't exist for some reason.
