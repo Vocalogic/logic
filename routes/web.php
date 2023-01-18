@@ -517,7 +517,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 Route::get('shop', [ShopController::class, 'index']);
 Route::group(['prefix' => 'shop'], function () {
 
-
+    Route::get('authorize', [ShopController::class, 'auth']);
     Route::group(['middleware' => ['auth']], function () {
         Route::get('account', [ShopAccountController::class, 'index']);
         Route::get('account/services', [ShopAccountController::class, 'services']);

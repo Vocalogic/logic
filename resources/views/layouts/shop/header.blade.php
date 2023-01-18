@@ -95,6 +95,12 @@
                                         </div>
                                     </a>
                                 </li>
+                                <li class="right-side">
+                                        <a class="live" href="/shop/authorize" data-title="Request Assistance"
+                                           class="btn p-0 position-relative header-wishlist">
+                                            <i data-feather="help-circle"></i>
+                                        </a>
+                                </li>
                                 @livewire('shop.cart-icon-component')
 
                                 @livewire('shop.shop-assist-component')

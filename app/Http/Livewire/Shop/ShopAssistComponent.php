@@ -50,7 +50,16 @@ class ShopAssistComponent extends Component
             // We won't re-read from the session here because sbus is updating on the stack in the previous comnmand.
         }
         $obj = sbus()->get($this->skey);
-        if (is_null($obj)) return; // No session built or has expired. Nothing to do here. Both above failed.
+        if (is_null($obj))
+        {
+            sbus()->ping($this->skey); // Let the bus know we exist.
+            return;
+        } // No session built or has expired. Nothing to do here. Both above failed.
+
+        if (!$obj->authorized) return; // Customer has not authorized any actions or requested help.
+        // We want to make sure that our commands are enabled. We do this by the user clicking the help
+        // icon at the top of the page. Since there's no way for the user to click the icon when the session
+        // initially starts, we will check for the authorized flag on the session.
 
         if (isset($obj->command) && !isset($obj->executed))
         {
