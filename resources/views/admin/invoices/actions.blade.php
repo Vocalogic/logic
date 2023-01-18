@@ -3,7 +3,6 @@
     <a class="mb-4" href="/admin/accounts/{{$account->id}}?active=invoices"><i class="fa fa-arrow-left"></i> Back to
         Invoices</a>
 
-
     @if($invoice->balance > 0)
         <div class="col-6 mb-3">
             <div class="card">
@@ -14,11 +13,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
-
     @endif
 
     @if($invoice->total < 0 || $invoice->total > 0)
@@ -87,6 +81,20 @@
                         <i class="fa fa-trash fa-2x"></i>
                         <div class="mb-0">Delete</div>
                     </a>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if($invoice->status == \App\Enums\Core\InvoiceStatus::SENT->value)
+        <div class="col-12 mt-3">
+
+            <div class="card">
+                <div class="card-body">
+                    <i class="fa fa-info-circle"></i> This invoice is currently due on {{$invoice->due_on->format("m/d/y")}}.
+                    <a class="live"
+                       data-title="Change Due Date"
+                       href="/admin/invoices/{{$invoice->id}}/due">Change due date?</a>
                 </div>
             </div>
         </div>

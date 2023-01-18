@@ -530,15 +530,32 @@ if (!function_exists('setting'))
     }
 
     /**
+     * If our version is higher than the master, then we should show
+     * the user that this is the development instance and not show the
+     * "upgrade is available" on the dashboard
+     * @return bool
+     */
+    function isInDevelopment(): bool
+    {
+        $current = (int) str_replace(".","", currentVersion()->version);
+        $stable = (int) str_replace(".","", latestVersion()->version);
+        return $current > $stable;
+    }
+
+    /**
      * Get the latest version from master.
      * @return object
      */
     function latestVersion(): object
     {
+        if (cache(CommKey::GlobalLatestVersionCache->value))
+            return cache(CommKey::GlobalLatestVersionCache->value);
         try
         {
             $file = file_get_contents("https://raw.githubusercontent.com/Vocalogic/logic/master/app/logic_version.json");
-            return json_decode($file);
+            $obj = json_decode($file);
+            cache([CommKey::GlobalLatestVersionCache->value => $obj], CommKey::GlobalLatestVersionCache->getLifeTime());
+            return $obj;
         } catch (Exception)
         {
             // Don't crash if file doesn't exist for some reason.

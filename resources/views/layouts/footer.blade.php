@@ -3,9 +3,10 @@
     <div class="container-fluid d-flex flex-wrap justify-content-between align-items-center">
         <p class="col-md-4 mb-0 text-muted">© {{date("Y")}} <a href="{{setting('brand.url')}}" target="_blank"
                                                                title="{{setting('brand.name')}}">{{setting('brand.name')}}</a>
-            |
-
-            Logic v{{currentVersion()->version}}
+            | Logic v{{currentVersion()->version}}
+            @if(isInDevelopment())
+                <span class="badge bg-warning">development</span>
+            @endif
 
 
         </p>
@@ -23,6 +24,5 @@
             @endif
 
         </a>
-
     </div>
 </footer>
