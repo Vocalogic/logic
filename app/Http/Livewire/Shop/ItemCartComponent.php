@@ -96,6 +96,10 @@ class ItemCartComponent extends Component
     {
         $this->errorMessage = '';
         $cart = cart();
+        if ($this->item->confirmation_dialog)
+        {
+            $this->emit('cartMetaModal', "Before you Buy..", "/shop/confirm/{$this->item->id}");
+        }
         try
         {
             $item = $cart->addItem($this->item, $this->qtySpinner);

@@ -557,6 +557,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('presales/{slug}/{qslug}/checkout', [CheckoutController::class, 'quoteCheckout']);
 
     // Guest Routes
+    Route::get('confirm/{item}', [ShopController::class, 'showConfirmation']);
     Route::get('cart', [GuestCartController::class, 'showCart']);
     Route::get('build/{slug}', [GuestCartController::class, 'startBuild']);
     Route::get('checkout', [GuestCheckoutController::class, 'checkout']);
