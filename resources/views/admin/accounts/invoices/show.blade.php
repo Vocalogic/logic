@@ -38,7 +38,7 @@
                                     </td>
                                 @endif
 
-                                <td class="text-center">${{moneyFormat($item->price)}}</td>
+                                <td class="text-center">${{moneyFormat($item->price)}} {!! $item->variation_detail !!}</td>
                                 <td class="text-center">{{$item->qty}}  <a class="confirm text-danger"
                                                                            data-message="Are you sure you want to remove this item?"
                                                                            data-method="DELETE"
