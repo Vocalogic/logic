@@ -53,19 +53,19 @@ use Illuminate\Support\Str;
  * @property mixed         $billing_email
  * @property mixed         $declined
  * @property mixed         $finance_customer_id
- * @property mixed $cc_reset_hash
- * @property mixed $account_credit
- * @property mixed $website
- * @property mixed $net_days
- * @property mixed $mrr
- * @property mixed $invoices
- * @property mixed $merchant_ach_aba
- * @property mixed $merchant_ach_account
- * @property mixed $partner
- * @property mixed $partner_id
- * @property mixed $commissionable
- * @property mixed $quotes
- * @property mixed $agent_id
+ * @property mixed         $cc_reset_hash
+ * @property mixed         $account_credit
+ * @property mixed         $website
+ * @property mixed         $net_days
+ * @property mixed         $mrr
+ * @property mixed         $invoices
+ * @property mixed         $merchant_ach_aba
+ * @property mixed         $merchant_ach_account
+ * @property mixed         $partner
+ * @property mixed         $partner_id
+ * @property mixed         $commissionable
+ * @property mixed         $quotes
+ * @property mixed         $agent_id
  */
 class Account extends Model
 {
@@ -240,14 +240,17 @@ class Account extends Model
      * Get a list of contracted quotes.
      * @return array
      */
-    public function getContractedQuotes() : array
+    public function getContractedQuotes(): array
     {
         $data = [];
         $data[0] = "-- Select Contract --";
         foreach ($this->quotes as $quote)
         {
             if ($quote->signature)
-                $data[$quote->id] = sprintf("Contract #%d - Ends %s", $quote->id, $quote->contract_expires?->format("m/d/y"));
+            {
+                $data[$quote->id] = sprintf("Contract #%d - Ends %s", $quote->id,
+                    $quote->contract_expires?->format("m/d/y"));
+            }
         }
         return $data;
     }
@@ -319,7 +322,7 @@ class Account extends Model
         if ($quote->lead && $quote->lead->partner && $generateMonthly) // gm assumes new account.
         {
             $this->update([
-                'partner_id'      => $quote->lead->partner_id,
+                'partner_id' => $quote->lead->partner_id,
             ]);
             // We need to notify the partner that this lead is sold.
             $quote->lead->partner->notifySoldLead($quote->lead);
@@ -510,7 +513,6 @@ class Account extends Model
     }
 
 
-
     /**
      * Get a list of alerts for an account and severity
      * @return array
@@ -540,7 +542,6 @@ class Account extends Model
                 'url'         => "/admin/accounts/$this->id?active=profile"
             ];
         }
-
 
 
         // Check for PBX and PBX Items
@@ -737,8 +738,9 @@ class Account extends Model
         $this->update(['next_bill' => now()->addMonth()->setDay($this->bills_on ?? 1)]);
         if ($this->items->count() == 0) return; // Do nothing if there are no service items
         $invoice = $this->invoices()->create([
-            'due_on' => now()->addDays($this->net_terms),
-            'status' => InvoiceStatus::DRAFT
+            'due_on'    => now()->addDays($this->net_terms),
+            'status'    => InvoiceStatus::DRAFT,
+            'recurring' => true
         ]);
         foreach ($this->items as $item)
         {
