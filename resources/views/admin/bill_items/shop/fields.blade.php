@@ -32,12 +32,25 @@
                     </div>
 
                     <div class="row mt-3">
+                        <div class="col-md-12 col-12">
+                            <div class="form-floating">
+                                        <textarea class="form-control" style="height: 100px;"
+                                                  name="confirmation_dialog">{!! $item->confirmation_dialog !!}</textarea>
+                                <label>Confirmation Dialog</label>
+                                <span class="helper-text">When a customer selects this item to add to their cart, you
+                                can add a pop-up dialog message. (Include things that may be required to purchase
+                                the item)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
                         <div class="row g-2">
                             <div class="col-md-12 col-12">
                                 <div class="form-floating">
                                         <textarea class="form-control" style="height: 200px;"
                                                   name="marketing_description">{!! $item->marketing_description !!}</textarea>
-                                    <label>Marketing Description (Shop)</label>
+                                    <label>Marketing Description for Shop</label>
                                     <span
                                         class="helper-text">Enter markdown-enabled description for shop details.</span>
                                 </div>
