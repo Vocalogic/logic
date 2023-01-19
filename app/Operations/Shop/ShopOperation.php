@@ -8,6 +8,7 @@ use App\Enums\Core\CommKey;
 use App\Exceptions\LogicException;
 use App\Models\Account;
 use App\Models\Addon;
+use App\Models\AddonOption;
 use App\Models\BillItem;
 use App\Models\Coupon;
 use App\Models\Lead;
@@ -48,11 +49,11 @@ class ShopOperation
     public ?Quote  $quote  = null;
 
     // --- Internal Counters and Processors Here --- //
-    public array   $products       = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // Contain all Products
-    public array   $services       = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              // Contain all Services
-    public array   $items          = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              // Contains all Items
-    public float   $total          = 0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               // Cart Grand Total
-    public float   $totalDiscounts = 0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               // Track how many discounts were given.
+    public array   $products       = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              // Contain all Products
+    public array   $services       = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // Contain all Services
+    public array   $items          = [];                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      // Contains all Items
+    public float   $total          = 0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       // Cart Grand Total
+    public float   $totalDiscounts = 0;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       // Track how many discounts were given.
     public float   $totalMonthly   = 0;
     public float   $totalOne       = 0;
     public ?string $uid            = null;
@@ -246,6 +247,38 @@ class ShopOperation
     }
 
     /**
+     * Attempt to find the first billitem UID based on an actual
+     * BillItem. This may need to be an array in the future.
+     * @param BillItem $item
+     * @param bool     $retry
+     * @return string|null
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function getUidByItem(BillItem $item, bool $retry = false): ?string
+    {
+        foreach ($this->items as $cartItem)
+        {
+            if ($item->id == $cartItem->id)
+            {
+                if ($cartItem->uid) return $cartItem->uid;
+                if ($retry)
+                {
+                    // We tried after unpacking at this point and still have nothing.
+                    return null;
+                }
+                // There is a possible race condition here where our package processor
+                // Could add an item and then attempt to get a new item before
+                // the previous item had a chance to get packed. So the item could
+                // exist at this point but no UID has been assigned.
+                $this->unpack(); // Attempt to unpack anything previous packed in a previous method but w/o being saved.
+                $this->getUidByItem($item, true); // add retry so we don't get into a constant loop.
+            }
+        }
+        return null;
+    }
+
+    /**
      * Remove an item by its logic ID (uid)
      * @param string $uid
      * @return void
@@ -378,7 +411,49 @@ class ShopOperation
     } //fn
 
     /**
-     * Take a request array and apply addons
+     * This will take an existing item in our cart and apply an addon based
+     * on the option given.
+     * @param string      $uid
+     * @param AddonOption $option
+     * @param int         $qty
+     * @return void
+     */
+    public function applyAddon(string $uid, AddonOption $option, int $qty = 1): void
+    {
+        $item = $this->getItem($uid);
+        if (!$item)
+        {
+            // Not sure how we'd get here. But someone will find a way.
+            return;
+        }
+        if (!isset($item->appliedAddons) || !$item->appliedAddons)
+        {
+            $item->appliedAddons = collect([]); // init addons if this is the first entry into it.
+        }
+        $price = $option->price ?: $option->item->msrp;
+        $item->appliedAddons->add((object)[
+            'qty'       => $qty,
+            'addon_id'  => $option->addon->id,
+            'option_id' => $option->id,
+            'price'     => $price,
+            'msrp'      => $option->item->msrp,
+            'text'      => sprintf("%s: %s", $option->addon->name, $option->name),
+            'textPrice' => sprintf("%s: %s (+$%s)", $option->addon->name, $option->name, moneyFormat($price)),
+            'option'    => $option->name,
+            'group'     => $option->addon->name
+        ]);
+        $atotal = 0;
+        foreach ($item->appliedAddons as $a)
+        {
+            $atotal += $a->price;
+        }
+        $item->addonTotal = $atotal;
+        $this->updateItem($uid, $item); // Apply addon to item and repack.
+    }
+
+    /**
+     * Take a request array and apply addons - This is done from the item component process and
+     * takes a list of all selected addons as a whole during the add to cart process.
      * @param string $uid
      * @param array  $addons
      * @return void
@@ -413,12 +488,13 @@ class ShopOperation
                 }
             }
             $item->appliedAddons->add((object)[
+                'qty'       => 1,
                 'addon_id'  => $addon->id,
                 'option_id' => $opt->id,
                 'price'     => $price,
                 'msrp'      => $msrp,
                 'text'      => sprintf("%s: %s", $addon->name, $opt->name),
-                'textPrice' => sprintf("%s: %s (+$%s)", $addon->name, $opt->name, number_format($price, 2)),
+                'textPrice' => sprintf("%s: %s (+$%s)", $addon->name, $opt->name, moneyFormat($price)),
                 'option'    => $opt->name,
                 'group'     => $addon->name
             ]);
@@ -666,7 +742,7 @@ class ShopOperation
      * @param Quote $quote
      * @return void
      */
-    public function applyCartItemsToQuote(Quote $quote) : void
+    public function applyCartItemsToQuote(Quote $quote): void
     {
         $cart = cart();
         foreach ($cart->items as $i)

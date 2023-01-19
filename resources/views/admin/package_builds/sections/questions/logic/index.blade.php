@@ -35,7 +35,11 @@
                         <td>
                             <a class="live" data-title="Edit Logic"
                                href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/{{$logic->id}}">
-                                {{$logic->addedItem?->name}}
+                                @if($logic->addedItem)
+                                    {{$logic->addedItem->name}}
+                                @else
+                                    <b>Addon To: </b> {{$logic->addon->addon->item->name}} <br/>{{$logic->addon->addon->name}} - {{$logic->addon->name}}
+                                @endif
                             </a>
                             <a class="confirm" data-message="Are you sure you want to remove this logic statement?"
                                data-method="DELETE"

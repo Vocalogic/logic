@@ -173,9 +173,9 @@ class PackageComponent extends Component
                     if ($passes)
                     {
                         $qty = $logic->qty_from_answer ? $answer : $logic->qty;
+                        if (!is_numeric($qty)) $qty = 1;
                         if ($logic->add_item_id)
                         {
-                            if (!is_numeric($qty)) $qty = 1;
                             try
                             {
                                 $cart->addItem(BillItem::find($logic->add_item_id), $qty);
@@ -183,7 +183,18 @@ class PackageComponent extends Component
                             {
                                 // Don't kill LW based on an inventory error
                             }
-                        } // if add
+                        } // if adding bill item
+                        if ($logic->add_addon_id)
+                        {
+                            // We are adding an addon to an existing bill item that is in our previous logic.
+                            // Since our cart takes in the uid and not the actual bill item we will need to
+                            // get the uid based on the item that this addon represents
+                            $uid = $cart->getUidByItem($logic->addon->addon->item);
+                            if ($uid)
+                            {
+                                $cart->applyAddon($uid, $logic->addon, $qty);
+                            }
+                        }
                     } // if passes
                 } // fe logic
 
