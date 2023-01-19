@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * @property mixed $invoice
+ * @property mixed $item
+ * @property mixed $price
  */
 class InvoiceItem extends Model
 {
@@ -29,5 +31,50 @@ class InvoiceItem extends Model
     {
         return $this->belongsTo(BillItem::class, 'bill_item_id');
     }
+
+    /**
+     * Take the item's price and compare it with another bill item
+     * and return the percentage of increase or decrease along with
+     * a tooltip that says what the average price sold for this customer
+     * has been.
+     * @return string|null
+     */
+    public function getVariationDetailAttribute(): ?string
+    {
+        if (!$this->item) return null; // We aren't comparing raw data, just anything with a billitem.
+        $total = 0;
+        $count = 0;
+        foreach ($this->invoice->account->invoices as $oldInvoice)
+        {
+            if ($oldInvoice->id == $this->invoice->id) continue; // visually cleaner this way.
+            foreach ($oldInvoice->items as $item)
+            {
+                if ($item->item && $item->item->id == $this->item->id)
+                {
+                    $total += $item->price;
+                    $count++;
+                }
+            }
+        }
+        if ($count == 0) return null; // First time billing this item - no info needed.
+        $average = $total / $count;
+        if ($average == 0) return null;  // $0 average - no info.
+        $less = $this->price < $average; // Is our current price lower than the average?
+        $text = sprintf("Average Price: $%s", moneyFormat($average));
+        $icon = $less ? "chevron-down" : "chevron-up"; // Set visual icon
+        $color = $less ? "warning" : "success";        // Set color
+        $pm = $less ? "-" : "+";                       // Set plus/minus indicator
+        if ($less)
+        {
+            $perc = 100 - round(($this->price / $average) * 100);
+        }
+        else
+        {
+            $perc = round(($this->price / $average) * 100) - 100;
+        }
+        return "<span class='small' data-bs-toggle='tooltip' data-bs-placement='top' title='$text'>
+            <i class='fa fa-$icon text-$color'>{$pm}{$perc}%</span>";
+    }
+
 
 }
