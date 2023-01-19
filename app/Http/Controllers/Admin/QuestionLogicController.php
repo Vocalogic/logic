@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\PackageBuild;
 use App\Models\PackageSection;
@@ -76,6 +77,7 @@ class QuestionLogicController extends Controller
      * @param PackageSectionQuestion $question
      * @param Request                $request
      * @return RedirectResponse
+     * @throws LogicException
      */
     public function store(
         PackageBuild $packageBuild,
@@ -83,11 +85,20 @@ class QuestionLogicController extends Controller
         PackageSectionQuestion $question,
         Request $request
     ): RedirectResponse {
-        $request->validate(['add_item_id' => 'required', 'answer' => 'required']);
+        $request->validate(['answer' => 'required']);
+        if ($request->add_addon_id && $request->add_item_id)
+        {
+            throw new LogicException("You can only specify an item or an addon in each entry.");
+        }
+        if (!$request->add_addon_id && !$request->add_item_id)
+        {
+            throw new LogicException("You must add either an item or an addon.");
+        }
         $question->logics()->create([
             'answer_equates'  => $request->answer_equates,
             'answer'          => $request->answer,
             'add_item_id'     => $request->add_item_id,
+            'add_addon_id'    => $request->add_addon_id,
             'qty_from_answer' => (bool)$request->qty_from_answer,
             'qty'             => $request->qty
         ]);
@@ -102,6 +113,7 @@ class QuestionLogicController extends Controller
      * @param PackageSectionQuestionLogic $logic
      * @param Request                     $request
      * @return RedirectResponse
+     * @throws LogicException
      */
     public function update(
         PackageBuild $packageBuild,
@@ -110,11 +122,20 @@ class QuestionLogicController extends Controller
         PackageSectionQuestionLogic $logic,
         Request $request
     ): RedirectResponse {
-        $request->validate(['add_item_id' => 'required', 'answer' => 'required']);
+        $request->validate(['answer' => 'required']);
+        if ($request->add_addon_id && $request->add_item_id)
+        {
+            throw new LogicException("You can only specify an item or an addon in each entry.");
+        }
+        if (!$request->add_addon_id && !$request->add_item_id)
+        {
+            throw new LogicException("You must add either an item or an addon.");
+        }
         $logic->update([
             'answer_equates'  => $request->answer_equates,
             'answer'          => $request->answer,
             'add_item_id'     => $request->add_item_id,
+            'add_addon_id'    => $request->add_addon_id,
             'qty_from_answer' => (bool)$request->qty_from_answer,
             'qty'             => $request->qty
         ]);
@@ -135,6 +156,17 @@ class QuestionLogicController extends Controller
         PackageSectionQuestion $question,
         PackageSectionQuestionLogic $logic
     ): array {
+        // Make sure there are no addons that were associated to thie entry.
+        foreach($question->logics as $l)
+        {
+            if ($l->add_addon_id)
+            {
+                if ($l->addon->addon->item->id == $logic->addedItem->id)
+                {
+                    $l->delete(); // If we matched addeditem with the root addon item, delete this.
+                }
+            }
+        }
         $logic->delete();
         return ['callback' => 'reload'];
     }

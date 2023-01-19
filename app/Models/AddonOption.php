@@ -6,7 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * @property int $price
+ * @property int   $price
+ * @property mixed $item
+ * @property mixed $addon
+ * @property mixed $name
+ * @property mixed $id
  */
 class AddonOption extends Model
 {
