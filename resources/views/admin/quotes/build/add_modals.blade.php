@@ -21,9 +21,10 @@
                         @foreach($cat->items as $item)
                             <tr>
                                 <td>
-                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">[{{$item->code}}
-                                        ] {{$item->name}}</a><br/><small
-                                        class="text-muted">{{$item->category->name}}</small></td>
+                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">
+                                        [{{$item->code}}] {{$item->name}}</a><br/><small
+                                        class="text-muted">{{$item->category->name}}</small>
+                                </td>
                                 <td>${{moneyFormat($item->mrc)}}</td>
                             </tr>
                         @endforeach
@@ -57,9 +58,12 @@
                         @foreach($cat->items as $item)
                             <tr>
                                 <td>
-                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">[{{$item->code}}
-                                        ] {{$item->name}}</a><br/><small
-                                        class="text-muted">{{$item->category->name}}</small></td>
+                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">
+                                        [{{$item->code}}] {{$item->name}}
+                                    </a><br/><small class="text-muted">
+                                        {{$item->category->name}}
+                                    </small>
+                                </td>
                                 <td>${{moneyFormat($item->nrc)}}</td>
                             </tr>
                         @endforeach
@@ -90,10 +94,10 @@
                     <div class="row g-3 mb-4">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-floating mb-2">
-                                @if(isset($lead))
-                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $lead->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
+                                @if($quote->lead)
+                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->lead->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
                                 @else
-                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $account->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
+                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->account->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
                                 @endif
                                 <label>Select Previous Quote</label>
                             </div>
@@ -127,10 +131,10 @@
                     <div class="row g-3 mb-4">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-floating mb-2">
-                                @if(isset($lead))
-                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $lead->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
+                                @if($quote->lead)
+                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->lead->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
                                 @else
-                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $account->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
+                                    {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->account->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
                                 @endif
                                 <label>Select Previous Quote</label>
                             </div>

@@ -8,7 +8,7 @@
     </div>
     <div class="card-body">
         <div class="avatar lg rounded-circle no-thumbnail mb-3 fs-5"><a
-                href="/admin/accounts/{{$invoice->account->id}}/invoices/{{$invoice->id}}">#{{$invoice->id}}</a></div>
+                href="/admin/invoices/{{$invoice->id}}">#{{$invoice->id}}</a></div>
         <small class="text-muted">Balance</small>
         <h4>${{moneyFormat($invoice->balance)}}</h4>
         <ul class="lh-lg mb-0 text-muted list-unstyled">
@@ -18,7 +18,7 @@
 
         <div class="text-center">
             <a class="btn btn-link btn-sm color-400"
-               href="/admin/accounts/{{$invoice->account->id}}/invoices/{{$invoice->id}}" data-bs-toggle="tooltip"
+               href="/admin/invoices/{{$invoice->id}}" data-bs-toggle="tooltip"
                data-bs-placement="top" title="" data-bs-original-title="View Invoice" aria-label="Edit"><i
                     class="fa fa-pencil"></i></a>
 

@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-12">
             <div class="input-group">
-                <a class="btn btn-outline-secondary" data-bs-toggle="modal" href="#newCategory"
+                <a class="btn btn-outline-primary" data-bs-toggle="modal" href="#newCategory"
                    type="button"><i class="fa fa-plus"></i> New {{ucfirst($type)}} Category
                 </a>
                 <input type="text" class="form-control" placeholder="Search...">
@@ -28,44 +28,39 @@
         </div>
     </div>
 
-    <div class="modal fade" id="newCategory" tabindex="-1" role="dialog" aria-labelledby="liveModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Create new Category</h5>
-                </div>
-                <div class="modal-body">
-                    <form method="post" action="/admin/bill_categories/{{$type}}">
-                        @method('POST')
-                        @csrf
-                        <div class="row g-3 mb-4">
-                            <div class="col-lg-6 col-md-12">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="name" value="">
-                                    <label>Category Name</label>
-                                    <span class="helper-text">Enter the category name</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <div class="form-floating">
-                                    <textarea class="form-control" rows=4 name="description"></textarea>
-                                    <label>Description</label>
-                                    <span class="helper-text">Enter a short description (optional)</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-12">
-                                <input type="submit" class="btn btn-primary rounded wait" data-message="Saving Category.." value="Save">
-                            </div>
-
-
-                        </div>
-
-                    </form>
+    <x-modal name="newCategory" title="Create {{ucfirst($type)}} Category" size="lg">
+        <form method="post" action="/admin/bill_categories/{{$type}}">
+            @method('POST')
+            @csrf
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        Categories are used to categorize your products and services. They are also used for your shop
+                        to assign tags where customers can filter their searches based on the category. Products and
+                        Services in your categories should be related and make searching easy for your customers.
+                    </p>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="card border-primary">
+                <div class="card-body">
+                    <div class="row g-3 mb-4">
+                        <x-form-input name="name" icon="link" label="{{ucfirst($type)}} Category Name">
+                            Enter the category name
+                        </x-form-input>
 
+                        <x-form-input name="description" icon="comments" label="Category Description">
+                            Enter a short description
+                        </x-form-input>
+
+                        <div class="offset-4 col-8">
+                            <input type="submit" class="w-100 btn btn-primary wait" data-message="Saving Category.."
+                                   value="Save Category">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </x-modal>
 
 @endsection

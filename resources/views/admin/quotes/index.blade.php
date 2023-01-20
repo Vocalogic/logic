@@ -16,7 +16,7 @@
                     </div>
                 </div>
             @else
-                @include('admin.quotes.main_list')
+                @include('admin.quotes.list')
             @endif
         </div>
     </div>

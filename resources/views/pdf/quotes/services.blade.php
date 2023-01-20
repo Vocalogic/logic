@@ -47,19 +47,21 @@
             @endforeach
             @foreach($quote->products as $service)
                 @if($service->frequency && $service->payments)
-                    <tr>
+                    <tr class="small">
                         <td width="65%">
-                    <span class="bold"
-                          style="font-size:12px;">[{{$service->item->code}}] {{$service->item->name}}</span>
+                            <b class="small">[{{$service->item->code}}] {{$service->item->name}}</b>
                             <br/>
                             <small class="helper-text">{{$service->item->description}}</small>
-                            <b>This temporary service will be invoiced a total of {{$service->payments}} times
-                                ({{$service->frequency->getHuman()}}) and will be removed automatically.</b>
+                            <b class="small">
+                                <div class="alert alert-info" style="padding: 3px;">
+                                    <b>NOTE:</b> This temporary service will be invoiced a total of {{$service->payments}} times
+                                ({{$service->frequency->getHuman()}}) and will be removed automatically.
+                                </div></b>
                         </td>
-                        <td align="center">
+                        <td>
                             ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments),2)}}</td>
-                        <td align="center">1</td>
-                        <td align="center">
+                        <t>1</t>
+                        <td>
                             ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments),2)}}
                         </td>
                     </tr>

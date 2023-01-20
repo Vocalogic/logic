@@ -143,4 +143,14 @@ class ShopController extends Controller
         return view('shop.authorize_modal', ['cart' => $cart]);
     }
 
+    /**
+     * Show confirmation dialog box to user if item has a
+     * confirmation requirement.
+     * @param BillItem $item
+     * @return View
+     */
+    public function showConfirmation(BillItem $item) : View
+    {
+        return view('shop.confirmation', ['item' => $item]);
+    }
 }

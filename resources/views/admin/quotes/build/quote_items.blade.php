@@ -80,12 +80,7 @@
                         @endif
                     </td>
                     <td>${{moneyFormat($service->price,2)}}</a></td>
-                    <td>{{$service->qty}} <a class="confirm"
-                                             data-message="Are you sure you want to remove {{$service->item->name}}?"
-                                             href="/admin/quotes/{{$quote->id}}/del/{{$service->id}}"
-                                             data-method="DELETE">
-                            <i class="fa fa-trash"></i></a></a>
-                    </td>
+                    <td>{{$service->qty}} </td>
                     <td>${{moneyFormat(($service->qty * $service->price) + $service->addonTotal,2)}}</td>
                 </tr>
             @empty
@@ -101,10 +96,8 @@
                                 <a class="btn btn-{{bm()}}primary border lift" data-bs-toggle="modal"
                                    href="#newRecurring"><i class="fa fa-plus"></i> Add
                                     Recurring Service</a>
-
                                 <a class="btn btn-{{bm()}}secondary border lift" data-bs-toggle="modal"
                                    href="#recurringCopy"><i class="fa fa-copy"></i> Copy From Quote</a>
-
                             </div>
                         </div>
                     </td>
@@ -190,12 +183,7 @@
                         <br/>
                     </td>
                     <td>${{moneyFormat($product->price,2)}}</a></td>
-                    <td>{{$product->qty}} <a class="confirm"
-                                             data-message="Are you sure you want to remove {{$product->item->name}}?"
-                                             href="/admin/quotes/{{$quote->id}}/del/{{$product->id}}"
-                                             data-method="DELETE">
-                            <i class="fa fa-trash"></i></a></a>
-                    </td>
+                    <td>{{$product->qty}}</td>
                     <td>${{moneyFormat(($product->qty * $product->price) + $product->addonTotal,2)}}</td>
                 </tr>
             @empty

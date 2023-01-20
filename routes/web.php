@@ -141,9 +141,39 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     // Account Import
     Route::get('accounts/import/csv', [AccountController::class, 'importModal']);
     Route::post('accounts/import/csv', [AccountController::class, 'import']);
-    // Account User Actions
+
+    // Account Section Routes
+    Route::get('accounts/{account}/overview', [AccountController::class, 'overview']);
+
+    // Account Services
+    Route::get('accounts/{account}/services', [AccountController::class, 'services']);
+    Route::get('accounts/{account}/services/{item}', [AccountController::class, 'editItem']);
+    Route::get('accounts/{account}/services/add/{item}', [AccountController::class, 'addItem']);
+    Route::put('accounts/{account}/services/{item}', [AccountController::class, 'updateItem']);
+    Route::delete('accounts/{account}/services/{item}', [AccountController::class, 'delItem']);
+
+    // Account Invoices
+    Route::get('accounts/{account}/invoices', [AccountController::class, 'invoices']);
+
+    // Account Users
+    Route::get('accounts/{account}/users', [AccountController::class, 'users']);
     Route::get('accounts/{account}/users/{user}/reset', [AccountUserController::class, 'resetUser']);
     Route::get('accounts/{account}/users/{user}/shadow', [AccountUserController::class, 'shadow']);
+
+    // Creating quotes from an Account
+    Route::get('accounts/{account}/quotes', [AccountController::class, 'quotes']);
+    Route::post('accounts/{account}/quotes', [AccountController::class, 'storeQuote']);
+
+    // Account Events
+    Route::get('accounts/{account}/events', [AccountController::class, 'events']);
+
+    // Account Profile
+    Route::get('accounts/{account}/profile', [AccountController::class, 'profile']);
+
+    Route::get('accounts/{account}/pricing', [AccountController::class, 'pricing']);
+
+    Route::get('accounts/{account}/files', [AccountController::class, 'files']);
+
     Route::get('accounts/{account}/statement', [AccountController::class, 'statement']);
     Route::get('accounts/{account}/paymentRequest', [AccountController::class, 'paymentRequest']);
     Route::post('accounts/{account}/s3', [AccountController::class, 'updateS3']);
@@ -344,21 +374,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('accounts/{account}/updateACH', [AccountController::class, 'saveACH']);
 
 
-    Route::post('accounts/{account}/quotes', [AccountController::class, 'storeQuote']);
+
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
-    Route::post('accounts/{account}/invoices/{invoice}/auth', [AccountController::class, 'authPayment']);
-    Route::get('invoices/{invoice}', [AccountController::class, 'invoiceRedirect']);
-    Route::get('accounts/{account}/quotes/{quote}', [AccountController::class, 'showQuote']);
-    Route::get('accounts/{account}/invoices/{invoice}', [AccountController::class, 'showInvoice']);
-    Route::get('accounts/{account}/invoices/{invoice}/item/{item}', [AccountController::class, 'showItem']);
-    Route::put('accounts/{account}/invoices/{invoice}/item/{item}', [AccountController::class, 'updateInvoiceItem']);
 
 
-    Route::get('accounts/{account}/services/{item}', [AccountController::class, 'editItem']);
-    Route::get('accounts/{account}/services/add/{item}', [AccountController::class, 'addItem']);
 
-    Route::put('accounts/{account}/services/{item}', [AccountController::class, 'updateItem']);
-    Route::delete('accounts/{account}/services/{item}', [AccountController::class, 'delItem']);
+
     Route::post('accounts/{account}/method/add', [AccountController::class, 'addPaymentMethod']);
 
     // Orders
@@ -400,19 +421,20 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('shipments/{shipment}/live/{item}', [ShipmentController::class, 'live']);
 
 
+    // Invoice Routes
+    Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy']);
     Route::post('invoices/{invoice}/add', [InvoiceController::class, 'addCustomItem']);
     Route::get('invoices/{invoice}/add/{item}', [InvoiceController::class, 'addItem']);
     Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::get('invoices/{invoice}/send', [InvoiceController::class, 'send']);
     Route::get('invoices/{invoice}/order', [InvoiceController::class, 'createOrder']);
-
     Route::get('invoices/{invoice}/due', [InvoiceController::class, 'dueModal']);
     Route::post('invoices/{invoice}/due', [InvoiceController::class, 'dueUpdate']);
-
+    Route::get('invoices/{invoice}/item/{item}', [InvoiceController::class, 'showItem']);
+    Route::put('invoices/{invoice}/item/{item}', [InvoiceController::class, 'updateInvoiceItem']);
     Route::delete('invoices/{invoice}/rem/{item}', [InvoiceController::class, 'remItem']);
-    Route::post('invoices/{invoice}/items/{item}/live', [InvoiceController::class, 'liveUpdate']);
-
+    Route::post('invoices/{invoice}/auth', [InvoiceController::class, 'authPayment']);
     // Sales Funnel
     Route::get('sales/funnel', [SalesFunnelController::class, 'index']);
 
@@ -557,6 +579,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('presales/{slug}/{qslug}/checkout', [CheckoutController::class, 'quoteCheckout']);
 
     // Guest Routes
+    Route::get('confirm/{item}', [ShopController::class, 'showConfirmation']);
     Route::get('cart', [GuestCartController::class, 'showCart']);
     Route::get('build/{slug}', [GuestCartController::class, 'startBuild']);
     Route::get('checkout', [GuestCheckoutController::class, 'checkout']);

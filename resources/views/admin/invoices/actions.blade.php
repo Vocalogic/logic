@@ -1,8 +1,4 @@
 <div class="row">
-
-    <a class="mb-4" href="/admin/accounts/{{$account->id}}?active=invoices"><i class="fa fa-arrow-left"></i> Back to
-        Invoices</a>
-
     @if($invoice->balance > 0)
         <div class="col-6 mb-3">
             <div class="card">

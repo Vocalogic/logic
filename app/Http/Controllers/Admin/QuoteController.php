@@ -25,16 +25,37 @@ class QuoteController extends Controller
      */
     public function index(): View
     {
-        return view('admin.quotes.index');
+        // Showing all quotes
+        $quotes = Quote::where('archived', false)->get();
+        return view('admin.quotes.index', ['quotes' => $quotes]);
     }
 
-    public function show(Quote $quote): RedirectResponse
+    /**
+     * Show Quote
+     * @param Quote $quote
+     * @return View
+     */
+    public function show(Quote $quote): View
     {
         if ($quote->lead)
         {
-            return redirect()->to("/admin/leads/{$quote->lead->id}/quotes/$quote->id");
+            $crumbs = [
+                '/admin/leads' => "Leads",
+                "/admin/leads/{$quote->lead->id}" => $quote->lead->company,
+                "/admin/leads/{$quote->lead->id}/quotes/" => "Quotes",
+                "#$quote->id"
+            ];
         }
-        else return redirect()->to("/admin/accounts/{$quote->account->id}/?active=quotes&quote=$quote->id");
+        else
+        {
+            $crumbs = [
+                "/admin/accounts" => "Accounts",
+                "/admin/accounts/{$quote->account->id}" => $quote->account->name,
+                "/admin/accounts/{$quote->account->id}/quotes/" => "Quotes",
+                "#$quote->id"
+            ];
+        }
+        return view('admin.quotes.show', ['quote' => $quote, 'crumbs' => $crumbs]);
     }
 
     /**
@@ -90,7 +111,7 @@ class QuoteController extends Controller
     public function addItem(Quote $quote, BillItem $item): RedirectResponse
     {
         $service = $item->type == BillItemType::SERVICE->value;
-        $item = (new QuoteItem)->create([
+        $qitem = (new QuoteItem)->create([
             'quote_id'        => $quote->id,
             'item_id'         => $item->id,
             'price'           => $service ? $item->mrc : $item->nrc,
@@ -101,10 +122,10 @@ class QuoteController extends Controller
             'allowed_overage' => $item->allowed_overage,
             'frequency'       => $item->type == 'services' ? $item->frequency : null,
         ]);
-        $item->update(['ord' => $item->setNewOrd()]);
+        $qitem->update(['ord' => $qitem->setNewOrd()]);
         $quote->reord();
         sbus()->emitQuoteUpdated($quote);
-        return redirect()->back();
+        return redirect()->back()->with('message', $item->name . " added to Quote #$quote->id");
     }
 
     /**
@@ -115,6 +136,7 @@ class QuoteController extends Controller
      */
     public function delItem(Quote $quote, QuoteItem $item): array
     {
+        session()->flash('message', $item->item->name . " removed from quote.");
         $item->delete();
         $quote->reord();
         sbus()->emitQuoteUpdated($quote);
@@ -157,7 +179,7 @@ class QuoteController extends Controller
             'notes'           => $request->notes
         ]);
         sbus()->emitQuoteUpdated($quote);
-        return redirect()->back();
+        return redirect()->back()->with('message', $item->item->name . " updated.");
     }
 
     /**
@@ -180,7 +202,7 @@ class QuoteController extends Controller
         {
             $quote->lead->quotes()->where('id', '!=', $quote->id)->update(['preferred' => false]);
         }
-        return redirect()->back();
+        return redirect()->back()->with('message', "Quote settings updated.");
     }
 
     /**
@@ -212,6 +234,7 @@ class QuoteController extends Controller
     public function send(Quote $quote): array
     {
         $quote->send();
+        session()->flash("message", "Quote #{$quote->id} sent successfully.");
         return ['callback' => 'reload'];
     }
 
@@ -219,7 +242,7 @@ class QuoteController extends Controller
      * Remove a quote
      * @param Quote   $quote
      * @param Request $request
-     * @return RedirectResponse
+     * @return RedirectResponse|array
      */
     public function destroy(Quote $quote, Request $request): RedirectResponse|array
     {

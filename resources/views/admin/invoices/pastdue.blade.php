@@ -16,7 +16,14 @@
         @endif
         <tr>
             <td>
-                <a href="/admin/accounts/{{$invoice->account->id}}/invoices/{{$invoice->id}}"><span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span></a>
+                <a href="/admin/invoices/{{$invoice->id}}">
+                    <span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
+                </a>
+                @if($invoice->recurring)
+                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Monthly Invoice">
+                        <i class="fa fa-refresh"></i>
+                    </a>
+                @endif
             </td>
             <td><a href="/admin/accounts/{{$invoice->account->id}}">{{$invoice->account->name}}</a></td>
             <td>{{$invoice->created_at->format("m/d/y")}}</td>

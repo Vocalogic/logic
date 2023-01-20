@@ -15,9 +15,17 @@
                 <span class="helper-text">Select the item to add if the below parameters are met.</span>
             </div>
         </div>
+        <div class="col-lg-12 mt-3 ">
+            <div class="form-floating">
+                {!! Form::select('add_addon_id', $build->relatedAddons(), $logic->add_addon_id, ['class' => 'form-control']) !!}
+                <label>Select Addon to Add:</label>
+                <span class="helper-text">Select from a list of addons of products/services already listed in this question.</span>
+            </div>
+        </div>
+
     </div>
 
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-lg-6">
             <div class="form-floating">
                 {!! Form::select('answer_equates', \App\Models\PackageSectionQuestion::getEquates(), $logic->answer_equates, ['class' => 'form-control', 'id' => 'answer_equates']) !!}

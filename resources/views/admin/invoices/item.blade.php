@@ -1,4 +1,4 @@
-<form class='formAnchor' method="POST" action="/admin/accounts/{{$invoice->account->id}}/invoices/{{$invoice->id}}/item/{{$item->id}}">
+<form class='formAnchor' method="POST" action="/admin/invoices/{{$invoice->id}}/item/{{$item->id}}">
     @method('PUT')
     @csrf
 

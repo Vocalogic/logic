@@ -9,7 +9,7 @@
     <tbody>
     @foreach($account->invoices()->where('status', \App\Enums\Core\InvoiceStatus::PAID)->get() as $invoice)
         <tr>
-            <td><a href="/admin/accounts/{{$account->id}}/invoices/{{$invoice->id}}"><span
+            <td><a href="/admin/invoices/{{$invoice->id}}"><span
                         class="badge bg-primary">#{{$invoice->id}}</span></a></td>
             <td>{{$invoice->paid_on?->format("m/d/y h:ia")}}</td>
             <td>${{moneyFormat($invoice->total)}}</td>

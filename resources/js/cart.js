@@ -1,8 +1,6 @@
-
 $(document).ready(function () {
 
-    Livewire.on('initSignature', function()
-    {
+    Livewire.on('initSignature', function () {
         let sig = $('.sigPad').signaturePad(
             {
                 drawOnly: true,
@@ -69,6 +67,7 @@ $(document).ready(function () {
             icon: "error",
         });
     }
+
     /**
      * AJAX Method with default handlers
      * @param url
@@ -174,36 +173,32 @@ $(document).ready(function () {
     /**
      * Send a directed url through sbus
      */
-    Livewire.on('assistDirect', function(url)
-    {
+    Livewire.on('assistDirect', function (url) {
         window.location.assign(url);
     });
 
     /**
      * Send a reload command via sbus
      */
-    Livewire.on('assistReload', function()
-    {
+    Livewire.on('assistReload', function () {
         window.location.reload();
     });
 
-    $('.scroll-to').click(function(e)
-    {
+    $('.scroll-to').click(function (e) {
         e.preventDefault();
-       let that = $(this);
-       let target = that.attr('data-target');
-       $('html, body').animate(
-        {
-           scrollTop: $(target).offset().top
-        }, 500);
+        let that = $(this);
+        let target = that.attr('data-target');
+        $('html, body').animate(
+            {
+                scrollTop: $(target).offset().top
+            }, 500);
 
     });
 
     /**
      * Spawn a meta requirements gatherer from ItemCartComponent
      */
-    Livewire.on('cartMetaModal', function(title, url)
-    {
+    Livewire.on('cartMetaModal', function (title, url) {
         let target = "#cartMetaModal";
         send(url, 'GET', null, function (data) {
             let modal = $(target);
@@ -216,8 +211,7 @@ $(document).ready(function () {
     /**
      * Dismiss the cart modal and add to cart.
      */
-    Livewire.on('dismissCartMeta', function()
-    {
+    Livewire.on('dismissCartMeta', function () {
         let target = "#cartMetaModal";
         let modal = $(target);
         modal.modal('close');
@@ -226,17 +220,14 @@ $(document).ready(function () {
     /**
      * Send a message via a Modal
      */
-    Livewire.on("sendMessage", function(message)
-    {
-       let target = $("#liveModal");
-       target.find(".modal-body").html(message);
-       target.modal('show');
+    Livewire.on("sendMessage", function (message) {
+        let target = $("#liveModal");
+        target.find(".modal-body").html(message);
+        target.modal('show');
     });
 
 
-
-    Livewire.on('reinitSlider', function()
-    {
+    Livewire.on('reinitSlider', function () {
         if ($('.product-main').hasClass('slick-initialized')) {
             $('.product-main').slick('destroy');
         }
