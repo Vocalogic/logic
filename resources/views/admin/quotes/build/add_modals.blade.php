@@ -21,9 +21,10 @@
                         @foreach($cat->items as $item)
                             <tr>
                                 <td>
-                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">[{{$item->code}}
-                                        ] {{$item->name}}</a><br/><small
-                                        class="text-muted">{{$item->category->name}}</small></td>
+                                    <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">
+                                        [{{$item->code}}] {{$item->name}}</a><br/><small
+                                        class="text-muted">{{$item->category->name}}</small>
+                                </td>
                                 <td>${{moneyFormat($item->mrc)}}</td>
                             </tr>
                         @endforeach

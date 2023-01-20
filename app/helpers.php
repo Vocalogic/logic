@@ -503,9 +503,9 @@ if (!function_exists('setting'))
     function isAdmin(): bool
     {
         if (auth()->guest()) return false;
+        if (user()->account_id > 1) return false;
         if (user()->acl->value === \App\Enums\Core\ACL::ADMIN->value) return true;
         return false;
-
     }
 
     /**
