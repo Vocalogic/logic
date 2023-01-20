@@ -93,7 +93,7 @@
                     <div class="row g-3 mb-4">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-floating mb-2">
-                                @if($quote->lead))
+                                @if($quote->lead)
                                     {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->lead->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
                                 @else
                                     {!! Form::select('quote_id', array_replace([0 => '-- Select Quote --'], $quote->account->alternateQuotes($quote)), null, ['class' => 'form-select', 'aria-label' => 'Select Quote']) !!}
