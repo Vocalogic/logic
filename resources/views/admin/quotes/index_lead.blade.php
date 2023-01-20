@@ -51,7 +51,7 @@
                 <a class="btn btn-{{bm()}}primary mt-3 mb-2" href="/admin/leads/{{$lead->id}}/quotes/create"><i
                         class="fa fa-plus"></i> New Quote</a>
 
-                @include('admin.quotes.list')
+                @include('admin.quotes.list', ['quotes' => $lead->quotes()->where('archived', false)->get()])
             @endif
         </div>
     </div>

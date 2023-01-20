@@ -5,7 +5,12 @@
 ]])
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+
+        <div class="col-2">
+            @include('admin.accounts.submenu')
+        </div>
+
+        <div class="col-10">
             @if($account->services_changed)
                 <div class="alert {{bma()}}info">
                     A change has been made to this account and the customer has not been informed of the change. If you

@@ -30,7 +30,6 @@ use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
-
     /**
      * Show all active accounts.
      * @param Request $request
@@ -59,7 +58,6 @@ class AccountController extends Controller
         {
             $accounts = Account::where('id', '>', 1)->where('active', 1)->get();
         }
-
         return view('admin.accounts.index', ['accounts' => $accounts]);
     }
 
@@ -73,60 +71,222 @@ class AccountController extends Controller
     }
 
     /**
-     * Show Quote inside Tab
-     * @param Account $account
-     * @param Quote   $quote
-     * @return RedirectResponse
-     */
-    public function showQuote(Account $account, Quote $quote): RedirectResponse
-    {
-        return redirect()->to("/admin/accounts/$account->id?active=quotes&quote=$quote->id");
-    }
-
-    /**
-     * Show an invoice redirect.
-     * @param Account $account
-     * @param Invoice $invoice
-     * @return RedirectResponse
-     */
-    public function showInvoice(Account $account, Invoice $invoice): RedirectResponse
-    {
-        return redirect()->to("/admin/accounts/$account->id?active=invoices&invoice=$invoice->id");
-    }
-
-
-    /**
      * Show Account Profile
      * @param Account $account
-     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function show(Account $account): RedirectResponse
+    {
+        return redirect()->to("/admin/accounts/$account->id/overview");
+    }
+
+
+    /**
+     * Show account overview page.
+     * @param Account $account
      * @return View
      */
-    public function show(Account $account, Request $request): View
+    public function overview(Account $account) : View
     {
-        if ($request->sync)
+        return view('admin.accounts.overview.index', ['account' => $account]);
+    }
+
+    /**
+     * Show active services
+     * @param Account $account
+     * @return View
+     */
+    public function services(Account $account) : View
+    {
+        return view('admin.accounts.services.index', ['account' => $account]);
+    }
+
+    /**
+     * Add an item to an account
+     * @param Account  $account
+     * @param BillItem $item
+     * @return RedirectResponse
+     */
+    public function addItem(Account $account, BillItem $item): RedirectResponse
+    {
+        $account->items()->create([
+            'bill_item_id' => $item->id,
+            'description'  => $item->description,
+            'price'        => $item->mrc,
+            'qty'          => 1
+        ]);
+        $account->update(['services_changed' => true]);
+        return redirect()->to("/admin/accounts/$account->id/services")
+            ->with('message', $item->name . " added to monthly services.");
+    }
+
+    /**
+     * Update a service item.
+     * @param Account     $account
+     * @param AccountItem $item
+     * @param Request     $request
+     * @return RedirectResponse
+     */
+    public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
+    {
+        $item->update([
+            'price'           => convertMoney($request->price),
+            'qty'             => $request->qty,
+            'notes'           => $request->notes,
+            'description'     => $request->description,
+            'allowed_qty'     => $request->allowed_qty,
+            'allowed_type'    => $request->allowed_type,
+            'allowed_overage' => $request->allowed_overage,
+            'frequency'       => $request->frequency
+        ]);
+        $account->update(['services_changed' => true]);
+        if ($request->contract_quote_id)
         {
-            // Sync account and then redirect.
-            Finance::syncAccount($account);
+            $item->update(['quote_id' => $request->contract_quote_id]);
         }
-        $tabs = (object)[
-            'overview' => false,
-            'services' => false,
-            'invoices' => false,
-            'quotes'   => false,
-            'orders'   => false,
-            'profile'  => false,
-            'pricing'  => false,
-            'files'    => false,
-            'events'   => false,
-            'partner'  => false,
-            'users'    => false
-        ];
-        if ($request->active)
+        if ($request->contract_expires)
         {
-            $tabs->{$request->active} = true;
+            $item->quote->update(['contract_expires' => $request->contract_expires]);
         }
-        else $tabs->overview = true;
-        return view('admin.accounts.show')->with('account', $account)->with('tab', $tabs);
+        return redirect()->to("/admin/accounts/$account->id/services")->with(['message' => $item->name . " Updated"]);
+    }
+
+    /**
+     * Remove an item from an account.
+     * @param Account     $account
+     * @param AccountItem $item
+     * @return string[]
+     */
+    public function delItem(Account $account, AccountItem $item): array
+    {
+        $item->delete();
+        return ['callback' => 'reload'];
+    }
+
+
+    /**
+     * Show Invoices for an Account
+     * @param Account $account
+     * @return View
+     */
+    public function invoices(Account $account) : View
+    {
+        return view('admin.accounts.invoices.index', ['account' => $account]);
+    }
+
+    /**
+     * Create a new invoice and return to builder.
+     * @param Account $account
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeInvoice(Account $account, Request $request): RedirectResponse
+    {
+        $terms = $request->terms ?: $account->net_terms;
+        $invoice = $account->invoices()->create([
+            'due_on' => now()->addDays($terms)
+        ]);
+        return redirect()->to("/admin/invoices/$invoice->id");
+    }
+
+
+    /**
+     * Show users for an account.
+     * @param Account $account
+     * @return View
+     */
+    public function users(Account $account): View
+    {
+        return view('admin.accounts.users.index', ['account' => $account]);
+    }
+
+    /**
+     * Show Quotes for an Account
+     * @param Account $account
+     * @return View
+     */
+    public function quotes(Account $account): View
+    {
+        return view('admin.accounts.quotes.index', ['account' => $account]);
+    }
+
+    /**
+     * Show events for an account.
+     * @param Account $account
+     * @return View
+     */
+    public function events(Account $account): View
+    {
+        return view('admin.accounts.events.index', ['account' => $account]);
+    }
+
+    /**
+     * Show account profile.
+     * @param Account $account
+     * @return View
+     */
+    public function profile(Account $account): View
+    {
+        return view('admin.accounts.profile.index', ['account' => $account]);
+    }
+
+    /**
+     * Show pricing for an account
+     * @param Account $account
+     * @return View
+     */
+    public function pricing(Account $account): View
+    {
+        return view('admin.accounts.pricing.index', ['account' => $account]);
+    }
+
+    /**
+     * Show files for an account.
+     * @param Account $account
+     * @return View
+     */
+    public function files(Account $account): View
+    {
+        return view('admin.accounts.files.index', ['account' => $account]);
+    }
+
+    /**
+     * Upload a file into an account.
+     * @param Account $account
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws LogicException
+     */
+    public function uploadFile(Account $account, Request $request): RedirectResponse
+    {
+        $request->validate(['description' => 'required']);
+        $lo = new LoFileHandler();
+        $category = FileCategory::find($request->file_category_id);
+        if (!$request->hasFile('uploaded')) throw new LogicException("No file found to process.");
+        $correlatedType = $category->type->getRootType();
+        $file = $lo->createFromRequest($request, 'uploaded', $correlatedType, $account->id);
+        $file->update([
+            'meta'             => $category->type->value,
+            'account_id'       => $account->id,
+            'description'      => $request->description,
+            'auth_required'    => $request->public ? 0 : 1,
+            'file_category_id' => $category->id
+        ]);
+        return redirect()->to("/admin/accounts/$account->id/files")->with('message', "File uploaded successfully.");
+    }
+
+    /**
+     * Delete a file
+     * @param Account $account
+     * @param LOFile  $file
+     * @param Request $request
+     * @return string[]
+     */
+    public function deleteFile(Account $account, LOFile $file, Request $request): array
+    {
+        $handle = new LoFileHandler();
+        $handle->delete($file->id);
+        return ['callback' => 'reload'];
     }
 
     /**
@@ -166,7 +326,7 @@ class AccountController extends Controller
         ]);
         $account->generateHash();
         $user->update(['account_id' => $account->id]);
-        return redirect()->to("/admin/accounts/$account->id?active=profile");
+        return redirect()->to("/admin/accounts/$account->id/profile");
     }
 
     /**
@@ -180,66 +340,6 @@ class AccountController extends Controller
         return view('admin.accounts.services.service_modal')->with('item', $item);
     }
 
-    /**
-     * Add an item to an account
-     * @param Account  $account
-     * @param BillItem $item
-     * @return RedirectResponse
-     */
-    public function addItem(Account $account, BillItem $item): RedirectResponse
-    {
-        $account->items()->create([
-            'bill_item_id' => $item->id,
-            'description'  => $item->description,
-            'price'        => $item->mrc,
-            'qty'          => 1
-        ]);
-        $account->update(['services_changed' => true]);
-        return redirect()->to("/admin/accounts/$account->id?active=services");
-    }
-
-    /**
-     * Update a service item.
-     * @param Account     $account
-     * @param AccountItem $item
-     * @param Request     $request
-     * @return RedirectResponse
-     */
-    public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
-    {
-        $item->update([
-            'price'           => convertMoney($request->price),
-            'qty'             => $request->qty,
-            'notes'           => $request->notes,
-            'description'     => $request->description,
-            'allowed_qty'     => $request->allowed_qty,
-            'allowed_type'    => $request->allowed_type,
-            'allowed_overage' => $request->allowed_overage,
-            'frequency'       => $request->frequency
-        ]);
-        $account->update(['services_changed' => true]);
-        if ($request->contract_quote_id)
-        {
-            $item->update(['quote_id' => $request->contract_quote_id]);
-        }
-        if ($request->contract_expires)
-        {
-            $item->quote->update(['contract_expires' => $request->contract_expires]);
-        }
-        return redirect()->to("/admin/accounts/$account->id?active=services");
-    }
-
-    /**
-     * Remove an item from an account.
-     * @param Account     $account
-     * @param AccountItem $item
-     * @return string[]
-     */
-    public function delItem(Account $account, AccountItem $item): array
-    {
-        $item->delete();
-        return ['callback' => 'reload'];
-    }
 
     /**
      * Update account properties.
@@ -256,12 +356,17 @@ class AccountController extends Controller
                 'next_bill' => Carbon::parse($request->next_bill),
                 'bills_on'  => Carbon::parse($request->next_bill)->day,
             ]);
+            if ($oldBill != $request->next_bill)
+            {
+                $account->update(['services_changed' => true]);
+            }
+            $account->update($request->all());
+            session()->flash('message', "Billing Information Updated.");
+            return redirect()->back();
         }
-        if ($oldBill != $request->next_bill)
-        {
-            $account->update(['services_changed' => true]);
-        }
+
         $account->update($request->all());
+        session()->flash("message", "Account Profile Updated.");
         // #45 - Try to get a favicon from the website if there is no image and a website exists.
         if ($request->website && !$account->logo_id)
         {
@@ -301,62 +406,9 @@ class AccountController extends Controller
             'net_terms'  => $account->net_terms,
             'expires_on' => now()->addDays((int)setting('quotes.length'))
         ]);
-        return redirect()->to("/admin/accounts/$account->id/quotes/$quote->id");
+        return redirect()->to("/admin/quotes/$quote->id");
     }
 
-    /**
-     * Upload a file into an account.
-     * @param Account $account
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws LogicException
-     */
-    public function uploadFile(Account $account, Request $request): RedirectResponse
-    {
-        $request->validate(['description' => 'required']);
-        $lo = new LoFileHandler();
-        $category = FileCategory::find($request->file_category_id);
-        if (!$request->hasFile('uploaded')) throw new LogicException("No file found to process.");
-        $correlatedType = $category->type->getRootType();
-        $file = $lo->createFromRequest($request, 'uploaded', $correlatedType, $account->id);
-        $file->update([
-            'meta'             => $category->type->value,
-            'account_id'       => $account->id,
-            'description'      => $request->description,
-            'auth_required'    => $request->public ? 0 : 1,
-            'file_category_id' => $category->id
-        ]);
-        return redirect()->to("/admin/accounts/$account->id?active=files");
-    }
-
-    /**
-     * Delete a file
-     * @param Account $account
-     * @param LOFile  $file
-     * @param Request $request
-     * @return string[]
-     */
-    public function deleteFile(Account $account, LOFile $file, Request $request): array
-    {
-        $handle = new LoFileHandler();
-        $handle->delete($file->id);
-        return ['callback' => 'reload'];
-    }
-
-    /**
-     * Create a new invoice and return to builder.
-     * @param Account $account
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function storeInvoice(Account $account, Request $request): RedirectResponse
-    {
-        $terms = $request->terms ?: $account->net_terms;
-        $invoice = $account->invoices()->create([
-            'due_on' => now()->addDays($terms)
-        ]);
-        return redirect()->to("/admin/accounts/$account->id/invoices/$invoice->id");
-    }
 
     /**
      * Add a new payment method
@@ -374,65 +426,11 @@ class AccountController extends Controller
         } catch (Exception $e)
         {
             $account->update(['declined' => 1]);
-            return redirect()->to("/admin/accounts/$account->id?active=profile")
+            return redirect()->to("/admin/accounts/$account->id/profile")
                 ->with('error', 'Transaction Declined: ' . $e->getMessage());
         }
         $account->update(['declined' => 0]);
         return redirect()->back();
-    }
-
-    /**
-     * Authorize or Apply a payment
-     * @param Account $account
-     * @param Invoice $invoice
-     * @param Request $request
-     * @return RedirectResponse
-     */
-    public function authPayment(Account $account, Invoice $invoice, Request $request): RedirectResponse
-    {
-        $amount = convertMoney($request->amount); // Remove commas for amount
-        if (!$request->pmethod)
-        {
-            session()->flash('error', "No payment method was selected. Please try again with a payment method.");
-            return redirect()->back();
-        }
-        if ($amount <= 0)
-        {
-            session()->flash('error', "You must enter a positive amount for a payment amount.");
-            return redirect()->back();
-        }
-
-        if ($amount > $invoice->balance)
-        {
-            session()->flash('error', "You cannot charge more than the balance of the invoice. ($amount)");
-            return redirect()->back();
-        }
-
-        try
-        {
-            $method = PaymentMethod::from($request->pmethod);
-            $invoice->processPayment($method, $amount, $request->details);
-            $account->update(['declined' => 0]);
-        } catch (LogicException $e)
-        {
-            session()->flash('error', "Unable to process payment: " . $e->getMessage());
-            return redirect()->back();
-        }
-        session()->flash('message',
-            "A payment of $" . moneyFormat($amount) . " was applied to Invoice #$invoice->id.");
-        return redirect()->to("/admin/accounts/$account->id?active=invoices");
-    }
-
-
-    /**
-     * Enable partner controls for an account
-     * @param Account $account
-     * @return array
-     */
-    public function enablePartner(Account $account): array
-    {
-        $account->update(['is_partner' => true]);
-        return ['callback' => "redirect:/admin/accounts/$account->id?active=partner"];
     }
 
     /**
@@ -443,48 +441,6 @@ class AccountController extends Controller
     public function statement(Account $account): mixed
     {
         return $account->statement();
-    }
-
-    /**
-     * Show Invoice Item Edit Modal
-     * @param Account     $account
-     * @param Invoice     $invoice
-     * @param InvoiceItem $item
-     * @return View
-     */
-    public function showItem(Account $account, Invoice $invoice, InvoiceItem $item): View
-    {
-        return view('admin.accounts.invoices.item')->with('invoice', $invoice)->with('item', $item);
-    }
-
-    /**
-     * Update an invoice item
-     * @param Account     $account
-     * @param Invoice     $invoice
-     * @param InvoiceItem $item
-     * @param Request     $request
-     * @return RedirectResponse
-     */
-    public function updateInvoiceItem(
-        Account $account,
-        Invoice $invoice,
-        InvoiceItem $item,
-        Request $request
-    ): RedirectResponse {
-        $request->validate([
-            'price' => 'required|numeric',
-            'qty'   => 'required|numeric'
-        ]);
-        if (!$request->description)
-        {
-            $request->merge(['description' => '']);
-        }
-        $item->update([
-            'price'       => convertMoney($request->price),
-            'qty'         => $request->qty,
-            'description' => $request->description
-        ]);
-        return redirect()->back();
     }
 
     /**
@@ -610,15 +566,7 @@ class AccountController extends Controller
         return redirect()->to("/admin/accounts");
     }
 
-    /**
-     * Redirect invoice link
-     * @param Invoice $invoice
-     * @return RedirectResponse
-     */
-    public function invoiceRedirect(Invoice $invoice): RedirectResponse
-    {
-        return redirect()->to("/admin/accounts/$invoice->account_id?active=invoices&invoice=$invoice->id");
-    }
+
 
     /**
      * Show suspension Modal
@@ -839,7 +787,7 @@ class AccountController extends Controller
      */
     public function redirectItem(AccountItem $item): RedirectResponse
     {
-        return redirect()->to("/admin/accounts/{$item->account->id}?active=services");
+        return redirect()->to("/admin/accounts/{$item->account->id}/overview");
     }
 
     /**

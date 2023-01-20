@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Core\PaymentMethod;
+use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
@@ -21,6 +24,16 @@ class InvoiceController extends Controller
     public function index(): View
     {
         return view('admin.invoices.index');
+    }
+
+    /**
+     * Show invoice
+     * @param Invoice $invoice
+     * @return View
+     */
+    public function show(Invoice $invoice): View
+    {
+        return view('admin.invoices.show', ['invoice' => $invoice]);
     }
 
 
@@ -72,24 +85,8 @@ class InvoiceController extends Controller
     public function remItem(Invoice $invoice, InvoiceItem $item): array
     {
         $item->delete();
+        session()->flash('message', $item->name . " removed from Invoice");
         return ['callback' => 'reload'];
-    }
-
-    /**
-     * X-editable Update for Invoice Items
-     * @param Invoice     $invoice
-     * @param InvoiceItem $item
-     * @param Request     $request
-     * @return bool[]
-     */
-    public function liveUpdate(Invoice $invoice, InvoiceItem $item, Request $request): array
-    {
-        if ($request->name == 'price')
-        {
-            $request->merge(['value' => str_replace(",", '', $request->value)]);
-        }
-        $item->update([$request->name => $request->value]);
-        return ['success' => true];
     }
 
     /**
@@ -110,7 +107,8 @@ class InvoiceController extends Controller
     public function send(Invoice $invoice): array
     {
         $invoice->send();
-        return ['callback' => 'success:Invoice Sent Successfully!'];
+        session()->flash('message', "Invoice Sent Successfully");
+        return ['callback' => 'reload'];
     }
 
     /**
@@ -155,13 +153,95 @@ class InvoiceController extends Controller
      */
     public function dueUpdate(Invoice $invoice, Request $request): RedirectResponse
     {
-        try {
+        try
+        {
             $due = Carbon::parse($request->due_on);
             $invoice->update(['due_on' => $due]);
             return redirect()->back()->with('message', "Due date updated successfully.");
-        } catch(\Exception $e)
+        } catch (\Exception $e)
         {
             throw new \LogicException("Unable to set due date - " . $e->getMessage());
+        }
+        return redirect()->back();
+    }
+
+    /**
+     * Authorize or Apply a payment
+     * @param Invoice $invoice
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function authPayment(Invoice $invoice, Request $request): RedirectResponse
+    {
+        $amount = convertMoney($request->amount); // Remove commas for amount
+        if (!$request->pmethod)
+        {
+            session()->flash('error', "No payment method was selected. Please try again with a payment method.");
+            return redirect()->back();
+        }
+        if ($amount <= 0)
+        {
+            session()->flash('error', "You must enter a positive amount for a payment amount.");
+            return redirect()->back();
+        }
+
+        if ($amount > $invoice->balance)
+        {
+            session()->flash('error', "You cannot charge more than the balance of the invoice. ($amount)");
+            return redirect()->back();
+        }
+
+        try
+        {
+            $method = PaymentMethod::from($request->pmethod);
+            $invoice->processPayment($method, $amount, $request->details);
+            $invoice->account->update(['declined' => 0]);
+        } catch (LogicException $e)
+        {
+            session()->flash('error', "Unable to process payment: " . $e->getMessage());
+            return redirect()->back();
+        }
+        session()->flash('message',
+            "A payment of $" . moneyFormat($amount) . " was applied to Invoice #$invoice->id.");
+        return redirect()->to("/admin/accounts/{$invoice->account->id}/invoices");
+    }
+
+    /**
+     * Show Invoice Item Edit Modal
+     * @param Invoice     $invoice
+     * @param InvoiceItem $item
+     * @return View
+     */
+    public function showItem(Invoice $invoice, InvoiceItem $item): View
+    {
+        return view('admin.invoices.item')->with('invoice', $invoice)->with('item', $item);
+    }
+
+    /**
+     * Update an invoice item
+     * @param Invoice     $invoice
+     * @param InvoiceItem $item
+     * @param Request     $request
+     * @return RedirectResponse
+     */
+    public function updateInvoiceItem(Invoice $invoice, InvoiceItem $item, Request $request): RedirectResponse
+    {
+        $request->validate([
+            'price' => 'required|numeric',
+            'qty'   => 'required|numeric'
+        ]);
+        if (!$request->description)
+        {
+            $request->merge(['description' => '']);
+        }
+        $item->update([
+            'price'       => convertMoney($request->price),
+            'qty'         => $request->qty,
+            'description' => $request->description
+        ]);
+        if (!$item->item)
+        {
+            $item->update(['name' => $request->name]);
         }
         return redirect()->back();
     }

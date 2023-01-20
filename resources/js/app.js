@@ -39,8 +39,6 @@ $(document).ready(function () {
     }
 
 
-
-
     /**
      * Init all Tooltips
      * @type {*[]}
@@ -112,9 +110,12 @@ $(document).ready(function () {
             let that = $(this);
             let Toast = Swal.mixin({
                 toast: true,
-                position: 'top-end',
+                position: 'bottom-right',
+                animation: true,
+                width: '400px',
                 showConfirmButton: false,
-                timer: 4000
+                timer: 4000,
+                timerProgressBar: true
             });
 
             Toast.fire({
@@ -360,9 +361,12 @@ $(document).ready(function () {
     function renderSuccess(title, message = null) {
         let Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: 'bottom-right',
             showConfirmButton: false,
-            timer: 4000
+            timer: 4000,
+            width: '400px',
+            animation: true,
+            timerProgressBar: true
         });
         Toast.fire({
             text: message,
@@ -378,9 +382,12 @@ $(document).ready(function () {
     function renderError(title, message = null) {
         let Toast = Swal.mixin({
             toast: true,
-            position: 'top-end',
+            position: 'middle',
+            width: '400px',
+            animation: true,
             showConfirmButton: false,
-            timer: 4000
+            timer: 4000,
+            timerProgressBar: true
         });
         Toast.fire({
             text: message,

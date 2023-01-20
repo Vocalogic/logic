@@ -16,7 +16,7 @@ class FormInput extends Component
     public int $fieldWidth  = 8;
     public bool $float      = false;
     public string $type;
-
+    public ?string $placeholder;
 
     /**
      * Create a new component instance.
@@ -30,7 +30,8 @@ class FormInput extends Component
         ?string $icon = null,
         bool $float = false,
         ?int $labelWidth = 4,
-        ?string $type = 'text'
+        ?string $type = 'text',
+        ?string $placeholder = null
     ) {
         $this->label = $label;
         $this->name = $name;
@@ -40,6 +41,7 @@ class FormInput extends Component
         $this->labelWidth = $labelWidth;
         $this->fieldWidth = 12 - $this->labelWidth;
         $this->type = $type;
+        $this->placeholder = $placeholder;
     }
 
     /**

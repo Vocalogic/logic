@@ -79,7 +79,7 @@ class AdminAlerts extends AlertEngine
             {
                 $total += $invoice->total;
                 $drafts[] = [
-                    "<a href='/admin/accounts/{$invoice->account->id}?active=invoices&invoice=$invoice->id'><span class='badge bg-primary'>#$invoice->id</span></a>",
+                    "<a href='/admin/invoices/$invoice->id'><span class='badge bg-primary'>#$invoice->id</span></a>",
                     "<a href='/admin/accounts/{$invoice->account->id}'>{$invoice->account->name}</a>",
                     $invoice->created_at->format("m/d/y"),
                     "$" . moneyFormat($invoice->total)
@@ -110,7 +110,7 @@ class AdminAlerts extends AlertEngine
                 {
                     $amount += $invoice->balance;
                     $pastDue[] = [
-                        "<a href='/admin/accounts/{$invoice->account->id}?active=invoices&invoice=$invoice->id'><span class='badge bg-danger'>$invoice->id</span></a>",
+                        "<a href='/admin/invoices/$invoice->id'><span class='badge bg-danger'>$invoice->id</span></a>",
                         "<a href='/admin/accounts/{$invoice->account->id}'>{$invoice->account->name}</a>",
                         "$" . moneyFormat($invoice->balance),
                         $invoice->due_on->diffInDays(now())

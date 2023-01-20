@@ -2,15 +2,13 @@
     @method('POST')
     @csrf
     <div class="row">
-        <div class="col-lg-12">
-            <div class="form-floating">
-                <input type="date" class="form-control" name="due_on" value="{{$invoice->due_on?->format("Y-m-d")}}">
-                <label>Enter Due Date</label>
-                <span class="helper-text">Enter a new due date for Invoice #{{$invoice->id}}</span>
-            </div>
-        </div>
-        <div class="col-lg-12 mt-3">
-            <input type="submit" name="submit" value="Save Due Date" class="btn btn-primary wait"
+        @props(['value' => $invoice->due_on?->format("Y-m-d")])
+        <x-form-input name="due_on" type="date" :value="$value" label="Enter Due Date" icon="calendar">
+            Enter a new due date for Invoice #{{$invoice->id}}
+        </x-form-input>
+
+        <div class="offset-4 col-lg-8 mt-3">
+            <input type="submit" name="submit" value="Save" class="btn btn-primary wait w-100"
                    data-anchor=".dueForm">
         </div>
     </div>
