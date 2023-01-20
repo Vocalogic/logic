@@ -72,6 +72,7 @@ class InvoiceItem extends Model
         {
             $perc = round(($this->price / $average) * 100) - 100;
         }
+        if ($perc == 0) return null;
         return "<span class='small' data-bs-toggle='tooltip' data-bs-placement='top' title='$text'>
             <i class='fa fa-$icon text-$color'>{$pm}{$perc}%</span>";
     }

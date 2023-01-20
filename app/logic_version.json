@@ -1,5 +1,5 @@
 {
     "version" : "1.1.7",
-    "summary" : "TBD",
-    "changelog" : "#"
+    "summary" : "Account, Lead and Quote interface changes; price checking on account invoices; addons added to package builder",
+    "changelog" : "https://logic.readme.io/changelog/v117-release-012023"
 }
