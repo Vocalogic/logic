@@ -324,7 +324,7 @@ class GraphSeries
                          ->where('status', '!=', InvoiceStatus::DRAFT->value)
                          ->get() as $invoice)
             {
-                $mTotal += moneyFormat($invoice->total, false);
+                $mTotal += $invoice->total;
             }
 
             // We have mrr and total.. add dataplot
@@ -335,7 +335,7 @@ class GraphSeries
 
             $invoicePlots[] = (object)[
                 'x' => $start->getTimestampMs(),
-                'y' => $mTotal
+                'y' => moneyFormat($mTotal, false)
             ];
 
 

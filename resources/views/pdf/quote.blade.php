@@ -39,7 +39,6 @@
             @include('pdf.quotes.header')
         </div>
 
-
         <div class="col-xs-4">
             <div class="panel panel-default small">
                 <div class="panel-heading">

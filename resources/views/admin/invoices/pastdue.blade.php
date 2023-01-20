@@ -16,7 +16,7 @@
         @endif
         <tr>
             <td>
-                <a href="/admin/accounts/{{$invoice->account->id}}/invoices/{{$invoice->id}}">
+                <a href="/admin/invoices/{{$invoice->id}}">
                     <span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
                 </a>
                 @if($invoice->recurring)

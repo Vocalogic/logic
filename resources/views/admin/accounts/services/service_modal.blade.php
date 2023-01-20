@@ -4,7 +4,6 @@
         @csrf
 
 
-
         <ul class="nav nav-tabs tab-card" role="tablist">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-pricing"
                                     role="tab">Pricing</a></li>
@@ -81,14 +80,8 @@
             <div class="tab-pane fade" id="actions" role="tabpanel">
 
                 <div class="list-group my-2">
-                    <span class="list-group-item">
-                         <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
-                            class="confirm "
-                            data-method="DELETE"
-                            data-message="Are you sure you want to remove this service?"><i class="fa fa-trash"></i> Remove
-                    Service
-                </a>
-                    </span>
+
+
 
                     <span class="list-group-item">
 
@@ -113,9 +106,9 @@
                     @if($item->terminate_on)
                         <span class="list-group-item">
                             <a class="confirm"
-                           data-method="POST"
-                           data-message="Are you sure you want to clear the termination date?"
-                           href="/admin/accounts/{{$item->account->id}}/items/{{$item->id}}/remove/termination"> Remove Termination
+                               data-method="POST"
+                               data-message="Are you sure you want to clear the termination date?"
+                               href="/admin/accounts/{{$item->account->id}}/items/{{$item->id}}/remove/termination"> Remove Termination
                             Date</a>
                         </span>
                     @endif
@@ -131,19 +124,15 @@
                         </span>
                     @endif
 
-
-
+                    <span class="list-group-item">
+                         <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
+                            class="confirm "
+                            data-method="DELETE"
+                            data-message="Are you sure you want to remove this service?"><i class="fa fa-trash"></i> Remove
+                    Service
+                </a>
+                    </span>
                 </div>
-
-
-
-
-
-
-
-
-
-
             </div>
 
             <div class="col-lg-12 mt-2">

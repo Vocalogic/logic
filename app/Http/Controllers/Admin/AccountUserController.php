@@ -43,7 +43,7 @@ class AccountUserController extends Controller
             'acl'        => $request->acl,
             'password'   => bcrypt("PW-" . mt_rand(52345, 23152423)),
             'account_id' => $account->id,
-            'active' => 1,
+            'active'     => 1,
         ]);
         $u->sendForgotPassword();
         return redirect()->back();
