@@ -4,28 +4,19 @@
     <i class="fa fa-plus"></i> Add New Item
 </a>
 
-
-@if(!$item->parent)
-    <a class="live mt-2 w-100 btn btn-{{bm()}}primary" data-title="Variation to {{$item->name}}"
-       href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/variation/create">
-        <i class="fa fa-recycle"></i> Add Variation
-    </a>
-
-@endif
-
-<a class="live mt-2 btn w-100 btn-{{bm()}}info" data-title="Move Category for {{$item->name}}"
+<a class="live mt-3 btn w-100 btn-{{bm()}}info" data-title="Move Category for {{$item->name}}"
    href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/category">
     <i class="fa fa-arrow-right"></i> Change Category
 </a>
 
 @if($item->photo_id)
-    <div class="mt-2 mb-2">
+    <div class="mt-4 mb-2">
         <img class="img-fluid" src="{{_file($item->photo_id)?->relative}}">
     </div>
 @endif
 
 
-<div class="card mt-4 mb-3">
+<div class="card mt- mb-3">
     <div class="card-body">
         <h6 class="card-title mb-3 text-center">{{$item->name}}</h6>
         <ul class="list-group list-group-custom">
