@@ -26,7 +26,7 @@
 
 
 <div class="row">
-    <div class="col-lg-9">
+    <div class="col-lg-9 col-xs-12">
         <div class="card">
             <div class="card-body">
                 <form method="POST" action="/admin/invoices/{{$invoice->id}}/add">
@@ -110,7 +110,7 @@
         @endif
     </div>
 
-    <div class="col-lg-3">
+    <div class="col-lg-3 col-xs-12">
         @include('admin.invoices.actions')
     </div>
 
