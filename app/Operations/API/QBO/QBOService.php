@@ -66,7 +66,7 @@ class QBOService extends QBOCore
         $data->Name = $item->name;
         $data->Sku = $item->code;
         $data->Description = strip_tags($desc);
-        $data->UnitPrice = $price;
+        $data->UnitPrice = moneyFormat($price, false);
         $data->ParentRef = (object)[
             'value' => $item->category->finance_category_id
         ];
