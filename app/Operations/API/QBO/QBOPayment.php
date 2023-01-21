@@ -22,6 +22,25 @@ class QBOPayment extends QBOCore
     }
 
     /**
+     * Find Transaction Id
+     * @param int $id
+     * @return mixed
+     * @throws GuzzleException
+     */
+    public function find(int $id): mixed
+    {
+        $res = $this->qsend("query", 'get', [
+            'query' => "SELECT * from Payment where Id='$id'"
+        ]);
+        if (isset($res->QueryResponse->Payment))
+        {
+            return $res->QueryResponse->Payment[0];
+        }
+        return null;
+    }
+
+
+    /**
      * Query QBO for Payment Types and then match with our enums.
      * @param Transaction $transaction
      * @return int
@@ -61,9 +80,16 @@ class QBOPayment extends QBOCore
      */
     public function byTransaction(Transaction $transaction) : void
     {
-        $data = (object)[];
+        if ($transaction->finance_transaction_id) // Update trans if found.
+        {
+            $data = $this->find($transaction->finance_transaction_id);
+        }
+        else
+        {
+            $data = (object)[];
+        }
         // Set Amount
-        $data->TotalAmt = sprintf("%.2f", $transaction->amount);
+        $data->TotalAmt = moneyFormat($transaction->amount, false);
         // Set Transaction Date
         $data->TxnDate = $transaction->created_at->format("Y-m-d");
         // Build Customer Reference Object
