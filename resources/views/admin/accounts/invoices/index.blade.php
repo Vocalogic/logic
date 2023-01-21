@@ -6,11 +6,11 @@
 ]])
 @section('content')
     <div class="row">
-        <div class="col-2">
+        <div class="col-lg-2 col-xs-12">
             @include('admin.accounts.submenu')
         </div>
 
-        <div class="col-lg-10">
+        <div class="col-lg-10 col-xs-12">
 
 
             <ul class="nav nav-tabs tab-card border-bottom-0 pt-2 fs-6 justify-content-center justify-content-md-start">

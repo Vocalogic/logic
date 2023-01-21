@@ -14,7 +14,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-2">
+        <div class="col-lg-2 col-xs-12">
             <a class="btn btn-outline-info live w-100 mb-4" data-title="Create new Account"
                href="/admin/accounts/create"
                type="button"><i class="fa fa-plus"></i> New Account
@@ -39,7 +39,7 @@
                 <i class="fa fa-recycle"></i> Import Accounts
             </a>
         </div>
-        <div class="col-lg-10">
+        <div class="col-lg-10 col-xs-12">
             @include('admin.accounts.list')
         </div>
     </div>
