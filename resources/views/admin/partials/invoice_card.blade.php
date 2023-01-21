@@ -1,46 +1,18 @@
-<div class="item card ribbon">
-    <div class="option-8 position-absolute text-light">
-        @if($invoice->isPastDue)
-            <i class="fa fa-exclamation-circle"></i>
-        @else
-            <i class="fa fa-info"></i>
-        @endif
-    </div>
+<div class="card border-dark">
     <div class="card-body">
-        <div class="avatar lg rounded-circle no-thumbnail mb-3 fs-5"><a
-                href="/admin/invoices/{{$invoice->id}}">#{{$invoice->id}}</a></div>
-        <small class="text-muted">Balance</small>
-        <h4>${{moneyFormat($invoice->balance)}}</h4>
-        <ul class="lh-lg mb-0 text-muted list-unstyled">
-            <li>Due: {{$invoice->due_on->format("m/d/y")}} <Br/>({{$invoice->due_on->diffForHumans()}})</li>
-            <li>Total: ${{moneyFormat($invoice->total)}}</li>
-        </ul>
-
-        <div class="text-center">
-            <a class="btn btn-link btn-sm color-400"
-               href="/admin/invoices/{{$invoice->id}}" data-bs-toggle="tooltip"
-               data-bs-placement="top" title="" data-bs-original-title="View Invoice" aria-label="Edit"><i
-                    class="fa fa-pencil"></i></a>
-
-            <a class="confirm btn btn-link btn-sm color-400"
-               data-method="GET"
-               data-message="Are you ready to send this invoice?"
-               data-bs-toggle="tooltip" data-bs-original-title="Send Invoice"
-               href="/admin/invoices/{{$invoice->id}}/send"><i class="fa fa-send"></i>
-            </a>
-
-            <a class="btn btn-link btn-sm color-400 wait" href="/admin/invoices/{{$invoice->id}}/download"><i
-                    class="fa fa-download"></i></a>
-            @if($invoice->transactions()->count() == 0)
-                <a class="confirm btn btn-link btn-sm color-400" href="/admin/invoices/{{$invoice->id}}"
-                   data-method="DELETE"
-                   data-message="Are you sure you watn to permanently delete this invoice?"
-                ><i class="fa fa-trash"></i>
-                </a>
-            @endif
-
-
+        <div class="d-flex">
+            <h6 class="flex-grow-1">Invoice #{{$invoice->id}}</h6>
+            <span class="badge d-inline-flex align-items-center
+                    justify-content-start bg-{{$invoice->status->getColor()}}">
+                        {{$invoice->status}}
+                    </span>
         </div>
-
+        <h5 class="font-weight-bold"><b>${{moneyFormat($invoice->balance)}}</b></h5>
+        <h6 class="text-muted">Due in {{$invoice->due_on?->diffInDays()}} days</h6>
+    </div>
+    <div class="card-footer text-center p-2 bg-gray">
+        <a class="text-info" href="/admin/invoices/{{$invoice->id}}">
+            View Invoice #{{$invoice->id}} <i class="fa fa-chevron-right"></i>
+        </a>
     </div>
 </div>

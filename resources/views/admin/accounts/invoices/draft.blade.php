@@ -1,4 +1,4 @@
-<div class="row mb-3">
+<div class="row mb-3 mt-4">
     @foreach($account->invoices()->where('status', 'draft')->get() as $invoice)        <div class="col-3">
             @include('admin.partials.invoice_card', ['invoice' => $invoice])
         </div>
