@@ -672,6 +672,7 @@ class ShopOperation
         if (user()) return user()->account; // Already logged in
 
         // If there is a quote created, we may have a lead that we need to update.
+        $agent = 0;
         if (session(CommKey::LocalQuoteSession->value))
         {
             $quote = session(CommKey::LocalQuoteSession->value);
@@ -679,6 +680,7 @@ class ShopOperation
             {
                 $lead = Lead::find($quote->lead->id);
                 $lead->update(['active' => 0]); // Close lead.
+                $agent = $lead->agent_id ?: 0; // Set agent if this is from a pre-existing quote.
             }
         }
         $account = (new Account)->create([
@@ -691,7 +693,7 @@ class ShopOperation
             'country'        => 'US',
             'phone'          => $this->infoData['phone'],
             'active'         => 1,
-            'agent_id'       => 0,
+            'agent_id'       => $agent,
             'logo_id'        => 0,
             'next_bill'      => now(),
             'bills_on'       => now()->day,
