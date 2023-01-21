@@ -74,7 +74,7 @@ class QBOPayment extends QBOCore
         $data->Line = [];
         // Build Singular Line to apply to our data line
         $line = (object)[];
-        $line->Amount = sprintf("%.2f", $transaction->amount);
+        $line->Amount = moneyFormat($transaction->amount, false);
         // Link Transaction to Invoice
         $line->LinkedTxn = [];
         $line->LinkedTxn[] = (object)[

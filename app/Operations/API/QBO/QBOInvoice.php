@@ -60,6 +60,7 @@ class QBOInvoice extends QBOCore
         // Step 1 - Set basic invoice properties.
         $inv->CustomerRef = (object)['value' => $invoice->account->finance_customer_id];
         $inv->DueDate = $invoice->due_on->format("Y-m-d");
+        $inv->DocNumber = $invoice->id;
         // Step 2 - Set Invoice Lines from Invoice
         $lines = [];
         foreach ($invoice->items as $item)
@@ -91,7 +92,7 @@ class QBOInvoice extends QBOCore
                 ];
             }
             $line->SalesItemLineDetail->Qty = $item->qty;
-            $line->SalesItemLineDetail->UnitPrice = sprintf("%.2f", $item->price);
+            $line->SalesItemLineDetail->UnitPrice = moneyFormat($item->price, false);
             $line->Description = $nameFormatted;
             $line->Amount = sprintf("%.2f", $item->qty * $item->price);
             // Finally add it to our array.
