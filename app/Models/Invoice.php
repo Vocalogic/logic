@@ -44,6 +44,7 @@ class Invoice extends Model
     protected $guarded = ['id'];
 
     public $dates = ['sent_on', 'due_on', 'paid_on'];
+    public $casts = ['status' => InvoiceStatus::class];
 
     /**
      * An invoice belongs to an account
