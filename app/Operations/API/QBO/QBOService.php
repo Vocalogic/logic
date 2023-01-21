@@ -79,7 +79,9 @@ class QBOService extends QBOCore
         // Let's set purchase cost if we have an expense line item for monthly opex.
         if ($item->ex_opex || $item->ex_capex)
         {
-            $data->PurchaseCost = $item->ex_opex ?: $item->ex_capex; // could be service or product.
+            $data->PurchaseCost = $item->ex_opex
+                ? moneyFormat($item->ex_opex, false)
+                : moneyFormat($item->ex_capex, false); // could be service or product.
         }
 
         $res = $this->qsend("item?minorversion=4", 'post', (array)$data);
