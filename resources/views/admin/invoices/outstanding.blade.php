@@ -20,6 +20,11 @@
                         <i class="fa fa-refresh"></i>
                     </a>
                 @endif
+                @if($invoice->hasIntegrationError())
+                    <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Invoice Sync Error">
+                        <i class="fa fa-exclamation-circle text-warning"></i>
+                    </a>
+                @endif
             </td>
             <td><a href="/admin/accounts/{{$invoice->account->id}}">{{$invoice->account->name}}</a></td>
             <td>{{$invoice->created_at->format("m/d/y")}}</td>
