@@ -26,6 +26,8 @@ class SalesQuoteController extends Controller
         $quote = $cart->createQuoteFromCart();
         $quote->lead_id = $lead->id;
         $quote->name = "Quote for " . $lead->company;
+        $quote->net_terms  = setting('invoices.net') ?: 0;
+        $quote->expires_on = now()->addDays((int)setting('quotes.length'));
         $quote->save();
         $quote->refresh();
         $cart->removeAll();
