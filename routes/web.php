@@ -166,7 +166,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
     // Account Events
     Route::get('accounts/{account}/events', [AccountController::class, 'events']);
-
+    // Account Billing
+    Route::get('accounts/{account}/billing', [AccountController::class, 'billing']);
+    Route::put('accounts/{account}/billing', [AccountController::class, 'billingUpdate']);
     // Account Profile
     Route::get('accounts/{account}/profile', [AccountController::class, 'profile']);
 
