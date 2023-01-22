@@ -67,7 +67,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function getLogo(): string
     {
-        return "https://gdm-catalog-fmapi-prod.imgix.net/ProductLogo/b14a841d-1dc7-47fc-bdaa-8dc4c7869fa7.png";
+        return "/assets/images/integrations/qbo.png";
     }
 
     /**
