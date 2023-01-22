@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
+use App\Operations\Integrations\Accounting\Finance;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,6 +34,10 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice): View
     {
+        if ($invoice->hasIntegrationError()) // Check to make sure we don't need to sync before showing.
+        {
+            Finance::syncInvoice($invoice);
+        }
         return view('admin.invoices.show', ['invoice' => $invoice]);
     }
 

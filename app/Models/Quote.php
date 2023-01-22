@@ -38,6 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|mixed    $account_id
  * @property int|mixed    $lead_id
  * @property mixed|string $name
+ * @property mixed        $expires_on
  *
  */
 class Quote extends Model

@@ -83,7 +83,9 @@ class CheckoutComponent extends Component
         }
         // Set Contract Term if Found
         if (session(CommKey::LocalContractSession->value))
+        {
             $this->contractTerm = session(CommKey::LocalContractSession->value);
+        }
     }
 
     /**
@@ -100,7 +102,7 @@ class CheckoutComponent extends Component
      * @param string $value
      * @return void
      */
-    public function setSignature(string $value)
+    public function setSignature(string $value): void
     {
         $this->signature = $value;
     }
@@ -226,7 +228,7 @@ class CheckoutComponent extends Component
         $all = [];
         if ($this->quote && $this->quote->id)
         {
-           $all = $this->quote->getTOSArray();
+            $all = $this->quote->getTOSArray();
         }
         else
         {
@@ -452,7 +454,7 @@ class CheckoutComponent extends Component
      * Adjust pricing based on contract terms provided
      * @return void
      */
-    public function updateContractTerm() : void
+    public function updateContractTerm(): void
     {
         $cart = cart();
         $cart->setGuestContractTerm($this->contractTerm);

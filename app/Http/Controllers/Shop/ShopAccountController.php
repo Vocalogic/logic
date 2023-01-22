@@ -112,14 +112,14 @@ class ShopAccountController extends Controller
         try
         {
             $m->addPaymentMethod(user()->account, $request);
+            user()->account->update(['declined' => 0]);
+            sysact(ActivityType::Account, user()->account->id, "added/updated their credit card information for Account");
         } catch (Exception $e)
         {
             user()->account->update(['declined' => 1]);
             return redirect()->to("/shop/account/profile")
                 ->with('error', 'Transaction Declined: ' . $e->getMessage());
         }
-        user()->account->update(['declined' => 0]);
-        sysact(ActivityType::Account, user()->account->id, "added/updated their credit card information for Account");
         return redirect()->back();
     }
 

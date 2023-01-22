@@ -13,49 +13,32 @@ use Illuminate\Support\Facades\Cache;
 use QuickBooksOnline\Payments\OAuth\OAuth2Authenticator;
 use QuickBooksOnline\Payments\PaymentClient;
 
-class QBOCore extends APICore
+class  QBOCore extends APICore
 {
     const REFRESH_TOKEN = 'QBO_RTOKEN';
     const ACCESS_TOKEN  = 'QBO_ATOKEN';
     const MINOR_VERSION = 65;
-
-    /**
-     * Sandbox Keys
-     * @var array|string[]
-     */
-    public array $sandbox = [
-        'client_id'     => 'ABqkd5PHOIg6rmFv6IjLaCfsZpkiOVCkd58T2cZww1vt4EWBaI',
-        'client_secret' => 'F1VbqN66PW0ulB1YyNZCSYUqqxNlumPIl8jkfokc',
-        'company_id'    => '4620816365230685600'
-    ];
-
-    /**
-     * Production Keys
-     * @var array
-     */
-    public array $production = [
-        'client_id'     => 'ABb2xYBpH54LAnlKX90t8FDUE8LAebnwpCkV8hemKcatbfbtT6',
-        'client_secret' => 'Ch2MMkZR4JLnxcYPrcnyaD7rm4UGxSjrwDkE4dv2',
-    ];
 
     public PaymentClient       $qclient;
     public OAuth2Authenticator $authenticator;
     public string              $mode;
     public string              $scope = "com.intuit.quickbooks.accounting";
     public ?string             $cid;
+    public object $config;
 
     /**
      * Build and setup keys
      */
-    public function __construct()
+    public function __construct(object $config)
     {
         parent::__construct();
         $this->qclient = new PaymentClient();
         $this->mode = env('APP_ENV') == 'local' ? 'sandbox' : 'production';
+        $this->config = $config;
         $mode = $this->mode;
         $this->authenticator = OAuth2Authenticator::create([
-            'client_id'     => $this->{$mode}['client_id'],
-            'client_secret' => $this->{$mode}['client_secret'],
+            'client_id'     => $config->qbo_client_id,
+            'client_secret' => $config->qbo_client_secret,
             'redirect_uri'  => $this->generateRedirect(),       // Where does QBO redirect when authorized?
             'environment'   => $mode
         ]);
@@ -78,7 +61,6 @@ class QBOCore extends APICore
         return $this->authenticator->generateAuthCodeURL($this->scope);
     }
 
-
     /**
      * Generate the redirect url using settings and our mode.
      * @return string
@@ -86,7 +68,7 @@ class QBOCore extends APICore
     private function generateRedirect(): string
     {
         return $this->mode == 'sandbox'
-            ? "https://meso.ngrok.io/oa/qbo/callback"
+            ? env('QBO_SANDBOX_CALLBACK')
             : setting('brand.url') . "/oa/qbo/callback";
     }
 
@@ -126,8 +108,8 @@ class QBOCore extends APICore
             cache([
                 self::ACCESS_TOKEN => $data->access_token,
             ], Carbon::now()->addSeconds(3600));
-            info("Refresh: " . $data->refresh_token);
-            info("Access: " . $data->access_token);
+            //info("Refresh: " . $data->refresh_token);
+            //info("Access: " . $data->access_token);
             // Set the company id from the request
             $i = Integration::where('ident', 'qbo')->first();
             $data = $i->unpacked;
@@ -142,22 +124,19 @@ class QBOCore extends APICore
      * @param string $method
      * @param array  $params
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
-    public function qsend(string $endpoint, string $method = 'get', array $params = [])
+    public function qsend(string $endpoint, string $method = 'get', array $params = []) : mixed
     {
-        $i = Integration::where('ident', 'qbo')->first();
-        $data = $i->unpacked;
-     //   $params['minorversion'] = self::MINOR_VERSION;
-        if (isset($data->qbo_cid) && $data->qbo_cid) $this->cid = $data->qbo_cid;
+        //   $params['minorversion'] = self::MINOR_VERSION;
         $this->setHeaders([
             'Authorization' => 'Bearer ' . cache(SELF::ACCESS_TOKEN),
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
         ]);
         $base = $this->mode == 'sandbox'
-            ? "https://sandbox-quickbooks.api.intuit.com/v3/company/$this->cid/"
-            : "https://quickbooks.api.intuit.com/v3/company/$this->cid/";
+            ? "https://sandbox-quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/"
+            : "https://quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/";
         return $this->send($base . $endpoint, $method, $params);
     }
 
@@ -174,10 +153,10 @@ class QBOCore extends APICore
         if (!isset($data->refresh_token))
         {
             // Something went wrong clear out everything.
-            info("No Refresh Token found in response. Here's what we have. -- " . print_r($data,true));
+            info("No Refresh Token found in response. Here's what we have. -- " . print_r($data, true));
             Cache::forget(self::REFRESH_TOKEN);
             Cache::forget(self::ACCESS_TOKEN);
-            $link = "<a href='". setting('brand.url') . "/oa/qbo/authorize'>click to reauthorize</a>";
+            $link = "<a href='" . setting('brand.url') . "/oa/qbo/authorize'>click to reauthorize</a>";
             throw new LogicException("Unable to get token from Quickbooks via Refresh Request. Reauthorize QBO: " . $link);
         }
         cache([
@@ -195,9 +174,9 @@ class QBOCore extends APICore
      * @param string|int $matches
      * @param bool       $single
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
-    public function query(string $object, string $property, string|int $matches, bool $single = true) : mixed
+    public function query(string $object, string $property, string|int $matches, bool $single = true): mixed
     {
         $q = sprintf("SELECT * from %s WHERE %s = '%s'", $object, $property, $matches);
         $res = $this->qsend("query", 'get', ['query' => $q]);

@@ -6,11 +6,11 @@
 ]])
 @section('content')
     <div class="row">
-        <div class="col-2">
+        <div class="col-lg-2">
             @include('admin.accounts.submenu')
         </div>
 
-        <div class="col-lg-10">
+        <div class="col-lg-10 col-xs-12">
             Incomplete : This section will provide specific pricing for customers to be able to order their own
             hardware, and for partners to quote directly out of logic to end customers if enabled.
 

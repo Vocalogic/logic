@@ -37,7 +37,7 @@ class WidgetGenerator
             ->whereDate('created_at', now()->format("Y-m-d"))->get();
         foreach ($invoices as $invoice)
         {
-            $total = $invoice->total;
+            $total += $invoice->total;
         }
         // Difference from the day before.
         $pasts = Invoice::where('status', '!=', InvoiceStatus::DRAFT->value)
@@ -45,7 +45,7 @@ class WidgetGenerator
         $pastTotal = 0;
         foreach ($pasts as $past)
         {
-            $pastTotal = $past->total;
+            $pastTotal += $past->total;
         }
 
         $perc = $this->getPerc($total, $pastTotal);
@@ -274,10 +274,6 @@ class WidgetGenerator
             'direction' => $perc > 0 ? 'up' : 'down'
         ];
     }
-
-
-
-
 
     /**
      * Get Percentage from Today VS Yesterday

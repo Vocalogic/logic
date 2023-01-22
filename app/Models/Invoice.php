@@ -44,6 +44,7 @@ class Invoice extends Model
     protected $guarded = ['id'];
 
     public $dates = ['sent_on', 'due_on', 'paid_on'];
+    public $casts = ['status' => InvoiceStatus::class];
 
     /**
      * An invoice belongs to an account
@@ -265,7 +266,7 @@ class Invoice extends Model
             Finance::syncInvoice($this);
         }
         // Put a notice on the dashboard.
-        $actData = "Balance: $".moneyFormat($this->balance) ." / Due on " . $this->due_on->format("m/d/y");
+        $actData = "Balance: $" . moneyFormat($this->balance) . " / Due on " . $this->due_on->format("m/d/y");
         sysact(ActivityType::InvoiceSend, $this->id,
             "sent <a href='/admin/accounts/{$this->account->id}'>{$this->account->name}</a>", $actData, true);
     }
@@ -637,6 +638,18 @@ class Invoice extends Model
             sysact(ActivityType::PastDueNotification, $this->id,
                 "sent a past due notification to {$this->account->name} for ");
         }
+    }
+
+    /**
+     * Is an invoice not sync'd properly to our finance/accounting integration?
+     * @return bool
+     */
+    public function hasIntegrationError(): bool
+    {
+        if (!hasIntegration(IntegrationType::Finance)) return false; // No integration
+        if ($this->status == InvoiceStatus::DRAFT) return false;     // Don't care about drafts.
+        if (!$this->finance_invoice_id) return true;
+        return false;
     }
 
     /**

@@ -60,6 +60,7 @@ class QBOInvoice extends QBOCore
         // Step 1 - Set basic invoice properties.
         $inv->CustomerRef = (object)['value' => $invoice->account->finance_customer_id];
         $inv->DueDate = $invoice->due_on->format("Y-m-d");
+        $inv->DocNumber = $invoice->id;
         // Step 2 - Set Invoice Lines from Invoice
         $lines = [];
         foreach ($invoice->items as $item)
@@ -91,14 +92,13 @@ class QBOInvoice extends QBOCore
                 ];
             }
             $line->SalesItemLineDetail->Qty = $item->qty;
-            $line->SalesItemLineDetail->UnitPrice = sprintf("%.2f", $item->price);
+            $line->SalesItemLineDetail->UnitPrice = moneyFormat($item->price, false);
             $line->Description = $nameFormatted;
-            $line->Amount = sprintf("%.2f", $item->qty * $item->price);
+            $line->Amount = moneyFormat($item->qty * $item->price, false);
             // Finally add it to our array.
             $lines[] = $line;
         }
         $inv->Line = $lines;
-
         // Step 3 - Submit to Quickbooks
         $res = $this->qsend("invoice", 'post', (array)$inv);
         if (isset($res->Invoice) && isset($res->Invoice->Id))
@@ -114,7 +114,7 @@ class QBOInvoice extends QBOCore
      * @return void
      * @throws GuzzleException
      */
-    public function deleteBy(Invoice $invoice)
+    public function deleteBy(Invoice $invoice): void
     {
         $token = $this->find($invoice->finance_invoice_id)->SyncToken;
         $this->qsend("invoice?operation=delete", 'post', [
