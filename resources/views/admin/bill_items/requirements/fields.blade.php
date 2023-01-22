@@ -47,7 +47,7 @@
                 Save and Continue
             </a>
         @else
-            <a class="mt-2 btn btn-{{bm()}}primary" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variations">
+            <a class="mt-2 btn btn-{{bm()}}primary" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variation">
                 Save and Continue
             </a>
         @endif
