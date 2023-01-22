@@ -24,7 +24,7 @@
                             <figure>
                                 <img src="{{_file($item->photo_id)?->relative}}" class="rounded mx-auto d-block"
                                      width="80">
-                                <figcaption>
+                                <figcaption class="text-center">
                                     <span class="text-secondary small">{{$item->name}}</span>
                                 </figcaption>
                             </figure>
