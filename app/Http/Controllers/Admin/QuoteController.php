@@ -40,8 +40,8 @@ class QuoteController extends Controller
         if ($quote->lead)
         {
             $crumbs = [
-                '/admin/leads' => "Leads",
-                "/admin/leads/{$quote->lead->id}" => $quote->lead->company,
+                '/admin/leads'                            => "Leads",
+                "/admin/leads/{$quote->lead->id}"         => $quote->lead->company,
                 "/admin/leads/{$quote->lead->id}/quotes/" => "Quotes",
                 "#$quote->id"
             ];
@@ -49,8 +49,8 @@ class QuoteController extends Controller
         else
         {
             $crumbs = [
-                "/admin/accounts" => "Accounts",
-                "/admin/accounts/{$quote->account->id}" => $quote->account->name,
+                "/admin/accounts"                               => "Accounts",
+                "/admin/accounts/{$quote->account->id}"         => $quote->account->name,
                 "/admin/accounts/{$quote->account->id}/quotes/" => "Quotes",
                 "#$quote->id"
             ];
@@ -96,9 +96,14 @@ class QuoteController extends Controller
      * @param Quote    $quote
      * @param BillItem $item
      * @return RedirectResponse
+     * @throws LogicException
      */
     public function addItem(Quote $quote, BillItem $item): RedirectResponse
     {
+        if ($quote->status == 'Executed')
+        {
+            throw new LogicException("Quote has already been executed. Unable to add item.");
+        }
         $service = $item->type == BillItemType::SERVICE->value;
         $qitem = (new QuoteItem)->create([
             'quote_id'        => $quote->id,
@@ -122,9 +127,14 @@ class QuoteController extends Controller
      * @param Quote     $quote
      * @param QuoteItem $item
      * @return string[]
+     * @throws LogicException
      */
     public function delItem(Quote $quote, QuoteItem $item): array
     {
+        if ($quote->status == 'Executed')
+        {
+            throw new LogicException("Quote has already been executed. Unable to remove item.");
+        }
         session()->flash('message', $item->item->name . " removed from quote.");
         $item->delete();
         $quote->reord();
@@ -149,9 +159,14 @@ class QuoteController extends Controller
      * @param QuoteItem $item
      * @param Request   $request
      * @return RedirectResponse
+     * @throws LogicException
      */
     public function updateItem(Quote $quote, QuoteItem $item, Request $request): RedirectResponse
     {
+        if ($quote->status == 'Executed')
+        {
+            throw new LogicException("Quote has already been executed. Unable to edit item.");
+        }
         if (!$request->description)
         {
             $request->merge(['description' => $item->item->description]);
@@ -176,9 +191,14 @@ class QuoteController extends Controller
      * @param Quote   $quote
      * @param Request $request
      * @return RedirectResponse
+     * @throws LogicException
      */
     public function update(Quote $quote, Request $request): RedirectResponse
     {
+        if ($quote->status == 'Executed')
+        {
+            throw new LogicException("Quote has already been executed. Unable to update quote settings.");
+        }
         $quote->update([
             'name'      => $request->name,
             'preferred' => $request->preferred,
@@ -442,10 +462,10 @@ class QuoteController extends Controller
      * @param Quote $quote
      * @return string[]
      */
-    public function approve(Quote $quote) : array
+    public function approve(Quote $quote): array
     {
         $quote->update([
-            'approved' => true,
+            'approved'    => true,
             'approved_by' => user()->id,
             'approved_on' => now()
         ]);

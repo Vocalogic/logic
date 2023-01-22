@@ -13,11 +13,11 @@
         </div>
         <div class="col d-flex justify-content-lg-end mt-2 mt-md-0">
             <div class="p-2 me-md-3">
-                <div><span class="h6 mb-0">${{number_format($lead->primaryMrr,2)}}</span></div>
+                <div><span class="h6 mb-0">${{moneyFormat($lead->primaryMrr)}}</span></div>
                 <small class="text-muted text-uppercase">MRR</small>
             </div>
             <div class="p-2 me-md-3">
-                <div><span class="h6 mb-0">${{number_format($lead->primaryNrc,2)}}</span></div>
+                <div><span class="h6 mb-0">${{moneyFormat($lead->primaryNrc)}}</span></div>
                 <small class="text-muted text-uppercase">NRC</small>
             </div>
             <div class="p-2 pe-lg-0">
