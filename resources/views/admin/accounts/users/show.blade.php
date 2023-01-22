@@ -24,8 +24,8 @@
                 Select access level for user.
             </x-form-select>
             <div class="row mb-3">
-                <div class="col-lg-12 col-md-12 mt-3">
-                    <input type="submit" class="btn btn-primary rounded wait" data-anchor=".userForm"
+                <div class="offset-4 col-lg-8 mt-3">
+                    <input type="submit" class="btn w-100 btn-primary rounded wait" data-anchor=".userForm"
                            value="Save">
                 </div>
             </div>

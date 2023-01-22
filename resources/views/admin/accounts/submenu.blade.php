@@ -9,6 +9,9 @@
     <li class="list-group-item {{preg_match("/services/i", app('request')->getUri()) ? "active" : null}}">
         <a class="color-600" href="/admin/accounts/{{$account->id}}/services">Services</a>
     </li>
+    <li class="list-group-item {{preg_match("/billing/i", app('request')->getUri()) ? "active" : null}}">
+        <a class="color-600" href="/admin/accounts/{{$account->id}}/billing">Billing</a>
+    </li>
     <li class="list-group-item {{preg_match("/invoices/i", app('request')->getUri()) ? "active" : null}}">
         <a class="color-600" href="/admin/accounts/{{$account->id}}/invoices">Invoices</a>
     </li>
