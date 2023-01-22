@@ -94,6 +94,14 @@ class QuestionLogicController extends Controller
         {
             throw new LogicException("You must add either an item or an addon.");
         }
+        if ($request->answer_equates == 'between')
+        {
+            $x = explode(",", $request->answer);
+            if (count($x) < 2)
+            {
+                throw new LogicException("When setting between two values, you must specify two values separated by a comma. ex. 1,20");
+            }
+        }
         $question->logics()->create([
             'answer_equates'  => $request->answer_equates,
             'answer'          => $request->answer,
@@ -131,6 +139,14 @@ class QuestionLogicController extends Controller
         {
             throw new LogicException("You must add either an item or an addon.");
         }
+        if ($request->answer_equates == 'between')
+        {
+            $x = explode(",", $request->answer);
+            if (count($x) < 2)
+            {
+                throw new LogicException("When setting between two values, you must specify two values separated by a comma. ex. 1,20");
+            }
+        }
         $logic->update([
             'answer_equates'  => $request->answer_equates,
             'answer'          => $request->answer,
@@ -157,7 +173,7 @@ class QuestionLogicController extends Controller
         PackageSectionQuestionLogic $logic
     ): array {
         // Make sure there are no addons that were associated to thie entry.
-        foreach($question->logics as $l)
+        foreach ($question->logics as $l)
         {
             if ($l->add_addon_id)
             {

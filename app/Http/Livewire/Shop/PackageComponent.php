@@ -96,20 +96,26 @@ class PackageComponent extends Component
         {
             $invert = false;
             $answer = $this->answers["q_$q->unless_question_id"];
-            switch($q->question_equates)
+            switch ($q->question_equates)
             {
-                case 'equals' : $invert = ($answer == $q->question_equates_to);
-                break;
-                case 'greater' : $invert = ($answer > $q->question_equates_to);
-                break;
-                case 'less' : $invert = ($answer < $q->question_equates_to);
-                break;
-                case 'notequals' : $invert = ($answer != $q->question_equates_to);
-                break;
-                case 'exists' : $invert = strlen($answer) > 0;
-                break;
-                case 'notexists' : $invert = strlen($answer) == 0;
-                break;
+                case 'equals' :
+                    $invert = ($answer == $q->question_equates_to);
+                    break;
+                case 'greater' :
+                    $invert = ($answer > $q->question_equates_to);
+                    break;
+                case 'less' :
+                    $invert = ($answer < $q->question_equates_to);
+                    break;
+                case 'notequals' :
+                    $invert = ($answer != $q->question_equates_to);
+                    break;
+                case 'exists' :
+                    $invert = strlen($answer) > 0;
+                    break;
+                case 'notexists' :
+                    $invert = strlen($answer) == 0;
+                    break;
             }
             if ($invert)
             {
@@ -142,7 +148,7 @@ class PackageComponent extends Component
      * @return void
      * @throws LogicException
      */
-    public function buildCart() : void
+    public function buildCart(): void
     {
         $cart = cart();
         $cart->removeAll(); // Remove all items in cart first.
@@ -151,23 +157,35 @@ class PackageComponent extends Component
         {
             foreach ($section->questions as $question)
             {
-                foreach($question->logics as $logic)
+                foreach ($question->logics as $logic)
                 {
                     $answer = $this->answers["q_$question->id"];
                     $passes = false;
-                    switch($logic->answer_equates)
+                    switch ($logic->answer_equates)
                     {
-                        case 'equals' : $passes = ($answer == $logic->answer);
+                        case 'equals' :
+                            $passes = ($answer == $logic->answer);
                             break;
-                        case 'greater' : $passes = ($answer > $logic->answer);
+                        case 'greater' :
+                            $passes = ($answer > $logic->answer);
                             break;
-                        case 'less' : $passes = ($answer < $logic->answer);
+                        case 'less' :
+                            $passes = ($answer < $logic->answer);
                             break;
-                        case 'notequals' : $passes = ($answer != $logic->answer);
+                        case 'notequals' :
+                            $passes = ($answer != $logic->answer);
                             break;
-                        case 'exists' : $passes = strlen($answer) > 0;
+                        case 'exists' :
+                            $passes = strlen($answer) > 0;
                             break;
-                        case 'notexists' : $passes = strlen($answer) == 0;
+                        case 'notexists' :
+                            $passes = strlen($answer) == 0;
+                            break;
+                        case 'between' :
+                            $x = explode(",", $logic->answer);
+                            $lowVal = trim($x[0]);
+                            $highVal = trim($x[1]);
+                            $passes = $answer <= $highVal && $answer >= $lowVal;
                             break;
                     }
                     if ($passes)
@@ -202,7 +220,7 @@ class PackageComponent extends Component
                 {
                     // We should add each item to the cart based on the answers.
                     if (!is_array($this->answers["q_$question->id"])) continue; // No indexes were built from the form.
-                    foreach($this->answers["q_$question->id"] as $key => $qty)
+                    foreach ($this->answers["q_$question->id"] as $key => $qty)
                     {
                         $x = explode("i_", $key);
                         $id = $x[1];
@@ -210,7 +228,7 @@ class PackageComponent extends Component
                         try
                         {
                             $cart->addItem(BillItem::find($id), $qty);
-                        } catch(LogicException)
+                        } catch (LogicException)
                         {
                             // Don't kill lw
                         }
@@ -220,7 +238,6 @@ class PackageComponent extends Component
         } // fe section
 
     } //fn
-
 
 
 }
