@@ -413,11 +413,16 @@ if (!function_exists('setting'))
      * @param bool         $forceAsSystem
      * @return void
      */
-    function sysact(ActivityType $type, int $refid, string $action, ?string $postData = '', bool $forceAsSystem = false): void
-    {
+    function sysact(
+        ActivityType $type,
+        int $refid,
+        string $action,
+        ?string $postData = '',
+        bool $forceAsSystem = false
+    ): void {
         $user = auth()->guest() ? 0 : user()->id;
         if ($forceAsSystem) $user = 0;
-        (new Activity)->create([
+        $act = (new Activity)->create([
             'type'     => $type->value,
             'refid'    => $refid,
             'system'   => true,
@@ -425,6 +430,7 @@ if (!function_exists('setting'))
             'activity' => $action,
             'user_id'  => $user
         ]);
+        $act->sendNotification();
     }
 
 

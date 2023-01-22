@@ -12,6 +12,7 @@ use App\Models\Order;
 use App\Models\Provisioning;
 use App\Models\Quote;
 use App\Models\Transaction;
+use App\Operations\Integrations\Chat\Chat;
 use ErrorException;
 use Throwable;
 
@@ -169,6 +170,22 @@ enum ActivityType: string
                 $this->getLinkSyntax($activity->type, $activity->refid));
         }
         return $summary;
+    }
+
+    /**
+     * Activities are categorized by type. We can associate
+     * different channels that map to specific chat integrations.
+     * @return ChatChannel|null
+     */
+    public function getChannel(): ?ChatChannel
+    {
+        return match ($this)
+        {
+            self::Lead, self::Account => ChatChannel::Sales,
+            self::Order, self::RequestedTermination => ChatChannel::Support,
+            self::Invoice, self::PastDueNotification, self::NewTransaction, self::InvoiceSend => ChatChannel::Accounting,
+            default => null
+        };
     }
 
 

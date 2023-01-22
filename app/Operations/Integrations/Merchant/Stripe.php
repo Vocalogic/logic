@@ -49,7 +49,7 @@ class Stripe extends BaseIntegration implements Integration, MerchantInterface
 
     public function getLogo(): string
     {
-        return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png";
+        return "/assets/images/integrations/stripe.png";
     }
 
     /**
