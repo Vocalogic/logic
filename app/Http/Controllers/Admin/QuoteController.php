@@ -92,17 +92,6 @@ class QuoteController extends Controller
     }
 
     /**
-     * Init a new Quote
-     * @param Lead  $lead
-     * @param Quote $quote
-     * @return View
-     */
-    public function leadShow(Lead $lead, Quote $quote): View
-    {
-        return view('admin.quotes.show_lead')->with('lead', $lead)->with('quote', $quote);
-    }
-
-    /**
      * Add an item to a quote.
      * @param Quote    $quote
      * @param BillItem $item
