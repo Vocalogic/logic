@@ -24,19 +24,21 @@ class  QBOCore extends APICore
     public string              $mode;
     public string              $scope = "com.intuit.quickbooks.accounting";
     public ?string             $cid;
+    public object $config;
 
     /**
      * Build and setup keys
      */
-    public function __construct(string $client_id, string $client_secret)
+    public function __construct(object $config)
     {
         parent::__construct();
         $this->qclient = new PaymentClient();
         $this->mode = env('APP_ENV') == 'local' ? 'sandbox' : 'production';
+        $this->config = $config;
         $mode = $this->mode;
         $this->authenticator = OAuth2Authenticator::create([
-            'client_id'     => $client_id,
-            'client_secret' => $client_secret,
+            'client_id'     => $config->qbo_client_id,
+            'client_secret' => $config->qbo_client_secret,
             'redirect_uri'  => $this->generateRedirect(),       // Where does QBO redirect when authorized?
             'environment'   => $mode
         ]);
@@ -106,8 +108,8 @@ class  QBOCore extends APICore
             cache([
                 self::ACCESS_TOKEN => $data->access_token,
             ], Carbon::now()->addSeconds(3600));
-            info("Refresh: " . $data->refresh_token);
-            info("Access: " . $data->access_token);
+            //info("Refresh: " . $data->refresh_token);
+            //info("Access: " . $data->access_token);
             // Set the company id from the request
             $i = Integration::where('ident', 'qbo')->first();
             $data = $i->unpacked;
@@ -126,18 +128,15 @@ class  QBOCore extends APICore
      */
     public function qsend(string $endpoint, string $method = 'get', array $params = []) : mixed
     {
-        $i = Integration::where('ident', 'qbo')->first();
-        $data = $i->unpacked;
         //   $params['minorversion'] = self::MINOR_VERSION;
-        if (isset($data->qbo_cid) && $data->qbo_cid) $this->cid = $data->qbo_cid;
         $this->setHeaders([
             'Authorization' => 'Bearer ' . cache(SELF::ACCESS_TOKEN),
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
         ]);
         $base = $this->mode == 'sandbox'
-            ? "https://sandbox-quickbooks.api.intuit.com/v3/company/$this->cid/"
-            : "https://quickbooks.api.intuit.com/v3/company/$this->cid/";
+            ? "https://sandbox-quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/"
+            : "https://quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/";
         return $this->send($base . $endpoint, $method, $params);
     }
 
@@ -175,7 +174,7 @@ class  QBOCore extends APICore
      * @param string|int $matches
      * @param bool       $single
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function query(string $object, string $property, string|int $matches, bool $single = true): mixed
     {
