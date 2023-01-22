@@ -26,12 +26,12 @@ class Quickbooks extends BaseIntegration implements Integration
     public QBOCore             $qbo;
 
     /**
-     * Bind Slack
+     * Bind Quickbooks API Class
      */
     public function __construct()
     {
         parent::__construct();
-        $this->qbo = new QBOCore($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $this->qbo = new QBOCore($this->config);
     }
 
     /**
@@ -141,7 +141,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function syncAccount(Account $account): void
     {
-        $customer = new QBOCustomer($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $customer = new QBOCustomer($this->config);
         $customer->byAccount($account);
     }
 
@@ -153,7 +153,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function syncCategory(BillCategory $category): void
     {
-        $cat = new QBOCategory($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $cat = new QBOCategory($this->config);
         $cat->byCategory($category);
     }
 
@@ -165,7 +165,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function syncItem(BillItem $item): void
     {
-        $cat = new QBOService($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $cat = new QBOService($this->config);
         $cat->byItem($item);
     }
 
@@ -177,7 +177,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function syncInvoice(Invoice $invoice): void
     {
-        $inv = new QBOInvoice($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $inv = new QBOInvoice($this->config);
         $inv->byInvoice($invoice);
     }
 
@@ -189,7 +189,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function deleteInvoice(Invoice $invoice): void
     {
-        $inv = new QBOInvoice($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $inv = new QBOInvoice($this->config);
         if (!$invoice->finance_invoice_id) return;
         $inv->deleteBy($invoice);
     }
@@ -202,7 +202,7 @@ class Quickbooks extends BaseIntegration implements Integration
      */
     public function syncTransaction(Transaction $transaction): void
     {
-        $x = new QBOPayment($this->config->qbo_client_id, $this->config->qbo_client_secret);
+        $x = new QBOPayment($this->config);
         if ($transaction->finance_transaction_id) return;
         $x->byTransaction($transaction);
     }
