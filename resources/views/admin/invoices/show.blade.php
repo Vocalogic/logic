@@ -27,7 +27,7 @@
 
 <div class="row">
     <div class="col-lg-9 col-xs-12">
-        <div class="card">
+        <div class="card border-{{$invoice->status->getColor()}}">
             <div class="card-body">
                 <form method="POST" action="/admin/invoices/{{$invoice->id}}/add">
                     @method('POST')
