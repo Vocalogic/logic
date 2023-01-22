@@ -33,18 +33,18 @@ class AnalysisEngine
         {
             if ($product->item->ex_capex_once)
             {
-                $capex += moneyFormat($product->item->ex_capex, false);
+                $capex += $product->item->ex_capex;
             }
             else
             {
-                $capex += moneyFormat($product->item->ex_capex * $product->qty, false);
+                $capex += $product->item->ex_capex * $product->qty;
             }
             // Check for any addons that may have an expense.
             foreach ($product->addons as $addon)
             {
                 if ($addon->option && $addon->option->item)
                 {
-                    $capex += moneyFormat($addon->option->item->ex_capex * $addon->qty, false);
+                    $capex += $addon->option->item->ex_capex * $addon->qty;
                 }
             }
         }
@@ -54,13 +54,13 @@ class AnalysisEngine
         {
             if ($service->item->ex_opex_once)
             {
-                $opex += moneyFormat($service->item->ex_opex * $term, false);
+                $opex += $service->item->ex_opex * $term;
             }
             else
             {
-                $opex += moneyFormat(($service->item->ex_opex * $service->qty) * $term, false);
+                $opex += ($service->item->ex_opex * $service->qty) * $term;
             }
-            $opexSolo += moneyFormat(($service->item->ex_opex * $service->qty), false);
+            $opexSolo += $service->item->ex_opex * $service->qty;
 
             // Get addon opex
             foreach ($service->addons as $addon)
@@ -69,13 +69,13 @@ class AnalysisEngine
                 {
                     if ($addon->option->item->ex_opex_once)
                     {
-                        $opex += moneyFormat($addon->option->item->ex_capex * $term, false);
+                        $opex += $addon->option->item->ex_capex * $term;
                     }
                     else
                     {
-                        $opex += moneyFormat(($addon->option->item->ex_opex * $addon->qty) * $term, false);
+                        $opex += ($addon->option->item->ex_opex * $addon->qty) * $term;
                     }
-                    $opexSolo += moneyFormat(($addon->option->item->ex_opex * $addon->qty), false);
+                    $opexSolo += $addon->option->item->ex_opex * $addon->qty;
                 }
             }
 
