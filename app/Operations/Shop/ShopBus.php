@@ -309,6 +309,7 @@ class ShopBus
      */
     public function authorize(string $uid) : void
     {
+        if (!array_key_exists($uid, $this->carts)) return;
         $this->carts[$uid]->authorized = true;
         $this->pack();
     }
