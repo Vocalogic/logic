@@ -70,6 +70,8 @@ class SettingSeeder extends Seeder
             'When setting low/high sales pricing, this percentage will dictate how much of the desired price can be modified lower or higher', '0|200');
         $this->buildSetting('quotes.openai', 'OpenAI Key', 'password', null, 'Quote',
             'Enter your OpenAI API Key for Product Definition Assistance (BETA)');
+        $this->buildSetting('quotes.subtractExpense', 'Subtract Expenses before Commission?', 'select', 'No', 'Quote',
+            'Should opex expenses be subtracted before figuring commission?', 'Yes,No');
 
         $this->buildSetting('quotes.msa', 'Master Services Agreement', 'textarea', $this->getMSA(), 'MSA',
             'Enter the text to be shown for signing the master services agreement. All TOS will be appeneded afterwards.');

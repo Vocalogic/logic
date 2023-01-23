@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\BillFrequency;
+use App\Operations\Admin\AnalysisEngine;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -60,13 +61,12 @@ class QuoteItem extends Model
     /**
      * Based on the item in a quote, project what commissions would look like
      * for MRR.
-     * @return float
+     * @return int
      */
-    public function getCommissionableAttribute(): float
+    public function getCommissionableAttribute(): int
     {
-        $comm = user()->agent_comm_mrc;
-        $total = $this->price * $this->qty;
-        return round($total * ($comm / 100), 2);
+        return AnalysisEngine::byQuoteItem(user(), $this);
+
     }
 
     /**

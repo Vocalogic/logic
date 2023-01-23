@@ -4,6 +4,8 @@ namespace App\Operations\Admin;
 
 use App\Models\Account;
 use App\Models\Quote;
+use App\Models\QuoteItem;
+use App\Models\User;
 
 /**
  * This class will perform profitability analysis on a per-account and per-quote basis
@@ -88,18 +90,28 @@ class AnalysisEngine
         {
             if ($quote->lead->agent->agent_comm_spiff)
             {
-                $agentSpiff = round($quote->lead->agent->agent_comm_spiff * $mrr, 2);
+                $agentSpiff = $quote->lead->agent->agent_comm_spiff * $mrr;
             }
             if ($quote->lead->agent->agent_comm_mrc)
             {
-                // Get MRC * term.
-                $termMrr = $mrr * $term;
-                $agentMonthly = $mrr * ($quote->lead->agent->agent_comm_mrc / 100);
-                $agentComm = $termMrr * ($quote->lead->agent->agent_comm_mrc / 100);
-                // Get MRC %
+                // #94 - Deduct Expenses Check for Commissionable Amount
+                if (setting('quotes.subtractExpense') == 'Yes')
+                {
+                    // We need to subtract OpexSolo (not over term)
+                    $subtractedMrr = $mrr - $opexSolo; // This is our base calculation for monthly
+                    $subtractedTerm = $subtractedMrr * $term;
+                    $agentMonthly = $subtractedMrr * ($quote->lead->agent->agent_comm_mrc / 100);
+                    $agentComm = $subtractedTerm * ($quote->lead->agent->agent_comm_mrc / 100);
+                }
+                else
+                {
+                    // Get MRC * term. (standard without subtracting expenses)
+                    $termMrr = $mrr * $term;
+                    $agentMonthly = $mrr * ($quote->lead->agent->agent_comm_mrc / 100);
+                    $agentComm = $termMrr * ($quote->lead->agent->agent_comm_mrc / 100);
+                }
             }
         }
-
 
         // Now we need to figure out commission. if its a spiff add it like a capex.
         // If its a mrr commission then it needs to be calulated like an opex.
@@ -115,12 +127,10 @@ class AnalysisEngine
 
         if ($grossIncome > 0)
         {
-            $margin = round($netValue / $grossIncome * 100, 2);
+            $margin = round($netValue / $grossIncome * 100,2);
         }
 
         // Month Profitability. This is a basic subtract capex and first month opex then figure out how many months until green
-
-
         return (object)[
             'gross'             => $grossIncome,
             'capex'             => $capex,
@@ -189,7 +199,7 @@ class AnalysisEngine
             if ($serviceRemaining < 0) $serviceRemaining = 0;
             if ($serviceTotal > 0)
             {
-                $perc = round(($serviceRemaining / $serviceTotal) * 100);
+                $perc = ($serviceRemaining / $serviceTotal) * 100;
             }
             else $perc = 0;
             if ($perc > 50)
@@ -221,7 +231,7 @@ class AnalysisEngine
         $diff = $data->total - $data->opex;
         if ($data->total > 0)
         {
-            $margin = round(($diff / $data->total) * 100);
+            $margin = round($diff / $data->total * 100,2);
         }
         else $margin = 100;
         $data->margin = $margin;
@@ -229,5 +239,20 @@ class AnalysisEngine
         return $data;
     }
 
-
+    /**
+     * Get agent commissionable amount on a per item basis.
+     * @param User      $user
+     * @param QuoteItem $item
+     * @return int
+     */
+    static public function byQuoteItem(User $user, QuoteItem $item) : int
+    {
+        $comm = $user->agent_comm_mrc;
+        if (!$comm) return 0;
+        $basePrice = setting('quotes.subtractExpense') == 'Yes'
+            ? $item->price - $item->item->ex_opex
+            : $item->price;
+        $total = $basePrice * $item->qty;
+        return $total * ($comm / 100);
+    }
 }
