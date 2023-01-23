@@ -311,13 +311,23 @@ class GraphSeries
         {
             $start = now()->subMonths($month)->startOfMonth();
             $end = now()->subMonths($month)->endOfMonth();
-            $mrr = _metric($start, $account, MetricType::AccountMRR);
-            $mrr = $mrr->first();
-            if ($mrr)
+            $mrr = 0;
+            $day = $start->copy();
+            while(true)
             {
-                $mrr = $mrr->value;
+                $mrrMetric = _metric($day, $account, MetricType::AccountMRR);
+                $mrrMetric = $mrrMetric->first();
+                if ($mrrMetric && $mrrMetric->value > 0)
+                {
+                    $mrr = $mrrMetric->value;
+                    break;
+                }
+                $day->addDay(); // Move to next day
+                if ($day->day == $end->day)
+                {
+                    break; // Stay with 0.
+                }
             }
-            else $mrr = 0;
             $mTotal = 0;
             foreach ($account->invoices()->whereBetween('created_at', [$start, $end])
                          ->where('status', '!=', InvoiceStatus::DRAFT)
