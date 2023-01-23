@@ -29,21 +29,23 @@ abstract class BaseIntegration
      * the enablement, and configuration parameters.
      * @return void
      */
-    private function checkExistence()
+    private function checkExistence() : void
     {
         $i = IntegrationModel::where('ident', $this->ident->value)->first();
-        if ($i) return;
-        $reqs = $this->getRequired();
-        $data = (object)[];
-        foreach ($reqs as $req)
+        if (!$i)
         {
-            $data->{$req->var} = $req->default;
+            $reqs = $this->getRequired();
+            $data = (object)[];
+            foreach ($reqs as $req)
+            {
+                $data->{$req->var} = $req->default;
+            }
+            (new IntegrationModel)->create([
+                'ident'   => $this->ident->value,
+                'enabled' => false,
+                'data'    => $data
+            ]);
         }
-        (new IntegrationModel)->create([
-            'ident'   => $this->ident->value,
-            'enabled' => false,
-            'data'    => $data
-        ]);
     }
 
     /**
@@ -61,11 +63,11 @@ abstract class BaseIntegration
      * that are not in our registry any longer.
      * @return void
      */
-    private function validateRequirements()
+    private function validateRequirements() : void
     {
         $i = IntegrationModel::where('ident', $this->ident->value)->first();
         $reqs = $this->getRequired();
-        $exists = (object) $i->data;
+        $exists = (object) $i->data ?? (object) [];
         // Scan for new additions.
         foreach ($reqs as $req)
         {
@@ -93,7 +95,7 @@ abstract class BaseIntegration
      * Set Configuration Object
      * @return void
      */
-    private function setConfig()
+    private function setConfig() : void
     {
         $i = IntegrationModel::where('ident', $this->ident->value)->first();
         $this->config = (object) $i->data;
