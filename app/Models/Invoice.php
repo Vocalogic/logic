@@ -10,6 +10,7 @@ use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\LNPStatus;
 use App\Enums\Core\OrderStatus;
 use App\Enums\Core\PaymentMethod;
+use App\Operations\Admin\AnalysisEngine;
 use App\Operations\Core\MakePDF;
 use App\Operations\Integrations\Accounting\Finance;
 use App\Operations\Integrations\Merchant\Merchant;
@@ -38,6 +39,7 @@ use App\Exceptions\LogicException;
  * @property mixed|string $amt
  * @property mixed        $last_notice_sent
  * @property mixed        $servicesTotal
+ * @property mixed        $recurring
  */
 class Invoice extends Model
 {
@@ -520,57 +522,11 @@ class Invoice extends Model
     {
         if (!$this->account->partner_id && !$this->account->agent_id) return;   // Not sold by a partner or agent
         if (!$this->account->is_commissionable) return;                         // Not Commissionable
+        if (!$this->recurring) return;                                          // Not a recurring invoice.
         if ($this->commission) return;                                          // already has a commission
-        // Get MRR totals.
-        $mrrTotal = 0;
-        $amount = 0;
-        foreach ($this->items as $item)
-        {
-            if ($item->item && $item->item->type == 'services')
-            {
-                $mrrTotal += $item->qty * $item->price;
-            }
-        }
-        $total = $this->getTotalAttribute(); // Total of Invoice
+        $amount = AnalysisEngine::byInvoice($this);
 
-        if ($this->account->agent && $this->account->agent->account->id == 1) // Is this agent local?
-        {
-            if ($this->account->agent->agent_comm_mrc > 0)
-            {
-                $per = $this->account->agent->agent_comm_mrc / 100; // Take 10 and make it .1
-                $amount = round($mrrTotal * $per, 2);
-            }
-            elseif ($this->account->agent->agent_comm_spiff > 0 && !$this->account->spiffed)
-            {
-                $amount = $total * $this->account->agent->agent_comm_spiff;
-            }
-        } // if internal account
-        else // This is a partner account which has different commission percentages.
-        {
-            if (!$this->account->agent->partner_nrc) // Don't include NRC
-            {
-                $total = $mrrTotal;
-            }
-            switch ($this->account->partner->partner_commission_type)
-            {
-                case 'MRR' :
-                    $per = $this->account->partner->partner_commission_mrr / 100; // Take 10 and make it .1
-                    $amount = round($mrrTotal * $per, 2);
-                    break;
-                case 'SPIFF':
-                    if ($this->account->spiffed) return; // We already spiffed this.
-                    $amount = $total * $this->account->partner->partner_commission_spiff;
-                    break;
-                case 'BOTH' :
-                    $per = $this->account->partner->partner_commission_mrr / 100; // Take 10 and make it .1
-                    $amount = round($mrrTotal * $per, 2);
-                    if (!$this->account->spiffed)
-                    {
-                        $amount += $total * $this->account->partner->partner_commission_spiff;
-                    }
-                    break;
-            }
-        }
+
         $this->account->update(['spiffed' => true]);
         if ($amount > 0)
         {
