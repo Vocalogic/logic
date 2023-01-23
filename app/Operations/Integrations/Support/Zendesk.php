@@ -44,7 +44,7 @@ class Zendesk extends BaseIntegration implements Integration
 
     public function getLogo(): string
     {
-        return "https://www.vectorlogo.zone/logos/zendesk/zendesk-ar21.png";
+        return "/assets/images/integrations/zendesk.png";
     }
 
     /**

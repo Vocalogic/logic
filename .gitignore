@@ -28,6 +28,7 @@ storage/app/*
 storage/pdf/*
 storage/*.key
 Modules/*
+modules_statuses.json
 app/.phpdoc
 !storage/framework/cache/data/.gitkeep
 !storage/framework/views/.gitkeep

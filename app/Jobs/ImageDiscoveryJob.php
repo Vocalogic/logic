@@ -101,7 +101,7 @@ class ImageDiscoveryJob implements ShouldQueue
             // we got an image; process it
             $base = base64_encode($image);
             $x = new LoFileHandler();
-            $file = $x->create('favicon.png', FileType::Image, $this->id, $base, 'image/png');
+            $file = $x->create('favicon.png', FileType::Image, $this->account->id, $base, 'image/png');
             $this->account->update(['logo_id' => $file->id]);
         }
     }

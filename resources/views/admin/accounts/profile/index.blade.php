@@ -145,63 +145,27 @@
 
                 <div class="col-lg-4">
 
-                    @if(hasIntegration(\App\Enums\Core\IntegrationType::Merchant))
-                        @include('admin.accounts.profile.method')
+                    @if($account->is_partner)
+                        <div class="card border-warning">
+                            <div class="card-body">
+                                <p>
+                                    {{$account->name}} is currently not enabled as a partner and cannot register
+                                    leads or have
+                                    commissions tracked.
+                                    If you wish to enable this account as a partner, click the button below.
+                                </p>
+                                <a href="/admin/accounts/{{$account->id}}/partner/enable"
+                                   class="btn btn-{{bm()}}warning confirm"
+                                   data-method="GET"
+                                   data-message="Are you sure you want to enable this account as a partner? You will need to set their commission structure after it is enabled.">
+                                    <i class="fa fa-user-circle"></i> Enable Partner Controls
+                                </a>
+                            </div>
+                        </div>
                     @endif
 
-                    <div class="card mt-5">
-                        <div class="card-body">
-                            <p>
-                                If you would like for invoices and other billing emails to go to a specific email
-                                address, you can
-                                add it below, otherwise it will use the primary user on the account.
-                            </p>
-                            <form method="POST" action="/admin/accounts/{{$account->id}}">
-                                @method('PUT')
-                                @csrf
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" name="billing_email"
-                                                   value="{{$account->billing_email}}">
-                                            <label>Billing E-mail</label>
-                                            <span
-                                                class="helper-text">Leave blank to use admin user for accounting.</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12 mt-2">
-                                        <input type="submit" name="save" value="Update Billing Email"
-                                               class="btn btn-light-primary wait">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
 
-
-                        @if($account->is_partner)
-                            <div class="card border-warning">
-                                <div class="card-body">
-                                    <p>
-                                        {{$account->name}} is currently not enabled as a partner and cannot register
-                                        leads or have
-                                        commissions tracked.
-                                        If you wish to enable this account as a partner, click the button below.
-                                    </p>
-                                    <a href="/admin/accounts/{{$account->id}}/partner/enable"
-                                       class="btn btn-{{bm()}}warning confirm"
-                                       data-method="GET"
-                                       data-message="Are you sure you want to enable this account as a partner? You will need to set their commission structure after it is enabled.">
-                                        <i class="fa fa-user-circle"></i> Enable Partner Controls
-                                    </a>
-                                </div>
-                            </div>
-                        @endif
-
-
-                    </div>
-
-
-                    <div class="card mt-3">
+                    <div class="card mt-2">
                         <div class="card-body">
                             <p class="card-title">Update Company Logo</p>
                             <form method="POST" action="/admin/accounts/{{$account->id}}/logo"
@@ -217,15 +181,10 @@
                         </div>
                     </div>
 
-
-                        <a class="btn btn-{{bm()}}danger live mt-4 w-100" data-title="Cancel {{$account->name}}"
-                           href="/admin/accounts/{{$account->id}}/cancel"><i class="fa fa-archive"></i> Cancel/Close Account</a>
-
+                    <a class="btn btn-{{bm()}}danger live mt-4 w-100" data-title="Cancel {{$account->name}}"
+                       href="/admin/accounts/{{$account->id}}/cancel"><i class="fa fa-archive"></i> Cancel/Close Account</a>
                 </div>
-
             </div>
-
-
         </div>
     </div>
 @endsection

@@ -5,6 +5,7 @@ namespace App\Enums\Core;
 use App\Models\Integration;
 use App\Operations\Integrations\Accounting\Quickbooks;
 use App\Operations\Integrations\Calendar\Calendly;
+use App\Operations\Integrations\Chat\Discord;
 use App\Operations\Integrations\Chat\Slack;
 use App\Operations\Integrations\Merchant\LogicPay;
 use App\Operations\Integrations\Merchant\Stripe;
@@ -32,6 +33,7 @@ enum IntegrationRegistry: string
      * Chat Integrations
      */
     case Slack = "slack";
+    case Discord = 'discord';
 
     /**
      * Calendar Applications
@@ -52,7 +54,8 @@ enum IntegrationRegistry: string
             self::Stripe => Stripe::class,
             self::Zendesk => Zendesk::class,
             self::LogicPay => LogicPay::class,
-            self::Calendly => Calendly::class
+            self::Calendly => Calendly::class,
+            self::Discord => Discord::class
         };
     }
 
@@ -100,7 +103,7 @@ enum IntegrationRegistry: string
     {
         return match ($this)
         {
-            self::QuickbooksOnline => true,
+            self::QuickbooksOnline, self::Discord => true,
             default => false
         };
     }
@@ -115,7 +118,7 @@ enum IntegrationRegistry: string
         return match ($this)
         {
             self::QuickbooksOnline => IntegrationType::Finance,
-            self::Slack => IntegrationType::Chat,
+            self::Slack, self::Discord => IntegrationType::Chat,
             self::Stripe, self::LogicPay => IntegrationType::Merchant,
             self::Zendesk => IntegrationType::Support,
             self::Calendly => IntegrationType::Calendar

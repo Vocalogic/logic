@@ -86,7 +86,7 @@ class AccountController extends Controller
      * @param Account $account
      * @return View
      */
-    public function overview(Account $account) : View
+    public function overview(Account $account): View
     {
         return view('admin.accounts.overview.index', ['account' => $account]);
     }
@@ -96,7 +96,7 @@ class AccountController extends Controller
      * @param Account $account
      * @return View
      */
-    public function services(Account $account) : View
+    public function services(Account $account): View
     {
         return view('admin.accounts.services.index', ['account' => $account]);
     }
@@ -169,7 +169,7 @@ class AccountController extends Controller
      * @param Account $account
      * @return View
      */
-    public function invoices(Account $account) : View
+    public function invoices(Account $account): View
     {
         return view('admin.accounts.invoices.index', ['account' => $account]);
     }
@@ -218,6 +218,28 @@ class AccountController extends Controller
     public function events(Account $account): View
     {
         return view('admin.accounts.events.index', ['account' => $account]);
+    }
+
+    /**
+     * Show billing settings for an account.
+     * @param Account $account
+     * @return View
+     */
+    public function billing(Account $account): View
+    {
+        return view('admin.accounts.billing.index', ['account' => $account]);
+    }
+
+    /**
+     * Update billing details
+     * @param Account $account
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function billingUpdate(Account $account, Request $request): RedirectResponse
+    {
+        $account->update($request->all());
+        return redirect()->back()->with('message', 'Billing Settings Updated');
     }
 
     /**
@@ -385,6 +407,10 @@ class AccountController extends Controller
      */
     public function updateLogo(Account $account, Request $request): RedirectResponse
     {
+        if (!$request->hasFile('logo'))
+        {
+            throw new LogicException("You must select a logo to upload.");
+        }
         $lo = new LoFileHandler();
         $file = $lo->createFromRequest($request, 'logo', FileType::Image, $account->id);
         $lo->unlock($file);
@@ -565,7 +591,6 @@ class AccountController extends Controller
         ]);
         return redirect()->to("/admin/accounts");
     }
-
 
 
     /**

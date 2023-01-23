@@ -28,7 +28,7 @@ class Calendly extends BaseIntegration implements Integration
 
     public function getLogo(): string
     {
-        return "https://images.g2crowd.com/uploads/product/image/social_landscape/social_landscape_9b95c3b92b1ef692b5f69baaec6579d5/calendly.png";
+        return "/assets/images/integrations/calendly.png";
     }
 
     /**

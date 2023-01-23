@@ -17,21 +17,21 @@ class GraphSeries
     public Request    $request;
     public MetricType $type;
     // Series Calculation Requests
-    public int      $days       = 0;                                                                                                                   // Specify Time in Days
-    public int      $weeks      = 0;                                                                                                                   // Specify time in weeks
-    public int      $months     = 0;                                                                                                                   // Specify time in months
-    public string   $tally;                                                                                                                            // Tally sum, average or min
-    public string   $seriesType;                                                                                                                       // Series Type is which method to use below
-    public Carbon   $start;                                                                                                                            // Start date
-    public Carbon   $end;                                                                                                                              // End Date
-    public ?Account $account;                                                                                                                          // Associated Account if needed.
-    public array    $blocks     = [];                                                                                                                  // Blocks of time for week/months
-    public array    $addMetrics = [];                                                                                                                  // Additional Metric Series
-    public array    $colors     = [];                                                                                                                  // Color Indexes
-    public bool     $diff       = false;                                                                                                               // Diffferential not total?
-    public array    $series     = [];                                                                                                                  // Series Data Storage
-    public array    $options    = [];                                                                                                                  // Base Object Construction
-    public ?string  $detail;                                                                                                                           // Define Detail match if necessary.
+    public int      $days       = 0;                                                                                                                       // Specify Time in Days
+    public int      $weeks      = 0;                                                                                                                       // Specify time in weeks
+    public int      $months     = 0;                                                                                                                       // Specify time in months
+    public string   $tally;                                                                                                                                // Tally sum, average or min
+    public string   $seriesType;                                                                                                                           // Series Type is which method to use below
+    public Carbon   $start;                                                                                                                                // Start date
+    public Carbon   $end;                                                                                                                                  // End Date
+    public ?Account $account;                                                                                                                              // Associated Account if needed.
+    public array    $blocks     = [];                                                                                                                      // Blocks of time for week/months
+    public array    $addMetrics = [];                                                                                                                      // Additional Metric Series
+    public array    $colors     = [];                                                                                                                      // Color Indexes
+    public bool     $diff       = false;                                                                                                                   // Diffferential not total?
+    public array    $series     = [];                                                                                                                      // Series Data Storage
+    public array    $options    = [];                                                                                                                      // Base Object Construction
+    public ?string  $detail;                                                                                                                               // Define Detail match if necessary.
 
     public int    $chartHeight = 300;                                                                               // Chart Definitions
     public bool   $showToolBar = false;
@@ -124,12 +124,11 @@ class GraphSeries
         {
             $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $type, false, $this->detail);
             $data = $this->getTotalFromMetrics($entries);
-            if ($type->isMoney()) $data = moneyFormat($data);
+            if ($type->isMoney()) $data = moneyFormat($data, false);
             $plots[] = (object)[
                 'x' => $block->getTimestampMs(),
                 'y' => $data
             ];
-
         }
         $series[] = [
             'name'  => $type->getSeriesName(),
@@ -149,7 +148,7 @@ class GraphSeries
                     $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $metric, $this->diff,
                         $this->detail);
                     $data = $this->getTotalFromMetrics($entries);
-                    if ($type->isMoney()) $data = moneyFormat($data);
+                    if ($type->isMoney()) $data = moneyFormat($data, false);
                     $plots[] = (object)[
                         'x' => $block->getTimestampMs(),
                         'y' => $data
@@ -179,7 +178,7 @@ class GraphSeries
         {
             $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $type, $this->diff, $this->detail);
             $data = $this->getTotalFromMetrics($entries);
-            if ($type->isMoney()) $data = moneyFormat($data);
+            if ($type->isMoney()) $data = moneyFormat($data, false);
             $plots[] = $data;
         }
         return [
@@ -266,7 +265,7 @@ class GraphSeries
     public function getInvoiceStatusPie(): array
     {
         $invoices = Invoice::whereIn('status',
-            [InvoiceStatus::PARTIAL->value, InvoiceStatus::SENT->value, InvoiceStatus::DRAFT->value])
+            [InvoiceStatus::PARTIAL, InvoiceStatus::SENT, InvoiceStatus::DRAFT])
             ->get();
         $pastDue = 0;
         $openNotPD = 0;
@@ -279,9 +278,9 @@ class GraphSeries
             {
                 $pastDue++;
             }
-            elseif ($invoice->status == InvoiceStatus::DRAFT->value) $draft++;
-            elseif ($invoice->status == InvoiceStatus::SENT->value) $openNotPD++;
-            elseif ($invoice->status == InvoiceStatus::PARTIAL->value) $partial++;
+            elseif ($invoice->status == InvoiceStatus::DRAFT) $draft++;
+            elseif ($invoice->status == InvoiceStatus::SENT) $openNotPD++;
+            elseif ($invoice->status == InvoiceStatus::PARTIAL) $partial++;
         }
 
 
@@ -312,16 +311,26 @@ class GraphSeries
         {
             $start = now()->subMonths($month)->startOfMonth();
             $end = now()->subMonths($month)->endOfMonth();
-            $mrr = _metric($start, $account, MetricType::AccountMRR);
-            $mrr = $mrr->first();
-            if ($mrr)
+            $mrr = 0;
+            $day = $start->copy();
+            while(true)
             {
-                $mrr = $mrr->value;
+                $mrrMetric = _metric($day, $account, MetricType::AccountMRR);
+                $mrrMetric = $mrrMetric->first();
+                if ($mrrMetric && $mrrMetric->value > 0)
+                {
+                    $mrr = $mrrMetric->value;
+                    break;
+                }
+                $day->addDay(); // Move to next day
+                if ($day->day == $end->day)
+                {
+                    break; // Stay with 0.
+                }
             }
-            else $mrr = 0;
             $mTotal = 0;
             foreach ($account->invoices()->whereBetween('created_at', [$start, $end])
-                         ->where('status', '!=', InvoiceStatus::DRAFT->value)
+                         ->where('status', '!=', InvoiceStatus::DRAFT)
                          ->get() as $invoice)
             {
                 $mTotal += $invoice->total;

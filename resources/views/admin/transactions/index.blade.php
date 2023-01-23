@@ -35,14 +35,13 @@
                                 <tr>
                                     <td>{{$transaction->id}}</td>
                                     <td>{{$transaction->created_at->format("Y-m-d")}}</td>
-                                    <td><a href="/admin/accounts/{{$transaction->account->id}}/invoices/{{$transaction->invoice->id}}">#{{$transaction->invoice->id}}</a></td>
+                                    <td><a href="/admin/invoices/{{$transaction->invoice->id}}">#{{$transaction->invoice->id}}</a></td>
                                     <td><a href="/admin/accounts/{{$transaction->account->id}}">{{$transaction->account->name}}</a></td>
                                     <td>${{moneyFormat($transaction->amount)}}
                                     @if($transaction->remote_transaction_id)<br/><small class="text-muted">{{$transaction->remote_transaction_id}}</small>@endif</td>
                                     <td>${{moneyFormat($transaction->fee)}}</td>
                                     <td>${{moneyFormat($transaction->net)}}</td>
                                     <td>{{$transaction->method}}</td>
-
                                 </tr>
                                 @endforeach
                         </tbody>

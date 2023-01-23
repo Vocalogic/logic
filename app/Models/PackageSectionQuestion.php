@@ -66,6 +66,7 @@ class PackageSectionQuestion extends Model
         $data['equals'] = "equals";
         $data['greater'] = "greater than";
         $data['less'] = "less than";
+        $data['between'] = "is between";
         $data['notequals'] = "does not equal";
         $data['exists'] = 'has an answer';
         $data['notexists'] = "was not answered";

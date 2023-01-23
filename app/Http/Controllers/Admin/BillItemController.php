@@ -589,6 +589,7 @@ class BillItemController extends Controller
             'type'             => $cat->type,
             'name'             => $request->name,
             'code'             => $request->code,
+            'slug'             => Str::slug($request->name),
             'msrp'             => convertMoney($request->price),
             'bill_category_id' => $cat->id,
             'description'      => 'TODO: Change Description',

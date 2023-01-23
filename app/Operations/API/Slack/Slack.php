@@ -2,6 +2,7 @@
 
 namespace App\Operations\API\Slack;
 
+use App\Exceptions\LogicException;
 use App\Operations\API\APICore;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -13,14 +14,14 @@ class Slack extends APICore
      * @param string|null $simpleMessage
      * @param array|null  $complexMessage
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function slackHook(string $hook, ?string $simpleMessage = null, ?array $complexMessage = []): mixed
     {
         if ($simpleMessage)
         {
             return $this->send($hook, 'post', [
-                'text' => $simpleMessage
+                'text' => strip_tags($simpleMessage)
             ]);
         }
         else

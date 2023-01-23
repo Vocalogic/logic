@@ -27,7 +27,7 @@ class LogicPayComponent extends Component
      */
     public function render(): View
     {
-        return view('admin.accounts.profile.logic_component');
+        return view('admin.accounts.billing.logic_component');
     }
 
     /**

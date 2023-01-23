@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\IntegrationType;
+use App\Jobs\DispatchChat;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed        $activity
  * @property bool|mixed   $private
  * @property mixed        $partner
+ * @property mixed        $formatted
  */
 class Activity extends Model
 {
@@ -83,6 +86,25 @@ class Activity extends Model
         return $this->belongsTo(Account::class, 'refid');
     }
 
+    /**
+     * Send the notification to the appropriate chat channel
+     * if chat integration has been integrated.
+     * @return void
+     */
+    public function sendNotification(): void
+    {
+        if (!hasIntegration(IntegrationType::Chat)) return; // no integration configured
+        dispatch(new DispatchChat($this));
+    }
+
+    /**
+     * This creates a summary of the activity for things such as chat/email notifications.
+     * @return string
+     */
+    public function getFormattedAttribute(): string
+    {
+        return $this->type->getSummary($this);
+    }
 
 
 }

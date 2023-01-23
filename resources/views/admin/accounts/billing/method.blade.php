@@ -13,7 +13,7 @@
         @endif
 
         @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::LogicPay)
-            @include('admin.accounts.profile.merchant_logic')
+            @include('admin.accounts.billing.merchant_logic')
             @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant)->connect()->achEnabled())
                 <a class="live btn btn-primary mt-3" data-title="Update ACH Information"
                    href="/admin/accounts/{{$account->id}}/updateACH">Update ACH Details</a>
@@ -22,7 +22,7 @@
         @endif
 
         @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::Stripe)
-            @include('admin.accounts.profile.merchant_stripe')
+            @include('admin.accounts.billing.merchant_stripe')
         @endif
 
 

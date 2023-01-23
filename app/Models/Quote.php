@@ -39,6 +39,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int|mixed    $lead_id
  * @property mixed|string $name
  * @property mixed        $expires_on
+ * @property mixed        $status
  *
  */
 class Quote extends Model
@@ -209,17 +210,13 @@ class Quote extends Model
      */
     public function getCommissionableAttribute(): int
     {
-        $total = 0;
+        // Use the analysis engine and don't try to figure this out by hand here.
+        $obj = AnalysisEngine::byQuote($this);
         if (user()->agent_comm_mrc)
         {
-            $amt = user()->agent_comm_mrc / 100;
-            $total += round($this->mrr * $amt, 2);
+            return $obj->monthlyCommission;
         }
-        if (user()->agent_comm_spiff)
-        {
-            $total += $this->mrr * user()->agent_comm_spiff;
-        }
-        return $total;
+        else return $obj->agentSpiff;
     }
 
     /**

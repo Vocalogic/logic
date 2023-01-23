@@ -144,7 +144,7 @@ class QBOService extends QBOCore
             return $data->qbo_default_income;
         }
         // Not found get from qboaccount
-        $a = new QBOAccount();
+        $a = new QBOAccount($this->config);
         $result = $a->findByName("Sales"); // Try to find default sales account.
         if (isset($result->QueryResponse->Account))
         {
