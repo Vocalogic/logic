@@ -3,6 +3,7 @@
 namespace App\Operations\Admin;
 
 use App\Models\Account;
+use App\Models\Invoice;
 use App\Models\Quote;
 use App\Models\QuoteItem;
 use App\Models\User;
@@ -127,7 +128,7 @@ class AnalysisEngine
 
         if ($grossIncome > 0)
         {
-            $margin = round($netValue / $grossIncome * 100,2);
+            $margin = round($netValue / $grossIncome * 100, 2);
         }
 
         // Month Profitability. This is a basic subtract capex and first month opex then figure out how many months until green
@@ -199,7 +200,7 @@ class AnalysisEngine
             if ($serviceRemaining < 0) $serviceRemaining = 0;
             if ($serviceTotal > 0)
             {
-                $perc = ($serviceRemaining / $serviceTotal) * 100;
+                $perc = round(($serviceRemaining / $serviceTotal) * 100, 2);
             }
             else $perc = 0;
             if ($perc > 50)
@@ -231,7 +232,7 @@ class AnalysisEngine
         $diff = $data->total - $data->opex;
         if ($data->total > 0)
         {
-            $margin = round($diff / $data->total * 100,2);
+            $margin = round($diff / $data->total * 100, 2);
         }
         else $margin = 100;
         $data->margin = $margin;
@@ -245,7 +246,7 @@ class AnalysisEngine
      * @param QuoteItem $item
      * @return int
      */
-    static public function byQuoteItem(User $user, QuoteItem $item) : int
+    static public function byQuoteItem(User $user, QuoteItem $item): int
     {
         $comm = $user->agent_comm_mrc;
         if (!$comm) return 0;
@@ -254,5 +255,44 @@ class AnalysisEngine
             : $item->price;
         $total = $basePrice * $item->qty;
         return $total * ($comm / 100);
+    }
+
+    /**
+     * This method will return the commissionable amount on an invoice.
+     * @param Invoice $invoice
+     * @return int
+     */
+    static public function byInvoice(Invoice $invoice): int
+    {
+        // Get MRR totals.
+        $amount = 0;
+        $total = $invoice->total; // Total of Recurring Invoice
+        if ($invoice->account->agent->agent_comm_mrc > 0)
+        {
+            $per = $invoice->account->agent->agent_comm_mrc / 100; // Take 10 and make it .1
+            // Check expenses first.
+            if (setting('quotes.subtractExpense') == 'Yes')
+            {
+                $totalExpenses = 0;
+                foreach($invoice->items as $item)
+                {
+                    if($item->item && $item->item->ex_opex)
+                    {
+                        $totalExpenses += $item->item->ex_opex * $item->qty;
+                    }
+                }
+                $commissionable = $total - $totalExpenses;
+            }
+            else
+            {
+                $commissionable = $total;
+            }
+            $amount = $commissionable * $per;
+        }
+        elseif ($invoice->account->agent->agent_comm_spiff > 0 && !$invoice->account->spiffed)
+        {
+            $amount = $total * $invoice->account->agent->agent_comm_spiff;
+        }
+        return $amount;
     }
 }

@@ -15,7 +15,7 @@
         <tr>
             <td><a class="live" data-title="Edit Commission" href="/admin/finance/commissions/{{$c->id}}"><span
                         class="badge bg-{{bm()}}primary">#{{$c->id}}</span></a></td>
-            <td><a href="/admin/accounts/{{$c->invoice->account->id}}/invoices/{{$c->invoice->id}}"><span
+            <td><a href="/admin/invoices/{{$c->invoice->id}}"><span
                         class="badge bg-{{bm()}}info">#{{$c->invoice->id}}</span></a></td>
             <td>{{$c->invoice->account->name}}</td>
             <td>{{$c->account->name}} / {{$c->invoice->account->agent->short}}</td>
@@ -37,8 +37,6 @@
                     Not Batched
                 @endif
             </td>
-
-
         </tr>
     @endforeach
     </tbody>
