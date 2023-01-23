@@ -43,12 +43,12 @@ enum BillFrequency: string
      * Get split total based on total and number of payments.
      * @param float    $total
      * @param int|null $numPayments
-     * @return float
+     * @return int
      */
-    public function splitTotal(float $total, ?int $numPayments) : float
+    public function splitTotal(float $total, ?int $numPayments) : int
     {
         if ($numPayments <= 0) return $total;
-        return round($total / $numPayments,2);
+        return round($total / $numPayments);
     }
 
     /**

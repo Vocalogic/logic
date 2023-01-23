@@ -75,7 +75,7 @@ class MetricsOperation
         $total = 0;
         foreach ($quotes as $quote)
         {
-            $total += $quote->mrr + $quote->nrc;
+            $total += $quote->analysis->profit;
         }
         _imetric(MetricType::TotalQuotedValue, $total);
     }
