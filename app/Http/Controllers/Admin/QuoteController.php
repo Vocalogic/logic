@@ -105,10 +105,21 @@ class QuoteController extends Controller
             throw new LogicException("Quote has already been executed. Unable to add item.");
         }
         $service = $item->type == BillItemType::SERVICE->value;
+        $preferredPrice = 0;
+        if ($quote->account)
+        {
+            $preferredPrice = $quote->account->getPreferredPricing($item);
+        }
+        if (!$preferredPrice)
+        {
+            $price = $service ? $item->mrc : $item->nrc;
+        }
+        else $price = $preferredPrice;
+
         $qitem = (new QuoteItem)->create([
             'quote_id'        => $quote->id,
             'item_id'         => $item->id,
-            'price'           => $service ? $item->mrc : $item->nrc,
+            'price'           => $price,
             'description'     => $item->description,
             'qty'             => 1,
             'allowed_qty'     => $item->allowed_qty,

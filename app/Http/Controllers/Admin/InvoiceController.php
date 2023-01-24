@@ -75,7 +75,7 @@ class InvoiceController extends Controller
             'code'         => $item->code,
             'name'         => $item->name,
             'description'  => $item->description,
-            'price'        => $item->nrc,
+            'price'        => $invoice->account->getPreferredPricing($item),
             'qty'          => 1
         ]);
         return redirect()->back();

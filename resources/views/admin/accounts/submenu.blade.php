@@ -47,6 +47,18 @@
     </div>
 @endif
 
+@if($account->parent)
+    <div class="card mt-3 mb-3 p-3 border-warning">
+        <div class="d-flex align-items-center">
+            <div class="avatar rounded-circle no-thumbnail bg-light"><i class="fa fa-building-o fa-lg"></i></div>
+            <div class="flex-fill ms-3 text-truncate">
+                <div class="small">Parent Account</div>
+                <span class="h6 mb-0"><a href="/admin/accounts/{{$account->parent->id}}">{{$account->parent->name}}</a></span>
+            </div>
+        </div>
+    </div>
+@endif
+
 @if($account->account_credit)
     <div class="card mb-3 p-3 border-dark">
         <div class="d-flex align-items-center">
