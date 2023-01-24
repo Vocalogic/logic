@@ -178,7 +178,7 @@
                         @if($product->frequency)
                             <br/> <span class="badge bg-{{bm()}}primary">{{$product->frequency->getHuman()}}
                                         financing ({{$product->payments}} payments @
-                                        ${{moneyFormat($product->frequency->splitTotal($product->qty * $product->price, $product->payments),2)}} p/{{$product->frequency->getHumanShort()}})</span>
+                                        ${{moneyFormat($product->frequency->splitTotal($product->qty * $product->price, $product->payments, $product->finance_charge),2)}} p/{{$product->frequency->getHumanShort()}})</span>
                         @endif
                         <br/>
                     </td>

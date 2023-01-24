@@ -393,7 +393,7 @@ class Account extends Model
                     'bill_item_id' => $product->item->id,
                     'description'  => $product->item->description,
                     'price'        => $product->frequency->splitTotal($product->price * $product->qty,
-                        $product->payments),
+                        $product->payments, $product->finance_charge),
                     'qty'          => 1,
                     'notes'        => $product->notes,
                     'account_id'   => $this->id,

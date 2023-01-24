@@ -67,6 +67,14 @@
                         <span class="helper-text">If financing, how many payments should total be split into.</span>
                     </div>
                 </div>
+                <div class="col-md-4 col-4">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" name="finance_charge"
+                               value="{{$item->finance_charge ?: setting('quotes.defaultFinanceCharge')}}">
+                        <label>Finance Charge (%)</label>
+                        <span class="helper-text">If adding a finance charge, enter it here.</span>
+                    </div>
+                </div>
             </div>
         @endif
 
