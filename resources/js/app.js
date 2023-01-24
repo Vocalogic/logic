@@ -416,8 +416,8 @@ $(document).ready(function () {
         let loading = $(obj).parents(anchor).waitMe({
             effect: effect,
             text: message,
-            bg: 'rgba(255,255,255,0.90)',
-            color: '#555'
+            bg: "var(--card-color)",
+            color: 'var(--color-900)'
         });
     }
 
