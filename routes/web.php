@@ -427,6 +427,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy']);
     Route::post('invoices/{invoice}/add', [InvoiceController::class, 'addCustomItem']);
+    Route::get('invoices/{invoice}/settings', [InvoiceController::class, 'settings']);
+    Route::post('invoices/{invoice}/settings', [InvoiceController::class, 'settingsUpdate']);
     Route::get('invoices/{invoice}/add/{item}', [InvoiceController::class, 'addItem']);
     Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::get('invoices/{invoice}/send', [InvoiceController::class, 'send']);

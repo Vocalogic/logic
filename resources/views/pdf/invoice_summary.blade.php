@@ -219,6 +219,12 @@
                         <td align="right"><strong>Invoice Balance</strong></td>
                         <td>${{moneyFormat($invoice->balance)}}</td>
                     </tr>
+                    @if($invoice->po)
+                        <tr>
+                            <td align="right"><strong>Purchase Order</strong></td>
+                            <td>{{$invoice->po}}</td>
+                        </tr>
+                    @endif
 
 
                 </table>

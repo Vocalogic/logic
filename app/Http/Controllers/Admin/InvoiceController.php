@@ -250,4 +250,26 @@ class InvoiceController extends Controller
         }
         return redirect()->back();
     }
+
+    /**
+     * Show invoice settings
+     * @param Invoice $invoice
+     * @return View
+     */
+    public function settings(Invoice $invoice): View
+    {
+        return view('admin.invoices.settings', ['invoice' => $invoice]);
+    }
+
+    /**
+     * Update invoice settings.
+     * @param Invoice $invoice
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function settingsUpdate(Invoice $invoice, Request $request): RedirectResponse
+    {
+        $invoice->update($request->all());
+        return redirect()->back()->with('message', "Settings updated successfully.");
+    }
 }
