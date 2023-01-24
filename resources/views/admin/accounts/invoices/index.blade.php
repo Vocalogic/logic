@@ -65,7 +65,12 @@
                                           value="{{$account->net_terms}}">
                                 How many days until this invoice is due?
                             </x-form-input>
+                            <x-form-input name="po" label="Purchase Order Number" icon="folder-o"
+                                          value="{{$account->po}}">
+                                If this invoice should be assigned a PO, enter it here.
+                            </x-form-input>
                         </div>
+
                         <div class="row mt-2">
                             <div class="col-lg-12">
                                 <input type="submit" name="submit" value="Create Invoice"

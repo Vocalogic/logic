@@ -1,6 +1,6 @@
 <div class="card mb-2 border-{{$account->merchant_payment_token ? "success" : "danger"}}">
     <div class="card-body">
-        <h4>Payment Method</h4>
+        <h6 class="card-title">Payment Method</h6>
         <p>
             You currently have a merchant integration active. Use the form below to
             update the credit card method on file.

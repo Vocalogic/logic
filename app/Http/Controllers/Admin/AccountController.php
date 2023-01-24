@@ -184,7 +184,8 @@ class AccountController extends Controller
     {
         $terms = $request->terms ?: $account->net_terms;
         $invoice = $account->invoices()->create([
-            'due_on' => now()->addDays($terms)
+            'due_on' => now()->addDays($terms),
+            'po'     => $request->po
         ]);
         return redirect()->to("/admin/invoices/$invoice->id");
     }
