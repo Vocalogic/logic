@@ -11863,7 +11863,8 @@ wi-wind-default._345-deg {
     --chart-color3: #374765;
     --chart-color4: #484261;
     --chart-color5: #717788;
-    --sidebar-img: url(https://www.wrraptheme.com/templates/luno/dist/assets/images/sidebar-bg/sidebar-1.jpg)
+    --tr-border: #110909;
+    --sidebar-img: url(/assets/images/sidebar-bg/sidebar-1.jpg)
 }
 
 :root [data-luno="theme-blush"] {
@@ -12004,7 +12005,8 @@ wi-wind-default._345-deg {
     --card-footer: #303030;
     --body-color: #1e1f20;
     --white-color: #ffffff;
-    --sidebar-color: #262727
+    --sidebar-color: #262727;
+    --tr-border: #ffffff;
 }
 
 [data-theme="dark"] [data-luno="theme-black"] {
@@ -25765,6 +25767,12 @@ button:focus:not(:focus-visible) {
 
 .table {
     border-color: var(--border-color)
+}
+
+.tr-border {
+    border-left: 1px;
+    border-color: var(--tr-border);
+    border-style: dashed;
 }
 
 .table tr th {

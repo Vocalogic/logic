@@ -1,4 +1,4 @@
-<form method="post" action="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta">
+<form method="post" action="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta" class="require">
     @csrf
     @method('POST')
     <div class="row">
@@ -57,7 +57,7 @@
         @endforeach
     </div>
     <div class="row mt-3">
-        <input type="submit" class="btn btn-{{bm()}}primary" value="Update Requirements">
+        <input type="submit" class="btn btn-{{bm()}}primary wait" data-anchor=".require" value="Update Requirements">
     </div>
 
 </form>

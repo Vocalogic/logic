@@ -11862,7 +11862,8 @@ wi-wind-default._345-deg {
     --chart-color3: #374765;
     --chart-color4: #484261;
     --chart-color5: #717788;
-    --sidebar-img: url(https://www.wrraptheme.com/templates/luno/dist/assets/images/sidebar-bg/sidebar-1.jpg)
+    --tr-border: #efefef;
+    --sidebar-img: url(/assets/images/sidebar-bg/sidebar-1.jpg)
 }
 
 :root [data-luno="theme-blush"] {
@@ -25763,6 +25764,12 @@ button:focus:not(:focus-visible) {
 
 .table {
     border-color: var(--border-color)
+}
+
+.table tr .tr-border {
+    border-left: 1px;
+    border-color: var(--tr-border);
+    border-style: dashed;
 }
 
 .table tr th {
