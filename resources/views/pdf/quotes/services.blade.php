@@ -56,13 +56,16 @@
                                 <div class="alert alert-info" style="padding: 3px;">
                                     <b>NOTE:</b> This temporary service will be invoiced a total of {{$service->payments}} times
                                 ({{$service->frequency->getHuman()}}) and will be removed automatically.
+                                    @if(setting('quotes.showFinanceCharge') == 'Yes')
+                                        A monthly finance charge of {{$service->finance_charge}}% has been added.
+                                    @endif
                                 </div></b>
                         </td>
                         <td>
-                            ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments),2)}}</td>
-                        <t>1</t>
+                            ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments, $service->finance_charge),2)}}</td>
+                        <td>1</td>
                         <td>
-                            ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments),2)}}
+                            ${{moneyFormat($service->frequency->splitTotal($service->qty * $service->price, $service->payments, $service->finance_charge),2)}}
                         </td>
                     </tr>
                 @endif

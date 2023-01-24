@@ -191,6 +191,7 @@ class QuoteController extends Controller
             'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency,
             'payments'        => $request->payments,
+            'finance_charge'  => $request->finance_charge,
             'notes'           => $request->notes
         ]);
         sbus()->emitQuoteUpdated($quote);
