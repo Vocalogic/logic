@@ -38,22 +38,36 @@
                             <tbody>
                             @foreach($account->itemsByCategory() as $group)
                                 <tr>
-                                    <td colspan="4">
-                                        <h6 class="text-info">{{$group->name}} - {{$group->description}}</h6>
+                                    <td colspan="4" class="text-center">
+                                        <h6 class="text-info mb-0"><b>{{$group->name}}</b></h6>
+                                            <span class="small">{{$group->description}}</span>
                                     </td>
                                 </tr>
                                 @foreach($group->items as $item)
                                     @if($item->item)
-                                        <tr>
-                                            <td><a data-title="Edit {{$item->item->name}}" class="live"
+                                        <tr class="tr-border">
+                                            <td>
+                                                <a data-title="Edit {{$item->item->name}}" class="live"
                                                    href="/admin/accounts/{{$account->id}}/services/{{$item->id}}"
                                                    data-title="{{$item->item->name}}">
-                                                    <strong>[{{$item->item->code}}
-                                                        ] {{$item->item->name}}</strong></a> @if($item->item->addons()->count())
+                                                    <strong>[{{$item->item->code}}]
+                                                        {{$item->item->name}}</strong>
+                                                </a>
+                                                @if($item->item->addons()->count())
                                                     <a data-bs-toggle='tooltip' class="live"
                                                        data-title="Manage Service Addons" title='Manage Service Addons'
-                                                       href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons"><i
-                                                            class="fa fa-database"></i></a>
+                                                       href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons">
+                                                        <i class="fa fa-database"></i>
+                                                    </a>
+                                                @endif
+                                                @if($item->item->meta()->count())
+                                                <a class="live"
+                                                   data-bs-toggle="tooltip"
+                                                   data-title="Update Requirements"
+                                                   title="Update Requirements"
+                                                   href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
                                                 @endif
 
                                                 <br/><small class="text-muted">{{$item->description}}</small>
@@ -64,11 +78,6 @@
                                                 @if($item->item->meta()->count())
                                                     <br/>
                                                     {!! $item->iterateMeta() !!}
-                                                    <a class="live badge bg-primary"
-                                                       data-title="Update Requirements"
-                                                       href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta">
-                                                        <span class="small">edit requirements</span>
-                                                    </a>
                                                 @endif
 
                                                 @if($item->quote)
@@ -134,14 +143,14 @@
                             @if($account->commissionable && $account->partner)
                                 <tr>
                                     <td colspan="4" style="text-align:right">
-                                        <strong class="text-secondary">Commission to {{$account->partner->name}}
-                                            : </strong>${{moneyFormat($account->commissionable)}}
+                                        <strong class="text-secondary">Commission to {{$account->partner->name}}:
+                                        </strong>${{moneyFormat($account->commissionable)}}
                                     </td>
                                 </tr>
                                 <tr>
                                     <td colspan="4" style="text-align:right">
-                                        <strong class="text-primary">NET
-                                            Monthly: </strong>${{moneyFormat($account->mrr - $account->commissionable)}}
+                                        <strong class="text-primary">NET Monthly:
+                                        </strong>${{moneyFormat($account->mrr - $account->commissionable)}}
                                     </td>
                                 </tr>
 
