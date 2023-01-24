@@ -113,7 +113,7 @@ class AccountController extends Controller
         $account->items()->create([
             'bill_item_id' => $item->id,
             'description'  => $item->description,
-            'price'        => $item->mrc,
+            'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
         $account->update(['services_changed' => true]);
