@@ -9,6 +9,12 @@ download the quote or start services completely unassisted. We also needed flexi
 options, contract signing and more. Vocal (the phone side) and Logic (the business process) prides itself
 on efficiency for admins to perform tasks, and customer experience for the end user.
 
+#### Development Staging Deployment Status
+[![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F572f2ddb-50ec-4651-bb97-ea16be33f51e%3Fdate%3D1%26commit%3D1&style=plastic)](https://forge.laravel.com)
+
+If you are a developer contributing to the project, the deployment status to staging is shown above. As features 
+are merged into the *develop* branch, they will be auto-deployed to the staging environment. 
+
 #### Who is Logic For?
 
 Logic is designed for anyone that runs a service-based business, that needs a way to track leads, quotes,
