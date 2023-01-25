@@ -86,7 +86,8 @@ Route::get('verify/{hash}', [LandingController::class, 'verify']);
 
 // Credit Card Update
 Route::get('payment/{hash}', [ShopAccountController::class, 'paymentForm']);
-
+// Signature Save -- Stores in session
+Route::post('signature/save', [ShopController::class, 'saveSignature']);
 
 
 // Logged in user regardless of ACL
