@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Admin;
 use App\Enums\Core\CommKey;
 use App\Models\Account;
 use App\Models\Lead;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 use Livewire\Redirector;
@@ -118,7 +117,7 @@ class SearchComponent extends Component
                 'url'         => "/admin/accounts/$account->id",
                 'class'       => 'bg-secondary text-white',
                 'description' => "Account #{$account->id} created on " . $account->created_at->format("m/d/y") .
-                    " bills $" . number_format($account->mrr, 2) . " monthly."
+                    " bills $" . moneyFormat($account->mrr) . " monthly."
             ];
         }
 
