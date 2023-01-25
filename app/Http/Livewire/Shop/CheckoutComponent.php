@@ -320,13 +320,22 @@ class CheckoutComponent extends Component
     }
 
     /**
+     * Get signature from session
+     * @return string|null
+     */
+    public function getSignature() : ?string
+    {
+        return session(CommKey::LocalSignatureData->value);
+    }
+
+    /**
      * Execute Cart
      * @return RedirectResponse|null
      */
     public function execute(): mixed
     {
         $this->errorMessage = '';
-        if (!$this->signature)
+        if (!$this->getSignature())
         {
             $this->errorMessage = "You must sign in the box below, agreeing to the terms and conditions of your order before proceeding";
             return null;
@@ -345,7 +354,7 @@ class CheckoutComponent extends Component
 
         $cart = cart();
         $cart->infoData = $this->info;
-        $cart->execute($this->signName, $this->signature);
+        $cart->execute($this->signName, $this->getSignature());
         return redirect()->to("/shop/account");
     }
 

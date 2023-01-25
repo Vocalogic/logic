@@ -39,7 +39,6 @@
 
     <!-- Template css -->
     <link id="color-link" rel="stylesheet" type="text/css" href="/ec/assets/css/style.css">
-    <link rel="stylesheet" href="/assets/js/jquery.signaturepad.css">
 
 
     @livewireStyles
@@ -243,7 +242,7 @@
 
 <script src="/ec/assets/js/script.js"></script>
 <script src="/ec/assets/js/lusqsztk.js"></script>
-<script src="/assets/js/jquery.signaturepad.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
 <script src="/ec/assets/js/wow.min.js"></script>
 <script src="/ec/assets/js/custom-wow.js"></script>

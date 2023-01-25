@@ -1,15 +1,23 @@
 $(document).ready(function () {
 
     Livewire.on('initSignature', function () {
-        let sig = $('.sigPad').signaturePad(
-            {
-                drawOnly: true,
-                onDrawEnd: function () {
-                    Livewire.emit('setSignature', sig.getSignatureString());
-                    //Livewire.emit('setSignature', $('.output').val());
-                }
-            });
-        $.fn.signaturePad.clear = '.clearButton';
+        const wrapper = document.getElementById("signature-pad");
+        const canvas = wrapper.querySelector("canvas");
+        const signaturePad = new SignaturePad(canvas, {
+            // It's Necessary to use an opaque color when saving image as JPEG;
+            // this option can be omitted if only saving as PNG or SVG
+            backgroundColor: 'rgb(255, 255, 255)',
+        });
+        canvas.width = 750;
+        signaturePad.addEventListener("endStroke", () => {
+            // Once we have let go of the mouse, we will take the sigdata
+            // and send it up to a session variable. This will be polled by
+            // the execute LW component to see if a signature is found.
+            const data = signaturePad.toDataURL();
+            send("/signature/save", 'POST', {sig: data});
+        }, { once: false });
+
+
     });
 
     // Dropify

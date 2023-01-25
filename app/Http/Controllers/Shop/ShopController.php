@@ -10,6 +10,7 @@ use App\Models\BillItem;
 use App\Models\Quote;
 use App\Observers\BillItemObserver;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\View\View;
 
@@ -152,5 +153,18 @@ class ShopController extends Controller
     public function showConfirmation(BillItem $item) : View
     {
         return view('shop.confirmation', ['item' => $item]);
+    }
+
+    /**
+     * Save Signature in Session
+     * @param Request $request
+     * @return array
+     */
+    public function saveSignature(Request $request) : array
+    {
+        $signature = json_encode($request->sig);
+        session([CommKey::LocalSignatureData->value => $signature]);
+        info(print_r($signature,true));
+        return ['succuess' => true];
     }
 }

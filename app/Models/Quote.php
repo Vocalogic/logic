@@ -7,7 +7,9 @@ use App\Enums\Core\BillFrequency;
 use App\Enums\Core\BillItemType;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\LeadStatus;
+use App\Enums\Files\FileType;
 use App\Operations\Admin\AnalysisEngine;
+use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
 use App\Structs\STemplate;
 use Illuminate\Database\Eloquent\Model;
@@ -471,11 +473,16 @@ class Quote extends Model
      */
     public function reassignExecuted(Account $account, string $name, string $signature): void
     {
+        // Our new sigpad writes base64 encoded PNGs so we need to convert this into a file.
+        $lo = new LoFileHandler();
+        $x = explode(",", $signature);
+        $based = $x[1]; // everything after the base64,is the actual encoded part.
+        $file = $lo->create($this->id . "-signature.png", FileType::Image, $this->id, $based, 'image/png');
         $this->update([
             'activated_on'     => now(),
             'contract_name'    => $name,
             'contract_ip'      => app('request')->ip(),
-            'signature'        => $signature,
+            'signature_id'     => $file->id,
             'contract_expires' => $this->term ? now()->addMonths($this->term) : null,
             'status'           => 'Executed',
             'archived'         => 1,
