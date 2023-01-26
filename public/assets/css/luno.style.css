@@ -12513,9 +12513,20 @@ wi-wind-default._345-deg {
 [data-theme="high-contrast"] .bg-danger {
     background-color: #ff745b !important
 }
+[data-theme="dark"] .bg-danger{
+    background: rgba(252, 90, 105, 0.2) !important
+}
 
 [data-theme="high-contrast"] .bg-success {
     background-color: #17ff17 !important
+}
+
+[data-theme="dark"] .bg-success{
+    background: rgba(77, 202, 136, 0.2) !important
+}
+
+[data-theme="dark"] .bg-info {
+    background: rgba(79, 184, 201, 0.2) !important
 }
 
 [data-theme="high-contrast"] .btn.btn-outline-danger {
@@ -20493,6 +20504,10 @@ textarea.form-control-lg {
 .fs-6 {
     font-size: 1rem !important
 }
+.fs-7 {
+    font-size: 0.80rem !important
+}
+
 
 .fst-italic {
     font-style: italic !important
