@@ -20,7 +20,7 @@
                type="button"><i class="fa fa-plus"></i> New Account
             </a>
             <div class="card">
-                <div class="card-body">
+
                     <ul class="list-group list-group-custom">
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts">Active</a>
@@ -47,7 +47,6 @@
                             </span>
                         </li>
                     </ul>
-                </div>
             </div>
             <a class="btn btn-{{bm()}}secondary live w-100 btn-block mt-3" href="/admin/accounts/import/csv"
                data-title="Import Accounts into Logic">
