@@ -40,7 +40,7 @@
                                 <tr>
                                     <td colspan="4" class="text-center">
                                         <h6 class="text-info mb-0"><b>{{$group->name}}</b></h6>
-                                            <span class="small">{{$group->description}}</span>
+                                        <span class="small fs-7">{{$group->description}}</span>
                                     </td>
                                 </tr>
                                 @foreach($group->items as $item)
@@ -51,7 +51,8 @@
                                                    href="/admin/accounts/{{$account->id}}/services/{{$item->id}}"
                                                    data-title="{{$item->item->name}}">
                                                     <strong>[{{$item->item->code}}]
-                                                        {{$item->item->name}}</strong>
+                                                        {{$item->item->name}}
+                                                    </strong>
                                                 </a>
                                                 @if($item->item->addons()->count())
                                                     <a data-bs-toggle='tooltip' class="live"
@@ -61,16 +62,16 @@
                                                     </a>
                                                 @endif
                                                 @if($item->item->meta()->count())
-                                                <a class="live"
-                                                   data-bs-toggle="tooltip"
-                                                   data-title="Update Requirements"
-                                                   title="Update Requirements"
-                                                   href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta">
-                                                    <i class="fa fa-edit"></i>
-                                                </a>
+                                                    <a class="live"
+                                                       data-bs-toggle="tooltip"
+                                                       data-title="Update Requirements"
+                                                       title="Update Requirements"
+                                                       href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/meta">
+                                                        <i class="fa fa-hdd-o"></i>
+                                                    </a>
                                                 @endif
 
-                                                <br/><small class="text-muted">{{$item->description}}</small>
+                                                <br/><small class="text-muted fs-7">{{$item->description}}</small>
                                                 @if($item->notes)
                                                     <br/>
                                                     <small class="text-primary">{!! nl2br($item->notes) !!}</small>
@@ -80,47 +81,16 @@
                                                     {!! $item->iterateMeta() !!}
                                                 @endif
 
-                                                @if($item->quote)
-                                                    <span
-                                                        class="badge bg-{{bm()}}info">via quote #{{$item->quote->id}}</span>
-                                                @endif
-                                                @if($item->quote && $item->quote->contract_expires)
-                                                    <span class="badge bg-{{bm()}}primary">
-                                            contracted until {{$item->quote->contract_expires->format('m/d/y')}}
-                                        </span>
-                                                @endif
-                                                @if($item->frequency != \App\Enums\Core\BillFrequency::Monthly && $item->frequency)
-                                                    <span class="badge bg-{{bm()}}info">
-                                            {{$item->frequency->getHuman()}} Billing (Bills: {{$item->next_bill_date ? $item->next_bill_date->format("m/d/y") : $account->next_bill->format("m/d/y")}})
-                                        </span>
-                                                @endif
-                                                @if($item->allowed_qty)
-                                                    <br/>
-                                                    <small class='text-muted'>{{$item->allowance}}</small>
-                                                @endif
-                                                @if($item->remaining)
-                                                    <span class="badge bg-{{bm()}}primary">{{$item->remaining}} billing cycles left</span>
-                                                @endif
-                                                @if($item->terminate_on)
-                                                    <span class="badge bg-{{bm()}}danger">Terminating on {{$item->terminate_on->format("m/d/y")}} - {{$item->terminate_reason}}</span>
-                                                @endif
-                                                @if($item->suspend_on)
-                                                    <span class="badge bg-{{bm()}}warning">Suspending on {{$item->suspend_on->format("m/d/y")}} - {{$item->suspend_reason}}</span>
-                                                @endif
-
-                                                @if($item->requested_termination_date)
-                                                    <span class="badge bg-{{bm()}}warning">Customer Requested Termination on {{$item->requested_termination_date->format("m/d/y")}} - {{$item->requested_termination_reason}}</span>
-                                                @endif
-
-
                                                 @if($item->addons()->count())
                                                     <br/>
                                                     @foreach($item->addons as $addon)
-                                                        <small class="text-muted">&nbsp;&nbsp; - <a class="confirm"
-                                                                                                    data-message="Are you sure you want to remove this addon?"
-                                                                                                    data-method="DELETE"
-                                                                                                    href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons/{{$addon->id}}"><i
-                                                                    class="fa fa-trash"></i></a>
+                                                        <small class="text-muted">&nbsp;&nbsp; -
+                                                            <a class="confirm"
+                                                               data-message="Are you sure you want to remove this addon?"
+                                                               data-method="DELETE"
+                                                               href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons/{{$addon->id}}">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
                                                             <strong>{{$addon->option->addon->name}}</strong>
                                                             : {{$addon->name}} x {{$addon->qty}}
                                                             (${{moneyFormat($addon->qty * $addon->price)}})</small>
@@ -130,7 +100,7 @@
                                             </td>
                                             <td>${{moneyFormat($item->price)}}</td>
                                             <td>{{$item->qty}}</td>
-                                            <td>${{moneyFormat(($item->price * $item->qty) + $item->addonTotal)}}</td>
+                                            <td><b>${{moneyFormat(($item->price * $item->qty) + $item->addonTotal)}}</b></td>
                                         </tr>
                                     @endif
                                 @endforeach
