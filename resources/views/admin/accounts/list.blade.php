@@ -1,6 +1,6 @@
 <div class="card mt-2">
     <div class="card-body">
-        <table class="table align-middle datatable table-striped">
+        <table class="table align-middle datatable table-striped table-sm">
             <thead>
             <tr>
                 <th>Company</th>
