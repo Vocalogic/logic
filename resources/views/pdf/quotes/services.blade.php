@@ -37,7 +37,14 @@
 
                     </td>
                     <td>
-                        ${{moneyFormat($service->price,2)}}</td>
+                        ${{moneyFormat($service->price,2)}}
+                        @if($service->getCatalogPrice() > $service->price && setting('quote.showDiscount') != 'None')
+                            <br/>
+                            <span class="small text-muted fs-7"><del>${{moneyFormat($service->getCatalogPrice())}}</del>
+                                (-{{$service->getDifferenceFromCatalog()}}%)
+                            </span>
+                        @endif
+                    </td>
                     <td>
                            {{$service->qty}}</a></td>
                     <td>

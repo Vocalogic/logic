@@ -33,10 +33,18 @@
 
 
                     </td>
-                    <td>${{moneyFormat($product->price,2)}}</td>
+                    <td>${{moneyFormat($product->price,2)}}
+                        @if($product->getCatalogPrice() > $product->price && setting('quote.showDiscount') != 'None')
+                            <br/>
+                            <span class="small text-muted fs-7"><del>${{moneyFormat($product->getCatalogPrice())}}</del>
+                                (-{{$product->getDifferenceFromCatalog()}}%)
+                            </span>
+                        @endif
+                    </td>
                     <td>{{$product->qty}}</a></td>
                     <td>
-                        ${{moneyFormat(($product->qty * $product->price) + $product->addonTotal,2)}}</td>
+                        <b>${{moneyFormat(($product->qty * $product->price) + $product->addonTotal,2)}}</b>
+                    </td>
                 </tr>
             @endforeach
 
