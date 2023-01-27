@@ -132,6 +132,10 @@ class AccountController extends Controller
      */
     public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
     {
+        if (!$request->description)
+        {
+            $request->merge(['description' => $item->item->description]);
+        }
         $item->update([
             'price'           => convertMoney($request->price),
             'qty'             => $request->qty,
