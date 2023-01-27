@@ -49,6 +49,12 @@ class SettingSeeder extends Seeder
             'Enter the target profit margin percentage (default 80).', '10|99');
         $this->buildSetting('quotes.commexp', 'Include Commissions in Expenses?', 'select', 'Yes', 'Quote',
             'When calculating profit margin, include commissions?', 'Yes,No');
+        $this->buildSetting('quotes.defaultFinanceCharge', 'Default Finance Charge (in percent)', 'input', '0', 'Quote',
+            'When allowing customer to finance a product what is the default percent markup for financing?');
+        $this->buildSetting('quotes.showFinanceCharge', 'Show Finance Charge when Financed?', 'select', 'No', 'Quote',
+            'Should verbiage be added to the quote to show the finance charge markup?', 'Yes,No');
+        $this->buildSetting('quotes.showDiscount', 'Show Discount to Customer?', 'select', 'MSRP', 'Quote',
+            'When creating a quote or invoice should we show the discount to the customer?', 'MSRP,Base,None');
 
         $this->buildSetting('quotes.msrp', 'Use MSRP for Guest Quotes?', 'select', 'Yes', 'Quote',
             'When a guest creates a quote, should msrp be used or auto-apply base pricing?', 'Yes,No');

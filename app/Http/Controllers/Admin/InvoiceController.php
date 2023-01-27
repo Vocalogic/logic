@@ -75,7 +75,7 @@ class InvoiceController extends Controller
             'code'         => $item->code,
             'name'         => $item->name,
             'description'  => $item->description,
-            'price'        => $item->nrc,
+            'price'        => $invoice->account->getPreferredPricing($item),
             'qty'          => 1
         ]);
         return redirect()->back();
@@ -249,5 +249,27 @@ class InvoiceController extends Controller
             $item->update(['name' => $request->name]);
         }
         return redirect()->back();
+    }
+
+    /**
+     * Show invoice settings
+     * @param Invoice $invoice
+     * @return View
+     */
+    public function settings(Invoice $invoice): View
+    {
+        return view('admin.invoices.settings', ['invoice' => $invoice]);
+    }
+
+    /**
+     * Update invoice settings.
+     * @param Invoice $invoice
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function settingsUpdate(Invoice $invoice, Request $request): RedirectResponse
+    {
+        $invoice->update($request->all());
+        return redirect()->back()->with('message', "Settings updated successfully.");
     }
 }

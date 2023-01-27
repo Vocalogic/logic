@@ -4,7 +4,7 @@
     <i class="fa fa-plus"></i> Add New Item
 </a>
 
-<a class="live mt-3 btn w-100 btn-{{bm()}}info" data-title="Move Category for {{$item->name}}"
+<a class="live mt-3 mb-3 btn w-100 btn-{{bm()}}info" data-title="Move Category for {{$item->name}}"
    href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/category">
     <i class="fa fa-arrow-right"></i> Change Category
 </a>
@@ -16,7 +16,7 @@
 @endif
 
 
-<div class="card mt- mb-3">
+<div class="card mb-3">
     <div class="card-body">
         <h6 class="card-title mb-3 text-center">{{$item->name}}</h6>
         <ul class="list-group list-group-custom">

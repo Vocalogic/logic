@@ -336,6 +336,8 @@
 <script src="/assets/js/jquery.signaturepad.min.js"></script>
 <script src="/assets/bundles/apexcharts.bundle.js"></script>
 <script src="/assets/bundles/fullcalendar.bundle.js"></script>
+<script src="/assets/js/tinymce/tinymce.min.js"></script>
+
 
 @livewireScripts
 <script type="text/javascript" src="{{mix('/js/app.js')}}"></script>

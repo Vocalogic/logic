@@ -183,18 +183,7 @@ class BillItem extends Model
      */
     public function getFullAttribute(): string
     {
-        $config = [];
-
-        $environment = new Environment($config);
-        $environment->addExtension(new CommonMarkCoreExtension());
-        $environment->addExtension(new AutolinkExtension());
-        $environment->addExtension(new DisallowedRawHtmlExtension());
-        $environment->addExtension(new StrikethroughExtension());
-        $environment->addExtension(new TableExtension());
-        $environment->addExtension(new TaskListExtension());
-
-        $converter = new MarkdownConverter($environment);
-        return $converter->convert($this->marketing_description ?: $this->description);
+        return $this->marketing_description ?: $this->description;
     }
 
     /**

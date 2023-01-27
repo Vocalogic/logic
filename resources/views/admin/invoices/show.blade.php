@@ -15,6 +15,9 @@
             </h1>
             <small class="text-muted">
                 Total: <b>${{moneyFormat($invoice->total)}}</b> | Balance: <b>${{moneyFormat($invoice->balance)}}</b>
+                    | Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
+                                         href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
+                    </a>
             </small>
         </div>
 
@@ -23,7 +26,6 @@
 @endsection
 
 @section('content')
-
 
 <div class="row">
     <div class="col-lg-9 col-xs-12">

@@ -48,7 +48,7 @@
                         <div class="row g-2">
                             <div class="col-md-12 col-12">
                                 <div class="form-floating">
-                                        <textarea class="form-control" style="height: 200px;"
+                                        <textarea class="tinymce" style="height: 200px;"
                                                   name="marketing_description">{!! $item->marketing_description !!}</textarea>
                                     <label>Marketing Description for Shop</label>
                                     <span

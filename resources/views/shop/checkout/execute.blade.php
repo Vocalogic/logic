@@ -17,16 +17,13 @@
             </div>
         </div>
         <div class="col-md-12 mt-4">
-
-            <div class="input-field col s12 center">
-                <div class='sigPad sigWrapper'>
-                    <canvas class='pad' width='380' height='100'
-                            style='border: 1px solid #000088'></canvas>
-                    <input type='hidden' name='output' class='output' wire:model="signature">
+            <div style="border: 1px #000 solid; background: #fff;">
+                <div id="signature-pad" class="signature-pad">
+                    <div class="signature-pad--body">
+                        <canvas></canvas>
+                    </div>
                 </div>
-
             </div>
-
         </div>
         <div class="col-lg-12 mt-5">
             <span class="helper-text">Please sign your name with your mouse. This signature will be applied

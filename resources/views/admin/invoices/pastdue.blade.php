@@ -10,14 +10,14 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Models\Invoice::whereIn('status', [\App\Enums\Core\InvoiceStatus::PARTIAL->value, \App\Enums\Core\InvoiceStatus::SENT])->get() as $invoice)
+    @foreach(\App\Models\Invoice::whereIn('status', [\App\Enums\Core\InvoiceStatus::PARTIAL, \App\Enums\Core\InvoiceStatus::SENT])->get() as $invoice)
         @if(!$invoice->isPastDue)
             @continue
         @endif
         <tr>
             <td>
                 <a href="/admin/invoices/{{$invoice->id}}">
-                    <span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
+                    <span class="color-100 badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
                 </a>
                 @if($invoice->recurring)
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Monthly Invoice">

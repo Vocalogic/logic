@@ -1,9 +1,5 @@
 <div class="card">
-
-
     <div class="card-body">
-
-
         <h5 class="card-title">Recurring Items
             <a href="#newRecurring" data-bs-toggle="modal"><i class="fa fa-plus"></i></a>
         </h5>
@@ -11,7 +7,7 @@
             <thead>
             <tr>
                 <th></th>
-                <th width="75%">Item</th>
+                <th>Service</th>
                 <th>Price</th>
                 <th>QTY</th>
                 <th>Ext. Price</th>
@@ -25,7 +21,7 @@
                             <img src="{{_file($service->item->photo_id)?->relative}}" width="100">
                         @endif
                     </td>
-                    <td>
+                    <td width="{{$service->item->photo_id ? "65" : "75"}}%">
                         @if($service->canMoveDown())
                             <a data-bs-toggle='tooltip' data-bs-placement='left' title='Move Item Down'
                                href="/admin/quotes/{{$quote->id}}/items/{{$service->id}}/move/down">
@@ -42,9 +38,6 @@
                            href="/admin/quotes/{{$quote->id}}/items/{{$service->id}}">
                             [{{$service->item->code}}] {{$service->item->name}}
                         </a>
-
-
-
                         @if($service->item->addons()->count())
                             <a class='live' data-bs-toggle='tooltip' data-title="Manage Service Addons"
                                title='Manage Service Addons'
@@ -79,7 +72,14 @@
                                         </span>
                         @endif
                     </td>
-                    <td>${{moneyFormat($service->price,2)}}</a></td>
+                    <td>${{moneyFormat($service->price,2)}}</a>
+                        @if($service->getCatalogPrice() > $service->price && setting('quote.showDiscount') != 'None')
+                            <br/>
+                            <span class="small text-muted fs-7"><del>${{moneyFormat($service->getCatalogPrice())}}</del>
+                                (-{{$service->getDifferenceFromCatalog()}}%)
+                            </span>
+                        @endif
+                    </td>
                     <td>{{$service->qty}} </td>
                     <td>${{moneyFormat(($service->qty * $service->price) + $service->addonTotal,2)}}</td>
                 </tr>
@@ -120,7 +120,7 @@
             <thead>
             <tr>
                 <th></th>
-                <th width="75%">Item</th>
+                <th>Product</th>
                 <th>Price</th>
                 <th>QTY</th>
                 <th>Ext. Price</th>
@@ -134,7 +134,7 @@
                             <img src="{{_file($product->item->photo_id)?->relative}}" width="100">
                         @endif
                     </td>
-                    <td>
+                    <td width="{{$product->item->photo_id ? "65" : "75"}}%">
                         @if($product->canMoveDown())
                             <a data-bs-toggle='tooltip' data-bs-placement='left' title='Move Item Down'
                                href="/admin/quotes/{{$quote->id}}/items/{{$product->id}}/move/down">
@@ -165,24 +165,31 @@
                             @endforeach
                         @endif
 
-                            @if($product->item->meta()->count())
-                                <br/>
-                                {!! $product->iterateMeta() !!}
-                                <a class="live"
-                                   data-title="Update Requirements"
-                                   href="/admin/quotes/{{$quote->id}}/items/{{$product->id}}/meta">
-                                    <span class="small">edit requirements</span>
-                                </a>
-                            @endif
+                        @if($product->item->meta()->count())
+                            <br/>
+                            {!! $product->iterateMeta() !!}
+                            <a class="live"
+                               data-title="Update Requirements"
+                               href="/admin/quotes/{{$quote->id}}/items/{{$product->id}}/meta">
+                                <span class="small">edit requirements</span>
+                            </a>
+                        @endif
 
                         @if($product->frequency)
                             <br/> <span class="badge bg-{{bm()}}primary">{{$product->frequency->getHuman()}}
                                         financing ({{$product->payments}} payments @
-                                        ${{moneyFormat($product->frequency->splitTotal($product->qty * $product->price, $product->payments),2)}} p/{{$product->frequency->getHumanShort()}})</span>
+                                        ${{moneyFormat($product->frequency->splitTotal($product->qty * $product->price, $product->payments, $product->finance_charge),2)}} p/{{$product->frequency->getHumanShort()}})</span>
                         @endif
                         <br/>
                     </td>
-                    <td>${{moneyFormat($product->price,2)}}</a></td>
+                    <td>${{moneyFormat($product->price,2)}}</a>
+                        @if($product->getCatalogPrice() > $product->price && setting('quote.showDiscount') != 'None')
+                            <br/>
+                            <span class="small text-muted fs-7"><del>${{moneyFormat($product->getCatalogPrice())}}</del>
+                                (-{{$product->getDifferenceFromCatalog()}}%)
+                            </span>
+                        @endif
+                    </td>
                     <td>{{$product->qty}}</td>
                     <td>${{moneyFormat(($product->qty * $product->price) + $product->addonTotal,2)}}</td>
                 </tr>

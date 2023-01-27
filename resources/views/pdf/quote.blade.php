@@ -85,6 +85,10 @@
 
         @include('pdf.quotes.total')
 
+        @if($quote->signature_id)
+            @include('pdf.quotes.signature')
+        @endif
+
     </div>
 
 </div>

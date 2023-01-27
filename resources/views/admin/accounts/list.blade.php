@@ -1,6 +1,6 @@
 <div class="card mt-2">
     <div class="card-body">
-        <table class="table align-middle datatable table-striped">
+        <table class="table align-middle datatable table-striped table-sm">
             <thead>
             <tr>
                 <th>Company</th>
@@ -8,10 +8,7 @@
                 <th>MRR</th>
                 <th>Outstanding</th>
                 <th>Next Bill</th>
-                @if(\App\Models\Partner::count() > 0)
-                    <th>Partner</th>
-                @endif
-
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -24,17 +21,6 @@
                         <a href="/admin/accounts/{{$account->id}}">
                             <div class="ms-2 mb-0 fw-bold">{{$account->name}}
                         </a>
-                        <br/>
-                        @if($account->declined)
-                            <span class="badge bg-{{bm()}}danger"><i class="fa fa-exclamation"></i> declined</span>
-                        @endif
-
-                        @if (hasIntegration(\App\Enums\Core\IntegrationType::Finance) && !$account->finance_customer_id)
-                            <span class="badge bg-{{bm()}}danger">integration error</span>
-                        @endif
-                        @if($account->auto_bill)
-                            <span class="badge bg-{{bm()}}success"><i class="fa fa-check"></i>auto-pay</span>
-                        @endif
                     </td>
                     <td>{{$account->agent ? $account->agent->short : "None"}}</td>
                     <td>${{moneyFormat($account->mrr)}}
@@ -42,9 +28,25 @@
                     </td>
                     <td>${{moneyFormat($account->account_balance,2)}}</td>
                     <td>{{$account->next_bill ? $account->next_bill->format("m/d/y") : "Not Set"}}</td>
-                    @if(\App\Models\Partner::count() > 0)
-                        <td>{!! $account->partner ? "<a href='/admin/partners/{$account->partner->id}'>{$account->partner->name}</a>" : "Internal" !!}</td>
-                    @endif
+                    <td>
+                        @if($account->declined)
+                            <span class="badge bg-danger"><i class="fa fa-exclamation"></i> declined</span>
+                        @endif
+                        @if (hasIntegration(\App\Enums\Core\IntegrationType::Finance) && !$account->finance_customer_id)
+                            <span class="badge bg-danger" data-bs-toggle="tooltip" title="Accounting Integration Error"><i class="fa fa-exclamation-circle"></i></span>
+                        @endif
+                        @if($account->auto_bill)
+                            <span class="badge bg-success" data-bs-toggle="tooltip" title="Auto-Pay Enabled">
+                                <i class="fa fa-dollar"></i>
+                            </span>
+                            @endif
+
+                        @if($account->partner)
+                                <a href="/admin/partners/{{$account->partner->id}}">
+                                    <span class="badge bg-info" data-bs-toggle="tooltip" title="Partner: {{$account->partner->name}}"><i class="fa fa-compass"></i></span>
+                                </a>
+                        @endif
+                    </td>
                 </tr>
             @endforeach
             </tbody>

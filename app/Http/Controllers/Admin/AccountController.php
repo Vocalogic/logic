@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\AccountAddon;
 use App\Models\AccountItem;
+use App\Models\AccountPricing;
 use App\Models\AddonOption;
 use App\Models\BillItem;
 use App\Models\FileCategory;
@@ -19,6 +20,7 @@ use App\Models\InvoiceItem;
 use App\Models\LOFile;
 use App\Models\Quote;
 use App\Models\User;
+use App\Observers\AccountObserver;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Integrations\Accounting\Finance;
 use App\Operations\Integrations\Merchant\Merchant;
@@ -112,9 +114,10 @@ class AccountController extends Controller
         $account->items()->create([
             'bill_item_id' => $item->id,
             'description'  => $item->description,
-            'price'        => $item->mrc,
+            'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
+        AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         return redirect()->to("/admin/accounts/$account->id/services")
             ->with('message', $item->name . " added to monthly services.");
@@ -129,6 +132,10 @@ class AccountController extends Controller
      */
     public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
     {
+        if (!$request->description)
+        {
+            $request->merge(['description' => $item->item->description]);
+        }
         $item->update([
             'price'           => convertMoney($request->price),
             'qty'             => $request->qty,
@@ -139,6 +146,7 @@ class AccountController extends Controller
             'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency
         ]);
+        AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         if ($request->contract_quote_id)
         {
@@ -184,7 +192,8 @@ class AccountController extends Controller
     {
         $terms = $request->terms ?: $account->net_terms;
         $invoice = $account->invoices()->create([
-            'due_on' => now()->addDays($terms)
+            'due_on' => now()->addDays($terms),
+            'po'     => $request->po
         ]);
         return redirect()->to("/admin/invoices/$invoice->id");
     }
@@ -362,7 +371,6 @@ class AccountController extends Controller
         return view('admin.accounts.services.service_modal')->with('item', $item);
     }
 
-
     /**
      * Update account properties.
      * @param Account $account
@@ -394,7 +402,6 @@ class AccountController extends Controller
         {
             $account->getFavIcon();
         }
-
         return redirect()->back();
     }
 
@@ -824,6 +831,58 @@ class AccountController extends Controller
         return view('admin.accounts.import_modal');
     }
 
+    /**
+     * Modal to add a product or service to special pricing.
+     * @param Account $account
+     * @param string  $type
+     * @return View
+     */
+    public function pricingModal(Account $account, string $type): View
+    {
+        return view('admin.accounts.pricing.add', ['account' => $account, 'type' => $type]);
+    }
+
+    /**
+     * Add bill item to special pricing
+     * @param Account  $account
+     * @param BillItem $item
+     * @return RedirectResponse
+     */
+    public function pricingApply(Account $account, BillItem $item): RedirectResponse
+    {
+        $account->pricings()->create([
+           'bill_item_id' => $item->id,
+           'price' => $item->type == 'services' ? $item->mrc : $item->nrc,
+           'price_children' => $item->type == 'services' ? $item->mrc : $item->nrc,
+        ]);
+        return redirect()->back()->with('message', $item->name . " Added for Special Pricing");
+    }
+
+    /**
+     * X-editable updater for pricing.
+     * @param Account        $account
+     * @param AccountPricing $item
+     * @param Request        $request
+     * @return true[]
+     */
+    public function pricingUpdate(Account $account, AccountPricing $item, Request $request) : array
+    {
+        $item->update([$request->name => convertMoney($request->value)]);
+        return ['success' => true];
+    }
+
+    /**
+     * Remove special pricing entry.
+     * @param Account        $account
+     * @param AccountPricing $item
+     * @return string[]
+     */
+    public function pricingRemove(Account $account, AccountPricing $item) : array
+    {
+        session()->flash('message', $item->item->name . " removed from special pricing.");
+        $item->delete();
+        return ['callback' => 'reload'];
+    }
     /**
      * Import Leads
      * @param Request $request

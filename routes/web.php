@@ -86,7 +86,8 @@ Route::get('verify/{hash}', [LandingController::class, 'verify']);
 
 // Credit Card Update
 Route::get('payment/{hash}', [ShopAccountController::class, 'paymentForm']);
-
+// Signature Save -- Stores in session
+Route::post('signature/save', [ShopController::class, 'saveSignature']);
 
 
 // Logged in user regardless of ACL
@@ -173,7 +174,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('accounts/{account}/profile', [AccountController::class, 'profile']);
 
     Route::get('accounts/{account}/pricing', [AccountController::class, 'pricing']);
+    Route::get('accounts/{account}/pricing/{type}/add', [AccountController::class, 'pricingModal']);
+    Route::get('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingApply']);
+    Route::delete('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingRemove']);
 
+    Route::post('accounts/{account}/pricing/{item}/live', [AccountController::class, 'pricingUpdate']);
     Route::get('accounts/{account}/files', [AccountController::class, 'files']);
 
     Route::get('accounts/{account}/statement', [AccountController::class, 'statement']);
@@ -427,6 +432,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('invoices/{invoice}', [InvoiceController::class, 'show']);
     Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy']);
     Route::post('invoices/{invoice}/add', [InvoiceController::class, 'addCustomItem']);
+    Route::get('invoices/{invoice}/settings', [InvoiceController::class, 'settings']);
+    Route::post('invoices/{invoice}/settings', [InvoiceController::class, 'settingsUpdate']);
     Route::get('invoices/{invoice}/add/{item}', [InvoiceController::class, 'addItem']);
     Route::get('invoices/{invoice}/download', [InvoiceController::class, 'download']);
     Route::get('invoices/{invoice}/send', [InvoiceController::class, 'send']);

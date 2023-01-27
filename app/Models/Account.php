@@ -56,17 +56,18 @@ use Illuminate\Support\Str;
  * @property mixed         $finance_customer_id
  * @property mixed         $cc_reset_hash
  * @property mixed         $account_credit
- * @property mixed         $website
- * @property mixed         $net_days
- * @property mixed         $mrr
- * @property mixed         $invoices
- * @property mixed         $merchant_ach_aba
- * @property mixed         $merchant_ach_account
- * @property mixed         $partner
- * @property mixed         $partner_id
- * @property mixed         $commissionable
- * @property mixed         $quotes
- * @property mixed         $agent_id
+ * @property mixed $website
+ * @property mixed $net_days
+ * @property mixed $mrr
+ * @property mixed $invoices
+ * @property mixed $merchant_ach_aba
+ * @property mixed $merchant_ach_account
+ * @property mixed $partner
+ * @property mixed $partner_id
+ * @property mixed $commissionable
+ * @property mixed $quotes
+ * @property mixed $agent_id
+ * @property mixed $parent
  */
 class Account extends Model
 {
@@ -185,6 +186,33 @@ class Account extends Model
     public function recordings(): HasMany
     {
         return $this->hasMany(CallRecording::class);
+    }
+
+    /**
+     * If an account is parented to another account.
+     * @return BelongsTo
+     */
+    public function parent(): BelongsTo
+    {
+        return $this->belongsTo(Account::class);
+    }
+
+    /**
+     * Accounts can have children parented to another account.
+     * @return HasMany
+     */
+    public function children(): HasMany
+    {
+        return $this->hasMany(Account::class, 'parent_id');
+    }
+
+    /**
+     * An account can have many special pricing entries.
+     * @return HasMany
+     */
+    public function pricings(): HasMany
+    {
+        return $this->hasMany(AccountPricing::class);
     }
 
     /**
@@ -365,7 +393,7 @@ class Account extends Model
                     'bill_item_id' => $product->item->id,
                     'description'  => $product->item->description,
                     'price'        => $product->frequency->splitTotal($product->price * $product->qty,
-                        $product->payments),
+                        $product->payments, $product->finance_charge),
                     'qty'          => 1,
                     'notes'        => $product->notes,
                     'account_id'   => $this->id,
@@ -1159,6 +1187,44 @@ class Account extends Model
     public function generateHash(): void
     {
         $this->update(['hash' => uniqid('A-')]);
+    }
+
+    /**
+     * Get a list of accounts that this account could be parented to.
+     * @return array
+     */
+    public function getSelectableParents(): array
+    {
+        $data = [];
+        $data[''] = '-- Select Parent Account --';
+        foreach(self::whereNull('parent_id')->where('id', '!=', $this->id)->orderBy('name')->get() as $account)
+        {
+            $data[$account->id] = $account->name;
+        }
+        return $data;
+    }
+
+    /**
+     * If we are working on a quote for an account, or an invoice
+     * or displaying products while a customer is logged in, return
+     * the pricing for an item.
+     * @param BillItem $item
+     * @return int
+     */
+    public function getPreferredPricing(BillItem $item): int
+    {
+        // First check is to see if the actual account has special pricing
+        $pricing = $this->pricings()->where('bill_item_id', $item->id)->first();
+        if ($pricing && $pricing->price) return $pricing->price;
+        // If not found, check to see if this account has a parent.
+        // If it does then check the child pricing and apply automatically
+        if ($this->parent)
+        {
+            $pricing = $this->parent->pricings()->where('bill_item_id', $item->id)->first();
+            if ($pricing && $pricing->price_children) return $pricing->price_children;
+        }
+        // If neither are found, return the catalog price.
+        return $item->type == 'services' ? $item->mrc : $item->nrc;
     }
 
 }

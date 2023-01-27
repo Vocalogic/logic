@@ -63,6 +63,12 @@ enum CommKey: string
     case LocalFilterSession = 'shop_filters';
 
     /**
+     * When signing with the signature pad, this session key will hold the data so that our
+     * livewire components can poll it to make sure there is a valid signature.
+     */
+    case LocalSignatureData = 'signature_data';
+
+    /**
      * This is one of the few admin sessions that are held for recently viewed leads, quotes, accounts, etc
      * for easy access during the search method.
      */

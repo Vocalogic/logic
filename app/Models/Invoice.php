@@ -343,6 +343,24 @@ class Invoice extends Model
     }
 
     /**
+     * Determine the discount on an entire quote based on the
+     * pricing of each item individually if we have the setting enabled.
+     * @return int
+     */
+    public function getDiscountAttribute(): int
+    {
+        if (setting('quotes.showDiscount') == 'None') return 0;
+        $totalCatalog = 0;
+        $totalQuoted = 0;
+        foreach ($this->items as $item)
+        {
+            $totalCatalog += $item->getCatalogPrice() * $item->qty;
+            $totalQuoted += $item->price * $item->qty;
+        }
+        return $totalCatalog - $totalQuoted;
+    }
+
+    /**
      * Apply or process a payment on an invoice
      * @param PaymentMethod $method
      * @param int           $amount

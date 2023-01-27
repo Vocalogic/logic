@@ -3,6 +3,56 @@
         @method("PUT")
         @csrf
 
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="d-flex justify-content-evenly">
+                    @if($item->quote)
+                        <a href="/admin/quotes/{{$item->quote->id}}">
+                            <span class="badge bg-info">Sold via quote #{{$item->quote->id}}</span>
+                        </a>
+                    @endif
+
+                    @if($item->quote && $item->quote->contract_expires)
+                        <span class="badge bg-primary">
+                            contracted until {{$item->quote->contract_expires->format('m/d/y')}}
+                        </span>
+                    @endif
+
+                    @if($item->frequency != \App\Enums\Core\BillFrequency::Monthly && $item->frequency)
+                        <span class="badge bg-info">
+                            {{$item->frequency->getHuman()}} Billing (Bills:
+                            {{$item->next_bill_date
+                                ? $item->next_bill_date->format("m/d/y")
+                                : $account->next_bill->format("m/d/y")}})
+                        </span>
+                    @endif
+
+                    @if($item->remaining)
+                        <span class="badge bg-primary">
+                                {{$item->remaining}} billing cycles left
+                            </span>
+                    @endif
+                    @if($item->terminate_on)
+                        <span class="badge bg-danger">
+                                Terminating on {{$item->terminate_on->format("m/d/y")}} - {{$item->terminate_reason}}
+                            </span>
+                    @endif
+                    @if($item->suspend_on)
+                        <span class="badge bg-warning">
+                                Suspending on {{$item->suspend_on->format("m/d/y")}} - {{$item->suspend_reason}}
+                            </span>
+                    @endif
+
+                    @if($item->requested_termination_date)
+                        <span class="badge bg-warning">Customer Requested Termination on
+                                {{$item->requested_termination_date->format("m/d/y")}} - {{$item->requested_termination_reason}}
+                            </span>
+                    @endif
+
+                </div>
+            </div>
+        </div>
+
 
         <ul class="nav nav-tabs tab-card" role="tablist">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-pricing"
@@ -124,20 +174,24 @@
                         </span>
                     @endif
 
-                    <span class="list-group-item">
-                         <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
-                            class="confirm "
-                            data-method="DELETE"
-                            data-message="Are you sure you want to remove this service?"><i class="fa fa-trash"></i> Remove
-                    Service
-                </a>
-                    </span>
+
                 </div>
             </div>
 
-            <div class="col-lg-12 mt-2">
-                <input type="submit" name="submit" value="Update Service" class="btn btn-{{bm()}}primary wait"
-                       data-anchor=".sModalArea">
+            <div class="col-lg-12 mt-3">
+                <div class="d-flex justify-content-between">
+
+                    <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
+                       class="confirm text-danger"
+                       data-method="DELETE"
+                       data-message="Are you sure you want to remove this service?">
+                        <i class="fa fa-trash"></i> Remove Service
+                    </a>
+
+                    <input type="submit" name="submit" value="Update Service" class="btn btn-primary wait"
+                           data-anchor=".sModalArea">
+                </div>
+
             </div>
         </div>
     </form>
