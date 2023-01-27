@@ -261,7 +261,7 @@ class BillItemController extends Controller
             'description' => 'required'
         ]);
         $item->update([
-            'code'            => $request->code,
+            'code'            => strtoupper(Str::slug($request->code)),
             'name'            => $request->name,
             'description'     => $request->description,
             'tos_id'          => $request->tos_id,
@@ -588,7 +588,7 @@ class BillItemController extends Controller
         $item = (new BillItem)->create([
             'type'             => $cat->type,
             'name'             => $request->name,
-            'code'             => $request->code,
+            'code'             => strtoupper(Str::slug($request->code)),
             'slug'             => Str::slug($request->name),
             'msrp'             => convertMoney($request->price),
             'bill_category_id' => $cat->id,
@@ -890,7 +890,7 @@ class BillItemController extends Controller
 
         $new->parent_id = $item->id;
         $new->name = $request->name;
-        $new->code = $request->code;
+        $new->code = strtoupper(Str::slug($request->code));
         $new->save();
         $new->refresh();
         if ($request->copy_tags)
@@ -1159,7 +1159,7 @@ class BillItemController extends Controller
      * @param Request      $request
      * @return RedirectResponse
      */
-    public function changeCategory(BillCategory $cat, BillItem $item, Request $request)
+    public function changeCategory(BillCategory $cat, BillItem $item, Request $request) : RedirectResponse
     {
         $item->update(['bill_category_id' => $request->category_id]);
         return redirect()->back()->with('message', 'Category Updated Successfully');
