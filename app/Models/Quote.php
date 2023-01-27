@@ -222,6 +222,24 @@ class Quote extends Model
     }
 
     /**
+     * Determine the discount on an entire quote based on the
+     * pricing of each item individually if we have the setting enabled.
+     * @return int
+     */
+    public function getDiscountAttribute(): int
+    {
+        if (setting('quotes.showDiscount') == 'None') return 0;
+        $totalCatalog = 0;
+        $totalQuoted = 0;
+        foreach ($this->items as $item)
+        {
+            $totalCatalog += $item->getCatalogPrice() * $item->qty;
+            $totalQuoted += $item->price * $item->qty;
+        }
+        return $totalCatalog - $totalQuoted;
+    }
+
+    /**
      * Create a small card for rendering the activity widget
      * with some details on the quote.
      * @return string

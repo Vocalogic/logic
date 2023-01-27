@@ -13,11 +13,7 @@
                         <td colspan="8">{!! nl2br($quote->notes) !!}</td>
                     </tr>
                 @endif
-
-
             </tbody>
-
-
         </table>
     </div>
 </div>

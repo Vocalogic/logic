@@ -77,5 +77,39 @@ class InvoiceItem extends Model
             <i class='fa fa-$icon text-$color'>{$pm}{$perc}%</span>";
     }
 
+    /**
+     * This method will get the increase or decrease price difference
+     * in percentage based on the catalog pricing.
+     * @return int
+     */
+    public function getDifferenceFromCatalog(): int
+    {
+        $catalogPrice = $this->getCatalogPrice();
+        $diff = $this->price / $catalogPrice;
+        return 100 - round($diff * 100);
+    }
+
+    /**
+     * Get catalog price based on the settings of either MSRP
+     * or base pricing.
+     * @return int
+     */
+    public function getCatalogPrice(): int
+    {
+        if (setting('quotes.showDiscount') == 'None') return 0;
+        $catalogPrice = 0;
+        if (!$this->item) return 0;  // Can be a manual product here. No catalog comparison
+        if (setting('quotes.showDiscount') == 'Base')
+        {
+            $catalogPrice = $this->item->type == 'services' ? $this->item->mrc : $this->item->nrc;
+        }
+        elseif (setting('quotes.showDiscount') == 'MSRP')
+        {
+            $catalogPrice = $this->item->msrp;
+        }
+        if ($catalogPrice <= 0) return 0;
+        return $catalogPrice;
+    }
+
 
 }

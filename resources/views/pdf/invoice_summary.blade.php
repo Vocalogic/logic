@@ -365,18 +365,33 @@
         @foreach($invoice->items as $product)
             <tr>
                 <td>
-
-
                     <span class="bold" style="font-size:12px;">[{{$product->code}}] - {{$product->name}}</span>
                     <br/>
                     <small class="helper-text">{!! $product->description !!}</small>
 
                 </td>
-                <td align="center">${{moneyFormat($product->price)}}</td>
+                <td align="center">${{moneyFormat($product->price)}}
+                    @if($product->getCatalogPrice() > $product->price && setting('quote.showDiscount') != 'None')
+                        <br/>
+                        <span class="small" style="font-size:10px;"><del>${{moneyFormat($product->getCatalogPrice())}}</del>
+
+                            </span>
+                    @endif
+                </td>
                 <td align="center">{{$product->qty}}</a></td>
                 <td align="center">${{moneyFormat($product->qty * $product->price)}}</td>
             </tr>
         @endforeach
+
+        @if(setting('quotes.showDiscount') != 'None')
+            <tr style="background: #393e44; color: #fff;">
+                <td>&nbsp;</td>
+                <td align="right"><span class="bold" style="font-size:14px;">Discount:</span></td>
+                <td>&nbsp;</td>
+                <td align="center"><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
+                </td>
+            </tr>
+        @endif
 
         <tr style="background: #393e44; color: #fff;">
             <td>&nbsp;</td>
