@@ -35,7 +35,7 @@ review their services, pay invoices, or get help.
 * Flexible configuration and branding
 * Integration Support - such as syncing invoices and payments to Quickbooks Online.
 
-### Check out the [live demo here](https://demo.logic.host).
+### Check out the [live demo here](https://demo.logic.host/login).
 
 This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2.
 
