@@ -322,8 +322,8 @@ class GraphSeries
                     $mrr = $mrrMetric->value;
                     break;
                 }
-                $day->addDay(); // Move to next day
-                if ($day->day == $end->day)
+                $day->addDays(5); // Move through week faster.
+                if ($day->day >= $end->day || $day->month != $end->month)
                 {
                     break; // Stay with 0.
                 }
