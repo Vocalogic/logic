@@ -20,6 +20,7 @@ use App\Models\InvoiceItem;
 use App\Models\LOFile;
 use App\Models\Quote;
 use App\Models\User;
+use App\Observers\AccountObserver;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Integrations\Accounting\Finance;
 use App\Operations\Integrations\Merchant\Merchant;
@@ -116,6 +117,7 @@ class AccountController extends Controller
             'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
+        AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         return redirect()->to("/admin/accounts/$account->id/services")
             ->with('message', $item->name . " added to monthly services.");
@@ -140,6 +142,7 @@ class AccountController extends Controller
             'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency
         ]);
+        AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         if ($request->contract_quote_id)
         {
