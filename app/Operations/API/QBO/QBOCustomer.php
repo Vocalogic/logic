@@ -120,7 +120,7 @@ class QBOCustomer extends QBOCore
             $data['ParentRef'] = [
                 'value' => $account->parent->finance_customer_id
             ];
-            $data['Job'] = false;
+            $data['Job'] = true;
         }
 
         $res = $this->qsend("customer", 'post', $data);
