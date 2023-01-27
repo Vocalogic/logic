@@ -86,6 +86,8 @@ class QBOCustomer extends QBOCore
             }
         }
 
+
+
         $data = [
             'FullyQualifiedName' => $account->name,
             'PrimaryEmailAddr'   => [
@@ -111,6 +113,13 @@ class QBOCustomer extends QBOCore
         {
             $data['SyncToken'] = $token;
             $data['Id'] = $account->finance_customer_id;
+        }
+        // We need to check to see if this account has a parent, if so link it here.
+        if ($account->parent && $account->parent->finance_customer_id) // Parent has to have sync first.
+        {
+            $data['ParentRef'] = [
+                'value' => $account->parent->finance_customer_id
+            ];
         }
 
         $res = $this->qsend("customer", 'post', $data);
