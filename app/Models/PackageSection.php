@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property mixed $questions
+ */
 class PackageSection extends Model
 {
     protected $guarded = ['id'];
@@ -26,5 +29,20 @@ class PackageSection extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(PackageSectionQuestion::class, 'package_section_id');
+    }
+
+    /**
+     * Remove all section questions, logic, options, and self.
+     * @return void
+     */
+    public function safeDelete() : void
+    {
+        foreach ($this->questions as $question)
+        {
+            $question->logics()->delete();
+            $question->options()->delete();
+            $question->delete();
+        }
+        $this->delete();
     }
 }

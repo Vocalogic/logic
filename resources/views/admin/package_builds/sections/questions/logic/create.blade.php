@@ -1,7 +1,7 @@
 <p class="card-text">
     Logic Operations will execute the adding of items depending on the answers to questions.
 </p>
-<form method="POST"
+<form method="POST" class="logicform"
       action="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/{{$logic->id ?: null}}">
     @csrf
     @method($logic->id ? 'PUT' : "POST")
@@ -66,8 +66,17 @@
 
 
     <div class="row mt-3">
-        <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Logic">
+        <div class="col-lg-6">
+            @if($logic->id)
+                <a class="confirm text-danger" data-message="Are you sure you want to remove this logic statement?"
+                   data-method="DELETE"
+                   href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/{{$logic->id}}">
+                    <i class="fa fa-times"></i> Remove Logic Operation
+                </a>
+                @endif
+        </div>
+        <div class="col-lg-6">
+            <input type="submit" class="btn btn-{{bm()}}primary pull-right wait" data-anchor=".logicform" value="Save Logic">
         </div>
     </div>
 </form>

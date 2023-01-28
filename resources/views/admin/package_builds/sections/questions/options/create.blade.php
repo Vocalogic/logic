@@ -1,7 +1,7 @@
 <p class="card-text">
     Create options/tags/etc for dropdowns, product selections and more.
 </p>
-<form method="POST"
+<form method="POST" class="optModal"
       action="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/options/{{$option->id ?: null}}">
     @csrf
     @method($option->id ? 'PUT' : "POST")
@@ -44,14 +44,22 @@
 
            @endif
 
-
-
-
     </div>
 
     <div class="row mt-3">
-        <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Option">
+        <div class="col-lg-6">
+        @if($option->id)
+
+                <a class="text-danger confirm"
+                   href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/options/{{$option->id}}"
+                   data-method="DELETE"
+                   data-message="Are you sure you want to remove this option?">
+                   <i class="fa fa-times"></i> Remove Option
+                </a>
+            @endif
+            </div>
+        <div class="col-lg-6">
+            <input type="submit" class="btn btn-primary pull-right wait" data-anchor=".optModal" value="Save Option">
         </div>
     </div>
 </form>

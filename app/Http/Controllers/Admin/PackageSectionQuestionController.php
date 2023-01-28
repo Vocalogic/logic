@@ -105,5 +105,23 @@ class PackageSectionQuestionController extends Controller
         return redirect()->back()->with('message', "Question Updated Successfully");
     }
 
+    /**
+     * Remove a question.
+     * @param PackageBuild           $packageBuild
+     * @param PackageSection         $section
+     * @param PackageSectionQuestion $question
+     * @return string[]
+     */
+    public function destroy( PackageBuild $packageBuild,
+        PackageSection $section,
+        PackageSectionQuestion $question) : array
+    {
+        $question->logics()->delete();
+        $question->options()->delete();
+        $question->delete();
+        session()->flash('message', 'Question Removed');
+        return ['callback' => 'reload'];
+    }
+
 
 }

@@ -28,7 +28,7 @@
                         @foreach($build->sections as $section)
                             <tr>
                                 <td><a href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions">{{$section->name}}</a>
-                                    <a class="live" data-title="Edit {{$section->name}}"
+                                    <a class="live pull-right" data-title="Edit {{$section->name}}"
                                        href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}">
                                         <i class="fa fa-edit"></i>
                                     </a>

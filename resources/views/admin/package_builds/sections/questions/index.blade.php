@@ -30,10 +30,9 @@
                         @foreach($section->questions as $question)
                             <tr>
                                 <td>
-                                    {{$question->question}}
                                     <a class="live" data-title="Edit {{$question->name}}"
                                        href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}">
-                                        <i class="fa fa-edit"></i>
+                                        {{$question->question}}
                                     </a>
                                 </td>
                                 <td>{{$question->type}}</td>

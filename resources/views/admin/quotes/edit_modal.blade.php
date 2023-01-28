@@ -80,9 +80,9 @@
 
 
         <div class="col-lg-12 mt-2">
-            <input type="submit" name="submit" value="Update Item" class="btn btn-{{bm()}}primary wait"
+            <input type="submit" name="submit" value="Update Item" class="btn btn-primary wait pull-right"
                    data-anchor=".sModalArea">
-            <a class="confirm btn btn-danger pull-right"
+            <a class="confirm text-danger"
                data-message="Are you sure you want to remove {{$item->item->name}}?"
                href="/admin/quotes/{{$quote->id}}/del/{{$item->id}}"
                data-method="DELETE">

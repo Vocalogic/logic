@@ -87,4 +87,22 @@ class PackageSectionController
         return redirect()->back()->with('message', "Section Updated Successfully");
     }
 
+    /**
+     * Remove an entire section.
+     * @param PackageBuild   $packageBuild
+     * @param PackageSection $section
+     * @return string[]
+     */
+    public function destroy(PackageBuild $packageBuild, PackageSection $section) : array
+    {
+        foreach($section->questions as $question)
+        {
+            $question->logics()->delete();
+            $question->options()->delete();
+            $question->delete();
+        }
+        $section->delete();
+        session()->flash('message', 'Section removed');
+        return ['callback' => 'reload'];
+    }
 }

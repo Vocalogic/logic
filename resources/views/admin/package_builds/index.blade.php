@@ -26,7 +26,7 @@
                         @foreach(\App\Models\PackageBuild::all() as $build)
                             <tr>
                                 <td><a href="/admin/package_builds/{{$build->id}}/sections">{{$build->name}}</a>
-                                    <a class="live" data-title="Edit {{$build->name}}"
+                                    <a class="live pull-right" data-title="Edit {{$build->name}}"
                                        href="/admin/package_builds/{{$build->id}}">
                                         <i class="fa fa-edit"></i>
                                     </a>
