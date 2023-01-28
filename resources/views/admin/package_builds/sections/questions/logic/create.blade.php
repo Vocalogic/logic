@@ -66,7 +66,7 @@
 
 
     <div class="row mt-3">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             @if($logic->id)
                 <a class="confirm text-danger" data-message="Are you sure you want to remove this logic statement?"
                    data-method="DELETE"
@@ -74,9 +74,9 @@
                     <i class="fa fa-times"></i> Remove Logic Operation
                 </a>
                 @endif
+                <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                    <i class="fa fa-save"></i> Save Operation Logic</button>
         </div>
-        <div class="col-lg-6">
-            <input type="submit" class="btn btn-{{bm()}}primary pull-right wait" data-anchor=".logicform" value="Save Logic">
-        </div>
+
     </div>
 </form>

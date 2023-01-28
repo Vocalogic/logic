@@ -18,8 +18,7 @@
 
         <div class="col-lg-12 mt-3">
             <div class="form-floating">
-                <textarea class="form-control" name="description" style="height: 100px;">{!! $build->description !!}
-                </textarea>
+                <textarea class="form-control" name="description" style="height: 100px;">{!! $build->description !!}</textarea>
                 <label>Description:</label>
                 <span class="helper-text">Enter a brief description of this service</span>
             </div>

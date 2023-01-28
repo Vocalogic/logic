@@ -22,12 +22,13 @@ mix.webpackConfig({
  */
 mix.js([
     'resources/js/app.js',
-    'node_modules/ladda/js/ladda.js'
+    'node_modules/ladda/js/ladda.js',
+    'node_modules/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
 ], 'public/js/app.js');
 
 mix.styles([
     'node_modules/ladda/dist/ladda-themeless.min.css',
-
+    'node_modules/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css'
 ], 'public/css/all.css');
 
 mix.js('resources/js/cart.js', 'public/js');

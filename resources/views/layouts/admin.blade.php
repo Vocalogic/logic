@@ -18,7 +18,6 @@
 
     <link rel="stylesheet" href="/assets/css/dataTables.min.css">
     <link rel="stylesheet" href="/assets/css/select2.min.css">
-    <link rel="stylesheet" href="/assets/css/x-editable.min.css"/>
     <link rel="stylesheet" href="/assets/css/dropify.min.css">
     <link rel="stylesheet" href="/assets/plugin/rating/rating.css"/>
     <link rel="stylesheet" href="/assets/js/wm/waitMe.css">
@@ -324,7 +323,6 @@
 <script src="/assets/bundles/select2.bundle.js"></script>
 <script src="/assets/bundles/bootstraptagsinput.bundle.js"></script>
 <script src="/assets/bundles/bootstrapdatepicker.bundle.js"></script>
-<script src="/assets/bundles/x-editable.bundle.js"></script>
 <script src="/assets/bundles/dropify.bundle.js"></script>
 <script src="/assets/bundles/rating.bundle.js"></script>
 <script src="/assets/js/wm/waitMe.min.js"></script>

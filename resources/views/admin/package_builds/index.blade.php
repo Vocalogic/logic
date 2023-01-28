@@ -6,7 +6,7 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <a class="w-100 btn btn-block btn-{{bm()}}primary live" data-title="Create new Package"
+            <a class="w-100 btn btn-block btn-primary live" data-title="Create new Package"
                href="/admin/package_builds/create">
                 <i class="fa fa-plus"></i> New Package
             </a>
