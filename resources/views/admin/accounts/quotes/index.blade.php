@@ -32,8 +32,8 @@
                 </div>
             </div>
 
-            <a class="btn btn-{{bm()}}primary" href="#newQuote" data-bs-toggle="modal"><i class="fa fa-plus"></i> new
-                quote</a>
+            <a class="btn btn-primary" href="#newQuote" data-bs-toggle="modal">
+                <i class="fa fa-plus"></i> new quote</a>
 
             <x-modal name="newQuote" title="Create Quote for {{$account->name}}">
                 <p class="mb-3">
@@ -53,8 +53,8 @@
                                 Enter the name for the quote.
                             </x-form-input>
                             <div class="row mt-2">
-                                <div class="offset-4 col-lg-6">
-                                    <button type="submit" name="submit" class="btn btn-primary ladda w-100"
+                                <div class="col-lg-12">
+                                    <button type="submit" class="btn btn-primary ladda pull-right"
                                             data-style="zoom-out">
                                         <i class="fa fa-plus"></i> Create Quote
                                     </button>

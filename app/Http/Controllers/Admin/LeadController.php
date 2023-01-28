@@ -81,7 +81,7 @@ class LeadController extends Controller
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
         }
         $lead->update($request->all());
-        return redirect()->to("/admin/leads/$lead->id");
+        return redirect()->to("/admin/leads/$lead->id")->with('message', $lead->company . " updated successfully.");
     }
 
     /**

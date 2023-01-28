@@ -85,8 +85,9 @@
 
 
                     <div class="col-12 mb-3">
-                        <input type="submit" class="btn btn-primary rounded wait w-100" data-anchor=".newLead"
-                               value="Save">
+                        <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                            <i class="fa fa-save"></i> Create Lead
+                        </button>
                     </div>
                 </div>
 

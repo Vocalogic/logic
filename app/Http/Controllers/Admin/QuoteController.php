@@ -87,8 +87,8 @@ class QuoteController extends Controller
             'expires_on' => now()->addDays((int)setting('quotes.length'))
         ]);
         sysact(ActivityType::Lead, $lead->id,
-            "started <a href='/admin/leads/$lead->id/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
-        return redirect()->to("/admin/leads/$lead->id/quotes/$quote->id");
+            "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
+        return redirect()->to("/admin/quotes/$quote->id");
     }
 
     /**

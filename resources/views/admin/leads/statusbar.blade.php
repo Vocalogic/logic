@@ -1,4 +1,4 @@
-<a class="btn btn-outline-info w-100 btn-block  mt-3" href="#newLead" data-bs-toggle="modal"
+<a class="btn btn-primary w-100 btn-block  mt-3" href="#newLead" data-bs-toggle="modal"
    type="button"><i class="fa fa-plus"></i> New Lead
 </a>
 
