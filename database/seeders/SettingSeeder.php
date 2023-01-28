@@ -79,7 +79,7 @@ class SettingSeeder extends Seeder
         $this->buildSetting('quotes.subtractExpense', 'Subtract Expenses before Commission?', 'select', 'No', 'Quote',
             'Should opex expenses be subtracted before figuring commission?', 'Yes,No');
 
-        $this->buildSetting('quotes.msa', 'Master Services Agreement', 'textarea', $this->getMSA(), 'MSA',
+        $this->buildSetting('quotes.msa', 'Master Services Agreement', 'tinymce', $this->getMSA(), 'MSA',
             'Enter the text to be shown for signing the master services agreement. All TOS will be appeneded afterwards.');
 
         // Invoice Setup
