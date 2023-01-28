@@ -7,6 +7,7 @@ use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\AccountAddon;
+use App\Models\AccountItem;
 use App\Models\Addon;
 use App\Models\AddonOption;
 use App\Models\BillCategory;
@@ -14,6 +15,7 @@ use App\Models\BillItem;
 use App\Models\BillItemFaq;
 use App\Models\BillItemMeta;
 use App\Models\BillItemTag;
+use App\Models\QuoteItem;
 use App\Models\QuoteItemAddon;
 use App\Models\Tag;
 use App\Models\TagCategory;
@@ -24,6 +26,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Stripe\Service\AccountService;
 
 
 class BillItemController extends Controller
@@ -1175,6 +1178,28 @@ class BillItemController extends Controller
     {
         $crumbs = $this->generateCrumbs($cat, $item);
         return view('admin.bill_items.generator', ['item' => $item, 'crumbs' => $crumbs]);
+    }
+
+    /**
+     * Reassign descriptions based on new item description
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @return string[]
+     */
+    public function respec(BillCategory $cat, BillItem $item): array
+    {
+        // Update Account Items
+        foreach(AccountItem::where('bill_item_id', $item->id)->get() as $as)
+        {
+            $as->update(['description' => $item->description]);
+        }
+        // Update Quote Items
+        foreach(QuoteItem::where('item_id', $item->id)->get() as $qi)
+        {
+            $qi->update(['description' => $item->description]);
+        }
+        session()->flash('message', "Descriptions updated on all account services and quotes.");
+        return ['callback' => 'reload'];
     }
 
 }
