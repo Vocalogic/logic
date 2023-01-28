@@ -35,8 +35,9 @@
             @endforeach
             </tbody>
         </table>
-        <a class="btn btn-{{bm()}}primary" data-bs-toggle="modal" href="#newStatus"><i class="fa fa-plus"></i> Add
-            Status</a>
+        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" href="#newStatus">
+            <i class="fa fa-plus"></i> new status
+        </a>
     </div>
 </div>
 

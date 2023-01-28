@@ -43,6 +43,7 @@ class Tag extends Model
     static public function selectable(?BillCategory $category = null): array
     {
         $data = [];
+        $data[''] = '-- Select Tag --';
         if ($category)
         {
             $tagcats = TagCategory::orderBy('name')->where('bill_category_id', $category->id)->get();

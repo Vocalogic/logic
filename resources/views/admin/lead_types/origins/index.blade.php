@@ -20,8 +20,9 @@
             @endforeach
             </tbody>
         </table>
-        <a class="btn btn-{{bm()}}primary" data-bs-toggle="modal" href="#newOrigin"><i class="fa fa-plus"></i> Add
-            Origin</a>
+        <a class="btn btn-primary btn-sm" data-bs-toggle="modal" href="#newOrigin">
+            <i class="fa fa-plus"></i> new origin
+        </a>
     </div>
 </div>
 
@@ -41,16 +42,16 @@
                     </p>
                     <div class="row g-3 mb-4">
                         <div class="col-lg-12 col-md-12">
-                            <div class="form-floating">
-                                <input type="text" class="form-control" name="name" value="">
-                                <label>Origin Name</label>
-                                <span class="helper-text">Enter the Lead Origin</span>
-                            </div>
+                            <x-form-input name="name"  label="Origin Name" icon="file-text-o">
+                                Enter the Lead Origin (where did a lead come from?)
+                            </x-form-input>
                         </div>
 
                     </div>
                         <div class="col-lg-12 col-md-12 mt-3">
-                            <input type="submit" class="btn btn-primary rounded" value="Save">
+                            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Save Origin
+                            </button>
                         </div>
                 </form>
             </div>

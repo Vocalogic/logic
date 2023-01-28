@@ -1,5 +1,9 @@
 <p class="mb-3">
-    Team members added here will be sent an invite and password reset link to login.
+    Team members added here will be sent an invite and password reset link to login. If you need to
+    send a password request you can
+    <a class="confirm text-primary" data-method="GET"
+       data-message="Are you sure you want to send a password reset request?"
+       href="/admin/users/{{$u->id}}/reset">send a password reset request</a> here.
 </p>
 <form method="post" action="/admin/users/{{$u->id}}" class="formAnchor">
     @method('PUT')
@@ -50,7 +54,8 @@
         <div class="row mt-3">
             <div class="col-xxl-12 col-md-12">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" {{$u->requires_approval ? "checked" : null}} role="switch" value="1" id="approval"
+                    <input class="form-check-input" type="checkbox"
+                           {{$u->requires_approval ? "checked" : null}} role="switch" value="1" id="approval"
                            name="requires_approval">
                     <label class="form-check-label" for="approval">Require Approval for Quotes</label>
                 </div>
@@ -112,14 +117,31 @@
         </div>
 
 
+    </div>
+    <div class="row mt-3">
 
-        <div class="col-lg-12 col-md-12 mt-3">
-            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".formAnchor" value="Save">
+        <div class="col-lg-6">
+            @if($u->active)
+                <a class="confirm text-danger" data-method="DELETE"
+                   href="/admin/users/{{$u->id}}"
+                   data-message="Are you sure you want to deactivate {{$u->name}}?">
+                    <i class="fa fa-times"></i> Deactivate {{$u->name}}
+                </a>
+            @else
+                <a class="confirm text-info" data-method="DELETE"
+                   href="/admin/users/{{$u->id}}"
+                   data-message="Are you sure you want to reactivate {{$u->name}}?">
+                    <i class="fa fa-check"></i> Reactivate {{$u->name}}
+                </a>
+            @endif
 
-            <a class="confirm mt-3 btn btn-light-primary pull-right" data-method="GET"
-               data-message="Are you sure you want to send a password reset request?"
-               href="/admin/users/{{$u->id}}/reset">Send Password Reset Link</a>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Update {{$u->name}}</i>
+            </button>
         </div>
 
+    </div>
 
 </form>

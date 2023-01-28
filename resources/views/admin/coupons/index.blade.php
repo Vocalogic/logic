@@ -16,7 +16,6 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <a href="/admin/coupons/create" class="btn btn-{{bm()}}primary"><i class="fa fa-plus"></i> Create Coupon</a>
                     <table class="table table-sm mt-2">
                         <thead>
                         <tr>
@@ -41,6 +40,7 @@
                     </table>
                 </div>
             </div>
+            <a href="/admin/coupons/create" class="btn btn-primary mt-3"><i class="fa fa-plus"></i> Create Coupon</a>
         </div>
     </div>
 @endsection

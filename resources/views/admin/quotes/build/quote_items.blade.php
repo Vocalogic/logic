@@ -93,10 +93,10 @@
                                     <span class="text-muted">No Recurring Items Found</span>
 
                                 </div>
-                                <a class="btn btn-{{bm()}}primary border lift" data-bs-toggle="modal"
+                                <a class="btn btn-primary border lift" data-bs-toggle="modal"
                                    href="#newRecurring"><i class="fa fa-plus"></i> Add
                                     Recurring Service</a>
-                                <a class="btn btn-{{bm()}}secondary border lift" data-bs-toggle="modal"
+                                <a class="btn btn-secondary border lift" data-bs-toggle="modal"
                                    href="#recurringCopy"><i class="fa fa-copy"></i> Copy From Quote</a>
                             </div>
                         </div>
@@ -203,10 +203,10 @@
                                     <span class="text-muted">No One-Time Items Found</span>
 
                                 </div>
-                                <a class="btn btn-{{bm()}}primary border lift" data-bs-toggle="modal"
+                                <a class="btn btn-primary border lift" data-bs-toggle="modal"
                                    href="#oneModal"><i class="fa fa-plus"></i> Add
                                     One-time Item</a>
-                                <a class="btn btn-{{bm()}}secondary border lift" data-bs-toggle="modal"
+                                <a class="btn btn-secondary border lift" data-bs-toggle="modal"
                                    href="#oneCopy"><i class="fa fa-copy"></i> Copy From Quote</a>
                             </div>
                         </div>

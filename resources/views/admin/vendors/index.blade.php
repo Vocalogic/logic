@@ -110,7 +110,9 @@
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 mt-3">
-                                <input type="submit" class="btn btn-primary rounded" value="Save">
+                                <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                    <i class="fa fa-save"></i> Save Vendor
+                                </button>
                             </div>
 
 

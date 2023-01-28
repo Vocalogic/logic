@@ -39,16 +39,23 @@ class TermEditorComponent extends Component
         $this->converted = $this->converter->convert($this->data);
     }
 
+    /**
+     * Show terms component
+     * @return View
+     */
     public function render(): View
     {
         $this->convert();
         return view('admin.terms.component');
     }
 
+    /**
+     * Update terms of service
+     * @return void
+     */
     public function save() : void
     {
         $this->term->update(['body' => $this->data]);
-
     }
 
 }

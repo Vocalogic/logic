@@ -141,7 +141,11 @@
 
 
                                 <div class="row g-3 mb-4">
-                                    <input type="submit" class="btn btn-{{bm()}}primary wait" value="Save">
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                            <i class="fa fa-save"></i> Save Company Profile
+                                        </button>
+                                    </div>
                                 </div>
 
 

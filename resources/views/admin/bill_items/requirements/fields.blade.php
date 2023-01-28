@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-lg-12 mt-3">
-        <a class="mt-4 live btn btn-{{bm()}}primary" data-title="Add new Requirement"
+        <a class="mt-4 live btn btn-primary" data-title="Add new Requirement"
            href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/meta">
             <i class="fa fa-plus"></i> Add new Requirement
         </a>
@@ -43,12 +43,12 @@
         </table>
 
         @if($item->type == 'products')
-            <a class="mt-2 btn btn-{{bm()}}primary" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
-                Save and Continue
+            <a class="mt-2 btn btn-primary pull-right" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
+                <i class="fa fa-save"></i> Save and Continue
             </a>
         @else
-            <a class="mt-2 btn btn-{{bm()}}primary" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variation">
-                Save and Continue
+            <a class="mt-2 btn btn-primary pull-right" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variation">
+                <i class="fa fa-save"></i> Save and Continue
             </a>
         @endif
 

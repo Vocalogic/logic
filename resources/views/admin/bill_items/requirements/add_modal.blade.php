@@ -64,15 +64,17 @@
 
     <div class="row mt-3">
         <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary" value="Save">
             @if($meta->id)
                 <a href="/admin/category/{{$cat->id}}/items/{{$item->id}}/meta/{{$meta->id}}"
-                   class="btn btn-danger confirm pull-right"
-                    data-message="Are you sure you want to remove this item?"
+                   class="confirm text-danger"
+                   data-message="Are you sure you want to remove this item?"
                    data-method="DELETE">
                     <i class="fa fa-trash"></i> Remove Requirement
                 </a>
             @endif
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Save Requirement
+            </button>
         </div>
     </div>
 

@@ -26,7 +26,7 @@
         @endif
 
 
-        <a class="mt-3 confirm btn btn-{{bm()}}primary"
+        <a class="mt-3 confirm btn btn-info pull-right"
            data-method="GET"
            data-message="This will send {{$account->name}} a request to re-add their credit card. Are you sure you want to do this?"
            href="/admin/accounts/{{$account->id}}/paymentRequest"><i class="fa fa-recycle"></i> Request new Credit Card</a>

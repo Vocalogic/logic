@@ -66,7 +66,7 @@
         </div>
     </div>
     <div class="row mt-3">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             @if($section->id)
                 <a class="confirm text-danger" data-message="Are you sure you want to remove this section?"
                    data-method="DELETE"
@@ -74,11 +74,9 @@
                     <i class="fa fa-times"></i> Remove Section
                 </a>
             @endif
-        </div>
+            <button type="submit" class="btn btn-primary pull-right ladda" data-style='zoom-out'>
+                <i class='fa fa-save'></i> Save Section</button>
 
-
-        <div class="col-lg-6">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Section">
         </div>
     </div>
 </form>

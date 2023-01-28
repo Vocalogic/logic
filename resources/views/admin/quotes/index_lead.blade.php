@@ -41,9 +41,9 @@
                         <div class="mt-4 mb-3">
                             <span class="text-muted">No quotes found.</span>
                         </div>
-                        <a class="btn btn-{{bm()}}primary border lift"
-                           href="/admin/leads/{{$lead->id}}/quotes/create"><i class="fa fa-plus"></i> New
-                            Quote</a>
+                        <a class="btn btn-primary border lift"
+                           href="/admin/leads/{{$lead->id}}/quotes/create"><i class="fa fa-plus"></i>
+                            Create New Quote</a>
                     </div>
                 </div>
             @else

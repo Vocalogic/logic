@@ -52,7 +52,14 @@
                                 </div>
 
 
-                                <input type="submit" class="btn btn-primary mt-3" value="Update Template">
+
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-lg-12">
+                                <button type="submit" class="btn btn-primary mt-3 ladda pull-right" data-style="zoom-out">
+                                    <i class="fa fa-save"></i> Update Template
+                                </button>
                             </div>
                         </div>
                     </form>

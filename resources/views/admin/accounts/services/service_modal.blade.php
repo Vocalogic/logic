@@ -188,10 +188,10 @@
                         <i class="fa fa-trash"></i> Remove Service
                     </a>
 
-                    <input type="submit" name="submit" value="Update Service" class="btn btn-primary wait"
-                           data-anchor=".sModalArea">
+                    <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
+                        <i class="fa fa-save"></i> Update Service
+                    </button>
                 </div>
-
             </div>
         </div>
     </form>

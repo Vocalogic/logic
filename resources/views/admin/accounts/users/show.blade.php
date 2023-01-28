@@ -24,9 +24,10 @@
                 Select access level for user.
             </x-form-select>
             <div class="row mb-3">
-                <div class="offset-4 col-lg-8 mt-3">
-                    <input type="submit" class="btn w-100 btn-primary rounded wait" data-anchor=".userForm"
-                           value="Save">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                        <i class="fa fa-save"></i> Save {{$u->name}}
+                    </button>
                 </div>
             </div>
         </div>

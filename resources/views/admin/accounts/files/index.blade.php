@@ -26,7 +26,7 @@
 
                 <div class="col-lg-3">
                     <a href="#uploadFileModal" data-bs-toggle="modal"
-                       class="btn btn-{{bm()}}primary text-light mb-3 w-100"><i
+                       class="btn btn-primary mb-3 w-100"><i
                             class="fa fa-upload"></i> Upload File</a>
                     <div class="card">
                         <div class="card-body">
@@ -89,8 +89,9 @@
 
                     </div>
                     <input type="file" name="uploaded" class="drop"/>
-                    <input type="submit" name="submit" class="btn btn-sm btn-primary mt-3 wait"
-                           data-anchor=".uploadForm" value="Upload File">
+                    <button type="submit" class="btn btn-primary mt-3 ladda pull-right" data-style="zoom-out">
+                           <i class="fa fa-file-o"></i> Upload File
+                    </button>
                 </form>
             </x-modal>
 

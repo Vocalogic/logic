@@ -73,8 +73,8 @@
                 </tbody>
             </table>
 
-            <a href="#newUser" data-bs-toggle="modal" class="mt-3 btn btn-{{bm()}}primary">
-                <i class="fa fa-plus"></i>new user</a>
+            <a href="#newUser" data-bs-toggle="modal" class="mt-3 btn btn-primary">
+                <i class="fa fa-plus"></i> new user</a>
         </div>
 
     </div>
@@ -107,9 +107,10 @@
                         Select access level for user.
                     </x-form-select>
                     <div class="row mb-3">
-                        <div class="col-lg-12 col-md-12 mt-3">
-                            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".modal"
-                                   value="Save">
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Add User
+                            </button>
                         </div>
                     </div>
                 </form>

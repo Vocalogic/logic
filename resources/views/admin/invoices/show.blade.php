@@ -67,11 +67,7 @@
                                 @endif
 
                                 <td class="text-center">${{moneyFormat($item->price)}} {!! $item->variation_detail !!}</td>
-                                <td class="text-center">{{$item->qty}}  <a class="confirm text-danger"
-                                                                           data-message="Are you sure you want to remove this item?"
-                                                                           data-method="DELETE"
-                                                                           href="/admin/invoices/{{$invoice->id}}/rem/{{$item->id}}">
-                                        <i class="fa fa-trash"></i></a></td>
+                                <td class="text-center">{{$item->qty}}</td>
                                 <td class="text-center">${{moneyFormat($item->price * $item->qty)}}
 
                                 </td>

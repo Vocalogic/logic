@@ -108,10 +108,12 @@
 
             </div>
             <div class="row g-3 mb-4">
-                <input type="submit" class="btn btn-{{bm()}}primary wait w-25 updateDetails" value="Save">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
+                        <i class='fa fa-save'></i> Save Contact Information
+                    </button>
+                </div>
             </div>
-
-
         </form>
     </div>
 </div>
@@ -151,7 +153,14 @@
                                     (ex. What is the client waiting on?)</span>
                     </div>
                 </div>
-                <input type="submit" class="btn btn-{{bm()}}primary mt-2" value="Update Forecast Information">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-primary mt-2 ladda pull-right" data-style="zoom-out">
+                            <i class='fa fa-edit'></i> Update Forecast Information
+                        </button>
+                    </div>
+                </div>
+
             </form>
 
         @endif

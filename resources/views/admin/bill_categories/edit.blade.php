@@ -1,4 +1,5 @@
-<form method="post" action="/admin/bill_categories/{{$type}}/{{$cat->id}}" class="editForm" enctype="multipart/form-data">
+<form method="post" action="/admin/bill_categories/{{$type}}/{{$cat->id}}" class="editForm"
+      enctype="multipart/form-data">
     @method('PUT')
     @csrf
     <div class="row g-3 mb-4">
@@ -24,8 +25,6 @@
                 <label>Category Name for Shop</label>
                 <span class="helper-text">How do we show this category in the shop?</span>
             </div>
-
-
 
 
         </div>
@@ -69,10 +68,10 @@
     <div class="row mb-3">
 
         <div class="col-lg-12 col-md-12">
-            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".editForm" data-message="Saving Category.." value="Save">
+            <button type="submit" class="btn btn-primary pull-right ladda">
+                <i class="fa fa-save"></i> Save Category
+            </button>
         </div>
-
-
     </div>
 
 </form>

@@ -31,18 +31,21 @@
 
     </div>
 
-
-    <div class="col-lg-12 col-md-12 mt-3">
-        <input type="submit" class="btn btn-primary rounded wait" data-anchor=".addItem" value="Save">
-        <a class="btn btn-{{bm()}}danger confirm"
-           data-method="DELETE"
-           data-message="Are you sure you want to remove this item from this coupon?"
-           href="/admin/coupons/{{$coupon->id}}/items/{{$item->id}}">
-            <i class="fa fa-trash"></i> Remove Item
-        </a>
+    <div class="row mt-4">
+        <div class="col-lg-6">
+            <a class="text-danger confirm"
+               data-method="DELETE"
+               data-message="Are you sure you want to remove this item from this coupon?"
+               href="/admin/coupons/{{$coupon->id}}/items/{{$item->id}}">
+                <i class="fa fa-trash"></i> Remove Item
+            </a>
+        </div>
+        <div class="col-lg-6">
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Save Requirements
+            </button>
+        </div>
     </div>
-
-
 
 
 </form>

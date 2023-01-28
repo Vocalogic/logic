@@ -15,7 +15,9 @@
                                         <label>TOS Body</label>
                                         <span class="helper-text">Enter the Terms of Service (in markdown format)</span>
                                     </div>
-                                    <input type="submit" name="save" class="btn btn-light-primary" value="Save TOS">
+                                    <button type="submit" wire:click="save" class="btn btn-primary pull-right">
+                                        <i class="fa fa-save"></i> Save TOS
+                                    </button>
                                 </div>
                             </form>
                         </div>
