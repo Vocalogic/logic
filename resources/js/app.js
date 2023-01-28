@@ -1,4 +1,5 @@
 require('./bootstrap');
+import * as Ladda from 'ladda';
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -37,6 +38,8 @@ $(document).ready(function () {
             }
         );
     }
+
+    Ladda.bind('button[type=submit]');
 
 
     /**
@@ -205,6 +208,8 @@ $(document).ready(function () {
                 modal.find('.modal-title').text(title);
                 modal.find('.modal-body').html(data);
                 modal.modal('show');
+                Ladda.bind('button[type=submit]');
+
             });
         });
 
@@ -411,6 +416,7 @@ $(document).ready(function () {
             title: title,
             icon: "error",
         });
+        Ladda.stopAll();
     }
 
     /**

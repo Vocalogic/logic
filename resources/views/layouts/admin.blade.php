@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="/assets/css/luno.style.css">
     <link rel="stylesheet" href="/assets/css/logic.css">
     <link rel="stylesheet" href="/assets/css/bootstrapdatepicker.min.css">
-
+    <link rel="stylesheet" href="{{mix('/css/all.css')}}">
 
 
     <style>

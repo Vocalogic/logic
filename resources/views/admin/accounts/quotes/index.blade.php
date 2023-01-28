@@ -53,9 +53,12 @@
                                 Enter the name for the quote.
                             </x-form-input>
                             <div class="row mt-2">
-                                <div class="col-lg-6">
-                                    <input type="submit" name="submit" value="Create" class="btn btn-primary wait"
-                                           data-anchor=".quoteForm">
+                                <div class="offset-4 col-lg-6">
+                                    <button type="submit" name="submit" class="btn btn-primary ladda w-100"
+                                            data-style="zoom-out">
+                                        <i class="fa fa-plus"></i> Create Quote
+                                    </button>
+
                                 </div>
                             </div>
                         </form>

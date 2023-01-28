@@ -264,9 +264,11 @@ class QuoteController extends Controller
      * @param Quote   $quote
      * @param Request $request
      * @return RedirectResponse|array
+     * @throws LogicException
      */
     public function destroy(Quote $quote, Request $request): RedirectResponse|array
     {
+        if (!$request->reason) throw new LogicException("You must enter a reason for the decline.");
         $quote->update(['declined_reason' => $request->reason]);
         sysact(ActivityType::AccountQuote, $quote->id, "declined Quote #$quote->id ($request->reason)");
         $quote->delete();
@@ -274,7 +276,7 @@ class QuoteController extends Controller
         {
             return ['callback' => "reload"];
         }
-        return redirect()->to("/admin/quotes");
+        return redirect()->to("/admin/quotes")->with('message', "Quote #$quote->id Declined");
     }
 
     /**
