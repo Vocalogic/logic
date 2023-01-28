@@ -15,12 +15,11 @@
 @section('content')
     <div class="row">
         <div class="col-lg-2 col-xs-12">
-            <a class="btn btn-outline-info live w-100 mb-4" data-title="Create new Account"
+            <a class="btn btn-primary live w-100 mb-4" data-title="Create new Account"
                href="/admin/accounts/create"
                type="button"><i class="fa fa-plus"></i> New Account
             </a>
             <div class="card">
-
                     <ul class="list-group list-group-custom">
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts">Active</a>
