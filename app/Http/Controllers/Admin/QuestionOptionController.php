@@ -46,6 +46,29 @@ class QuestionOptionController extends Controller
         ]);
     }
 
+
+    /**
+     * Show Update Option Modal
+     * @param PackageBuild                 $packageBuild
+     * @param PackageSection               $section
+     * @param PackageSectionQuestion       $question
+     * @param PackageSectionQuestionOption $option
+     * @return View
+     */
+    public function show(
+        PackageBuild $packageBuild,
+        PackageSection $section,
+        PackageSectionQuestion $question,
+        PackageSectionQuestionOption $option
+    ): View {
+        return view('admin.package_builds.sections.questions.options.create', [
+            'build'    => $packageBuild,
+            'section'  => $section,
+            'question' => $question,
+            'option'   => $option
+        ]);
+    }
+
     /**
      * Store new option for a question.
      * @param PackageBuild           $packageBuild
@@ -67,4 +90,47 @@ class QuestionOptionController extends Controller
         ]);
         return redirect()->back()->with('message', "Option Created Successfully");
     }
+
+    /**
+     * Update Option
+     * @param PackageBuild                 $packageBuild
+     * @param PackageSection               $section
+     * @param PackageSectionQuestion       $question
+     * @param PackageSectionQuestionOption $option
+     * @param Request                      $request
+     * @return RedirectResponse
+     */
+    public function update(
+        PackageBuild $packageBuild,
+        PackageSection $section,
+        PackageSectionQuestion $question,
+        PackageSectionQuestionOption $option,
+        Request $request
+    ): RedirectResponse {
+        $request->validate(['option' => 'required']);
+        $option->update([
+            'option'      => $request->option,
+            'description' => $request->description
+        ]);
+        return redirect()->back()->with('message', "Option updated");
+    }
+
+    /**
+     * Remove Option
+     * @param PackageBuild                 $packageBuild
+     * @param PackageSection               $section
+     * @param PackageSectionQuestion       $question
+     * @param PackageSectionQuestionOption $option
+     * @return string[]
+     */
+    public function destroy( PackageBuild $packageBuild,
+        PackageSection $section,
+        PackageSectionQuestion $question,
+        PackageSectionQuestionOption $option) : array
+    {
+        session()->flash('message', "Option removed");
+        $option->delete();
+        return ['callback' => 'reload'];
+    }
+
 }

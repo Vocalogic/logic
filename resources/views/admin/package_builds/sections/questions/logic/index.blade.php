@@ -41,11 +41,6 @@
                                     <b>Addon To: </b> {{$logic->addon->addon->item->name}} <br/>{{$logic->addon->addon->name}} - {{$logic->addon->name}}
                                 @endif
                             </a>
-                            <a class="confirm" data-message="Are you sure you want to remove this logic statement?"
-                               data-method="DELETE"
-                               href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/{{$logic->id}}">
-                                <i class="fa fa-trash"></i>
-                            </a>
                         </td>
                         <td>{{$logic->answer_equates}} {{$logic->answer}}</td>
                         <td>{{$logic->qty_from_answer ? "From Answer" : $logic->qty}}</td>

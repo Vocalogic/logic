@@ -86,7 +86,7 @@ class InvoiceItem extends Model
     {
         $catalogPrice = $this->getCatalogPrice();
         $diff = $this->price / $catalogPrice;
-        return 100 - round($diff * 100);
+        return (int) (100 - round($diff * 100));
     }
 
     /**
