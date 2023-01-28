@@ -11,7 +11,7 @@
         </p>
     </div>
 </div>
-<a class="btn btn-{{bm()}}primary mt-3 live"
+<a class="btn btn-primary mt-3 live"
    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/addons/create" data-title="Create new Addon Group"><i
         class="fa fa-plus"></i> Create new Addon Group</a>
 
@@ -57,6 +57,6 @@
     </tbody>
 </table>
 
-<a class="btn btn-{{bm()}}primary mt-3"
+<a class="btn btn-primary mt-3 pull-right"
    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/tags">
-    Save and Continue</a>
+    <i class="fa fa-save"></i> Save and Continue</a>

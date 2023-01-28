@@ -24,11 +24,11 @@
                 </div>
 
                 <div class="row mt-3">
-                    <div class="offset-4 col-8">
-                        <input type="submit" class="w-100 btn btn-{{bm()}}primary wait"
-                               data-anchor=".createForm"
-                               data-message="Creating Item.."
-                               value="Save">
+                    <div class="col-lg-12">
+                        <button type="submit" class="btn btn-primary ladda pull-right"
+                                data-style="zoom-out">
+                            <i class="fa fa-plus"></i> Save {{ucfirst(\Illuminate\Support\Str::singular($type))}}
+                        </button>
                     </div>
                 </div>
             </div>

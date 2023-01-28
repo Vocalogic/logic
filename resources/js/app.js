@@ -551,6 +551,11 @@ $(document).ready(function () {
         $('.drop').dropify();
     });
 
+    Livewire.on('initLadda', () => {
+        Ladda.bind('button[type=submit]');
+    });
+
+
     Livewire.on('initDatePicker', () => {
         $('.datepicker').datepicker({});
     });

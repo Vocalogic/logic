@@ -21,15 +21,16 @@
 
 
         <div class="col-lg-12 col-md-12 mt-3">
-            <input type="submit" class="btn btn-primary" name="submit" value="Save">
             @if($faq->id)
-                <a class="pull-right confirm btn btn-danger" data-message="Are you sure you want to delete this FAQ?"
+                <a class="confirm text-danger" data-message="Are you sure you want to delete this FAQ?"
                    data-method="DELETE"
                    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/faqs/{{$faq->id}}"><i class="fa fa-trash"></i>
                     Delete FAQ</a>
             @endif
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Save FAQ
+            </button>
         </div>
-
     </div>
 
 </form>

@@ -1,4 +1,5 @@
-<form method="post" action="{{$option->id ? "/admin/category/$cat->id/items/$item->id/addons/$addon->id/options/$option->id" : "/admin/category/$cat->id/items/$item->id/addons/$addon->id/options/"}}">
+<form method="post"
+      action="{{$option->id ? "/admin/category/$cat->id/items/$item->id/addons/$addon->id/options/$option->id" : "/admin/category/$cat->id/items/$item->id/addons/$addon->id/options/"}}">
     @method($option->id ? 'PUT' : 'POST')
     @csrf
     <h6 class="fw-bold">Addon Option</h6>
@@ -50,17 +51,18 @@
     </div>
 
     <div class="row mt-2">
-        <div class="col-lg-6">
-            <input type="submit" class="btn btn-{{bm()}}primary" value="Save Option">
-        </div>
-        @if($option->id)
-            <div class="col-lg-6">
-                <a class="btn btn-{{bm()}}danger confirm"
+        <div class="col-lg-12">
+            @if($option->id)
+                <a class="text-danger confirm"
                    data-method="DELETE"
+                   data-loading="Removing Option.."
                    data-message="Are you sure you want to remove this option?"
-                   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/addons/{{$addon->id}}/options/{{$option->id}}"><i class="fa fa-trash"></i> Remove Option</a>
-            </div>
+                   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/addons/{{$addon->id}}/options/{{$option->id}}"><i
+                        class="fa fa-trash"></i> Remove Option</a>
             @endif
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Save Option
+            </button>
+        </div>
     </div>
-
 </form>
