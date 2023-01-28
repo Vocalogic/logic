@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\CommKey;
+use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -39,6 +41,11 @@ class UserController extends Controller
      */
     public function update(User $user, Request $request): RedirectResponse
     {
+        $request->validate([
+            'name'  => "required",
+            'email' => "required",
+            Rule::unique('users')->ignore($user->id)
+        ]);
         $user->update([
             'name'              => $request->name,
             'email'             => $request->email,
@@ -53,7 +60,7 @@ class UserController extends Controller
             'acl'               => $request->acl,
             'requires_approval' => (bool)$request->requires_approval
         ]);
-        return redirect()->to("/admin/users");
+        return redirect()->to("/admin/users")->with('message', $user->name . " updated.");
     }
 
 
@@ -75,6 +82,10 @@ class UserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'name'  => "required",
+            'email' => "required|email|unique:users"
+        ]);
         $u = (new User)->create([
             'account_id'       => 1,
             'name'             => $request->name,
@@ -98,7 +109,6 @@ class UserController extends Controller
      */
     public function toggleMode(): RedirectResponse
     {
-
         if (isset(user()->preferences['mode']))
         {
             $mode = user()->preference('mode') == 'dark' ? 'light' : 'dark';
@@ -123,6 +133,21 @@ class UserController extends Controller
         session()->flush();
         auth()->loginUsingId($uid);
         return redirect()->to("/");
+    }
+
+    /**
+     * Deactivate a User
+     * @param User $user
+     * @return string[]
+     * @throws LogicException
+     */
+    public function destroy(User $user): array
+    {
+        // anti-lockout
+        if ($user->id == 1) throw new LogicException("You cannot deactivate the global administrator user.");
+        $user->update(['active' => !$user->active]);
+        session()->flash('message', "$user->name activation state updated.");
+        return ['callback' => 'redirect:/admin/users'];
     }
 
 }

@@ -13,8 +13,8 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-6">
-            <div class="card border-primary">
+        <div class="offset-lg-3 col-lg-6 col-xs-12">
+            <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">File Categories</h6>
                     <p>
@@ -42,7 +42,7 @@
                         </tbody>
                     </table>
 
-                    <a class="btn btn-{{bm()}}info" href="/admin/file_categories/create"><i class="fa fa-plus"></i> new file category</a>
+                    <a class="btn btn-primary" href="/admin/file_categories/create"><i class="fa fa-plus"></i> new file category</a>
                 </div>
             </div>
 

@@ -6,15 +6,18 @@
 @section('pre')
     <div class="row align-items-center">
         <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">File Categories</h1>
-            <small class="text-muted">Created/Edit File Categories for Account File Storage.</small>
+            <h1 class="fs-5 color-900 mt-1 mb-0">File Categories
+            @if($category->id) - {{$category->name}} @endif</h1>
+            <small class="text-muted">
+                Created/Edit File Categories for Account File Storage.
+            </small>
         </div>
     </div> <!-- .row end -->
 
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-6">
+        <div class="offset-lg-3 col-lg-6 col-xs-12">
             <div class="card">
                 <div class="card-body">
 
@@ -25,7 +28,8 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" name="name" {{$category->locked ? "disabled" : null}} value="{{$category->name}}">
+                                    <input type="text" class="form-control" name="name"
+                                           {{$category->locked ? "disabled" : null}} value="{{$category->name}}">
                                     <label>Category Name:</label>
                                     <span class="helper-text">Enter category (i.e. Supporting Documentation)</span>
                                 </div>
@@ -53,25 +57,23 @@
 
 
                         <div class="row mt-3">
-                            <div class="col-lg-12">
-
-                                <input type="submit" name="submit" value="Save" class="btn btn-{{bm()}}primary">
+                            <div class="col-lg-6">
                                 @if($category->id && !$category->locked)
-                                    <a class="confirm btn btn-{{bm()}}danger pull-right"
+                                    <a class="confirm text-danger"
                                        data-message="Are you sure you want to delete this category? Any files associated will be moved into the Unsorted folder on each account."
                                        data-method="DELETE" href="/admin/file_categories/{{$category->id}}"><i
                                             class="fa fa-trash"></i> Remove File Category</a>
                                 @endif
                             </div>
+                            <div class="col-lg-6">
+                                <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                    <i class="fa fa-save"></i> Save Category
+                                </button>
+                            </div>
                         </div>
-
-
                     </form>
-
-
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

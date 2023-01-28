@@ -41,7 +41,6 @@
                 </div>
             </div>
             <a href="/admin/coupons/create" class="btn btn-primary mt-3"><i class="fa fa-plus"></i> Create Coupon</a>
-
         </div>
     </div>
 @endsection
