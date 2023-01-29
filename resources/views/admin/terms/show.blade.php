@@ -13,7 +13,24 @@
 @endsection
 
 @section('content')
-        @livewire('admin.term-editor-component', ['term' => $term])
-
-
+    <div class="row">
+        <div class="col-lg-12">
+            <form method="post" action="/admin/terms/{{$term->id}}">
+                @csrf
+                @method('PUT')
+                <div class="row">
+                    <div class="col-lg-12">
+                        <textarea name="body" class="tinymce">{!! $term->body !!}</textarea>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Save Service Terms
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 @endsection

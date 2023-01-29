@@ -31,9 +31,10 @@
 
 
                         </div>
-                        <div class="offset-4 col-lg-8 mt-2">
-                            <input type="submit" name="save" value="Update Billing Settings"
-                                   class="btn w-100 btn-light-primary wait">
+                        <div class="col-lg-12 mt-2">
+                            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Save Billing Settings
+                            </button>
                         </div>
                     </div>
                 </form>

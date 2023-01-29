@@ -2,7 +2,8 @@
     Questions are used to gather information that can be used to add items to a quote/cart and to
     collect information required for starting service(s).
 </p>
-<form method="POST" action="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id ?: null}}">
+<form method="POST" class="questionmodal"
+      action="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id ?: null}}">
     @csrf
     @method($question->id ? 'PUT' : "POST")
     <div class="row">
@@ -41,9 +42,6 @@
         </div>
 
 
-
-
-
     </div>
     <div class="row mt-3">
         <div class="col-lg-4">
@@ -65,7 +63,8 @@
 
         <div class="col-lg-4">
             <div class="form-floating">
-                <input type="text" name="question_equates_to" value="{{$question->question_equates_to}}" class="form-control">
+                <input type="text" name="question_equates_to" value="{{$question->question_equates_to}}"
+                       class="form-control">
                 <label>Compared Value:</label>
                 <span class="helper-text">Enter the comparing value for the previous question.</span>
             </div>
@@ -85,7 +84,17 @@
 
     <div class="row mt-3">
         <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Question">
+            @if($question->id)
+                <a class="confirm text-danger" data-message="Are you sure you want to remove this question?"
+                   data-method="DELETE"
+                   href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}">
+                    <i class="fa fa-times"></i> Remove Question
+                </a>
+            @endif
+            <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                <i class="fa fa-save"></i> Save Question
+            </button>
+
         </div>
     </div>
 </form>

@@ -72,10 +72,12 @@
             </div> <!-- .row end -->
 
             <div class="row mt-3">
-                <div class="col-xl-6">
-                    <input type="submit" class="btn btn-outline-primary wait" data-message="Updating Photos.."
-                           value="Save and Continue">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                        <i class="fa fa-save"></i> Save and Continue
+                    </button>
                 </div>
+
             </div>
 
 

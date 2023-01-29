@@ -7,7 +7,7 @@
     </div>
 
 </div>
-<a class="mt-2 btn btn-{{bm()}}primary live mt-3"
+<a class="mt-2 btn btn-primary live mt-3"
    data-title="Assign Tag to {{$item->name}}"
    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/tags/create">
     <i class="fa fa-plus"></i> Assign new Tag
@@ -32,6 +32,6 @@
 
     </tbody>
 </table>
-<a class="mt-2 btn btn-{{bm()}}primary" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/faq">
-    Save and Continue
+<a class="mt-2 btn btn-primary pull-right" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/faq">
+   <i class="fa fa-save"></i> Save and Continue
 </a>

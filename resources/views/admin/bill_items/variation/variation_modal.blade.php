@@ -63,11 +63,12 @@
         </div>
 
         <div class="row mb-3">
-            <div class="col-lg-6">
-                <input type="submit" class="btn btn-{{bm()}}primary wait" data-anchor=".newVariant" value="Create">
+            <div class="col-lg-12">
+                <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                    <i class="fa fa-save"></i> Create Variation
+                </button>
             </div>
         </div>
-
 
     </form>
 </div>

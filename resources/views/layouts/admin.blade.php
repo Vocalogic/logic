@@ -18,7 +18,6 @@
 
     <link rel="stylesheet" href="/assets/css/dataTables.min.css">
     <link rel="stylesheet" href="/assets/css/select2.min.css">
-    <link rel="stylesheet" href="/assets/css/x-editable.min.css"/>
     <link rel="stylesheet" href="/assets/css/dropify.min.css">
     <link rel="stylesheet" href="/assets/plugin/rating/rating.css"/>
     <link rel="stylesheet" href="/assets/js/wm/waitMe.css">
@@ -34,7 +33,7 @@
     <link rel="stylesheet" href="/assets/css/luno.style.css">
     <link rel="stylesheet" href="/assets/css/logic.css">
     <link rel="stylesheet" href="/assets/css/bootstrapdatepicker.min.css">
-
+    <link rel="stylesheet" href="{{mix('/css/all.css')}}">
 
 
     <style>
@@ -324,7 +323,6 @@
 <script src="/assets/bundles/select2.bundle.js"></script>
 <script src="/assets/bundles/bootstraptagsinput.bundle.js"></script>
 <script src="/assets/bundles/bootstrapdatepicker.bundle.js"></script>
-<script src="/assets/bundles/x-editable.bundle.js"></script>
 <script src="/assets/bundles/dropify.bundle.js"></script>
 <script src="/assets/bundles/rating.bundle.js"></script>
 <script src="/assets/js/wm/waitMe.min.js"></script>
@@ -339,8 +337,14 @@
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 
 
-@livewireScripts
+
+
+    @livewireScripts
 <script type="text/javascript" src="{{mix('/js/app.js')}}"></script>
+@if(setting('account.maps_key'))
+    <script>function handlePlace(place){}</script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key={{setting('account.maps_key')}}&callback=handlePlace"></script>
+@endif
 @yield('javascript')
 
 </body>

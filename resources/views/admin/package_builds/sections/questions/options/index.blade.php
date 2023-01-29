@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <a class="w-100 btn btn-block btn-{{bm()}}primary live" data-title="Create new Option"
+            <a class="w-100 btn btn-block btn-primary live" data-title="Create new Option"
                href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/options/create">
                 <i class="fa fa-plus"></i> New Option
             </a>

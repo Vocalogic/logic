@@ -52,8 +52,8 @@ enum BillFrequency: string
         {
             $total += $total * ($financeCharge / 100);
         }
-        if ($numPayments <= 0) return $total;
-        return round($total / $numPayments);
+        if ($numPayments <= 0) return (int) $total;
+        return (int) round($total / $numPayments);
     }
 
     /**

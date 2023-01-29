@@ -36,7 +36,7 @@
         </div>
 
     </div>
-    <div class="row  mb-3">
+    <div class="row mb-3">
         <div class="col-lg-6 col-md-12">
             <div class="form-floating">
                 <input type="text" class="form-control" name="order_email" value="{{$vendor->order_email}}">
@@ -44,10 +44,14 @@
                 <span class="helper-text">E-mail address for sending hardware orders.</span>
             </div>
         </div>
+
         <div class="col-lg-12 col-md-12 mt-3">
-            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".modal" value="Update {{$vendor->name}}">
-            <a class="confirm btn btn-danger" data-message="Are you sure you want to remove this vendor?"
+            <a class="confirm text-danger" data-message="Are you sure you want to remove this vendor?"
                data-method="DELETE" href="/admin/vendors/{{$vendor->id}}"><i class="fa fa-trash"></i> Remove {{$vendor->name}}</a>
+            <button type="submit" class="btn btn-primary ladda pull-right">
+                <i class="fa fa-save"></i> Save Vendor
+            </button>
+
         </div>
 
 

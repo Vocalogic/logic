@@ -37,7 +37,7 @@
                     @include('admin.accounts.invoices.paid')
                 </div>
             </div>
-            <a class="btn btn-{{bm()}}primary" href="#newInvoice" data-bs-toggle="modal"><i
+            <a class="btn btn-primary" href="#newInvoice" data-bs-toggle="modal"><i
                     class="fa fa-plus"></i> new invoice</a>
 
         </div>
@@ -73,8 +73,9 @@
 
                         <div class="row mt-2">
                             <div class="col-lg-12">
-                                <input type="submit" name="submit" value="Create Invoice"
-                                       class="btn btn-{{bm()}}primary w-100 wait" data-anchor=".newInvoiceForm">
+                                <button type="submit" class="btn btn-primary ladda pull-right">
+                                    <i class="fa fa-plus"></i> Create Invoice
+                                </button>
                             </div>
                         </div>
                     </div>

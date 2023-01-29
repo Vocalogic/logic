@@ -2,7 +2,8 @@
     Creating a package builder will allow customers that visit your shop to build a
     quote based on answers to basic questions.
 </p>
-<form method="POST" action="/admin/package_builds/{{$build->id ? "$build->id" : null}}">
+<form method="POST" class="buildForm"
+      action="/admin/package_builds/{{$build->id ? "$build->id" : null}}">
     @csrf
     @method($build->id ? 'PUT' : "POST")
     <div class="row">
@@ -17,8 +18,7 @@
 
         <div class="col-lg-12 mt-3">
             <div class="form-floating">
-                <textarea class="form-control" name="description" style="height: 100px;">{!! $build->description !!}
-                </textarea>
+                <textarea class="form-control" name="description" style="height: 100px;">{!! $build->description !!}</textarea>
                 <label>Description:</label>
                 <span class="helper-text">Enter a brief description of this service</span>
             </div>
@@ -26,8 +26,17 @@
 
     </div>
     <div class="row mt-3">
-        <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Build">
+        <div class="col-lg-6">
+            @if($build->id)
+                <a class="confirm text-danger" data-message="Are you sure you want to remove this section?"
+                   data-method="DELETE"
+                   href="/admin/package_builds/{{$build->id}}">
+                    <i class="fa fa-times"></i> Remove Package Build
+                </a>
+            @endif
+        </div>
+        <div class="col-lg-6">
+            <input type="submit" class="btn btn-primary pull-right wait" data-anchor=".buildForm" value="Save Build">
         </div>
     </div>
 </form>

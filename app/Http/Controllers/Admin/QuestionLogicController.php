@@ -175,7 +175,7 @@ class QuestionLogicController extends Controller
         // Make sure there are no addons that were associated to thie entry.
         foreach ($question->logics as $l)
         {
-            if ($l->add_addon_id)
+            if ($l->addon && $l->addon->addon && $l->addon->addon->item && $logic->addedItem)
             {
                 if ($l->addon->addon->item->id == $logic->addedItem->id)
                 {

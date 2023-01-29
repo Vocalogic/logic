@@ -39,14 +39,24 @@
     <div class="row mb-2">
         <div class="col-lg-12">
             <div class="form-floating">
-                <textarea style="height:200px;" class="form-control" name="description">{{$item->description}}</textarea>
+                <textarea style="height:200px;" class="form-control"
+                          name="description">{{$item->description}}</textarea>
                 <label>Description</label>
                 <span class="helper-text">Update description for product/service.</span>
             </div>
         </div>
     </div>
     <div class="row mb-2">
-        <input type="submit" name="save" value="Save" data-anchor='.formAnchor' class="wait btn btn-{{bm()}}primary">
+        <div class="col-lg-12">
+            <a class="confirm text-danger"
+               data-message="Are you sure you want to remove this item?"
+               data-method="DELETE"
+               href="/admin/invoices/{{$invoice->id}}/rem/{{$item->id}}">
+                <i class="fa fa-trash"></i> Remove Item from Invoice</a>
+            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                <i class="fa fa-save"></i> Update {{$item->name}}
+            </button>
+        </div>
     </div>
 
 

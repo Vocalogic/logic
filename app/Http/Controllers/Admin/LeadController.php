@@ -81,7 +81,7 @@ class LeadController extends Controller
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
         }
         $lead->update($request->all());
-        return redirect()->to("/admin/leads/$lead->id");
+        return redirect()->to("/admin/leads/$lead->id")->with('message', $lead->company . " updated successfully.");
     }
 
     /**
@@ -144,6 +144,8 @@ class LeadController extends Controller
      */
     public function uploadLogo(Lead $lead, Request $request): RedirectResponse
     {
+        if (!$request->hasFile('logo'))
+            throw new LogicException("You must select a logo to upload.");
         $lo = new LoFileHandler();
         if ($lead->logo_id)
         {

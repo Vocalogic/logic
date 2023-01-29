@@ -79,7 +79,7 @@ class SettingSeeder extends Seeder
         $this->buildSetting('quotes.subtractExpense', 'Subtract Expenses before Commission?', 'select', 'No', 'Quote',
             'Should opex expenses be subtracted before figuring commission?', 'Yes,No');
 
-        $this->buildSetting('quotes.msa', 'Master Services Agreement', 'textarea', $this->getMSA(), 'MSA',
+        $this->buildSetting('quotes.msa', 'Master Services Agreement', 'tinymce', $this->getMSA(), 'MSA',
             'Enter the text to be shown for signing the master services agreement. All TOS will be appeneded afterwards.');
 
         // Invoice Setup
@@ -144,7 +144,8 @@ class SettingSeeder extends Seeder
 
         $this->buildSetting('account.term_payoff', 'Account Contract Payoff Percentage', 'number', '80', 'Account',
             'Enter the percentage of contracted amount that must be paid off during cancellation (default 80% of remainder)', '1|99');
-
+        $this->buildSetting('account.maps_key', 'Google Maps API Key', 'password', '', 'Account',
+            'Enter your Google Maps API for Address Validation');
 
 
         // Shop Seeder
@@ -266,7 +267,7 @@ If you have opted in for automatic payments, your card on file will be charged o
     private function getMSA(): string
     {
         return "
-The Agreement is made this day, {quote.msaStart}, by and between **{setting.brand-name}** located at {setting.brand-address} {setting.brand-csz} (hereinafter known as \"Provider\"), and **{quote.company-name}** (hereinafter known as \"Customer\").
+The Agreement is made this day, {quote.msaStart}, by and between <b>{setting.brand-name}</b> located at {setting.brand-address} {setting.brand-csz} (hereinafter known as \"Provider\"), and <b>{quote.company-name}</b> (hereinafter known as \"Customer\").
 \n\n
 WHEREAS, Customer has requested services from Provider specified in the Quote Review or Cart Checkout process
 <br/><br/>
@@ -282,19 +283,19 @@ sufficiency and receipt of which are acknowledged, the following terms and condi
 the parties to this Contract:
 <br/><br/>
 \n\n
-**1. Incorporation by Reference.** The following are made a part hereof as if the same were fully set
+<b>1. Incorporation by Reference.</b> The following are made a part hereof as if the same were fully set
 forth herein, and if any discrepancies arise between the documents, they will prevail in the
 following order: (1) this Contract, (2) Quote for Services, including any addenda
 and (3) any and all Terms of Services agreed to upon execution of this order.
 <br/><br/>
 
-**2. Term of Contract.** The term of this contract shall be for ({quote.term}) months with the option for
+<b>2. Term of Contract.</b> The term of this contract shall be for ({quote.term}) months with the option for
 renewals under the terms, conditions and unit pricing of the original contract for up to four (12)
 additional months, unless either party gives written notification to the other party sixty (60) days
 prior to expiration of the then-current term that they do not wish to renew.
 <br/><br/>
 
-**3. Costs.** Provider agrees to perform all work pursuant to this Contract according to the fee
+<b>3. Costs.</b> Provider agrees to perform all work pursuant to this Contract according to the fee
 schedule attached as \"Quote for Service\" (the \"Contract Price\"). All travel-related reimbursable expenses
 shall not exceed the current GSA rates. Any subcontractor reimbursable expenses may have a
 markup not to exceed 10% of actual cost.

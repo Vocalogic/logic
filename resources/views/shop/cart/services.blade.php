@@ -28,7 +28,7 @@
                             @if($service->notes)
                                 <br/><Br/><strong>{{$service->notes}}</strong>
                             @endif
-                            <small>{!! $this->exportAddonText($service) !!}</small>
+                            <small>{!! $this->exportAddonText($service->uid) !!}</small>
                         </div>
                     </td>
 

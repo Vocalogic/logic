@@ -35,7 +35,9 @@
                         @elseif($q->type == 'color')
                             <input type="color" name="s_{{$q->id}}" class="form-control form-control-color"
                                    value="{{$q->value ?: $q->default}}" title="Select color">
-
+                        @elseif($q->type == 'tinymce')
+                            <textarea name="s_{{$q->id}}" class="tinymce"
+                                      style="height: 200px">{{$q->value ?: $q->default}}</textarea>
                         @endif
                         <span class="helper-text">{{$q->help}}</span>
                     </div>

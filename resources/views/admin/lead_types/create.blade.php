@@ -23,28 +23,24 @@
                         @csrf
                         <div class="row">
                             <div class="col-lg-12">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="name" value="{{$type->name}}">
-                                    <label>Name:</label>
-                                    <span class="helper-text">Enter the type of lead</span>
-                                </div>
+                                <x-form-input name="name" value="{{$type->name}}" label="Lead Type Name"
+                                              icon="file-text-o">
+                                    Enter the type of lead for categorization.
+                                </x-form-input>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-lg-12">
+                                @if($type->id)
+                                    <a class="confirm text-danger" data-message="Are you sure you want to delete this lead type?"
+                                       data-method="DELETE" href="/admin/lead_types/{{$type->id}}"><i class="fa fa-trash"></i> Remove Lead Type</a>
+                                @endif
+                                <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                    <i class="fa fa-save"></i> Save Lead Type</button>
 
-                                <input type="submit" name="submit" value="Save" class="btn btn-{{bm()}}primary">
-                            @if($type->id)
-                                <a class="confirm btn btn-{{bm()}}danger pull-right" data-message="Are you sure you want to delete this lead type?"
-                                data-method="DELETE" href="/admin/lead_types/{{$type->id}}"><i class="fa fa-trash"></i> Remove Lead Type</a>
-                            @endif
                             </div>
                         </div>
-
-
                     </form>
-
-
                 </div>
             </div>
 

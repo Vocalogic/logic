@@ -42,7 +42,15 @@
                                         <textarea class="form-control" style="height:140px;"
                                                   name="description">{!! $item->description !!}</textarea>
                         <label>{{ucfirst($type)}} Description (Invoice/Quote) </label>
-                        <span class="helper-text">Enter the description to be used on quotes and invoices</span>
+                        <span class="helper-text">Enter the description to be used on quotes and invoices
+                         <a class="confirm" data-method="GET"
+                            data-message="Are you sure you want to replace the account service
+                             descriptions and quote descriptions for all customers with this item assigned?
+                             This will not update notes or data tracking, only the descriptions"
+                            href="/admin/category/{{$cat->id}}/items/{{$item->id}}/respec">
+                             <i class="fa fa-tags"></i> Mass update descriptions
+                         </a>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -81,9 +89,10 @@
             @endif
 
             <div class="row mt-3">
-                <div class="col-xl-6">
-                    <input type="submit" class="btn btn-outline-primary wait" data-message="Updating Definitions.."
-                           value="Save and Continue">
+                <div class="col-lg-12">
+                    <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                        <i class="fa fa-save"></i> Save and Continue
+                    </button>
                 </div>
             </div>
         </form>

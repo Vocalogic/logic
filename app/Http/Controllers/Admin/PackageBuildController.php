@@ -78,4 +78,20 @@ class PackageBuildController extends Controller
         return redirect()->to("/admin/package_builds/$packageBuild->id/sections");
     }
 
+    /**
+     * Remove the entire build.
+     * @param PackageBuild $packageBuild
+     * @return string[]
+     */
+    public function destroy(PackageBuild $packageBuild) : array
+    {
+        foreach ($packageBuild->sections as $section)
+        {
+            $section->safeDelete();
+        }
+        $packageBuild->delete();
+        session()->flash('message', "Package Build Removed");
+        return ['callback' => 'reload'];
+    }
+
 }

@@ -83,6 +83,18 @@ class CouponController extends Controller
     }
 
     /**
+     * Remove a coupon
+     * @param Coupon $coupon
+     * @return string[]
+     */
+    public function destroy(Coupon $coupon): array
+    {
+        $coupon->delete();
+        session()->flash('message', "Coupon removed successfully.");
+        return ['callback' => "redirect:/admin/coupons"];
+    }
+
+    /**
      * Validate Input
      * @param Request $request
      * @return void

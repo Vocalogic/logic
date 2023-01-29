@@ -11,68 +11,68 @@
                     deducts the reservation off their first month's bill for $50.
                 </p>
 
-            <form method="POST" action="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
-                @method('PUT')
-                @csrf
-                <div class="row mt-3">
-                    <div class="col-lg-6">
-                        <div class="form-floating">
-                            {!! Form::select('reservation_mode', [0 => 'Disabled', 1 => 'Enabled'], $item->reservation_mode, ['class' => 'form-control']) !!}
-                            <label>Reservation Mode</label>
-                            <span class="helper-text">Enable reservation mode for this item (Yes will NOT purchase the item in full).</span>
+                <form method="POST" action="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
+                    @method('PUT')
+                    @csrf
+                    <div class="row mt-3">
+                        <div class="col-lg-6">
+                            <div class="form-floating">
+                                {!! Form::select('reservation_mode', [0 => 'Disabled', 1 => 'Enabled'], $item->reservation_mode, ['class' => 'form-control']) !!}
+                                <label>Reservation Mode</label>
+                                <span class="helper-text">Enable reservation mode for this item (Yes will NOT purchase the item in full).</span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 ">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="reservation_price"
+                                       value="{{moneyFormat($item->reservation_price)}}">
+                                <label>Reservation Price</label>
+                                <span class="helper-text">Enter the price to reserve this item.</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="row mt-2">
 
-                    <div class="col-lg-6 ">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="reservation_price"
-                                   value="{{moneyFormat($item->reservation_price)}}">
-                            <label>Reservation Price</label>
-                            <span class="helper-text">Enter the price to reserve this item.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mt-2">
-
-                    <div class="col-lg-12">
-                        <div class="form-floating">
+                        <div class="col-lg-12">
+                            <div class="form-floating">
                         <textarea class="form-control" name="reservation_details"
                                   style="height: 100px;">{{$item->reservation_details}}</textarea>
-                            <label>Reservation Details</label>
-                            <span class="helper-text">Explain what purchasing this reservation entails.</span>
+                                <label>Reservation Details</label>
+                                <span class="helper-text">Explain what purchasing this reservation entails.</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-lg-12 mt-2">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" name="reservation_time"
-                                   value="{{$item->reservation_time}}">
-                            <label>Length of Reservation</label>
-                            <span class="helper-text">Enter how long this reservation will last if purchased (i.e. 30 days, etc)</span>
+                        <div class="col-lg-12 mt-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="reservation_time"
+                                       value="{{$item->reservation_time}}">
+                                <label>Length of Reservation</label>
+                                <span class="helper-text">Enter how long this reservation will last if purchased (i.e. 30 days, etc)</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-lg-12">
-                        <div class="form-floating">
+                        <div class="col-lg-12">
+                            <div class="form-floating">
                         <textarea class="form-control" name="reservation_refund"
                                   style="height: 100px;">{{$item->reservation_refund}}</textarea>
-                            <label>Reservation Refund Details</label>
-                            <span class="helper-text">Explain if a refund on a reservation is allowed, etc.</span>
+                                <label>Reservation Refund Details</label>
+                                <span class="helper-text">Explain if a refund on a reservation is allowed, etc.</span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Save and Continue
+                            </button>
                         </div>
                     </div>
-
-
-                </div>
-
-                <div class="row mt-3">
-                    <div class="col-xl-6">
-                        <input type="submit" class="btn btn-outline-primary wait"
-                               data-message="Updating Reservation Settings.."
-                               value="Save and Continue">
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
     </div>
 </div>

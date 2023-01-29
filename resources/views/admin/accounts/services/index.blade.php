@@ -21,7 +21,8 @@
                                 <span class="text-muted">No Monthly Services Found</span>
                             </div>
                             <a href="#recurringModal" data-bs-toggle="modal"
-                               class="btn btn-{{bm()}}primary border lift">Add Service</a>
+                               class="btn btn-primary border lift"><i class="fa fa-plus"></i> Add Service
+                            </a>
                         </div>
                     </div>
                 @else
@@ -128,8 +129,7 @@
                             </tbody>
                         </table>
                         <a href="#recurringModal" data-bs-toggle="modal" data-backdrop="false"
-                           class="btn btn-{{bm()}}primary"><i
-                                class="fa fa-plus"></i> new service</a>
+                           class="btn btn-primary"><i class="fa fa-plus"></i> add service</a>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block">
                         @include('admin.accounts.services.bill_date')

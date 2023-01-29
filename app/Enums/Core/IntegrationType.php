@@ -12,4 +12,5 @@ enum IntegrationType: string
     case Merchant = 'MERCHANT';
     case Support = "SUPPORT";
     case Calendar = "CALENDAR";
+    case Backup = "BACKUP";
 }

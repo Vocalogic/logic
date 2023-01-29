@@ -5,22 +5,21 @@
 @section('pre')
     <div class="row align-items-center">
         <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Lead Types</h1>
+            <h1 class="fs-5 color-900 mt-1 mb-0">Lead Types, Origins and Statuses</h1>
             <small class="text-muted">Select the types of leads (used for Discovery Questions)</small>
         </div>
     </div> <!-- .row end -->
 
 @endsection
 @section('content')
-    <div class="row">
+    <div class="row row-deck">
         <div class="col-lg-4">
-            <div class="card border-primary">
+            <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">Lead Types</h6>
                     <p>
                         <code>Lead types</code> are used to categorize different needs for different customers. This will reflect
-                        primarily on which questions are asked of the customer as well as which terms of service/contract
-                        to use when converting the lead to an account.
+                        primarily on which questions are asked of the customer.
                     </p>
 
                     <table class="table mt-2">
@@ -39,7 +38,7 @@
                         </tbody>
                     </table>
 
-                    <a class="btn btn-{{bm()}}info" href="/admin/lead_types/create"><i class="fa fa-plus"></i> new lead type</a>
+                    <a class="btn btn-primary btn-sm" href="/admin/lead_types/create"><i class="fa fa-plus"></i> new lead type</a>
 
                 </div>
             </div>

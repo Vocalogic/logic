@@ -71,7 +71,7 @@
                             <div class="col-lg-4">
                                 <div class="form-floating">
                                     {!! Form::select('total_invoice', [0 => 'No', 1 => 'Yes'], $coupon->total_invoice, ['class' => 'form-control']) !!}
-                                    <label>Coupon Discounts Entire Invoice?</label>
+                                    <label>Discount Invoice?</label>
                                     <span class="helper-text">If yes, this coupon will apply to all products and services and
                                     will not be restricted.</span>
                                 </div>
@@ -132,7 +132,8 @@
 
                             <div class="col-lg-12">
                                 <div class="form-floating">
-                                    <textarea class="form-control" name="details" style="height:150px;">{!! $coupon->details !!}</textarea>
+                                    <textarea class="form-control" name="details"
+                                              style="height:150px;">{!! $coupon->details !!}</textarea>
                                     <label>Details / Terms</label>
                                     <span class="helper-text">If a customer enters this coupon, you can show additional terms
                                      and conditions for using this coupon.</span>
@@ -141,46 +142,52 @@
                             </div>
 
                             <div class="col-lg-12 mt-2">
-                                <input type="submit" name="submit" value="Save Coupon" class="btn btn-{{bm()}}primary">
+                                <a class="text-danger confirm" data-method="DELETE"
+                                   data-message="Are you sure you want to delete this coupon? It will be
+                                   immediately removed from the store and invalidated."
+                                   href="/admin/coupons/{{$coupon->id}}"><i class="fa fa-times"></i> Delete Coupon</a>
+
+                                <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                    <i class="fa fa-save"></i> Save Coupon
+                                </button>
                             </div>
                         </div>
-
-
                     </form>
-
-
                 </div>
             </div>
         </div>
         @if($coupon->id && !$coupon->total_invoice)
-        <div class="col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title">Products/Services Enabled</h6>
-                    <p>Manage your products and services that can your coupon can be used by.</p>
-                    <a href="#addItem" data-bs-toggle="modal" class="btn btn-{{bm()}}primary"><i class="fa fa-plus"></i> Add Item/Service</a>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Products/Services Enabled</h6>
+                        <p>Manage your products and services that can your coupon can be used by.</p>
+                        <a href="#addItem" data-bs-toggle="modal" class="btn btn-primary mb-3"><i
+                                class="fa fa-plus"></i> Add Item/Service</a>
 
-                    <table class="table table-sm table-striped">
-                        <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Min</th>
-                            <th>Max</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                        <table class="table table-sm table-striped">
+                            <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Min</th>
+                                <th>Max</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             @foreach($coupon->items as $item)
                                 <tr>
-                                    <td><a class="live" href="/admin/coupons/{{$coupon->id}}/items/{{$item->id}}">{{$item->item->name}}</a></td>
+                                    <td><a class="live" data-title="Update Product/Service"
+                                           href="/admin/coupons/{{$coupon->id}}/items/{{$item->id}}">{{$item->item->name}}</a>
+                                    </td>
                                     <td>{{$item->min_qty}}</td>
                                     <td>{{$item->max_qty}}</td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
     </div>
 
@@ -200,7 +207,8 @@
                                 <div class="form-floating">
                                     {!! Form::select('bill_item_id', \App\Models\BillItem::selectable(), null, ['class' => 'form-select', 'id' => 'selectmodal']) !!}
                                     <label>Select Product/Service</label>
-                                    <span class="helper-text">Select a product or service that this coupon will work for</span>
+                                    <span
+                                        class="helper-text">Select a product or service that this coupon will work for</span>
                                 </div>
                             </div>
                         </div>
@@ -226,13 +234,11 @@
                         </div>
 
 
-                            <div class="col-lg-12 col-md-12 mt-3">
-                                <input type="submit" class="btn btn-primary rounded wait" data-anchor=".addItem" value="Save">
-                            </div>
-
-
-
-
+                        <div class="col-lg-12 col-md-12 mt-3">
+                            <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Update Coupon
+                            </button>
+                        </div>
                     </form>
 
                 </div>

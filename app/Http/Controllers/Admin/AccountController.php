@@ -549,7 +549,7 @@ class AccountController extends Controller
                         'addon_id'             => $key,
                         'account_bill_item_id' => $item->id,
                         'addon_option_id'      => $val,
-                        'price'                => $request->get("price_$key") ?: $price,
+                        'price'                => $request->get("price_$key") ? convertMoney($request->get("price_$key")) : $price,
                         'qty'                  => $request->get("qty_$key") ?: 1,
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
@@ -561,7 +561,7 @@ class AccountController extends Controller
                         'addon_id'             => $key,
                         'account_bill_item_id' => $item->id,
                         'addon_option_id'      => $val,
-                        'price'                => $request->get("price_$key") ?: $price,
+                        'price'                => $request->get("price_$key") ? convertMoney($request->get("price_$key")) : $price,
                         'qty'                  => $request->get("qty_$key") ?: 1,
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
@@ -851,9 +851,9 @@ class AccountController extends Controller
     public function pricingApply(Account $account, BillItem $item): RedirectResponse
     {
         $account->pricings()->create([
-           'bill_item_id' => $item->id,
-           'price' => $item->type == 'services' ? $item->mrc : $item->nrc,
-           'price_children' => $item->type == 'services' ? $item->mrc : $item->nrc,
+            'bill_item_id'   => $item->id,
+            'price'          => $item->type == 'services' ? $item->mrc : $item->nrc,
+            'price_children' => $item->type == 'services' ? $item->mrc : $item->nrc,
         ]);
         return redirect()->back()->with('message', $item->name . " Added for Special Pricing");
     }
@@ -865,7 +865,7 @@ class AccountController extends Controller
      * @param Request        $request
      * @return true[]
      */
-    public function pricingUpdate(Account $account, AccountPricing $item, Request $request) : array
+    public function pricingUpdate(Account $account, AccountPricing $item, Request $request): array
     {
         $item->update([$request->name => convertMoney($request->value)]);
         return ['success' => true];
@@ -877,12 +877,13 @@ class AccountController extends Controller
      * @param AccountPricing $item
      * @return string[]
      */
-    public function pricingRemove(Account $account, AccountPricing $item) : array
+    public function pricingRemove(Account $account, AccountPricing $item): array
     {
         session()->flash('message', $item->item->name . " removed from special pricing.");
         $item->delete();
         return ['callback' => 'reload'];
     }
+
     /**
      * Import Leads
      * @param Request $request

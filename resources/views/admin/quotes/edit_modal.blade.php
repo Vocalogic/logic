@@ -80,9 +80,11 @@
 
 
         <div class="col-lg-12 mt-2">
-            <input type="submit" name="submit" value="Update Item" class="btn btn-{{bm()}}primary wait"
-                   data-anchor=".sModalArea">
-            <a class="confirm btn btn-danger pull-right"
+            <button type="submit" class="btn btn-primary ladda w-25 pull-right" data-style="zoom-out">
+                   <i class="fa fa-save"></i> Save Item
+            </button>
+
+            <a class="confirm text-danger"
                data-message="Are you sure you want to remove {{$item->item->name}}?"
                href="/admin/quotes/{{$quote->id}}/del/{{$item->id}}"
                data-method="DELETE">

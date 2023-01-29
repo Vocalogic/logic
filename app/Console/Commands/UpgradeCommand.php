@@ -50,6 +50,7 @@ class UpgradeCommand extends Command
             'php artisan config:clear',
             'php artisan migrate --force',
             'php artisan db:seed --force',
+            'npm install',
             'npm run prod',
             'php artisan up',
         ];

@@ -21,32 +21,36 @@
                         <div class="alert alert-primary">Team management is disabled in demo mode.</div>
                     @else
 
-                        <table class="table table-striped">
+                        <table class="table table-striped table-sm datatable">
                             <thead>
                             <tr>
-                                <td>Name</td>
-                                <td>Email</td>
-                                <td>Access Level</td>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Access Level</th>
                             </tr>
                             </thead>
                             <tbody>
                             @foreach(\App\Models\User::where('account_id', 1)->get() as $user)
                                 <tr>
                                     <td><a class="live" data-title="Edit {{$user->name}}"
-                                           href="/admin/users/{{$user->id}}">{{$user->name}}</a></td>
+                                           href="/admin/users/{{$user->id}}">{{$user->name}}</a>
+                                    @if(!$user->active)
+                                        <span class="badge bg-danger">deactivated</span>
+                                    @endif
+                                    </td>
                                     <td>{{$user->email}}</td>
                                     <td>{{$user->acl->getHuman()}}</td>
                                 </tr>
                             @endforeach
                             </tbody>
                         </table>
-                        <a class="btn btn-primary mt-3" href="#newUser" data-bs-toggle="modal"><i
-                                class="fa fa-plus"></i>
-                            Add Team Member</a>
+
                     @endif
                 </div>
-
             </div>
+            <a class="btn btn-primary mt-3" href="#newUser" data-bs-toggle="modal">
+                <i class="fa fa-plus"></i> Add Team Member
+            </a>
         </div>
     </div>
 
@@ -58,47 +62,42 @@
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Create new Vendor</h5>
+                    <h5 class="modal-title">Add new Team Member </h5>
                 </div>
                 <div class="modal-body">
                     <p class="mb-3">
                         Team members added here will be sent an invite and password reset link to login.
                     </p>
-                    <form method="post" action="/admin/users">
-                        @method('POST')
-                        @csrf
-                        <div class="row g-3 mb-3">
-                            <div class="col-lg-6 col-md-12">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="name" value="">
-                                    <label>Member Name</label>
-                                    <span class="helper-text">Enter the first and last name</span>
-                                </div>
-                            </div>
+                    <div class="card border-primary">
+                        <div class="card-body">
 
-                            <div class="col-lg-6 col-md-12">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" name="email" value="">
-                                    <label>E-mail Address</label>
-                                    <span class="helper-text">Enter member's email address</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-lg-6">
-                                <div class="col-lg-5 col-md-12">
-                                    <div class="form-floating">
-                                        {!! Form::select('acl', \App\Enums\Core\ACL::getSelectable(), null, ['class' => 'form-control']) !!}
-                                        <label>Select Access</label>
-                                        <span class="helper-text">Select Access Level</span>
+                            <form method="post" action="/admin/users">
+                                @method('POST')
+                                @csrf
+                                <div class="row g-3 mb-3">
+                                    <div class="col-lg-12">
+                                        <x-form-input name="name" label="Member Name" icon="user">
+                                            Enter team member's first and last name.
+                                        </x-form-input>
+                                        <x-form-input name="email" label="E-mail Address" icon="mail-reply">
+                                            Enter member's email address
+                                        </x-form-input>
+                                        @props(['acl' =>  \App\Enums\Core\ACL::getSelectable()])
+                                        <x-form-select name="acl" label="Select Access" icon="check-circle-o"
+                                                       :options="$acl">
+                                            Select access level
+                                        </x-form-select>
                                     </div>
                                 </div>
-                            </div>
+
+                                <div class="col-lg-12 col-md-12 mt-3">
+                                    <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                        <i class="fa fa-save"></i> Add Team Member</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="col-lg-12 col-md-12 mt-3">
-                            <input type="submit" class="btn btn-primary rounded wait" data-anchor=".modal" value="Save">
-                        </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
         </div>

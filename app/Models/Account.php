@@ -1076,7 +1076,7 @@ class Account extends Model
             $help[] = (object)[
                 'icon'   => '726623.png',
                 'title'  => "Mailer Setup",
-                'body'   => "You have no mailer configured for Logic to use",
+                'body'   => "You have no mailer configured for Logic to use. A mailer is required to send quotes and invoices.",
                 'action' => "Configure Mail",
                 'target' => "/admin/settings?tab=mail"
             ];

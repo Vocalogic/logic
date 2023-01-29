@@ -11,7 +11,7 @@
                 </p>
 
 
-                <a class="live btn btn-{{bm()}}primary" data-title="Create new FAQ"
+                <a class="live btn btn-primary" data-title="Create new FAQ"
                    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/faqs/create">
                     <i class="fa fa-plus"></i> Create new FAQ
                 </a>
@@ -34,9 +34,9 @@
                     </tbody>
                 </table>
 
-                <a class="btn btn-{{bm()}}primary mt-3"
+                <a class="btn btn-primary mt-3 pull-right"
                    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/requirements">
-                    Save and Continue</a>
+                    <i class="fa fa-save"></i> Save and Continue</a>
 
             </div>
         </div>

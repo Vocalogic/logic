@@ -22,15 +22,12 @@
                 <tr {{$quote->presentable ? "class='bg-light-success'" : null}}>
                     <td>
                         <a href="/admin/quotes/{{$quote->id}}"><span
-                                class="badge bg-{{bm()}}primary">#{{$quote->id}}</span></a>
+                                class="badge bg-primary">#{{$quote->id}}</span></a>
                     </td>
                     <td>
-                        @if($quote->lead)
-                            <a href="/admin/leads/{{$quote->lead->id}}">{{$quote->name}}</a>
-                        @else
-                            <a href="/admin/accounts/{{$quote->account->id}}/quotes/">{{$quote->name}}</a>
-                        @endif
-
+                        <a href="/admin/quotes/{{$quote->id}}">
+                            {{$quote->name}}
+                        </a>
                     </td>
                     <td>{{$quote->created_at->diffForHumans()}}</td>
                     <td>${{moneyFormat($quote->mrr)}}</td>

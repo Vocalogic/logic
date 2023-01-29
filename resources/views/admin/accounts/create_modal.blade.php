@@ -34,8 +34,9 @@
             </div>
             <div class="row mt-3">
                 <div class="col-lg-12 ">
-                    <input type="submit" name="save" value="Create Account"
-                           class="btn  btn-primary btn-block w-100 wait" data-anchor=".areaModal">
+                    <button type="submit"  class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                        <i class="fa fa-save"></i> Create Account
+                    </button>
                 </div>
             </div>
 

@@ -52,9 +52,11 @@
                             Enter a short description
                         </x-form-input>
 
-                        <div class="offset-4 col-8">
-                            <input type="submit" class="w-100 btn btn-primary wait" data-message="Saving Category.."
-                                   value="Save Category">
+                        <div class="col-lg-12">
+                            <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                <i class="fa fa-save"></i> Create Category
+                            </button>
+
                         </div>
                     </div>
                 </div>

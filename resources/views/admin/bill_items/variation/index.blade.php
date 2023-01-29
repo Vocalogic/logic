@@ -28,7 +28,7 @@
 
             @include('admin.bill_items.variation.fields')
                 @if(!$item->parent)
-                    <a class="live mt-2 w-100 btn btn-{{bm()}}primary" data-title="Variation to {{$item->name}}"
+                    <a class="live mt-2 btn btn-primary" data-title="Variation to {{$item->name}}"
                        href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/variation/create">
                         <i class="fa fa-recycle"></i> Add Variation
                     </a>

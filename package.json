@@ -17,6 +17,8 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
-        "autoprefixer": "10.4.5"
+        "autoprefixer": "10.4.5",
+        "ladda": "^2.0.3",
+        "x-editable": "^1.5.1"
     }
 }

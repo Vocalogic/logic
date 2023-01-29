@@ -8,7 +8,7 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <a class="w-100 btn btn-block btn-{{bm()}}primary live" data-title="Create new Question"
+            <a class="w-100 btn btn-block btn-primary live" data-title="Create new Question"
                href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/create">
                 <i class="fa fa-plus"></i> New Question
             </a>
@@ -30,10 +30,9 @@
                         @foreach($section->questions as $question)
                             <tr>
                                 <td>
-                                    {{$question->question}}
                                     <a class="live" data-title="Edit {{$question->name}}"
                                        href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}">
-                                        <i class="fa fa-edit"></i>
+                                        {{$question->question}}
                                     </a>
                                 </td>
                                 <td>{{$question->type}}</td>

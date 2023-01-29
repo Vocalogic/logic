@@ -41,6 +41,8 @@
                             </li>
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#calendar" role="tab">Calendars</a>
                             </li>
+                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#backup" role="tab">Backups</a>
+                            </li>
                         </ul>
 
                         <div class="tab-content ps-3">
@@ -69,6 +71,10 @@
 
                             <div class="tab-pane fade" id="calendar" role="tabpanel">
                                 @include('admin.integrations.list', ['type' => \App\Enums\Core\IntegrationType::Calendar])
+                            </div>
+
+                            <div class="tab-pane fade" id="backup" role="tabpanel">
+                                @include('admin.integrations.list', ['type' => \App\Enums\Core\IntegrationType::Backup])
                             </div>
                         </div>
                     </div>

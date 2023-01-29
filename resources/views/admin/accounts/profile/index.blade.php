@@ -48,7 +48,8 @@
 
                                     <div class="col-lg-8 col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" name="address"
+                                            <input type="text" class="address form-control {{setting('account.maps_key') ? 'mapsEnabled': null}}"
+                                                   id="addressQuery" name="address"
                                                    value="{{$account->address}}">
                                             <label>Address</label>
                                             <span class="helper-text">Enter the company address</span>
@@ -70,7 +71,7 @@
 
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" name="city"
+                                            <input type="text" class="city form-control" name="city"
                                                    value="{{$account->city}}">
                                             <label>City</label>
                                             <span class="helper-text">Enter the company city</span>
@@ -79,7 +80,7 @@
 
                                     <div class="col-lg-3 col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" name="state"
+                                            <input type="text" class="state form-control" name="state"
                                                    value="{{$account->state}}">
                                             <label>State</label>
                                             <span class="helper-text">State</span>
@@ -88,7 +89,7 @@
 
                                     <div class="col-lg-3 col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" name="postcode"
+                                            <input type="text" class="zip form-control" name="postcode"
                                                    value="{{$account->postcode}}">
                                             <label>Zip</label>
                                             <span class="helper-text">Zip Code</span>
@@ -141,7 +142,11 @@
 
 
                                 <div class="row g-3 mb-4">
-                                    <input type="submit" class="btn btn-{{bm()}}primary wait" value="Save">
+                                    <div class="col-lg-12">
+                                        <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                            <i class="fa fa-save"></i> Save Company Profile
+                                        </button>
+                                    </div>
                                 </div>
 
 

@@ -14,7 +14,7 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <a class="w-100 btn btn-block btn-{{bm()}}primary live" data-title="New Logic Operation"
+            <a class="w-100 btn btn-block btn-primary live" data-title="New Logic Operation"
                href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/create">
                 <i class="fa fa-plus"></i> New Logic Operation
             </a>
@@ -40,11 +40,6 @@
                                 @else
                                     <b>Addon To: </b> {{$logic->addon->addon->item->name}} <br/>{{$logic->addon->addon->name}} - {{$logic->addon->name}}
                                 @endif
-                            </a>
-                            <a class="confirm" data-message="Are you sure you want to remove this logic statement?"
-                               data-method="DELETE"
-                               href="/admin/package_builds/{{$build->id}}/sections/{{$section->id}}/questions/{{$question->id}}/logics/{{$logic->id}}">
-                                <i class="fa fa-trash"></i>
                             </a>
                         </td>
                         <td>{{$logic->answer_equates}} {{$logic->answer}}</td>
