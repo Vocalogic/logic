@@ -11,7 +11,7 @@
                         <label>Enter Discovery Information</label>
                         <span class="helper-text">Enter information about this lead.</span>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 ladda" data-style="zoom-out">
+                    <button type="submit" class="btn btn-primary mt-3 ladda pull-right" data-style="zoom-out">
                         <i class="fa fa-edit"></i> Update Discovery
                     </button>
                 </div>

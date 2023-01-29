@@ -144,6 +144,8 @@ class LeadController extends Controller
      */
     public function uploadLogo(Lead $lead, Request $request): RedirectResponse
     {
+        if (!$request->hasFile('logo'))
+            throw new LogicException("You must select a logo to upload.");
         $lo = new LoFileHandler();
         if ($lead->logo_id)
         {

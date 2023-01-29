@@ -7,8 +7,11 @@
                     @method('POST')
                     <input type="file" name="logo" class="drop"
                            data-default-file="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}}"/>
-                    <input type="submit" name="submit" class="btn btn-sm btn-{{bm()}}primary mt-3"
-                           value="Save Logo">
+                    <button type="submit" name="submit" class="btn btn-sm btn-primary ladda mt-3"
+                            data-style="zoom-out">
+                        <i class="fa fa-image"></i> Save Logo
+                    </button>
+
                 </form>
             @else
                 <img height=100 src="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}} " alt=""
