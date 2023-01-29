@@ -30,14 +30,8 @@ class Term extends Model
      */
     public function convert(array $models) : string
     {
-        $converter = new CommonMarkConverter([
-            'html_input'         => 'strip',
-            'allow_unsafe_links' => false
-        ]);
-        $mark = $converter->convert($this->body);
-
         $e = new STemplate(
-            ident: $mark,
+            ident: $this->body,
             user: null,
             models: $models,
         );
