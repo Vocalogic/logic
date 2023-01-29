@@ -32,6 +32,7 @@ class  QBOCore extends APICore
     public function __construct(object $config)
     {
         parent::__construct();
+        if (!isset($config->qbo_client_id) || !$config->qbo_client_id) return;
         $this->qclient = new PaymentClient();
         $this->mode = env('APP_ENV') == 'local' ? 'sandbox' : 'production';
         $this->config = $config;
