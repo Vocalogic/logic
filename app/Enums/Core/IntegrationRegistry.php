@@ -4,6 +4,7 @@ namespace App\Enums\Core;
 
 use App\Models\Integration;
 use App\Operations\Integrations\Accounting\Quickbooks;
+use App\Operations\Integrations\Backup\AmazonS3;
 use App\Operations\Integrations\Calendar\Calendly;
 use App\Operations\Integrations\Chat\Discord;
 use App\Operations\Integrations\Chat\Slack;
@@ -40,6 +41,11 @@ enum IntegrationRegistry: string
      */
     case Calendly = 'calendly';
 
+    /**
+     * Backup Services
+     */
+    case AmazonS3 = 'amazon_s3';
+
 
     /**
      * Return the class that is used to instantiate.
@@ -55,7 +61,8 @@ enum IntegrationRegistry: string
             self::Zendesk => Zendesk::class,
             self::LogicPay => LogicPay::class,
             self::Calendly => Calendly::class,
-            self::Discord => Discord::class
+            self::Discord => Discord::class,
+            self::AmazonS3 => AmazonS3::class
         };
     }
 
@@ -121,7 +128,8 @@ enum IntegrationRegistry: string
             self::Slack, self::Discord => IntegrationType::Chat,
             self::Stripe, self::LogicPay => IntegrationType::Merchant,
             self::Zendesk => IntegrationType::Support,
-            self::Calendly => IntegrationType::Calendar
+            self::Calendly => IntegrationType::Calendar,
+            self::AmazonS3 => IntegrationType::Backup
         };
     }
 

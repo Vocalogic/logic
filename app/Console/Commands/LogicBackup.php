@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Core\IntegrationType;
 use App\Operations\API\Control;
+use App\Operations\Integrations\Backup\Backup;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
@@ -32,54 +34,10 @@ class LogicBackup extends Command
      */
     public function handle()
     {
-        // Check if there is a license key - if not exit.
-        if (!setting('brand.license')) return Command::SUCCESS;
-
-        $this->info("Starting Backup Routine...");
-        $this->info("Working Path: " . getenv('PATH'));
-        $this->info("Compressing Site Data..");
-        $license = setting('brand.license');
-        $date = now()->format("Y-m-d");
-        $file = "Backup-$license-$date.tar.gz";
-        $command = new Process([
-            "/usr/bin/tar",
-            "-cvzf",
-            $file,
-            "storage"
-        ]);
-        $command->run();
-        if (!$command->isSuccessful())
-        {
-            $this->error($command->getErrorOutput());
-        }
-        $this->info("Exporting Database ...");
-        $user = trim(env('DB_USERNAME'));
-        $password = trim(env('DB_PASSWORD'));
-        $db = trim(env('DB_DATABASE'));
-        $command = Process::fromShellCommandline("/usr/bin/mysqldump -u $user -p{$password} $db > db-$date.sql");
-        $command->run();
-        $this->info("Compressing Database..");
-        $command = Process::fromShellCommandline("gzip db-$date.sql");
-        $command->run();
-        if (!$command->isSuccessful())
-        {
-            $this->error($command->getErrorOutput());
-        }
-        $command->run();
-        // Should have a file db-$date.sql.gz
-        $this->info("Uploading to Control..");
-        $c = new Control();
-        $site = base64_encode(file_get_contents($file));
-        $database = base64_encode(file_get_contents("db-$date.sql.gz"));
-        try
-        {
-            $c->submitBackup($site, $database);
-        } catch (Exception $e)
-        {
-            $this->error($e->getMessage());
-        }
-        unlink($file);
-        unlink("db-$date.sql.gz");
+        // If we have no enabled integration then just exit.
+        if (!hasIntegration(IntegrationType::Backup)) return Command::SUCCESS;
+        Backup::backupSiteData();
+        Backup::backupDatabase();
         return Command::SUCCESS;
     }
 }
