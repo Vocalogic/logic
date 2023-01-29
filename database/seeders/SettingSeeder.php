@@ -144,7 +144,8 @@ class SettingSeeder extends Seeder
 
         $this->buildSetting('account.term_payoff', 'Account Contract Payoff Percentage', 'number', '80', 'Account',
             'Enter the percentage of contracted amount that must be paid off during cancellation (default 80% of remainder)', '1|99');
-
+        $this->buildSetting('account.maps_key', 'Google Maps API Key', 'password', '', 'Account',
+            'Enter your Google Maps API for Address Validation');
 
 
         // Shop Seeder
