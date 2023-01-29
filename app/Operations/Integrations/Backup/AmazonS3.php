@@ -31,7 +31,7 @@ class AmazonS3 extends BaseIntegration implements Integration
      */
     public function getWebsite(): string
     {
-       return "https://aws.amazon.com/s3";
+        return "https://aws.amazon.com/s3";
     }
 
     /**
@@ -40,7 +40,7 @@ class AmazonS3 extends BaseIntegration implements Integration
      */
     public function getDescription(): string
     {
-       return "Amazon Simple Storage Service (Amazon S3) is an object storage service offering industry-leading scalability, data availability, security, and performance.";
+        return "Amazon Simple Storage Service (Amazon S3) is an object storage service offering industry-leading scalability, data availability, security, and performance.";
     }
 
     /**
@@ -94,8 +94,9 @@ class AmazonS3 extends BaseIntegration implements Integration
      * Use the Amazon S3 Driver in Laravel for Processing
      * @return void
      */
-    public function backupSiteData() : void
+    public function backupSiteData(): void
     {
+        if (!isset($this->config->s3_key) || !$this->config->s3_key) return; // Enabled but not configured.
         $date = now()->format("Y-m-d");
         $file = "Backup-Logic-$date.tar.gz";
         $command = Process::fromShellCommandline("/usr/bin/tar --exclude=\"$file\" -cvzf storage/$file *");
@@ -111,15 +112,16 @@ class AmazonS3 extends BaseIntegration implements Integration
         try
         {
             info("Attempting to Store Backup to S3..");
-            $s3->put($location . $file, file_get_contents(storage_path() . "/". $file));
-        } catch(Exception $e)
+            $s3->put($location . $file, file_get_contents(storage_path() . "/" . $file));
+        } catch (Exception $e)
         {
             error_log("Failed to Upload to Amazon S3 - " . $e->getMessage());
         }
         // Cleanup
-        try {
+        try
+        {
             File::delete(storage_path() . "/" . $file);
-        } catch(Exception $e)
+        } catch (Exception $e)
         {
             info("Could not remove $file - " . $e->getMessage());
         }
@@ -131,6 +133,7 @@ class AmazonS3 extends BaseIntegration implements Integration
      */
     public function backupDatabase(): void
     {
+        if (!isset($this->config->s3_key) || !$this->config->s3_key) return; // Enabled but not configured.
         // Build Storage Driver
         $s3 = $this->setS3();
         $location = sprintf("%s/%s/", "backups", now()->format("M-Y"));
@@ -158,15 +161,16 @@ class AmazonS3 extends BaseIntegration implements Integration
         try
         {
             info("Attempting to Store Database Backup to S3..");
-            $s3->put($location . $file.".gz", file_get_contents($storage.$file.".gz"));
-        } catch(Exception $e)
+            $s3->put($location . $file . ".gz", file_get_contents($storage . $file . ".gz"));
+        } catch (Exception $e)
         {
             error_log("Failed to Upload to Amazon S3 - " . $e->getMessage());
         }
         // Cleanup
-        try {
-            File::delete($storage . $file.".gz");
-        } catch(Exception $e)
+        try
+        {
+            File::delete($storage . $file . ".gz");
+        } catch (Exception $e)
         {
             info("Could not remove $file - " . $e->getMessage());
         }
@@ -176,7 +180,7 @@ class AmazonS3 extends BaseIntegration implements Integration
      * Configure S3 Storage Engine
      * @return Filesystem
      */
-    private function setS3() : Filesystem
+    private function setS3(): Filesystem
     {
         return Storage::build([
             'driver'                  => 's3',
