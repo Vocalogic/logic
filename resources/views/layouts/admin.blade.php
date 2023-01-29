@@ -337,8 +337,14 @@
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 
 
-@livewireScripts
+
+
+    @livewireScripts
 <script type="text/javascript" src="{{mix('/js/app.js')}}"></script>
+@if(setting('account.maps_key'))
+    <script>function handlePlace(place){}</script>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key={{setting('account.maps_key')}}&callback=handlePlace"></script>
+@endif
 @yield('javascript')
 
 </body>

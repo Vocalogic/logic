@@ -22,6 +22,7 @@ mix.webpackConfig({
  */
 mix.js([
     'resources/js/app.js',
+    'resources/js/places.js',
     'node_modules/ladda/js/ladda.js',
     'node_modules/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js'
 ], 'public/js/app.js');
