@@ -245,7 +245,7 @@ class BillItemController extends Controller
             'cat'    => $cat,
             'item'   => $item,
             'type'   => $type,
-            'crumbs' => $this->generateCrumbs($cat, $item)
+            'crumbs' => $this->generateCrumbs($cat, $item),
         ]);
     }
 
@@ -270,7 +270,8 @@ class BillItemController extends Controller
             'tos_id'          => $request->tos_id,
             'is_shipped'      => $request->is_shipped,
             'track_qty'       => $request->track_qty,
-            'allow_backorder' => $request->allow_backorder
+            'allow_backorder' => $request->allow_backorder,
+            'slug'            => Str::slug($item->name)
         ]);
         return redirect()
             ->to("/admin/category/$cat->id/items/$item->id/pricing")
@@ -1162,7 +1163,7 @@ class BillItemController extends Controller
      * @param Request      $request
      * @return RedirectResponse
      */
-    public function changeCategory(BillCategory $cat, BillItem $item, Request $request) : RedirectResponse
+    public function changeCategory(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
         $item->update(['bill_category_id' => $request->category_id]);
         return redirect()->back()->with('message', 'Category Updated Successfully');
@@ -1189,12 +1190,12 @@ class BillItemController extends Controller
     public function respec(BillCategory $cat, BillItem $item): array
     {
         // Update Account Items
-        foreach(AccountItem::where('bill_item_id', $item->id)->get() as $as)
+        foreach (AccountItem::where('bill_item_id', $item->id)->get() as $as)
         {
             $as->update(['description' => $item->description]);
         }
         // Update Quote Items
-        foreach(QuoteItem::where('item_id', $item->id)->get() as $qi)
+        foreach (QuoteItem::where('item_id', $item->id)->get() as $qi)
         {
             $qi->update(['description' => $item->description]);
         }
