@@ -14,7 +14,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-2 col-xs-12">
+        <div class="col-lg-2 mt-2 col-xs-12">
             <a class="btn btn-primary live w-100 mb-4" data-title="Create new Account"
                href="/admin/accounts/create"
                type="button"><i class="fa fa-plus"></i> New Account
