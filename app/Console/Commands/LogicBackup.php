@@ -24,7 +24,7 @@ class LogicBackup extends Command
      *
      * @var string
      */
-    protected $description = 'Take a backup and Send it to Control';
+    protected $description = 'Take a backup and Submit to Integration';
 
     /**
      * Execute the console command.
@@ -35,9 +35,18 @@ class LogicBackup extends Command
     public function handle()
     {
         // If we have no enabled integration then just exit.
-        if (!hasIntegration(IntegrationType::Backup)) return Command::SUCCESS;
+        if (!hasIntegration(IntegrationType::Backup))
+        {
+            $this->warn("No integration has been selected. Go to admin -> integrations -> backups to configure.");
+            return Command::SUCCESS;
+        }
+        $integrationName = getIntegration(IntegrationType::Backup)->connect()->getName();
+        $this->alert("Using $integrationName for Backups");
+        $this->info("Compressing and Submitting Site Data...");
         Backup::backupSiteData();
+        $this->info("Compressing and Submitting Database Export...");
         Backup::backupDatabase();
+        $this->info("Finished!");
         return Command::SUCCESS;
     }
 }
