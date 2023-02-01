@@ -32,39 +32,12 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary" href="#newQuote" data-bs-toggle="modal">
-                <i class="fa fa-plus"></i> new quote</a>
+            <a class="btn btn-primary live" data-title="Create Quote for {{$account->name}}"
+               href="/admin/quotes/create?account_id={{$account->id}}">
+                <i class="fa fa-plus"></i> new quote
+            </a>
 
-            <x-modal name="newQuote" title="Create Quote for {{$account->name}}">
-                <p class="mb-3">
-                    Enter the name of the new quote. This quote will be created as a draft and you will be
-                    prompted to enter services once saved.
-                </p>
-                <div class="card border-primary">
-                    <div class="card-body">
-                        <form method="post" action="/admin/accounts/{{$account->id}}/quotes" class="quoteForm">
-                            @method('POST')
-                            @csrf
-                            @props(['val' => $account->name . " Quote ". now()->format("m/d")])
-                            <x-form-input name="name" :value="$val"
-                                          label="Quote Name"
-                                          placeholder="Sample Quote Name"
-                                          icon="sliders">
-                                Enter the name for the quote.
-                            </x-form-input>
-                            <div class="row mt-2">
-                                <div class="col-lg-12">
-                                    <button type="submit" class="btn btn-primary ladda pull-right"
-                                            data-style="zoom-out">
-                                        <i class="fa fa-plus"></i> Create Quote
-                                    </button>
 
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </x-modal>
         </div>
     </div>
 @endsection
