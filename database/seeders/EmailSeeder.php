@@ -91,6 +91,15 @@ class EmailSeeder extends Seeder
         $this->buildEmail('invoice.pastdue', self::CAT_FINANCE, 'Invoice Past Due',
             'Email sent when an invoice is past due.',
             "{setting.brand-name} Invoice #{invoice.id} is {invoice.daysPastDue} days PAST DUE");
+
+        $this->buildEmail('invoice.suspensionPending', self::CAT_FINANCE, 'Invoice Past Due - Pending Suspension',
+            'Email sent when an invoice is past due and has reached the pending suspension period.',
+            "[NOTICE OF PENDING SUSPENSION] Invoice #{invoice.id} is {invoice.daysPastDue} days PAST DUE");
+
+        $this->buildEmail('invoice.terminationPending', self::CAT_FINANCE, 'Invoice Past Due - Pending Termination',
+            'Email sent when an invoice is past due and has reached the pending termination period.',
+            "[NOTICE OF PENDING TERMINATION] Invoice #{invoice.id} is {invoice.daysPastDue} days PAST DUE");
+
         $this->buildEmail('account.customer_order', self::CAT_ACCOUNT, 'Customer Order Email',
             'Email sent to customer when new order built',
             '[OR-{order.id}] New {setting.brand-name} Order Created.');
@@ -134,6 +143,7 @@ class EmailSeeder extends Seeder
             'Email sent when a payment has been sent to the sales agent.',
             'Payment Sent for Commission Batch #{commissionBatch.id}');
 
+        EmailTemplate::placeholders();
 
 
     }
