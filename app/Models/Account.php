@@ -56,18 +56,18 @@ use Illuminate\Support\Str;
  * @property mixed         $finance_customer_id
  * @property mixed         $cc_reset_hash
  * @property mixed         $account_credit
- * @property mixed $website
- * @property mixed $net_days
- * @property mixed $mrr
- * @property mixed $invoices
- * @property mixed $merchant_ach_aba
- * @property mixed $merchant_ach_account
- * @property mixed $partner
- * @property mixed $partner_id
- * @property mixed $commissionable
- * @property mixed $quotes
- * @property mixed $agent_id
- * @property mixed $parent
+ * @property mixed         $website
+ * @property mixed         $net_days
+ * @property mixed         $mrr
+ * @property mixed         $invoices
+ * @property mixed         $merchant_ach_aba
+ * @property mixed         $merchant_ach_account
+ * @property mixed         $partner
+ * @property mixed         $partner_id
+ * @property mixed         $commissionable
+ * @property mixed         $quotes
+ * @property mixed         $agent_id
+ * @property mixed         $parent
  */
 class Account extends Model
 {
@@ -249,7 +249,7 @@ class Account extends Model
             if ($item->frequency && $item->frequency != BillFrequency::Monthly) continue;
             $total += ($item->price * $item->qty) + $item->addonTotal;
         }
-        return $total;
+        return bcmul($total, 1);
     }
 
     /**
@@ -681,69 +681,7 @@ class Account extends Model
     public function getServiceDetail(BillItem $item): object
     {
         $item = $this->items()->where('bill_item_id', $item->id)->first();
-        return (object)['qty' => $item->qty, 'price' => $item->price, 'total' => $item->qty * $item->price];
-    }
-
-    /**
-     * Gets the domain stats from the provider. Returns
-     * cache data if found.
-     * @param bool $refresh
-     * @return mixed
-     * @throws GuzzleException
-     */
-    public function getPBXStats(bool $refresh = false): mixed
-    {
-        if (cache("ACCOUNT_PBX_{$this->id}_STATS") && !$refresh)
-        {
-            return cache("ACCOUNT_PBX_{$this->id}_STATS");
-        }
-        $dom = new Domain($this->provider);
-        $data = $dom->billable($this->pbx_domain);
-        if (isset($data[0]))
-        {
-            cache(["ACCOUNT_PBX_{$this->id}_STATS" => $data[0]]);
-        }
-        return $data[0];
-    }
-
-    /**
-     * Get CDR Stats for Today
-     * @return object
-     * @throws GuzzleException
-     */
-    public function getPBXCdrStatus(): object
-    {
-        $dom = new CDR($this->provider);
-        return $dom->count($this->pbx_domain, now()->startOfDay(), now());
-    }
-
-    /**
-     * Get Number of Sold Extenions
-     * @return int
-     */
-    public function getSoldExtensionCount(): int
-    {
-        $total = 0;
-        foreach ($this->items as $item)
-        {
-            if ($item->item && $item->item->count_seats)
-            {
-                $total += $item->qty;
-            }
-        }
-        return $total;
-    }
-
-    /**
-     * Get the actual number of extensions in use.
-     * @return int
-     * @throws GuzzleException
-     */
-    public function getActualExtensionCount(): int
-    {
-        if (!$this->provider || !$this->pbx_domain) return 0;
-        $data = $this->getPBXStats();
-        return $data->current_user;
+        return (object)['qty' => $item->qty, 'price' => $item->price, 'total' => bcmul($item->qty * $item->price, 1)];
     }
 
     /**
@@ -1197,7 +1135,7 @@ class Account extends Model
     {
         $data = [];
         $data[''] = '-- Select Parent Account --';
-        foreach(self::whereNull('parent_id')->where('id', '!=', $this->id)->orderBy('name')->get() as $account)
+        foreach (self::whereNull('parent_id')->where('id', '!=', $this->id)->orderBy('name')->get() as $account)
         {
             $data[$account->id] = $account->name;
         }

@@ -632,8 +632,9 @@ if (!function_exists('setting'))
      * @param bool     $formatted
      * @return string
      */
-    function moneyFormat(?int $value = 0, bool $formatted = true): string
+    function moneyFormat(mixed $value = 0, bool $formatted = true): string
     {
+        // We could send in a float from a price * Qty where qty is float.
         if ($value == 0 || !$value) return '0.00';
         $value = $value / 100;
         return $formatted ? number_format($value, 2) : $value;

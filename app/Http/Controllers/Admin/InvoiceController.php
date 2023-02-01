@@ -192,10 +192,10 @@ class InvoiceController extends Controller
 
         if ($amount > $invoice->balance)
         {
-            session()->flash('error', "You cannot charge more than the balance of the invoice. ($amount)");
+            session()->flash('error',
+                "You cannot charge more than the balance of the invoice. ($" . moneyFormat($amount) . ")");
             return redirect()->back();
         }
-
         try
         {
             $method = PaymentMethod::from($request->pmethod);

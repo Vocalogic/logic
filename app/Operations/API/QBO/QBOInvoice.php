@@ -2,6 +2,7 @@
 
 namespace App\Operations\API\QBO;
 
+use App\Exceptions\LogicException;
 use App\Models\Invoice;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -10,7 +11,7 @@ class QBOInvoice extends QBOCore
     /**
      * Get all invoices
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function all(): mixed
     {
@@ -21,7 +22,7 @@ class QBOInvoice extends QBOCore
      * Find Invoice by Id
      * @param int $id
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function find(int $id): mixed
     {
@@ -40,7 +41,7 @@ class QBOInvoice extends QBOCore
      * link already exists.
      * @param Invoice $invoice
      * @return void
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function byInvoice(Invoice $invoice): void
     {
@@ -94,7 +95,7 @@ class QBOInvoice extends QBOCore
             $line->SalesItemLineDetail->Qty = $item->qty;
             $line->SalesItemLineDetail->UnitPrice = moneyFormat($item->price, false);
             $line->Description = $nameFormatted;
-            $line->Amount = moneyFormat($item->qty * $item->price, false);
+            $line->Amount = moneyFormat(bcmul($item->qty * $item->price,1), false);
             // Finally add it to our array.
             $lines[] = $line;
         }

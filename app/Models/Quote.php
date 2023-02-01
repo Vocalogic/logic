@@ -142,7 +142,7 @@ class Quote extends Model
             if (!$product->frequency || !$product->payments) continue; // Only count financed
             $total += $product->frequency->splitTotal($product->qty * $product->price, $product->payments);
         }
-        return $total;
+        return bcmul($total,1);
     }
 
     /**
@@ -167,7 +167,7 @@ class Quote extends Model
             if ($product->frequency && $product->payments) continue; // Don't count financed
             $total += ($product->price * $product->qty) + $product->addonTotal;
         }
-        return $total;
+        return bcmul($total,1);
     }
 
     /**
@@ -236,7 +236,7 @@ class Quote extends Model
             $totalCatalog += $item->getCatalogPrice() * $item->qty;
             $totalQuoted += $item->price * $item->qty;
         }
-        return $totalCatalog - $totalQuoted;
+        return bcmul($totalCatalog - $totalQuoted,1);
     }
 
     /**

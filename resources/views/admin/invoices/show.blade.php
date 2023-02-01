@@ -65,7 +65,6 @@
                                         <small class="text-muted">{{$item->description}}</small>
                                     </td>
                                 @endif
-
                                 <td class="text-center">${{moneyFormat($item->price)}} {!! $item->variation_detail !!}</td>
                                 <td class="text-center">{{$item->qty}}</td>
                                 <td class="text-center">${{moneyFormat($item->price * $item->qty)}}
