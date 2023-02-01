@@ -40,6 +40,8 @@ use App\Exceptions\LogicException;
  * @property mixed        $last_notice_sent
  * @property mixed        $servicesTotal
  * @property mixed        $recurring
+ * @property mixed        $suspension_sent
+ * @property mixed        $termination_sent
  */
 class Invoice extends Model
 {
@@ -613,6 +615,32 @@ class Invoice extends Model
             sysact(ActivityType::PastDueNotification, $this->id,
                 "sent a past due notification to {$this->account->name} for ");
         }
+    }
+
+    /**
+     * Send Termination Notice
+     * @return void
+     */
+    public function sendTerminationNotice(): void
+    {
+        if ($this->termination_sent) return;
+        $this->account->sendBillingEmail('invoice.terminationPending', [$this], [$this->pdf(true)]);
+        $this->update(['termination_sent' => now()]);
+        sysact(ActivityType::PastDueNotification, $this->id,
+            "sent a termination past due notification to {$this->account->name} for ");
+    }
+
+    /**
+     * Send Suspension Notice
+     * @return void
+     */
+    public function sendSuspensionNotice(): void
+    {
+        if ($this->suspension_sent) return;
+        $this->account->sendBillingEmail('invoice.suspensionPending', [$this], [$this->pdf(true)]);
+        $this->update(['suspension_sent' => now()]);
+        sysact(ActivityType::PastDueNotification, $this->id,
+            "sent a suspension past due notification to {$this->account->name} for ");
     }
 
     /**

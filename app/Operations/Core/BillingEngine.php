@@ -42,6 +42,17 @@ class BillingEngine
             {
                 info("Invoice #$invoice->id is past due. Sending to Notification routine.");
                 $invoice->sendPastDueNotification(); // Method will handle checks.
+                // #147 - Check Suspension and Termination Notices
+                if (now()->diffInDays($invoice->due_on) > setting('invoices.terminationDays'))
+                {
+                    info(now()->diffInDays($invoice->due_on));
+                    $invoice->sendTerminationNotice();
+                    continue; // don't send suspension again. (or try to)
+                }
+                if (now()->diffInDays($invoice->due_on) > setting('invoices.suspensionDays'))
+                {
+                    $invoice->sendSuspensionNotice();
+                }
             }
         }
     }
