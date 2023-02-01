@@ -334,7 +334,7 @@ class Invoice extends Model
     public function getIsPastDueAttribute(): bool
     {
         if ($this->balance > 0
-            && ($this->status == InvoiceStatus::SENT->value || $this->status == InvoiceStatus::PARTIAL->value)
+            && ($this->status == InvoiceStatus::SENT || $this->status == InvoiceStatus::PARTIAL)
             && now()->timestamp > $this->due_on->timestamp)
         {
             return true;
