@@ -87,7 +87,6 @@ class QBOCustomer extends QBOCore
         }
 
 
-
         $data = [
             'FullyQualifiedName' => $account->name,
             'PrimaryEmailAddr'   => [
@@ -104,7 +103,20 @@ class QBOCustomer extends QBOCore
                 'CountrySubDivisionCode' => $account->state,
                 'City'                   => $account->city,
                 'PostalCode'             => $account->postcode,
-                'Line1'                  => $account->address,
+                'Line1'                  => $account->admin?->name,
+                'Line2'                  => $account->name,
+                'Line3'                  => $account->address,
+                'Line4'                  => sprintf("%s, %s %s", $account->city, $account->state, $account->postcode),
+                'Country'                => $account->country
+            ],
+            'ShipAddr'           => [
+                'CountrySubDivisionCode' => $account->state,
+                'City'                   => $account->city,
+                'PostalCode'             => $account->postcode,
+                'Line1'                  => $account->admin?->name,
+                'Line2'                  => $account->name,
+                'Line3'                  => $account->address,
+                'Line4'                  => sprintf("%s, %s %s", $account->city, $account->state, $account->postcode),
                 'Country'                => $account->country
             ],
             'Taxable'            => true
