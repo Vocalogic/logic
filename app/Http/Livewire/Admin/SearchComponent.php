@@ -4,8 +4,10 @@ namespace App\Http\Livewire\Admin;
 
 use App\Enums\Core\CommKey;
 use App\Models\Account;
+use App\Models\BillItem;
 use App\Models\Lead;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Redirector;
 
@@ -121,7 +123,20 @@ class SearchComponent extends Component
             ];
         }
 
-
+        // Search Product Catalog
+        foreach(BillItem::where(function($q)
+        {
+           $q->where('name', 'like', "%$this->query%");
+           $q->orWhere('description', 'like', "%$this->query%");
+        })->get() as $item)
+        {
+            $this->results[] = (object)[
+                'title'       => "[$item->code] $item->name",
+                'url'         => "/admin/category/{$item->category->id}/items/$item->id/specs",
+                'class'       => 'bg-secondary text-white',
+                'description' => "Found in $item->type Catalog in <b>{$item->category->name}</b>"
+            ];
+        }
     }
 
 }

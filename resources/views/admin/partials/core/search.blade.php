@@ -17,7 +17,7 @@
                     @foreach($results as $idx => $result)
                         <a wire:click="sendTo({{$idx}})" class="list-group-item list-group-item-action text-truncate" style="cursor: pointer;">
                             <div class="fw-bold">{{$result->title}}</div>
-                            <small class="text-muted">{{$result->description}}</small>
+                            <small class="text-muted">{!! $result->description !!}</small>
                         </a>
                     @endforeach
                 </div>
