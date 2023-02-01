@@ -13,6 +13,16 @@
                         <span class="helper-text">Easily identifiable name for quote</span>
                     </div>
 
+                    <div class="form-floating">
+                        <input type="date" class="form-control" name="expires_on"
+                               value="{{$quote->expires_on->format("Y-m-d")}}">
+                        <label>Quote Expiration</label>
+                        <span class="helper-text">When does this quote expire?
+                            <span class="text-primary pull-right"><i class="fa fa-info"></i> Expires in <b>{{$quote->expires_on->diffInDays()}} days</b>.</span>
+                        </span>
+                    </div>
+
+
                     <div class="form-floating mt-2">
                         @if($quote->coterm)
                             {!! Form::select('term', \App\Models\Quote::getTermSelectable(), $quote->coterm->term, ['class' => 'form-control', 'disabled' => true]) !!}

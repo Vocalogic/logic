@@ -41,14 +41,14 @@
                         <div class="mt-4 mb-3">
                             <span class="text-muted">No quotes found.</span>
                         </div>
-                        <a class="btn btn-primary border lift"
-                           href="/admin/leads/{{$lead->id}}/quotes/create"><i class="fa fa-plus"></i>
+                        <a class="btn btn-primary border lift live"
+                           href="/admin/quotes/create?lead_id={{$lead->id}}"><i class="fa fa-plus"></i>
                             Create New Quote</a>
                     </div>
                 </div>
             @else
 
-                <a class="btn btn-{{bm()}}primary mt-3 mb-2" href="/admin/leads/{{$lead->id}}/quotes/create"><i
+                <a class="btn btn-primary mt-3 mb-2 live" data-title="Create Quote for {{$lead->company}}" href="/admin/quotes/create?lead_id={{$lead->id}}"><i
                         class="fa fa-plus"></i> New Quote</a>
 
                 @include('admin.quotes.list', ['quotes' => $lead->quotes()->where('archived', false)->get()])

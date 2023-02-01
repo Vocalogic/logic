@@ -53,19 +53,6 @@
         </div>
 
         @include('admin.quotes.build.quote_items')
-        @if($quote->presentable)
-            <div role="alert" class="alert border-info mt-3">NOTE: This quote has been marked presentable and is
-                available on the customer's pre-sales dashboard.
-            </div>
-        @else
-            <div role="alert" class="alert border-warning mt-3">NOTE: This quote is not completed yet. If you are
-                finished with this quote and would like customers to be able to see it make sure you <a
-                    href="/admin/quotes/{{$quote->id}}/presentable">
-                    mark it as presentable.
-                </a>
-            </div>
-        @endif
-
     </div>
 
     <div class="col-lg-3">

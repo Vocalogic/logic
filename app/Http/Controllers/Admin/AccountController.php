@@ -425,24 +425,6 @@ class AccountController extends Controller
         return redirect()->to("/admin/accounts/$account->id");
     }
 
-
-    /**
-     * Create new Quote
-     */
-    public function storeQuote(Account $account, Request $request): RedirectResponse
-    {
-        $request->validate(['name' => 'required']);
-        $quote = $account->quotes()->create([
-            'name'       => $request->name,
-            'hash'       => "QO-" . uniqid(),
-            'preferred'  => 1,
-            'net_terms'  => $account->net_terms,
-            'expires_on' => now()->addDays((int)setting('quotes.length'))
-        ]);
-        return redirect()->to("/admin/quotes/$quote->id");
-    }
-
-
     /**
      * Add a new payment method
      * @param Account $account

@@ -6,6 +6,7 @@ use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillItemType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use App\Models\AddonOption;
 use App\Models\BillItem;
 use App\Models\Lead;
@@ -37,6 +38,11 @@ class QuoteController extends Controller
      */
     public function show(Quote $quote): View
     {
+        if (!$quote->expires_on)
+        {
+            $quote->update(['expires_on' => now()->addDays((int)setting('quotes.length'))]);
+            $quote->refresh();
+        }
         if ($quote->lead)
         {
             $crumbs = [
@@ -59,6 +65,57 @@ class QuoteController extends Controller
     }
 
     /**
+     * Global Quote Creator Modal send in account_id or lead_id
+     * depending on context.
+     * @param Request $request
+     * @return View
+     */
+    public function create(Request $request): View
+    {
+        if ($request->lead_id)
+        {
+            $obj = Lead::find($request->lead_id);
+        }
+        else
+        {
+            $obj = Account::find($request->account_id);
+        }
+        return view('admin.quotes.create', ['obj' => $obj]);
+    }
+
+    /**
+     * Create a new Quote from either a lead or account.
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $obj = $request->lead_id ? Lead::find($request->lead_id) : Account::find($request->account_id);
+        $preferred = $obj->quotes()->count() > 0 ? 0 : 1;
+        $quote = (new Quote)->create([
+            'name'       => $request->name,
+            'lead_id'    => ($obj instanceof Lead) ? $obj->id : 0,
+            'account_id' => ($obj instanceof Account) ? $obj->id : 0,
+            'agent_id'   => user()->id,
+            'hash'       => "QO-" . uniqid(),
+            'preferred'  => $preferred,
+            'net_terms'  => $request->net_terms ?: setting('invoices.net'),
+            'expires_on' => $request->expires_on ?: now()->addDays((int)setting('quotes.length'))
+        ]);
+        if ($obj instanceof Lead)
+        {
+            sysact(ActivityType::LeadQuote, $quote->id,
+                "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
+        }
+        else
+        {
+            sysact(ActivityType::AccountQuote, $quote->id,
+                "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
+        }
+        return redirect()->to("/admin/quotes/$quote->id")->with('message', "Quote #$quote->id created.");
+    }
+
+    /**
      * The index from inside the context of a lead.
      * @param Lead $lead
      * @return View
@@ -66,29 +123,6 @@ class QuoteController extends Controller
     public function leadIndex(Lead $lead): View
     {
         return view('admin.quotes.index_lead')->with('lead', $lead);
-    }
-
-    /**
-     * Show create form for a lead.
-     * @param Lead $lead
-     * @return RedirectResponse
-     * @throws LogicException
-     */
-    public function leadCreate(Lead $lead): RedirectResponse
-    {
-        $preferred = $lead->quotes()->count() > 0 ? 0 : 1;
-        $quote = (new Quote)->create([
-            'name'       => "Quote for " . $lead->company,
-            'lead_id'    => $lead->id,
-            'agent_id'   => user()->id,
-            'hash'       => "QO-" . uniqid(),
-            'preferred'  => $preferred,
-            'net_terms'  => setting('invoices.net') ?: 0,
-            'expires_on' => now()->addDays((int)setting('quotes.length'))
-        ]);
-        sysact(ActivityType::Lead, $lead->id,
-            "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
-        return redirect()->to("/admin/quotes/$quote->id");
     }
 
     /**
@@ -212,12 +246,13 @@ class QuoteController extends Controller
             throw new LogicException("Quote has already been executed. Unable to update quote settings.");
         }
         $quote->update([
-            'name'      => $request->name,
-            'preferred' => $request->preferred,
-            'notes'     => $request->notes,
-            'term'      => $request->term,
-            'net_terms' => $request->net_terms,
-            'coterm_id' => $request->coterm_id
+            'name'       => $request->name,
+            'preferred'  => $request->preferred,
+            'notes'      => $request->notes,
+            'term'       => $request->term,
+            'net_terms'  => $request->net_terms,
+            'coterm_id'  => $request->coterm_id,
+            'expires_on' => $request->expires_on
         ]);
         if ($request->preferred && $quote->lead)
         {
