@@ -73,7 +73,10 @@ class Account extends Model
 {
     protected $guarded = ['id'];
     public    $dates   = ['next_bill'];
-    public    $casts   = ['payment_method' => PaymentMethod::class];
+    public    $casts   = [
+        'payment_method'    => PaymentMethod::class,
+        'merchant_metadata' => 'json'
+    ];
 
     public function users(): HasMany
     {

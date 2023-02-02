@@ -18,24 +18,19 @@ class LPCore extends APICore
     public Integration $integration;
     public string      $baseUrl = '';
 
-    //public string $baseUrlTesting = "https://fts-uat.cardconnect.com/cardconnect/"; // Generic Testing
-    public string $baseUrlTesting = "https://isv-uat.cardconnect.com/cardconnect/";    // Specific VL Testing
+    public string $baseUrlTesting = "https://isv-uat.cardconnect.com/cardconnect/"; // Generic Testing
     public string $baseUrlProd    = "https://isv.cardconnect.com/cardconnect/";        // Production
 
 
     /**
      * Prepare LogicPay API
      */
-    public function __construct()
+    public function __construct(object $config)
     {
         parent::__construct();
-        $i = Integration::where('ident', 'logic')->first();
-        $this->integration = $i;
-        $unpacked = $i->unpacked;
-
-        $this->mid = $unpacked->logic_mid;
-        $this->user = $unpacked->logic_user;
-        $this->password = $unpacked->logic_secret;
+        $this->mid = $config->logic_mid;
+        $this->user = $config->logic_user;
+        $this->password = $config->logic_secret;
         $this->baseUrl = env('APP_ENV') != 'production' ? $this->baseUrlTesting : $this->baseUrlProd;
         $encoded = base64_encode($this->user . ":" . $this->password);
         $this->setHeaders([
@@ -50,7 +45,7 @@ class LPCore extends APICore
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function test()
+    public function test() : mixed
     {
         return $this->send($this->baseUrl . "rest/", 'put', [
             'merchid' => $this->mid
@@ -82,14 +77,15 @@ class LPCore extends APICore
 
     /**
      * Attempt to Capture/Process a Payment
-     * @param string $token
-     * @param int    $amount
-     * @param string $name
+     * @param string      $token
+     * @param int         $amount
+     * @param string      $name
+     * @param string|null $expiry
      * @return object
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function authorize(string $token, int $amount, string $name): object
+    public function authorize(string $token, int $amount, string $name, ?string $expiry): object
     {
         $data = [
             'merchid'      => $this->mid,
@@ -101,6 +97,10 @@ class LPCore extends APICore
             'cof'          => 'M',
             'cofscheduled' => 'Y'
         ];
+        if ($expiry)
+        {
+            $data['expiry'] = $expiry;
+        }
         // Send on preauth and auth
         // E - Customer initiated , R - Recurring automated
         // cofscheduled = Y if recurring, N if not
