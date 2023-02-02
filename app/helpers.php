@@ -651,7 +651,7 @@ if (!function_exists('setting'))
         $value = onlyNumbers($value);
         if (!$value) return 0;
         $value = $value * 100;
-        return (int)$value;
+        return bcmul($value,1);
     }
 
     /**
