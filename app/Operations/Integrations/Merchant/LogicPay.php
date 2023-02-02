@@ -116,7 +116,7 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
     {
         $lp = new LPCore($this->config);
         //   $result = $lp->authorizeInstance($invoice->account->merchant_payment_token, $amount, $invoice->account->name, '341', '30005', "1025");
-        $meta = $invoice->account->merchant_metadata;
+        $meta = (object) $invoice->account->merchant_metadata;
         $expiry = (isset($meta->expiration) && $meta->expiration) ? $meta->expiration : null;
         $result = $lp->authorize($invoice->account->merchant_payment_token, $amount, $invoice->account->name, $expiry);
         if ($result->respstat == 'A')
