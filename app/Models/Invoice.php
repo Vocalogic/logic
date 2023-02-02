@@ -40,6 +40,8 @@ use App\Exceptions\LogicException;
  * @property mixed        $last_notice_sent
  * @property mixed        $servicesTotal
  * @property mixed        $recurring
+ * @property mixed        $suspension_sent
+ * @property mixed        $termination_sent
  */
 class Invoice extends Model
 {
@@ -113,7 +115,7 @@ class Invoice extends Model
         {
             $total += ($item->price * $item->qty);
         }
-        return $total;
+        return bcmul($total, 1);
     }
 
     /**
@@ -129,16 +131,16 @@ class Invoice extends Model
 
     /**
      * Get balance on an invoice.
-     * @return int
+     * @return float
      */
-    public function getBalanceAttribute(): int
+    public function getBalanceAttribute(): float
     {
         $total = $this->total;
         foreach ($this->transactions as $transaction)
         {
             $total -= $transaction->amount;
         }
-        return $total;
+        return bcmul($total,1);
     }
 
     /**
@@ -227,7 +229,7 @@ class Invoice extends Model
                 $total += $item->price * $item->qty;
             }
         }
-        return round($total, 2);
+        return bcmul($total,1);
     }
 
     /**
@@ -334,7 +336,7 @@ class Invoice extends Model
     public function getIsPastDueAttribute(): bool
     {
         if ($this->balance > 0
-            && ($this->status == InvoiceStatus::SENT->value || $this->status == InvoiceStatus::PARTIAL->value)
+            && ($this->status == InvoiceStatus::SENT || $this->status == InvoiceStatus::PARTIAL)
             && now()->timestamp > $this->due_on->timestamp)
         {
             return true;
@@ -345,19 +347,20 @@ class Invoice extends Model
     /**
      * Determine the discount on an entire quote based on the
      * pricing of each item individually if we have the setting enabled.
-     * @return int
+     * @return float
      */
-    public function getDiscountAttribute(): int
+    public function getDiscountAttribute(): float
     {
         if (setting('quotes.showDiscount') == 'None') return 0;
         $totalCatalog = 0;
         $totalQuoted = 0;
         foreach ($this->items as $item)
         {
+            if (!$item->item) continue; // no catalog price on manual items.
             $totalCatalog += $item->getCatalogPrice() * $item->qty;
             $totalQuoted += $item->price * $item->qty;
         }
-        return $totalCatalog - $totalQuoted;
+        return bcmul($totalCatalog - $totalQuoted,1);
     }
 
     /**
@@ -612,6 +615,32 @@ class Invoice extends Model
             sysact(ActivityType::PastDueNotification, $this->id,
                 "sent a past due notification to {$this->account->name} for ");
         }
+    }
+
+    /**
+     * Send Termination Notice
+     * @return void
+     */
+    public function sendTerminationNotice(): void
+    {
+        if ($this->termination_sent) return;
+        $this->account->sendBillingEmail('invoice.terminationPending', [$this], [$this->pdf(true)]);
+        $this->update(['termination_sent' => now()]);
+        sysact(ActivityType::PastDueNotification, $this->id,
+            "sent a termination past due notification to {$this->account->name} for ");
+    }
+
+    /**
+     * Send Suspension Notice
+     * @return void
+     */
+    public function sendSuspensionNotice(): void
+    {
+        if ($this->suspension_sent) return;
+        $this->account->sendBillingEmail('invoice.suspensionPending', [$this], [$this->pdf(true)]);
+        $this->update(['suspension_sent' => now()]);
+        sysact(ActivityType::PastDueNotification, $this->id,
+            "sent a suspension past due notification to {$this->account->name} for ");
     }
 
     /**

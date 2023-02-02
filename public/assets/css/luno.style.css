@@ -12524,6 +12524,12 @@ wi-wind-default._345-deg {
 [data-theme="dark"] .bg-success{
     background: rgba(77, 202, 136, 0.2) !important
 }
+[data-theme="dark"] .bg-warning{
+    background: rgba(255, 186, 51, 0.2) !important;
+    color: #d7cece !important;
+}
+
+
 
 [data-theme="dark"] .bg-info {
     background: rgba(79, 184, 201, 0.2) !important

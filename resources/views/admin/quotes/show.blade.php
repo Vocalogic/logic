@@ -16,12 +16,25 @@
                 <div><span class="h6 mb-0">${{moneyFormat($quote->nrc)}}</span></div>
                 <small class="text-muted text-uppercase">NRC</small>
             </div>
-            <div class="p-2 pe-lg-0">
+            <div class="p-2 me-md-3">
                 <div><span
-                        class="h6 mb-0">{{$quote->lead && $quote->lead->agent ? $quote->lead->agent->short : $quote->account?->agent?->short}}</span>
+                        class="h6 mb-0">{{$quote->term ? $quote->term ." months" : "MTM"}}</span>
                 </div>
-                <small class="text-muted text-uppercase">Owner</small>
+                <small class="text-muted text-uppercase">Term</small>
             </div>
+            <div class="p-2 pe-lg-0">
+                <div>
+                    <span class="h6 mb-0">
+                        @if($quote->lead && $quote->lead->agent)
+                            {{$quote->lead->agent ? $quote->lead->agent->short : "No Agent"}}
+                        @else
+                            {{$quote->account->agent ? $quote->account->agent->short : "No Agent"}}
+                        @endif
+                    </span>
+                </div>
+                <small class="text-muted text-uppercase">Agent</small>
+            </div>
+
         </div>
     </div> <!-- .row end -->
 
@@ -47,9 +60,18 @@
                 </div>
             @endif
             @if($quote->status == 'Executed')
-                <div class="alert {{bma()}}warning">
+                <div class="alert border-warning">
                     <i class="fa fa-exclamation-circle"></i>
-                    This quote has been executed and is no longer able to be edited.
+                    This quote was executed on {{$quote->activated_on->format("m/d/y")}} by {{$quote->contract_name}} and is no longer able to be edited.
+                </div>
+            @endif
+
+            @if(!$quote->presentable)
+                <div role="alert" class="alert border-warning mt-3">NOTE: This quote is not completed yet. If you are
+                    finished with this quote and would like customers to be able to see it make sure you <a
+                        href="/admin/quotes/{{$quote->id}}/presentable">
+                        mark it as presentable.
+                    </a>
                 </div>
             @endif
             @include('admin.quotes.builder')

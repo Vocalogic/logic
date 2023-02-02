@@ -87,10 +87,10 @@ class SettingSeeder extends Seeder
             'Enter your default net terms of when invoices should be due', '0|30');
         $this->buildSetting('invoices.pastdue', 'Number of Days to Send Past Due Notice', 'number', 7, 'Invoice',
             'Enter the number of days between sending a past due invoice notification.', '0|30');
-        $this->buildSetting('invoices.suspensionDays', 'Number of Days Past Due before Suspension', 'number', 15, 'Invoice',
-            'Enter the number of days until services are to be suspended for non-payment.', '0|60');
-        $this->buildSetting('invoices.terminationDays', 'Number of Days Past Due before Termination', 'number', 30, 'Invoice',
-            'Enter the number of days until services are to be terminated for non-payment.', '0|60');
+        $this->buildSetting('invoices.suspensionDays', 'Number of Days Past Due before Suspension', 'number', 45, 'Invoice',
+            'Enter the number of days until services are to be suspended for non-payment.', '0|120');
+        $this->buildSetting('invoices.terminationDays', 'Number of Days Past Due before Termination', 'number', 60, 'Invoice',
+            'Enter the number of days until services are to be terminated for non-payment.', '0|120');
 
         $this->buildSetting('invoices.default', 'Default Payment Type', 'select', 'Credit Card', 'Invoice',
             'Enter the default payment type for when accounts are created.', 'Credit Card,Check,EFT,Cash');

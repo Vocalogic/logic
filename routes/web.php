@@ -163,7 +163,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
     // Creating quotes from an Account
     Route::get('accounts/{account}/quotes', [AccountController::class, 'quotes']);
-    Route::post('accounts/{account}/quotes', [AccountController::class, 'storeQuote']);
 
     // Account Events
     Route::get('accounts/{account}/events', [AccountController::class, 'events']);
@@ -465,6 +464,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
 
     Route::get('quotes', [QuoteController::class, 'index']);
+    Route::post('quotes', [QuoteController::class, 'store']);
+    Route::get('quotes/create', [QuoteController::class, 'create']);
     Route::get('quotes/{quote}', [QuoteController::class, 'show']);
     Route::get('quotes/{quote}/approve', [QuoteController::class, 'approve']);
     Route::get('quotes/{quote}/items/{item}/addons', [QuoteController::class, 'addons']);
@@ -520,8 +521,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
 // Quotes from Lead Context
     Route::get('leads/{lead}/quotes', [QuoteController::class, 'leadIndex']);
-    Route::get('leads/{lead}/quotes/create', [QuoteController::class, 'leadCreate']);
-    Route::get('leads/{lead}/quotes/{quote}', [QuoteController::class, 'leadShow']);
 
     Route::put('quotes/{quote}', [QuoteController::class, 'update']);
     Route::post('quotes/{quote}/copy', [QuoteController::class, 'copy']);

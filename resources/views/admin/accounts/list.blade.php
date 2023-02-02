@@ -33,18 +33,25 @@
                             <span class="badge bg-danger"><i class="fa fa-exclamation"></i> declined</span>
                         @endif
                         @if (hasIntegration(\App\Enums\Core\IntegrationType::Finance) && !$account->finance_customer_id)
-                            <span class="badge bg-danger" data-bs-toggle="tooltip" title="Accounting Integration Error"><i class="fa fa-exclamation-circle"></i></span>
+                            <span class="badge bg-danger" data-bs-toggle="tooltip" title="Accounting Integration Error"><i
+                                    class="fa fa-exclamation-circle"></i></span>
                         @endif
                         @if($account->auto_bill)
                             <span class="badge bg-success" data-bs-toggle="tooltip" title="Auto-Pay Enabled">
                                 <i class="fa fa-dollar"></i>
                             </span>
-                            @endif
+                        @endif
+                        @if($account->payment_method == \App\Enums\Core\PaymentMethod::CreditCard && !$account->merchant_payment_token)
+                            <span class="badge bg-warning" data-bs-toggle="tooltip" title="No credit card on file">
+                                <i class="fa fa-credit-card"></i>
+                            </span>
+                        @endif
 
                         @if($account->partner)
-                                <a href="/admin/partners/{{$account->partner->id}}">
-                                    <span class="badge bg-info" data-bs-toggle="tooltip" title="Partner: {{$account->partner->name}}"><i class="fa fa-compass"></i></span>
-                                </a>
+                            <a href="/admin/partners/{{$account->partner->id}}">
+                                <span class="badge bg-info" data-bs-toggle="tooltip"
+                                      title="Partner: {{$account->partner->name}}"><i class="fa fa-compass"></i></span>
+                            </a>
                         @endif
                     </td>
                 </tr>

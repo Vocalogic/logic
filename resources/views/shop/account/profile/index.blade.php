@@ -118,13 +118,13 @@
                                                             <span class="text-danger"><i class="fa fa-exclamation-circle"></i> You have no credit card on file.</span>
                                                         @endif
                                                             @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::Stripe)
-                                                                @include('admin.accounts.profile.merchant_stripe')
+                                                                @include('admin.accounts.billing.merchant_stripe')
                                                             @endif
 
 
                                                             @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::LogicPay)
                                                                 <div class="card">
-                                                                @include('admin.accounts.profile.merchant_logic')
+                                                                @include('admin.accounts.billing.merchant_logic')
                                                                 </div>
                                                             @endif
 

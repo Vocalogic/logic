@@ -17,7 +17,7 @@
         <tr>
             <td>
                 <a href="/admin/invoices/{{$invoice->id}}">
-                    <span class="color-100 badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
+                    <span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span>
                 </a>
                 @if($invoice->recurring)
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Monthly Invoice">
