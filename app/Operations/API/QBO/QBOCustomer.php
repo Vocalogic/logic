@@ -53,6 +53,7 @@ class QBOCustomer extends QBOCore
      */
     public function findByName(string $name): array
     {
+        $name = str_replace("'", "\'", $name);
         $res = $this->qsend("query", 'get', [
             'query' => "SELECT * from Customer where CompanyName LIKE '%$name%'"
         ]);
