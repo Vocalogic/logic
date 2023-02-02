@@ -2,22 +2,21 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Enums\Core\ActivityType;
 use App\Exceptions\LogicException;
 use App\Models\Account;
-use App\Operations\API\LogicPay\LPCore;
 use App\Operations\Integrations\Merchant\LogicPay;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\Redirector;
 
 class LogicPayComponent extends Component
 {
-    public         $listeners    = ['logicToken'];
-    public string  $message      = "Awaiting New Payment Details..";
-    public string  $messageColor = 'info';
+    public         $listeners          = ['logicToken'];
+    public string  $message            = "Awaiting New Payment Details..";
+    public string  $messageColor       = 'info';
+    public bool    $awaitingExpiration = false;
+    public string  $expiration         = '';
     public Account $account;
     public string  $token;
 
@@ -45,26 +44,53 @@ class LogicPayComponent extends Component
 
     /**
      * Attempt to Authorize $1.00 with this token.
-     * @return mixed
+     * @return void
      * @throws GuzzleException
      */
-    private function attemptAuthorization(): mixed
+    private function attemptAuthorization(): void
     {
         $lp = new LogicPay();
         try
         {
-            $result = $lp->addPaymentMethod($this->account, $this->token);
+            $lp->addPaymentMethod($this->account, $this->token);
         } catch (LogicException $e)
         {
             $this->message = $e->getMessage();
             $this->messageColor = 'danger';
-            return null;
+            return;
         }
         $this->account->refresh();
-        $this->message = "<span class='text-success'>Payment Authorized! ($result->authcode)</span>";
+        $this->messageColor = 'success';
+        $this->message = "<span class='text-success'>Card Authorized! Verify Expiration Date</span>";
+        $this->awaitingExpiration = true;
+    }
+
+
+    /**
+     * Attempt to save Expiration
+     * @return mixed
+     */
+    public function saveExpiration(): mixed
+    {
+        if (!$this->expiration)
+        {
+            $this->message = "<span class='text-danger'>Expiration date verification required for validation.</span>";
+            return null;
+        }
+        if (strlen($this->expiration) != 4)
+        {
+            $this->message = "<span class='text-danger'>Expiration date must be MMYY format.</span>";
+            return null;
+        }
+        $data = [
+          'expiration' => $this->expiration
+        ];
+        $this->account->update(['merchant_metadata' => $data]);
         if (user()->account->id > 1)
         {
-            return redirect()->to("/shop/account/profile")->with('message', "Your payment method has been updated with ".setting('brand.name'). " Successfully!");
+            sysact(ActivityType::Account, user()->account->id, "updated their credit card information for ");
+            return redirect()->to("/shop/account/profile")->with('message',
+                "Your payment method has been updated with " . setting('brand.name') . " Successfully!");
         }
         else
         {

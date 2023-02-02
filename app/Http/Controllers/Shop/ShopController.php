@@ -138,7 +138,6 @@ class ShopController extends Controller
      */
     public function auth() : View
     {
-        //info(print_r(cart(),true));
         $cart = sbus()->get(cart()->uid);
         sbus()->authorize(cart()->uid);
         return view('shop.authorize_modal', ['cart' => $cart]);
@@ -164,7 +163,6 @@ class ShopController extends Controller
     {
         $signature = json_encode($request->sig);
         session([CommKey::LocalSignatureData->value => $signature]);
-        info(print_r($signature,true));
         return ['succuess' => true];
     }
 }

@@ -15,3 +15,8 @@
         </div>
     </div>
 @endsection
+@section('javascript')
+    @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::LogicPay)
+        <script type="text/javascript" src="/assets/js/logicpay.js"></script>
+    @endif
+@endsection
