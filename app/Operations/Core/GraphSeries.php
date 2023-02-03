@@ -2,6 +2,7 @@
 
 namespace App\Operations\Core;
 
+use App\Enums\Core\CommKey;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\MetricType;
 use App\Models\Account;
@@ -305,8 +306,18 @@ class GraphSeries
         // We should take the account_id, and months to determine how far to go back.
         // We will use _metrics to figure out historical MRR.
         $account = Account::find($this->request->account);
+        if (cache(CommKey::AccountMRRCache->value))
+        {
+            $data = cache(CommKey::AccountMRRCache->value);
+            if (isset($data[$account->id])) {
+                $this->series = $data[$account->id];
+                return $this->series;
+            }
+        }
+
         $mrrPlots = [];
         $invoicePlots = [];
+        info("Months is ". $this->request->months);
         foreach (range(0, $this->request->months ?? 6) as $month)
         {
             $start = now()->subMonths($month)->startOfMonth();
@@ -322,11 +333,8 @@ class GraphSeries
                     $mrr = $mrrMetric->value;
                     break;
                 }
-                $day->addDays(5); // Move through week faster.
-                if ($day->day >= $end->day || $day->month != $end->month)
-                {
-                    break; // Stay with 0.
-                }
+                $day->addDay();
+                if ($day >= $end) break;
             }
             $mTotal = 0;
             foreach ($account->invoices()->whereBetween('created_at', [$start, $end])
@@ -346,8 +354,6 @@ class GraphSeries
                 'x' => $start->getTimestampMs(),
                 'y' => moneyFormat($mTotal, false)
             ];
-
-
         }
 
         $this->series[] = [
@@ -362,6 +368,11 @@ class GraphSeries
             'color' => $this->colors[3],
             'type'  => 'area'
         ];
+
+        $cacheValue = cache(CommKey::AccountMRRCache->value);
+        if (!$cacheValue) $cacheValue = [];
+        $cacheValue[$account->id] = $this->series;
+        cache([CommKey::AccountMRRCache->value => $cacheValue], CommKey::AccountMRRCache->getLifeTime());
         return $this->series;
     }
 

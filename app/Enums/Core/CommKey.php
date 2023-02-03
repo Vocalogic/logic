@@ -111,6 +111,12 @@ enum CommKey: string
      */
     case GlobalUpgradeTrigger = 'logic_should_upgrade';
 
+    /**
+     * This will cache the MRR for an account for the invoice vs MRR graph
+     * for each account.
+     */
+    case AccountMRRCache = 'account_mrr_cache';
+
 
     /**
      * All cache keys should have their lifetimes defined below. If no specific definition is defined
@@ -124,6 +130,7 @@ enum CommKey: string
             self::GlobalCartCache => now()->addMinutes(30),
             self::GlobalLicenseCache => now()->addMinutes(5),
             self::GlobalIPInventoryCache => now()->addMonth(),
+            self::AccountMRRCache => now()->addDay(),
             default => now()->addHour()
         };
     }
