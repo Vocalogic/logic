@@ -18,7 +18,13 @@
             <td><a href="/admin/invoices/{{$c->invoice->id}}"><span
                         class="badge bg-{{bm()}}info">#{{$c->invoice->id}}</span></a></td>
             <td>{{$c->invoice->account->name}}</td>
-            <td>{{$c->account->name}} / {{$c->invoice->account->agent->short}}</td>
+            <td>
+                @if($c->invoice->account->affiliate)
+                    Affiliate / {{$c->invoice->account->affiliate->name}}
+                @else
+                {{$c->account->name}} / {{$c->invoice->account->agent->short}}
+                @endif
+            </td>
             <td>{{$c->status->getHuman()}}
                 @if($c->status == \App\Enums\Core\CommissionStatus::Scheduled)
                     <br/><span

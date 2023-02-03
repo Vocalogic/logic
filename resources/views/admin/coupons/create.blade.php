@@ -128,6 +128,18 @@
                         </div>
 
                         <div class="row mt-2">
+                            <div class="col-lg-6">
+
+                                <div class="form-floating">
+                                    {!! Form::select('affiliate_id', \App\Models\Affiliate::getSelectable(), $coupon->affiliate_id, ['class' => 'form-control']) !!}
+                                    <label>Select Affiliate</label>
+                                    <span class="helper-text">Does this coupon belong to an affiliate?</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
                             <div class="col-lg-12 mb-2"><h6 class="card-title">Terms and Conditions</h6></div>
 
                             <div class="col-lg-12">

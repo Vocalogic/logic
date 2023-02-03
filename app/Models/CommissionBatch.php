@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $agent
  * @property mixed $transaction_detail
  * @property mixed $paid_on
+ * @property mixed $affiliate
  */
 class CommissionBatch extends Model
 {
@@ -34,6 +35,15 @@ class CommissionBatch extends Model
     public function agent(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * A batched commission payout can be to an affiliate.
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
     }
 
     /**
@@ -106,6 +116,11 @@ class CommissionBatch extends Model
      */
     public function notifyNew(): void
     {
+        if ($this->affiliate)
+        {
+            template('agent.batch', null, [$this], [], $this->affiliate->email, $this->affiliate->name);
+            return;
+        }
         template('agent.batch', $this->agent, [$this]);
     }
 
@@ -115,6 +130,11 @@ class CommissionBatch extends Model
      */
     public function notifyPaid(): void
     {
+        if ($this->affiliate)
+        {
+            template('agent.batchPaid', null, [$this], [], $this->affiliate->email, $this->affiliate->name);
+            return;
+        }
         template('agent.batchPaid', $this->agent, [$this]);
     }
 

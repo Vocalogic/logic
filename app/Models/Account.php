@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\AccountFileType;
 use App\Enums\Core\ACL;
+use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
 use App\Enums\Core\IntegrationType;
 use App\Enums\Core\InvoiceStatus;
@@ -216,6 +217,15 @@ class Account extends Model
     public function pricings(): HasMany
     {
         return $this->hasMany(AccountPricing::class);
+    }
+
+    /**
+     * An account can have an affiliate for commissions (via coupon)
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
     }
 
     /**
@@ -794,6 +804,9 @@ class Account extends Model
         {
             $invoice->createOrder();
         }
+        $total = "$" . moneyFormat($invoice->total);
+        sysact(ActivityType::Account, $this->id,
+            "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
     }
 
     /**

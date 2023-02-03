@@ -21,7 +21,7 @@
                         <tr>
                             <th>Code</th>
                             <th>Name</th>
-                            <th>Type</th>
+                            <th>Affiliate</th>
                             <th>Active On</th>
                             <th>Remaining</th>
                         </tr>
@@ -31,7 +31,7 @@
                             <tr>
                                 <td><a href="/admin/coupons/{{$coupon->id}}">{{$coupon->coupon}}</a></td>
                                 <td>{{$coupon->name}}</td>
-                                <td>{{$coupon->total_invoice ? "Total Invoice Discount" : "Per Product Discount"}} </td>
+                                <td>{{$coupon->affiliate ? $coupon->affiliate->name : "None"}}</td>
                                 <td>{{$coupon->start ? $coupon->start->format("m/d/y h:ia") : "Not Started"}} - {{$coupon->end ? $coupon->end->format("m/d/y h:ia") : "No End Date"}}</td>
                                 <td>{{$coupon->remaining > -1 ? $coupon->remaining : "Unlimited"}}</td>
                             </tr>

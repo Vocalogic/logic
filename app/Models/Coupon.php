@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -15,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $percent_off
  * @property mixed $id
  * @property mixed $new_accounts_only
+ * @property mixed $affiliate
  */
 class Coupon extends Model
 {
@@ -28,6 +30,15 @@ class Coupon extends Model
     public function items(): HasMany
     {
         return $this->hasMany(BillItemCoupon::class, 'coupon_id');
+    }
+
+    /**
+     * A coupon can be associated to an affiliate for commission tracking.
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
     }
 
     /**

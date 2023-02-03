@@ -22,7 +22,12 @@
         <tbody>
         @foreach(\App\Models\Commission::whereNull('commission_batch_id')->get() as $c)
             <tr>
-                <td>{{$c->user->name}}</td>
+                <td>@if($c->user)
+                        {{$c->user->name}}
+                    @else
+                        {{$c->affiliate->name}} <span class="badge bg-primary">affiliate</span>
+                    @endif
+                </td>
                 <td>#{{$c->invoice->id}}</td>
                 <td>${{moneyFormat($c->amount)}}</td>
                 <td>{{$c->scheduled_on ? $c->scheduled_on->format("m/d/y") : "N/A"}}</td>
