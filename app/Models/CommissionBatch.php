@@ -118,7 +118,7 @@ class CommissionBatch extends Model
     {
         if ($this->affiliate)
         {
-            template('agent.batch', null, [$this], $this->affiliate->email, $this->affiliate->name);
+            template('agent.batch', null, [$this], [], $this->affiliate->email, $this->affiliate->name);
             return;
         }
         template('agent.batch', $this->agent, [$this]);
@@ -132,7 +132,7 @@ class CommissionBatch extends Model
     {
         if ($this->affiliate)
         {
-            template('agent.batchPaid', null, [$this], $this->affiliate->email, $this->affiliate->name);
+            template('agent.batchPaid', null, [$this], [], $this->affiliate->email, $this->affiliate->name);
             return;
         }
         template('agent.batchPaid', $this->agent, [$this]);
