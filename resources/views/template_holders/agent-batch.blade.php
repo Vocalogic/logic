@@ -6,4 +6,4 @@ The following items below have been scheduled in this batch for payment:
 
 {commissionBatch.listHuman}
 
-<b>Total:</b> {commissionBatch.totalHuman}
+<b>Total:</b> ${commissionBatch.totalHuman}

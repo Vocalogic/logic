@@ -27,6 +27,10 @@ class CommissionController extends Controller
         {
             $commissions = Commission::where('user_id', $request->byUser)->get();
         }
+        elseif($request->byAffiliate)
+        {
+            $commissions = Commission::where('affiliate_id', $request->byAffiliate)->get();
+        }
         else
         {
             $commissions = Commission::where('status', '!=', CommissionStatus::Paid)->get();

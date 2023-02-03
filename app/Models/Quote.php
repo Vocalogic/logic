@@ -110,6 +110,15 @@ class Quote extends Model
     }
 
     /**
+     * A quote can have an assigned coupon from the shop.
+     * @return BelongsTo
+     */
+    public function coupon(): BelongsTo
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
+    /**
      * Get number of items to invoice that don't have financing./
      * @return int
      */

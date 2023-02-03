@@ -37,6 +37,15 @@ class Commission extends Model
     }
 
     /**
+     * A commission could belong to an affiliate not a user/agent
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
+    }
+
+    /**
      * Commission off an invoice.
      * @return BelongsTo
      */

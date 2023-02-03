@@ -259,6 +259,7 @@ class AnalysisEngine
 
     /**
      * This method will return the commissionable amount on an invoice.
+     * This should only be called if the invoice is commissionable (also recurring invoice)
      * @param Invoice $invoice
      * @return int
      */
@@ -267,30 +268,51 @@ class AnalysisEngine
         // Get MRR totals.
         $amount = 0;
         $total = $invoice->total; // Total of Recurring Invoice
+
+        // First lets figure out how much is actually commissionable.
+        if (setting('quotes.subtractExpense') == 'Yes')
+        {
+            $totalExpenses = 0;
+            foreach($invoice->items as $item)
+            {
+                if($item->item && $item->item->ex_opex)
+                {
+                    $totalExpenses += bcmul($item->item->ex_opex * $item->qty,1);
+                }
+            }
+            $commissionable = $total - $totalExpenses;
+        }
+        else
+        {
+            $commissionable = $total;
+        }
+
+        // #154 - Affiliate Commissioning
+        if ($invoice->account->affiliate)
+        {
+            if ($invoice->account->affiliate->mrr > 0)
+            {
+                $per = $invoice->account->affiliate->mrr / 100;
+                $amount = $commissionable * $per;
+            }
+            elseif($invoice->account->affiliate->spiff)
+            {
+                // Check if already spiffed
+                if ($invoice->account->spiffed) return 0;
+                $amount = $total * $invoice->account->affiliate->spiff;
+            }
+            return $amount;
+        }
+
+        // If we are here, then no affiliate found and it's commissionable by agent.
         if ($invoice->account->agent->agent_comm_mrc > 0)
         {
             $per = $invoice->account->agent->agent_comm_mrc / 100; // Take 10 and make it .1
-            // Check expenses first.
-            if (setting('quotes.subtractExpense') == 'Yes')
-            {
-                $totalExpenses = 0;
-                foreach($invoice->items as $item)
-                {
-                    if($item->item && $item->item->ex_opex)
-                    {
-                        $totalExpenses += $item->item->ex_opex * $item->qty;
-                    }
-                }
-                $commissionable = $total - $totalExpenses;
-            }
-            else
-            {
-                $commissionable = $total;
-            }
             $amount = $commissionable * $per;
         }
         elseif ($invoice->account->agent->agent_comm_spiff > 0 && !$invoice->account->spiffed)
         {
+            if ($invoice->account->spiffed) return 0;
             $amount = $total * $invoice->account->agent->agent_comm_spiff;
         }
         return $amount;

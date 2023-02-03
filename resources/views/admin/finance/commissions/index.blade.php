@@ -14,45 +14,10 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-2 mt-2">
-            <a href="/admin/finance/commission_batches/create" data-title="Create new Commission Batch"
-               class="btn btn-block btn-{{bm()}}primary w-100 live mb-3">
-                <i class="fa fa-plus"></i> Create new Batch
-            </a>
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title">By Status</h6>
-                    <ul class="list-group list-group-custom">
-                        @foreach(\App\Enums\Core\CommissionStatus::cases() as $status)
-                            <li class="list-group-item">
-                                <a class="color-600" href="/admin/finance/commissions?status={{$status->value}}">
-                                    {{$status->getHuman()}} ({{$status->count()}})
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h6 class="card-title">By Agent</h6>
-                    <ul class="list-group list-group-custom">
-                        @foreach(\App\Models\User::where('agent_comm_mrc', '>', 0)->get() as $user)
-                            <li class="list-group-item">
-                                <a class="color-600" href="/admin/finance/commissions?byUser={{$user->id}}">
-                                    {{$user->name}}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-
+        <div class="col-lg-3 col-xs-12 mt-2">
+            @include('admin.finance.commissions.sidebar')
         </div>
-
-
-        <div class="col-lg-10 mt-2">
+        <div class="col-lg-9 col-xs-12 mt-2">
             <div class="card">
                 <div class="card-body">
                     @include('admin.finance.commissions.list')

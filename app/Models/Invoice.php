@@ -140,7 +140,7 @@ class Invoice extends Model
         {
             $total -= $transaction->amount;
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -229,7 +229,7 @@ class Invoice extends Model
                 $total += $item->price * $item->qty;
             }
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -360,7 +360,7 @@ class Invoice extends Model
             $totalCatalog += $item->getCatalogPrice() * $item->qty;
             $totalQuoted += $item->price * $item->qty;
         }
-        return bcmul($totalCatalog - $totalQuoted,1);
+        return bcmul($totalCatalog - $totalQuoted, 1);
     }
 
     /**
@@ -541,21 +541,22 @@ class Invoice extends Model
      */
     private function createCommission(): void
     {
-        if (!$this->account->partner_id && !$this->account->agent_id) return;   // Not sold by a partner or agent
+        // Check to see if we have any form of commissionable agent here.
+        if (!$this->account->partner_id && !$this->account->agent_id && !$this->account->affiliate_id) return;
         if (!$this->account->is_commissionable) return;                         // Not Commissionable
         if (!$this->recurring) return;                                          // Not a recurring invoice.
         if ($this->commission) return;                                          // already has a commission
         $amount = AnalysisEngine::byInvoice($this);
 
-
-        $this->account->update(['spiffed' => true]);
+        $this->account->update(['spiffed' => true]);                            // Do not spiff more than once.
         if ($amount > 0)
         {
             $comm = $this->commission()->create([
-                'account_id' => $this->account->partner_id ?: 1, // No partner, set as house account.
-                'user_id'    => $this->account->agent_id,
-                'status'     => CommissionStatus::PendingPayment,
-                'amount'     => $amount
+                'account_id'   => $this->account->partner_id ?: 1, // No partner, set as house account.
+                'user_id'      => $this->account->agent_id ?: 0,
+                'affiliate_id' => $this->account->affiliate_id ?: 0,
+                'status'       => CommissionStatus::PendingPayment,
+                'amount'       => $amount
             ]);
             $comm->refresh();
             $comm->notifyNew();

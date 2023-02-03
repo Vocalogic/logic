@@ -18,6 +18,12 @@
                     | Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
                                          href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
                     </a>
+                @if($invoice->account->agent)
+                    | Agent: <b>{{$invoice->account->agent->name}}</b>
+                @endif
+                @if($invoice->account->affiliate)
+                    | Affiliate: <b>{{$invoice->account->affiliate->name}}</b>
+                @endif
             </small>
         </div>
 

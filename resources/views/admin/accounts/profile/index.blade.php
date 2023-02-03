@@ -48,7 +48,8 @@
 
                                     <div class="col-lg-8 col-md-12">
                                         <div class="form-floating">
-                                            <input type="text" class="address form-control {{setting('account.maps_key') ? 'mapsEnabled': null}}"
+                                            <input type="text"
+                                                   class="address form-control {{setting('account.maps_key') ? 'mapsEnabled': null}}"
                                                    id="addressQuery" name="address"
                                                    value="{{$account->address}}">
                                             <label>Address</label>
@@ -98,8 +99,6 @@
                                 </div>
 
                                 <div class="row g-3 mb-4">
-
-
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-floating">
                                             {!! Form::select('agent_id', \App\Models\User::getAgentsSelectable(), $account->agent_id, ['class' => 'form-control']) !!}
@@ -107,8 +106,6 @@
                                             <span class="helper-text">Select the user who sold or is supporting this account.</span>
                                         </div>
                                     </div>
-
-
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-floating">
                                             {!! Form::select('is_commissionable', [0 => 'No', 1 => 'Yes'], $account->is_commissionable, ['class' => 'form-control']) !!}
@@ -116,8 +113,18 @@
                                             <span class="helper-text">Select if commissions should be paid on this account</span>
                                         </div>
                                     </div>
+                                </div>
 
-
+                                <div class="row g-3 mb-4">
+                                    <div class="col-lg-6">
+                                        <div class="form-floating">
+                                            {!! Form::select('affiliate_id', \App\Models\Affiliate::getSelectable(), $account->affiliate_id, ['class' => 'form-control']) !!}
+                                            <label>Select Affiliate</label>
+                                            <span class="helper-text">
+                                                Select an affiliate agent to be commissioned.
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row mb-4">
@@ -143,7 +150,8 @@
 
                                 <div class="row g-3 mb-4">
                                     <div class="col-lg-12">
-                                        <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                                        <button type="submit" class="btn btn-primary ladda pull-right"
+                                                data-style="zoom-out">
                                             <i class="fa fa-save"></i> Save Company Profile
                                         </button>
                                     </div>

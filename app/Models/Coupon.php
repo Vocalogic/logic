@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $percent_off
  * @property mixed $id
  * @property mixed $new_accounts_only
+ * @property mixed $affiliate
  */
 class Coupon extends Model
 {
