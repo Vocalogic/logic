@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AccountUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AffiliateController;
 use App\Http\Controllers\Admin\AssistantController;
 use App\Http\Controllers\Admin\BillItemCategoryController;
 use App\Http\Controllers\Admin\BillItemController;
@@ -113,6 +114,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::resource('file_categories', FileCategoryController::class);
     Route::resource('meetings', MeetingController::class);
     Route::resource('partners', PartnerController::class);
+    Route::resource('affiliates', AffiliateController::class);
     Route::get('partners/{partner}/remote/invoice/{id}', [PartnerController::class, 'getRemoteInvoice']);
     Route::get('partners/{partner}/invoice/{id}', [PartnerController::class, 'getLocalInvoice']);
 
