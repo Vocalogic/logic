@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire;
 
-use App\Enums\Core\EventType;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
 
@@ -25,7 +24,8 @@ class NotificationComponent extends Component
      */
     public function markRead(): void
     {
-        user()->notifications()->where('type', EventType::SEV_NOTIFY)->update(['read' => true]);
+        // TODO: to be clarified, for now just commented
+        // user()->notifications()->where('type', EventType::SEV_NOTIFY)->update(['read' => true]);
     }
 
 }

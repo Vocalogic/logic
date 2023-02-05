@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\Core\ACL;
-use App\Enums\Core\EventType;
 use App\Operations\Core\Gravatar;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;

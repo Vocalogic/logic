@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Enums\Core\EventType;
 use App\Mail\BaseMailer;
 use App\Models\Setting;
 use App\Structs\SEmail;
@@ -15,6 +14,7 @@ use Illuminate\Mail\MailServiceProvider;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class DispatchEmail implements ShouldQueue
@@ -55,7 +55,6 @@ class DispatchEmail implements ShouldQueue
         } catch(Exception $e)
         {
             info("Failure to send email: " . $e->getMessage());
-            _log(EventType::Mail, EventType::SEV_ERROR, $e->getMessage());
         }
     }
 }

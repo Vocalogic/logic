@@ -3,7 +3,7 @@
 namespace App\Operations\Core;
 
 use App\Enums\Core\AccountFileType;
-use App\Enums\Core\EventType;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Models\Account;
@@ -61,7 +61,7 @@ class LoFileHandler
             Storage::disk(self::DISK)->put($finalLocation, base64_decode($baseData));
         } catch (Exception $e)
         {
-            _log(EventType::Storage, EventType::SEV_ERROR, "Unable to create file (" . $e->getMessage() . ")");
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
             return null;
         }
         return (new LOFile)->create([
@@ -114,7 +114,7 @@ class LoFileHandler
             Storage::disk(self::DISK)->putFileAs($location, $request->file($key), $real);
         } catch (Exception $e)
         {
-            _log(EventType::Storage, EventType::SEV_ERROR, "Unable to create file (" . $e->getMessage() . ")");
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
             return null;
         }
         return (new LOFile)->create([
