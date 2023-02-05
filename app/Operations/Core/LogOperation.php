@@ -18,13 +18,6 @@ class LogOperation
     protected string $message;
     protected LogSeverity $logSeverity;
 
-    public function __construct(Model $model, string $message, LogSeverity $logSeverity)
-    {
-        $this->model = $model;
-        $this->message = $message;
-        $this->logSeverity = $logSeverity;
-    }
-
     public function getUserId(): int
     {
         return user()->id ?? 0;
@@ -78,18 +71,17 @@ class LogOperation
     }
 
     /**
-     * This function will be mainly used for log entries
+     * This method will be mainly used for log entries
      * @param  Model  $model
      * @param  string  $message
-     * @param  LogSeverity|null  $logSeverity
+     * @param  LogSeverity  $logSeverity
      * @return void
      */
-    public static function write(Model $model, string $message, LogSeverity $logSeverity = null): void
+    public function write(Model $model, string $message, LogSeverity $logSeverity = LogSeverity::Info): void
     {
-        if ($logSeverity === null) {
-            $logSeverity = LogSeverity::Info;
-        }
-        $service = new self($model, $message, $logSeverity);
-        $service->insert();
+        $this->model = $model;
+        $this->message = $message;
+        $this->logSeverity = $logSeverity;
+        $this->insert();
     }
 }
