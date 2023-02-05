@@ -6,7 +6,7 @@
                        value="{{$val}}">
                 <label>{{$term}}-Month Term Discount (in %)</label>
                 <span
-                    class="helper-text">Enter auto-discount amount *from MSRP* for a {{$term}} month term selected.</span>
+                    class="helper-text">Enter auto-discount amount <b>from MSRP</b> for a {{$term}} month term selected.</span>
             </div>
         </div>
     @endforeach

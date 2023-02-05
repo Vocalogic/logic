@@ -67,12 +67,6 @@
                         </div>
 
                     </div>
-
-                    @if(setting('quotes.selfterm') == 'Yes' && $item->id)
-
-                    @endif
-
-
                 </div>
 
                 <div class="col-md-6 col-6">
