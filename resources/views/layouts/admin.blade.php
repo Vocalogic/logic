@@ -116,7 +116,7 @@
 
                         <!-- start: quick light dark -->
                         <li>
-                            <a class="nav-link quick-light-dark" href="/mode/toggle">
+                            <a class="nav-link quick-light-dark" href="/mode/toggle" data-bs-placement="left" data-bs-toggle="tooltip" title="Switch to {{currentMode() == 'light' ? "dark" : "light"}} mode">
                                 <svg viewBox="0 0 16 16" width="18px" fill="currentColor"
                                      xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -126,6 +126,32 @@
                                 </svg>
                             </a>
                         </li>
+                        @if(isset($docs))
+                            <li>
+                                <a class="nav-link quick-light-dark" target="_blank" data-bs-placement="left" href="{{$docs}}" data-bs-toggle="tooltip" title="{{$title}} Documentation">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" fill="currentColor" viewBox="0 0 16 16">
+                                        <path class="fill-secondary" d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"></path>
+                                        <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"></path>
+                                        <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if(isset($video))
+                            <li>
+                                <a class="nav-link quick-light-dark" target="_blank" href="{{$video}}" data-bs-toggle="tooltip" data-bs-placement="left" title="Video Tutorial">
+                                    <svg width="18" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M0 3H16V4H0V3Z"></path>
+                                        <path d="M9 1H14V6H9V1Z"></path>
+                                        <path d="M0 13H16V14H0V13Z"></path>
+                                        <path d="M9 11H14V16H9V11Z"></path>
+                                        <path class="fill-secondary" d="M0 8H16V9H0V8Z"></path>
+                                        <path class="fill-secondary" d="M2 6H7V11H2V6Z"></path>
+                                    </svg>
+                                </a>
+                            </li>
+                        @endif
                         <!-- start: User dropdown-menu -->
                         <li>
                             <div class="dropdown morphing scale-left user-profile mx-lg-3 mx-2">
