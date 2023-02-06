@@ -321,11 +321,10 @@ class BillItem extends Model
      */
     public function getVariantExportAttribute(): string
     {
-        $data = "<table><thead><tr><th>Variant</th><th>Price</th></tr></thead><tbody>";
+        $data = "<table><tbody>";
         foreach ($this->children as $child)
         {
-            $data .= "<tr><td><a href='/admin/category/{$child->category->id}/items/$child->id'>$child->name ({$child->variation_name})</a></td><td>$" . number_format($child->msrp,
-                    2) . "</td></tr>";
+            $data .= "<tr><td><a href='/admin/category/{$child->category->id}/items/$child->id'>$child->name ({$child->variation_name})</a></td></tr>";
         }
         $data .= "</table>";
         return $data;
