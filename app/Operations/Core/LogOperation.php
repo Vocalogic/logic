@@ -3,6 +3,7 @@
 namespace App\Operations\Core;
 
 use App\Enums\Core\LogSeverity;
+use App\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AppLog;
 
@@ -30,6 +31,10 @@ class LogOperation
 
     private function getAccountId(): int|null
     {
+        if ($this->model instanceof Account) {
+            return $this->model->id;
+        }
+
         return $this->model->account_id ?? null;
     }
 
@@ -77,7 +82,7 @@ class LogOperation
      * @param  LogSeverity  $logSeverity
      * @return void
      */
-    public function write(Model $model, string $message, LogSeverity $logSeverity = LogSeverity::Info): void
+    public function write(Model $model, string $message, LogSeverity $logSeverity): void
     {
         $this->model = $model;
         $this->message = $message;

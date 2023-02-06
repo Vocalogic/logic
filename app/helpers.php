@@ -175,13 +175,13 @@ if (!function_exists('setting'))
      * Log an event or notification
      * @param Model            $model
      * @param string           $message
-     * @param LogSeverity|null $logSeverity
+     * @param LogSeverity      $logSeverity
      * @return void
      */
     function _log(
         Model $model,
         string $message,
-        LogSeverity $logSeverity = null
+        LogSeverity $logSeverity = LogSeverity::Info
     ): void {
         try {
             $service = new LogOperation();

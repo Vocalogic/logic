@@ -2,7 +2,6 @@
 
 namespace App\Operations\API\QBO;
 
-use App\Enums\Core\EventType;
 use App\Exceptions\LogicException;
 use App\Models\Account;
 use App\Models\Lead;

@@ -112,6 +112,7 @@ class QuoteController extends Controller
             sysact(ActivityType::AccountQuote, $quote->id,
                 "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
         }
+        _log($quote, 'Quote created');
         return redirect()->to("/admin/quotes/$quote->id")->with('message', "Quote #$quote->id created.");
     }
 

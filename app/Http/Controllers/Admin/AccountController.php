@@ -195,6 +195,7 @@ class AccountController extends Controller
             'due_on' => now()->addDays($terms),
             'po'     => $request->po
         ]);
+        _log($invoice, 'Invoice created');
         return redirect()->to("/admin/invoices/$invoice->id");
     }
 
@@ -357,6 +358,7 @@ class AccountController extends Controller
         ]);
         $account->generateHash();
         $user->update(['account_id' => $account->id]);
+        _log($account, 'Account created');
         return redirect()->to("/admin/accounts/$account->id/profile");
     }
 

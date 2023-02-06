@@ -195,24 +195,6 @@ class User extends Authenticatable
     }
 
     /**
-     * A user has many notifications
-     * @return HasMany
-     */
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(LOLog::class, 'user_id')->where('type', EventType::SEV_NOTIFY);
-    }
-
-    /**
-     * Get the number of unread notifications.
-     * @return int
-     */
-    public function getUnreadAttribute(): int
-    {
-        return $this->notifications()->where('read', false)->count();
-    }
-
-    /**
      * Get email formatted link
      * @return string
      */
