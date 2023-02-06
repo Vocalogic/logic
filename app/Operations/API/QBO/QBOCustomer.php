@@ -15,7 +15,7 @@ class QBOCustomer extends QBOCore
     /**
      * Get a list of all customers.
      * @return mixed
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function all(): array
     {
@@ -51,18 +51,19 @@ class QBOCustomer extends QBOCore
      * Delete a customer entry in quickbooks.
      * @param int $id
      * @return void
-     * @throws GuzzleException
-     * @throws LogicException
+     * @throws Exception
      */
     public function remove(int $id): void
     {
         $customer = $this->find($id);
         if (!$customer) return;
-        $this->qsend("customer?operation=delete", 'post', [
-            'SyncToken'   => $customer->SyncToken,
-            'CustomerRef' => $customer->CustomerRef,
-            'Id'          => $customer->Id
-        ]);
+        $customer->Active = false;
+        try {
+            $this->qsend("customer", 'post', (array) $customer);
+        } catch(Exception|GuzzleException $e)
+        {
+            info("Customer could not be deactivated: " . $e->getMessage());
+        }
     }
 
     /**

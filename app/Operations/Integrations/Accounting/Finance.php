@@ -224,7 +224,7 @@ class Finance
             $lead->update(['finance_customer_id' => null]);
         } catch (Exception $e)
         {
-            info("Unable to remove lead from to Accounting : " . $e->getMessage());
+            info("Unable to remove lead from Accounting : " . $e->getMessage());
         }
     }
 
