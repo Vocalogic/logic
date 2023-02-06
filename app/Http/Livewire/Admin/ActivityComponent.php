@@ -263,6 +263,7 @@ class ActivityComponent extends Component
                 'auth_required' => 0
             ]
         );
+        _log($lo, 'Photo has been uploaded');
         return $lo->id;
     }
 
