@@ -66,6 +66,14 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-6 mt-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" {{$item->taxable ? "checked" : null}} role="switch" value="1" id="taxable"
+                                       name="taxable">
+                                <label class="form-check-label" for="taxable">Item is taxable?</label>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 

@@ -28,6 +28,10 @@
                                           label="Purchase Order" value="{{$account->po}}">
                                 If your customer requires a purchase order for monthly services, you can enter it here.
                             </x-form-input>
+                            @props(['opts' => [0 => 'No', 1 => 'Yes']])
+                            <x-form-select name="taxable" icon="minus-square" label="Customer Taxable?" :options="$opts" selected="{{$account->taxable}}">
+                                Is this customer taxable? Select No for no sales tax
+                            </x-form-select>
 
 
                         </div>
