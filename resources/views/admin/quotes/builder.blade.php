@@ -9,8 +9,14 @@
             </div>
         @endif
 
-        <div class="row mb-3">
-            <div class="col-lg-3">
+
+
+        @include('admin.quotes.build.quote_items')
+
+
+
+            <div class="row mt-3">
+                <div class="col-lg-2">
                     <div class="card text-center">
                         <div class="card-body">
                             <span class="fs-6">Recurring</span>
@@ -18,41 +24,61 @@
                             <b>${{moneyFormat($quote->mrr)}}</b>
                         </div>
 
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-lg-3">
+                <div class="col-lg-2">
                     <div class="card text-center">
                         <div class="card-body">
                             <span class="fs-6">One-Time</span>
                             <br/>
                             <b>${{moneyFormat($quote->nrc)}}</b>
                         </div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-lg-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <span class="fs-6">Discounted</span>
-                        <br/>
-                        <b>-${{moneyFormat($quote->discount)}}</b>
+                <div class="col-lg-2">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <span class="fs-6">Discounted</span>
+                            <br/>
+                            <b>-${{moneyFormat($quote->discount)}}</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <span class="fs-6">Subtotal</span>
+                            <br/>
+                            <b>${{moneyFormat($quote->subtotal)}}</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <span class="fs-6">Tax</span>
+                            <br/>
+                            <b>${{moneyFormat($quote->tax)}}</b>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="card text-center border-primary">
+                        <div class="card-body">
+                            <span class="fs-6">Total Quote</span>
+                            <br/>
+                            <b><span class="text-primary">${{moneyFormat($quote->total)}}</span></b>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <span class="fs-6">Total Quote</span>
-                        <br/>
-                        <b>${{moneyFormat($quote->total)}}</b>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        @include('admin.quotes.build.quote_items')
     </div>
 
     <div class="col-lg-3">

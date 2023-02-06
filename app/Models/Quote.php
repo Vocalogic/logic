@@ -42,6 +42,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed|string $name
  * @property mixed        $expires_on
  * @property mixed        $status
+ * @property mixed        $tax
  *
  */
 class Quote extends Model
@@ -180,12 +181,21 @@ class Quote extends Model
     }
 
     /**
+     * Get subtotal before tax
+     * @return int
+     */
+    public function getSubtotalAttribute(): int
+    {
+        return $this->mrr + $this->nrc;
+    }
+
+    /**
      * Get the total for the quote.
      * @return int
      */
     public function getTotalAttribute(): int
     {
-        return $this->mrr + $this->nrc;
+        return $this->mrr + $this->nrc + $this->tax;
     }
 
     /**
@@ -228,6 +238,27 @@ class Quote extends Model
             return $obj->monthlyCommission;
         }
         else return $obj->agentSpiff;
+    }
+
+    /**
+     * Get the tax for a quote.
+     * @return void
+     */
+    public function calculateTax(): void
+    {
+        $total = 0;
+        $rate = 0;
+        if ($this->lead) $rate = TaxLocation::findByLocation($this->lead->state);
+        if ($this->account) $rate = TaxLocation::findByLocation($this->account->state);
+        if (!$rate) return;
+        foreach($this->items as $item)
+        {
+            if (!$item->item || !$item->item->taxable) continue;
+            $itemTotal = bcmul($item->price * $item->qty,1);
+            $tax = bcmul($itemTotal * ($rate / 100),1);
+            $total += $tax;
+        }
+        $this->update(['tax' => $total]);
     }
 
     /**
