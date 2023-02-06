@@ -2,7 +2,6 @@
 
 namespace App\Operations\API\QBO;
 
-use App\Enums\Core\EventType;
 use App\Models\Account;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
