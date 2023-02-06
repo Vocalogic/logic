@@ -177,6 +177,11 @@ class Invoice extends Model
         $total = 0;
         $rate = TaxLocation::findByLocation($this->account->state);
         if (!$rate) return;
+        if (!$this->account->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
         foreach ($this->items as $item)
         {
             if (!$item->item || !$item->item->taxable) continue;

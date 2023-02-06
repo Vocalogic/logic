@@ -250,6 +250,16 @@ class Quote extends Model
         $rate = 0;
         if ($this->lead) $rate = TaxLocation::findByLocation($this->lead->state);
         if ($this->account) $rate = TaxLocation::findByLocation($this->account->state);
+        if ($this->lead && !$this->lead->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
+        if ($this->account && !$this->account->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
         if (!$rate) return;
         foreach($this->items as $item)
         {

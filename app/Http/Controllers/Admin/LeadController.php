@@ -81,6 +81,11 @@ class LeadController extends Controller
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
         }
         $lead->update($request->all());
+        // Go through and recalculate tax on each quote in case a state or taxation was changed.
+        foreach($lead->quotes as $quote)
+        {
+            $quote->calculateTax();
+        }
         return redirect()->to("/admin/leads/$lead->id")->with('message', $lead->company . " updated successfully.");
     }
 
@@ -92,7 +97,6 @@ class LeadController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
         $request->validate([
             'company'      => 'required',
             'contact'      => 'required',
