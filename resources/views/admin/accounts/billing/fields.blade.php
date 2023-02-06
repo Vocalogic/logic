@@ -32,8 +32,6 @@
                             <x-form-select name="taxable" icon="minus-square" label="Customer Taxable?" :options="$opts" selected="{{$account->taxable}}">
                                 Is this customer taxable? Select No for no sales tax
                             </x-form-select>
-
-
                         </div>
                         <div class="col-lg-12 mt-2">
                             <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">

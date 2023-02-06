@@ -242,10 +242,10 @@ class Quote extends Model
         $totalQuoted = 0;
         foreach ($this->items as $item)
         {
-            $totalCatalog += $item->getCatalogPrice() * $item->qty;
-            $totalQuoted += $item->price * $item->qty;
+            $totalCatalog += bcmul($item->getCatalogPrice() * $item->qty,1);
+            $totalQuoted += bcmul($item->price * $item->qty,1);
         }
-        return bcmul($totalCatalog - $totalQuoted,1);
+        return $totalCatalog - $totalQuoted;
     }
 
     /**
