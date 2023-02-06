@@ -58,17 +58,18 @@ use Illuminate\Support\Str;
  * @property mixed         $cc_reset_hash
  * @property mixed         $account_credit
  * @property mixed         $website
- * @property mixed         $net_days
- * @property mixed         $mrr
- * @property mixed         $invoices
- * @property mixed         $merchant_ach_aba
- * @property mixed         $merchant_ach_account
- * @property mixed         $partner
- * @property mixed         $partner_id
- * @property mixed         $commissionable
- * @property mixed         $quotes
- * @property mixed         $agent_id
- * @property mixed         $parent
+ * @property mixed $net_days
+ * @property mixed $mrr
+ * @property mixed $invoices
+ * @property mixed $merchant_ach_aba
+ * @property mixed $merchant_ach_account
+ * @property mixed $partner
+ * @property mixed $partner_id
+ * @property mixed $commissionable
+ * @property mixed $quotes
+ * @property mixed $agent_id
+ * @property mixed $parent
+ * @property mixed $taxable
  */
 class Account extends Model
 {

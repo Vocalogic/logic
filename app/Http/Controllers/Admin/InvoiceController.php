@@ -41,7 +41,6 @@ class InvoiceController extends Controller
         return view('admin.invoices.show', ['invoice' => $invoice]);
     }
 
-
     /**
      * Add custom item to an invoice
      * @param Invoice $invoice
@@ -59,6 +58,7 @@ class InvoiceController extends Controller
             'price'        => convertMoney($request->price),
             'qty'          => $request->qty
         ]);
+        $invoice->calculateTax();
         return redirect()->back();
     }
 
@@ -78,6 +78,7 @@ class InvoiceController extends Controller
             'price'        => $invoice->account->getPreferredPricing($item),
             'qty'          => 1
         ]);
+        $invoice->calculateTax();
         return redirect()->back();
     }
 
@@ -90,6 +91,7 @@ class InvoiceController extends Controller
     public function remItem(Invoice $invoice, InvoiceItem $item): array
     {
         $item->delete();
+        $invoice->calculateTax();
         session()->flash('message', $item->name . " removed from Invoice");
         return ['callback' => 'reload'];
     }
@@ -248,6 +250,7 @@ class InvoiceController extends Controller
         {
             $item->update(['name' => $request->name]);
         }
+        $invoice->calculateTax();
         return redirect()->back();
     }
 

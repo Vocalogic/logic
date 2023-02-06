@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => "$item->name Addons", 'crumbs' => $crumbs])
+@extends('layouts.admin', ['title' => "$item->name Addons", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/addons"])
 
 @section('pre')
     <div class="row align-items-center">

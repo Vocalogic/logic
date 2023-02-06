@@ -5,13 +5,16 @@ namespace App\Models;
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
 use App\Enums\Core\BillItemType;
+use App\Enums\Core\IntegrationType;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\LeadStatus;
 use App\Enums\Files\FileType;
 use App\Operations\Admin\AnalysisEngine;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
+use App\Operations\Integrations\Accounting\Finance;
 use App\Structs\STemplate;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -42,6 +45,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed|string $name
  * @property mixed        $expires_on
  * @property mixed        $status
+ * @property mixed        $tax
+ * @property mixed        $finance_quote_id
  *
  */
 class Quote extends Model
@@ -180,12 +185,21 @@ class Quote extends Model
     }
 
     /**
+     * Get subtotal before tax
+     * @return int
+     */
+    public function getSubtotalAttribute(): int
+    {
+        return $this->mrr + $this->nrc;
+    }
+
+    /**
      * Get the total for the quote.
      * @return int
      */
     public function getTotalAttribute(): int
     {
-        return $this->mrr + $this->nrc;
+        return $this->mrr + $this->nrc + $this->tax;
     }
 
     /**
@@ -231,6 +245,45 @@ class Quote extends Model
     }
 
     /**
+     * Get the tax for a quote.
+     * @return void
+     */
+    public function calculateTax(): void
+    {
+        try {
+            $tax = Finance::taxByQuote($this);
+            $this->update(['tax' => $tax]);
+            return;
+        } catch(Exception)
+        {
+            // No taxation available - continue;
+        }
+        $total = 0;
+        $rate = 0;
+        if ($this->lead) $rate = TaxLocation::findByLocation($this->lead->state);
+        if ($this->account) $rate = TaxLocation::findByLocation($this->account->state);
+        if ($this->lead && !$this->lead->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
+        if ($this->account && !$this->account->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
+        if (!$rate) return;
+        foreach($this->items as $item)
+        {
+            if (!$item->item || !$item->item->taxable) continue;
+            $itemTotal = bcmul($item->price * $item->qty,1);
+            $tax = bcmul($itemTotal * ($rate / 100),1);
+            $total += $tax;
+        }
+        $this->update(['tax' => $total]);
+    }
+
+    /**
      * Determine the discount on an entire quote based on the
      * pricing of each item individually if we have the setting enabled.
      * @return int
@@ -242,10 +295,10 @@ class Quote extends Model
         $totalQuoted = 0;
         foreach ($this->items as $item)
         {
-            $totalCatalog += $item->getCatalogPrice() * $item->qty;
-            $totalQuoted += $item->price * $item->qty;
+            $totalCatalog += bcmul($item->getCatalogPrice() * $item->qty,1);
+            $totalQuoted += bcmul($item->price * $item->qty,1);
         }
-        return bcmul($totalCatalog - $totalQuoted,1);
+        return $totalCatalog - $totalQuoted;
     }
 
     /**
