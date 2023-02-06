@@ -163,6 +163,7 @@ class QuoteController extends Controller
         ]);
         $qitem->update(['ord' => $qitem->setNewOrd()]);
         $quote->reord();
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return redirect()->back()->with('message', $item->name . " added to Quote #$quote->id");
     }
@@ -183,6 +184,7 @@ class QuoteController extends Controller
         session()->flash('message', $item->item->name . " removed from quote.");
         $item->delete();
         $quote->reord();
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return ['callback' => "reload"];
     }
@@ -228,6 +230,7 @@ class QuoteController extends Controller
             'finance_charge'  => $request->finance_charge,
             'notes'           => $request->notes
         ]);
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return redirect()->back()->with('message', $item->item->name . " updated.");
     }

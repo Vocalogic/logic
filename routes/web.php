@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\TagCategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TaxLocationController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
@@ -115,6 +116,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::resource('meetings', MeetingController::class);
     Route::resource('partners', PartnerController::class);
     Route::resource('affiliates', AffiliateController::class);
+    Route::resource('tax_locations', TaxLocationController::class);
     Route::get('partners/{partner}/remote/invoice/{id}', [PartnerController::class, 'getRemoteInvoice']);
     Route::get('partners/{partner}/invoice/{id}', [PartnerController::class, 'getLocalInvoice']);
 

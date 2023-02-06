@@ -10,6 +10,7 @@ use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\User;
 use App\Operations\Core\LoFileHandler;
+use App\Operations\Integrations\Accounting\Finance;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
@@ -81,6 +82,11 @@ class LeadController extends Controller
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
         }
         $lead->update($request->all());
+        // Go through and recalculate tax on each quote in case a state or taxation was changed.
+        foreach($lead->quotes as $quote)
+        {
+            $quote->calculateTax();
+        }
         return redirect()->to("/admin/leads/$lead->id")->with('message', $lead->company . " updated successfully.");
     }
 
@@ -92,7 +98,6 @@ class LeadController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
         $request->validate([
             'company'      => 'required',
             'contact'      => 'required',
@@ -238,6 +243,10 @@ class LeadController extends Controller
         {
             $lead->partner->disconnectLead($lead);
             $lead->update(['partner_id' => 0]);
+        }
+        if ($lead->finance_customer_id)
+        {
+            Finance::removeLead($lead);
         }
         return redirect()->to("/admin/leads");
     }

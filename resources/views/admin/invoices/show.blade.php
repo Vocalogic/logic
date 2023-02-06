@@ -89,6 +89,20 @@
                             </td>
                         </tr>
                         @endif
+                        @if($invoice->tax > 0)
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:right;"><strong>Subtotal:</strong></td>
+                                <td>${{moneyFormat($invoice->subtotal)}}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:right;"><strong>Tax:</strong></td>
+                                <td>${{moneyFormat($invoice->tax)}}</td>
+                            </tr>
+                        @endif
                         <tr>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td>

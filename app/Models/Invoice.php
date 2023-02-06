@@ -42,6 +42,7 @@ use App\Exceptions\LogicException;
  * @property mixed        $recurring
  * @property mixed        $suspension_sent
  * @property mixed        $termination_sent
+ * @property mixed        $tax
  */
 class Invoice extends Model
 {
@@ -105,6 +106,20 @@ class Invoice extends Model
     }
 
     /**
+     * Get subtotal for invoice.
+     * @return int
+     */
+    public function getSubtotalAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->items as $item)
+        {
+            $total += ($item->price * $item->qty);
+        }
+        return bcmul($total, 1);
+    }
+
+    /**
      * Get total for invoice.
      * @return int
      */
@@ -115,6 +130,7 @@ class Invoice extends Model
         {
             $total += ($item->price * $item->qty);
         }
+        $total += $this->tax;
         return bcmul($total, 1);
     }
 
@@ -150,6 +166,30 @@ class Invoice extends Model
     public function getBalanceFormattedAttribute(): string
     {
         return "$" . moneyFormat($this->balance);
+    }
+
+    /**
+     * Get the tax for a quote.
+     * @return void
+     */
+    public function calculateTax(): void
+    {
+        $total = 0;
+        $rate = TaxLocation::findByLocation($this->account->state);
+        if (!$rate) return;
+        if (!$this->account->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
+        foreach ($this->items as $item)
+        {
+            if (!$item->item || !$item->item->taxable) continue;
+            $itemTotal = bcmul($item->price * $item->qty, 1);
+            $tax = bcmul($itemTotal * ($rate / 100), 1);
+            $total += $tax;
+        }
+        $this->update(['tax' => $total]);
     }
 
     /**

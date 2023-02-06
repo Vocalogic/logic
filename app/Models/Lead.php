@@ -30,6 +30,8 @@ use LogicException;
  * @property mixed $partner
  * @property mixed $partner_sourced
  * @property mixed $status
+ * @property mixed $finance_customer_id
+ * @property mixed $taxable
  */
 class Lead extends Model
 {

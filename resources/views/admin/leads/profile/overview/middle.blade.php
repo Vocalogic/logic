@@ -113,6 +113,17 @@
                 </div>
 
             </div>
+
+
+            <div class="row g-3 mb-4">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-floating mb-2">
+                        {!! Form::select('taxable', [1 => 'Yes', 0 => 'No'], $lead->taxable, ['class' => 'form-select', 'aria-label' => 'Select Taxation']) !!}
+                        <label>Customer Taxable?</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="row g-3 mb-4">
                 <div class="col-lg-12">
                     <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">

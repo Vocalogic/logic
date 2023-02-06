@@ -383,12 +383,28 @@
             </tr>
         @endforeach
 
-        @if(setting('quotes.showDiscount') != 'None')
+        @if(setting('quotes.showDiscount') != 'None' && $invoice->discount > 0)
             <tr style="background: #393e44; color: #fff;">
                 <td>&nbsp;</td>
-                <td align="right"><span class="bold" style="font-size:14px;">Discount:</span></td>
+                <td align="right"><span class="bold" style="font-size:14px;">Total Discount:</span></td>
                 <td>&nbsp;</td>
-                <td align="center"><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
+                <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
+                </td>
+            </tr>
+        @endif
+        @if($invoice->tax > 0)
+            <tr style="background: #393e44; color: #fff;">
+                <td>&nbsp;</td>
+                <td align="right"><span class="bold" style="font-size:14px;">Subtotal:</span></td>
+                <td>&nbsp;</td>
+                <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->subtotal)}}</span>
+                </td>
+            </tr>
+            <tr style="background: #393e44; color: #fff;">
+                <td>&nbsp;</td>
+                <td align="right"><span class="bold" style="font-size:14px;">Taxes:</span></td>
+                <td>&nbsp;</td>
+                <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->tax)}}</span>
                 </td>
             </tr>
         @endif
@@ -397,7 +413,7 @@
             <td>&nbsp;</td>
             <td align="right"><span class="bold" style="font-size:14px;">Total:</span></td>
             <td>&nbsp;</td>
-            <td align="center"><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->total)}}</span>
+            <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->total)}}</span>
             </td>
         </tr>
         <tr>
