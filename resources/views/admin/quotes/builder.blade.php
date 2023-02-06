@@ -36,7 +36,7 @@
                         </div>
                     </div>
                 </div>
-
+                @if($quote->discount > 0)
                 <div class="col-lg-2">
                     <div class="card text-center">
                         <div class="card-body">
@@ -46,6 +46,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="col-lg-2">
                     <div class="card text-center">

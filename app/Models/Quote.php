@@ -5,13 +5,16 @@ namespace App\Models;
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
 use App\Enums\Core\BillItemType;
+use App\Enums\Core\IntegrationType;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\LeadStatus;
 use App\Enums\Files\FileType;
 use App\Operations\Admin\AnalysisEngine;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
+use App\Operations\Integrations\Accounting\Finance;
 use App\Structs\STemplate;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,6 +46,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed        $expires_on
  * @property mixed        $status
  * @property mixed        $tax
+ * @property mixed        $finance_quote_id
  *
  */
 class Quote extends Model
@@ -246,6 +250,14 @@ class Quote extends Model
      */
     public function calculateTax(): void
     {
+        try {
+            $tax = Finance::taxByQuote($this);
+            $this->update(['tax' => $tax]);
+            return;
+        } catch(Exception)
+        {
+            // No taxation available - continue;
+        }
         $total = 0;
         $rate = 0;
         if ($this->lead) $rate = TaxLocation::findByLocation($this->lead->state);

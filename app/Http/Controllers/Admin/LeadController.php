@@ -10,6 +10,7 @@ use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\User;
 use App\Operations\Core\LoFileHandler;
+use App\Operations\Integrations\Accounting\Finance;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
@@ -242,6 +243,10 @@ class LeadController extends Controller
         {
             $lead->partner->disconnectLead($lead);
             $lead->update(['partner_id' => 0]);
+        }
+        if ($lead->finance_customer_id)
+        {
+            Finance::removeLead($lead);
         }
         return redirect()->to("/admin/leads");
     }

@@ -3,7 +3,9 @@
 namespace App\Operations\API\QBO;
 
 use App\Enums\Core\EventType;
+use App\Exceptions\LogicException;
 use App\Models\Account;
+use App\Models\Lead;
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 
@@ -46,6 +48,24 @@ class QBOCustomer extends QBOCore
     }
 
     /**
+     * Delete a customer entry in quickbooks.
+     * @param int $id
+     * @return void
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function remove(int $id): void
+    {
+        $customer = $this->find($id);
+        if (!$customer) return;
+        $this->qsend("customer?operation=delete", 'post', [
+            'SyncToken'   => $customer->SyncToken,
+            'CustomerRef' => $customer->CustomerRef,
+            'Id'          => $customer->Id
+        ]);
+    }
+
+    /**
      * Lookup Account by name.
      * @param string $name
      * @return array
@@ -68,9 +88,9 @@ class QBOCustomer extends QBOCore
     /**
      * Create/Update a QBO Account
      * @param Account $account
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
-    public function byAccount(Account $account)
+    public function byAccount(Account $account): void
     {
         if ($account->finance_customer_id)
         {
@@ -120,7 +140,7 @@ class QBOCustomer extends QBOCore
                 'Line4'                  => sprintf("%s, %s %s", $account->city, $account->state, $account->postcode),
                 'Country'                => $account->country
             ],
-            'Taxable'            => true
+            'Taxable'            => $account->taxable
         ];
         if (isset($token))
         {
@@ -147,5 +167,82 @@ class QBOCustomer extends QBOCore
         }
     }
 
+    /**
+     * Create a customer record with quickbooks using lead details.
+     * This entry will be removed if the lead is lost.
+     * @param Lead $lead
+     * @return void
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function byLead(Lead $lead): void
+    {
+        if ($lead->finance_customer_id)
+        {
+            $c = $this->find($lead->finance_customer_id);
+            $token = $c->SyncToken;
+        }
+        else
+        {
+            $exists = $this->findByName($lead->company);
+            if (!empty($exists))
+            {
+                $lead->update(['finance_customer_id' => $exists[0]->Id]);
+                return;
+            }
+        }
+        $x = explode(" ", $lead->contact);
+        $first = $x[0];
+        $last = $x[1] ?? '';
 
+        $data = [
+            'FullyQualifiedName' => $lead->company,
+            'PrimaryEmailAddr'   => [
+                'Address' => $lead->email
+            ],
+            'DisplayName'        => $lead->company,
+            'FamilyName'         => $first,
+            'GivenName'          => $last,
+            'PrimaryPhone'       => [
+                'FreeFormNumber' => $lead->phone,
+            ],
+            'CompanyName'        => $lead->company,
+            'BillAddr'           => [
+                'CountrySubDivisionCode' => $lead->state,
+                'City'                   => $lead->city,
+                'PostalCode'             => $lead->zip,
+                'Line1'                  => $lead->company,
+                'Line2'                  => $lead->contact,
+                'Line3'                  => $lead->address,
+                'Line4'                  => sprintf("%s, %s %s", $lead->city, $lead->state, $lead->zip),
+                'Country'                => 'US'
+            ],
+            'ShipAddr'           => [
+                'CountrySubDivisionCode' => $lead->state,
+                'City'                   => $lead->city,
+                'PostalCode'             => $lead->zip,
+                'Line1'                  => $lead->company,
+                'Line2'                  => $lead->contact,
+                'Line3'                  => $lead->address,
+                'Line4'                  => sprintf("%s, %s %s", $lead->city, $lead->state, $lead->zip),
+                'Country'                => 'US'
+            ],
+            'Taxable'            => $lead->taxable
+        ];
+        if (isset($token))
+        {
+            $data['SyncToken'] = $token;
+            $data['Id'] = $lead->finance_customer_id;
+        }
+        // We need to check to see if this account has a parent, if so link it here.
+        $res = $this->qsend("customer", 'post', $data);
+        if (isset($res->Customer))
+        {
+            $lead->update(['finance_customer_id' => $res->Customer->Id]);
+        }
+        else
+        {
+            info("QBO Error Creating Customer From Lead");
+        }
+    }
 }

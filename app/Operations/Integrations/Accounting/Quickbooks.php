@@ -8,10 +8,13 @@ use App\Models\Account;
 use App\Models\BillCategory;
 use App\Models\BillItem;
 use App\Models\Invoice;
+use App\Models\Lead;
+use App\Models\Quote;
 use App\Models\Transaction;
 use App\Operations\API\QBO\QBOCategory;
 use App\Operations\API\QBO\QBOCore;
 use App\Operations\API\QBO\QBOCustomer;
+use App\Operations\API\QBO\QBOEstimate;
 use App\Operations\API\QBO\QBOInvoice;
 use App\Operations\API\QBO\QBOPayment;
 use App\Operations\API\QBO\QBOService;
@@ -105,6 +108,13 @@ class Quickbooks extends BaseIntegration implements Integration
                 'default'     => '',
                 'protected'   => true,
             ],
+            (object)[
+                'var'         => 'use_integration_tax',
+                'item'        => "Use Quickbooks Automated Sales Tax:",
+                'description' => "If you have enabled Quickbooks AST engine enter Y.",
+                'default'     => 'Y',
+                'protected'   => false,
+            ],
 
         ];
     }
@@ -138,11 +148,39 @@ class Quickbooks extends BaseIntegration implements Integration
      * @param Account $account
      * @return void
      * @throws GuzzleException
+     * @throws LogicException
      */
     public function syncAccount(Account $account): void
     {
         $customer = new QBOCustomer($this->config);
         $customer->byAccount($account);
+    }
+
+    /**
+     * Create or update an account by lead. (presales)
+     * @param Lead $lead
+     * @return void
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function syncLead(Lead $lead) : void
+    {
+        $customer = new QBOCustomer($this->config);
+        $customer->byLead($lead);
+    }
+
+    /**
+     * If a lead was lost then we need to remove this account from quickbooks.
+     * @param Lead $lead
+     * @return void
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function removeLead(Lead $lead): void
+    {
+        if (!$lead->finance_customer_id) return;
+        $customer = new QBOCustomer($this->config);
+        $customer->remove($lead->finance_customer_id);
     }
 
     /**
@@ -174,6 +212,7 @@ class Quickbooks extends BaseIntegration implements Integration
      * @param Invoice $invoice
      * @return void
      * @throws GuzzleException
+     * @throws LogicException
      */
     public function syncInvoice(Invoice $invoice): void
     {
@@ -186,6 +225,7 @@ class Quickbooks extends BaseIntegration implements Integration
      * @param Invoice $invoice
      * @return void
      * @throws GuzzleException
+     * @throws LogicException
      */
     public function deleteInvoice(Invoice $invoice): void
     {
@@ -205,6 +245,57 @@ class Quickbooks extends BaseIntegration implements Integration
         $x = new QBOPayment($this->config);
         if ($transaction->finance_transaction_id) return;
         $x->byTransaction($transaction);
+    }
+
+    /**
+     * This method will query QBO's AST System by creating an estimate if not
+     * found, and then getting the tax associated from Quickbooks and return.
+     * @param Quote $quote
+     * @return float
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function taxByQuote(Quote $quote): float
+    {
+        // Step 1: Do we have a finance_customer_id on leads. If not this is probably the first
+        // quote. So we will need to create the account in Quickbooks first so we can sync the
+        // estimate for taxation.
+        if ($quote->lead && !$quote->lead->finance_customer_id)
+        {
+            $this->syncLead($quote->lead);
+        }
+        if ($quote->account && !$quote->account->finance_customer_id)
+        {
+            $this->syncAccount($quote->account);
+        }
+        $quote->refresh(); // Make sure we have our new customer id there.
+        // Step 2: We need to sync our quote to Quickbooks as an Estimate
+        $x = new QBOEstimate($this->config);
+        $est = $x->byQuote($quote);
+        if ($est && isset($est->TxnTaxDetail) && isset($est->TxnTaxDetail->TotalTax))
+        {
+            return $est->TxnTaxDetail->TotalTax;
+        }
+        return 0;
+    }
+
+    /**
+     * This method will query QBO's AST System by a sync'd invoice if not
+     * found, and then getting the tax associated from Quickbooks and return.
+     * @param Invoice $invoice
+     * @return float
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function taxByInvoice(Invoice $invoice): float
+    {
+        $inv = new QBOInvoice($this->config);
+        $qi = $inv->byInvoice($invoice);
+        if ($qi && isset($qi->TxnTaxDetail) && isset($qi->TxnTaxDetail->TotalTax))
+        {
+            return $qi->TxnTaxDetail->TotalTax;
+        }
+        return 0;
     }
 
 }
