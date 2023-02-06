@@ -45,6 +45,7 @@
                 <li><a class="ms-link" href="/admin/bill_categories/products">Products</a></li>
                 <li><a class="ms-link" href="/admin/bill_categories/services">Services</a></li>
                 <li><a class="ms-link" href="/admin/settings">Settings</a></li>
+                <li><a class="ms-link" href="/admin/tax_locations">Tax Locations</a></li>
                 <li><a class="ms-link" href="/admin/terms">TOS Manager</a></li>
                 <li><a class="ms-link" href="/admin/vendors">Vendors</a></li>
 
