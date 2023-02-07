@@ -35,8 +35,35 @@ use LogicException;
  */
 class Lead extends Model
 {
-    protected $guarded = ['id'];
-    public    $dates   = ['forecast_date'];
+    protected    $guarded = ['id'];
+    public       $dates   = ['forecast_date'];
+    public array $tracked = [
+        'company'            => "Company Name",
+        'contact'            => "Primary Contact",
+        'email'              => "Email Address",
+        'phone'              => "Contact Phone",
+        'title'              => "Contact Title",
+        'active'             => "Active State",
+        'agent_id'           => "Lead Agent|agent.name",
+        'description'        => "Lead Description",
+        'rating'             => "Lead Rating",
+        'address'            => "Address",
+        'address2'           => "Address Line 2",
+        'city'               => "City",
+        'state'              => "State",
+        'zip'                => "Zip Code",
+        'forecast_date'      => "Forecasted Close Date",
+        'forecast_note'      => "Forecasted Note",
+        'lead_type_id'       => "Lead Type|type.name",
+        'lost_on'            => "Date Lead Lost",
+        'reactivate_on'      => "Date for Reactivation",
+        'reason'             => "Lost Lead Reason",
+        'lead_origin_id'     => "Lead Origin|origin.name",
+        'lead_origin_detail' => "Lead Origin Detail",
+        'discovery'          => "Discovery Information",
+        'lead_status_id'     => "Lead Status|status.name",
+        'taxable'            => "Taxable State",
+    ];
 
     /**
      * A lead belongs to an agent.
@@ -319,7 +346,7 @@ class Lead extends Model
      * @param int $status
      * @return void
      */
-    public function setStatus(int $status) : void
+    public function setStatus(int $status): void
     {
         $this->update(['lead_status_id' => $status]);
     }

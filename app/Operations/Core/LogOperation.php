@@ -85,9 +85,9 @@ class LogOperation
     /**
      * Optionally save additional details for developers
      * to review. For API errors, system errors etc.
-     * @return string
+     * @return string|null
      */
-    private function getDetail(): string
+    private function getDetail(): ?string
     {
         return $this->detail;
     }
@@ -159,16 +159,34 @@ class LogOperation
                 // Check to see if we have a relationship to map for the value data.
                 if (preg_match("/\|/", $desc))
                 {
-                    // This looks something like Agent Name|agent.name
                     $m = explode("|", $desc);
-                    $x = explode(".", $m[1]);
-                    $oldValue = $old->{$x[0]}->{$x[1]};
-                    $newValue = $model->{$x[0]}->{$x[1]};
+                    if ($m[1] == 'money') // If we need to convert an int into money.
+                    {
+                        $oldValue = moneyFormat($old->{$key});
+                        $newValue = moneyFormat($model->{$key});
+                    }
+                    elseif ($m[1] == 'bool') // If we need to convert an int into money.
+                    {
+
+                        $oldValue = (bool) $old->{$key};
+                        $oldValue = $oldValue ? "Yes" : "No";
+                        $newValue = (bool) $model->{$key};
+                        $newValue = $newValue ? "Yes" : "No";
+                    }
+                    else // If this is a relationship
+                    {
+                        // This looks something like Agent Name|agent.name
+                        $x = explode(".", $m[1]);
+                        $oldValue = $old->{$x[0]}->{$x[1]};
+                        $newValue = $model->{$x[0]}->{$x[1]};
+                    }
+                    if (!$oldValue) $oldValue = "Empty";
+                    if (!$newValue) $newValue = "Empty";
                     $desc = $m[0];
                     $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $oldValue, $newValue);
                     continue;
                 }
-                $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $old->{$key}, $model->{$key});
+                $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $old->{$key} ?:"Empty", $model->{$key}?:"Empty");
             }
         }
         return implode(", ", $changes);
