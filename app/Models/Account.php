@@ -58,18 +58,18 @@ use Illuminate\Support\Str;
  * @property mixed         $cc_reset_hash
  * @property mixed         $account_credit
  * @property mixed         $website
- * @property mixed $net_days
- * @property mixed $mrr
- * @property mixed $invoices
- * @property mixed $merchant_ach_aba
- * @property mixed $merchant_ach_account
- * @property mixed $partner
- * @property mixed $partner_id
- * @property mixed $commissionable
- * @property mixed $quotes
- * @property mixed $agent_id
- * @property mixed $parent
- * @property mixed $taxable
+ * @property mixed         $net_days
+ * @property mixed         $mrr
+ * @property mixed         $invoices
+ * @property mixed         $merchant_ach_aba
+ * @property mixed         $merchant_ach_account
+ * @property mixed         $partner
+ * @property mixed         $partner_id
+ * @property mixed         $commissionable
+ * @property mixed         $quotes
+ * @property mixed         $agent_id
+ * @property mixed         $parent
+ * @property mixed         $taxable
  */
 class Account extends Model
 {
@@ -78,6 +78,31 @@ class Account extends Model
     public    $casts   = [
         'payment_method'    => PaymentMethod::class,
         'merchant_metadata' => 'json'
+    ];
+
+    /**
+     * Define our array of tracked changes. This will be used for the
+     * logging class to optional compare a previous instance of an
+     * object before it was changed and print human readable changes.
+     * @var array
+     */
+    public array $tracked = [
+        'name'                  => "Account Name",
+        'address'               => "Address",
+        'address2'              => "Address Line 2",
+        'city'                  => "City",
+        'state'                 => "State",
+        'postcode'              => "Zip/Postal Code",
+        'active'                => "Active State",
+        'agent_id'              => "Sales Agent|agent.name", // use | for a relationship on the model dotted and field
+        'next_bill'             => "Next Bill Date",
+        'bills_on'              => "Billing Day",
+        'billing_email'         => "Billing Email",
+        'auto_bill'             => "Automatic Billing",
+        'is_commissionable'     => "Commissionable Mode",
+        'taxable'               => "Customer Tax Mode",
+        'account_credit'        => "Account Credit Balance",
+        'account_credit_reason' => "Reason for Credit"
     ];
 
     public function users(): HasMany

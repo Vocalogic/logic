@@ -115,14 +115,62 @@ class LogOperation
      * @param string      $message
      * @param LogSeverity $logSeverity
      * @param string|null $detail
+     * @param Model|null  $old
      * @return void
      */
-    public function write(Model $model, string $message, LogSeverity $logSeverity, ?string $detail = null): void
-    {
+    public function write(
+        Model $model,
+        string $message,
+        LogSeverity $logSeverity,
+        ?string $detail = null,
+        ?Model $old = null
+    ): void {
         $this->model = $model;
         $this->message = $message;
         $this->logSeverity = $logSeverity;
-        $this->detail = $detail;
+        if ($old)
+        {
+            // We were sent in an old object so we need to add additional detail automatically
+            $this->detail = $this->compare($model, $old);
+        }
+        else
+        {
+            $this->detail = $detail;
+        }
         $this->insert();
+    }
+
+    /**
+     * Compare the current and old model objects and create a human-readable list of
+     * changes. This will only work if $tracked is public on each Model.
+     * @param Model $model
+     * @param Model $old
+     * @return string|null
+     */
+    private function compare(Model $model, Model $old): ?string
+    {
+        if (get_class($model) != get_class($old)) return null; // Different types. Only compare same.
+        $changes = [];
+        if (!isset($model->tracked)) return null; // Need to add tracked to model.
+        foreach ($model->tracked as $key => $desc)
+        {
+            if ($model->{$key} != $old->{$key})
+            {
+                // Check to see if we have a relationship to map for the value data.
+                if (preg_match("/\|/", $desc))
+                {
+                    // This looks something like Agent Name|agent.name
+                    $m = explode("|", $desc);
+                    $x = explode(".", $m[1]);
+                    $oldValue = $old->{$x[0]}->{$x[1]};
+                    $newValue = $model->{$x[0]}->{$x[1]};
+                    $desc = $m[0];
+                    $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $oldValue, $newValue);
+                    continue;
+                }
+                $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $old->{$key}, $model->{$key});
+            }
+        }
+        return implode(", ", $changes);
     }
 }

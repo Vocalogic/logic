@@ -381,6 +381,7 @@ class AccountController extends Controller
      */
     public function update(Account $account, Request $request): RedirectResponse
     {
+        $old = $account->replicate();
         $oldBill = $account->next_bill;
         if ($request->next_bill)
         {
@@ -404,6 +405,7 @@ class AccountController extends Controller
         {
             $account->getFavIcon();
         }
+        _log($account, "Account Updated", $old);
         return redirect()->back();
     }
 

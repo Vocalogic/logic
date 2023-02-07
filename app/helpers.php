@@ -173,22 +173,26 @@ if (!function_exists('setting'))
 
     /**
      * Log an event or notification
-     * @param Model            $model
-     * @param string           $message
-     * @param LogSeverity      $logSeverity
+     * @param Model       $model
+     * @param string      $message
+     * @param Model|null  $old
+     * @param string|null $details
+     * @param LogSeverity $logSeverity
      * @return void
      */
     function _log(
         Model $model,
         string $message,
+        ?Model $old = null,
+        ?string $details = null,
         LogSeverity $logSeverity = LogSeverity::Info
     ): void {
         try {
             $service = new LogOperation();
-            $service->write($model, $message, $logSeverity);
+            $service->write($model, $message, $logSeverity, $details, $old);
         }
         catch (\Exception $e) {
-            logger('Logging error: ' . $e->getMessage());
+            logger('Logging error: ' . $e->getMessage() . " " . $e->getFile() . " - " . $e->getLine());
         }
     }
 
