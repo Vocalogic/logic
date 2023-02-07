@@ -168,7 +168,7 @@ class LeadController extends Controller
         $disc = $lead->discoveries()->where('discovery_id', $request->pk)->first();
         if (!$disc)
         {
-            $lead->discoveries()->create([
+            $disc = $lead->discoveries()->create([
                 'discovery_id' => $request->pk,
                 'value'        => $request->value
             ]);

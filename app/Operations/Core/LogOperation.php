@@ -165,7 +165,7 @@ class LogOperation
                         $oldValue = moneyFormat($old->{$key});
                         $newValue = moneyFormat($model->{$key});
                     }
-                    elseif ($m[1] == 'bool') // If we need to convert an int into money.
+                    elseif ($m[1] == 'bool') // If we need to convert a boolean into yes/no.
                     {
 
                         $oldValue = (bool) $old->{$key};
