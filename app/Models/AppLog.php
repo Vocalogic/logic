@@ -44,7 +44,7 @@ class AppLog extends Model
      * is in fact a json object. Otherwise just return the text.
      * @return mixed
      */
-    public function getDetailFormatted(): mixed
+    public function getDetailFormattedAttribute(): mixed
     {
         if (json_decode($this->detail)) return json_decode($this->detail);
         return $this->detail;
