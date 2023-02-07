@@ -53,8 +53,27 @@ class Quote extends Model
 {
     use SoftDeletes;
 
-    protected $guarded = ['id'];
-    protected $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];
+    protected    $guarded = ['id'];
+    protected    $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];
+    public array $tracked = [
+        'name'             => "Quote Name",
+        'status'           => "Status",
+        'archived'         => "Archived State",
+        'preferred'        => "Preferred Quote State|bool",
+        'sent_on'          => "Quote Last Sent",
+        'expires_on'       => "Quote Expiration Date",
+        'notes'            => "Quote Notations",
+        'term'             => "Term Length",
+        'presentable'      => "Presentable State|bool",
+        'net_terms'        => "Net Terms for Payment",
+        'activated_on'     => "Activation Date",
+        'contract_name'    => "Contract Signer Name",
+        'contract_ip'      => "Contract Signed from IP",
+        'contract_expires' => "Contract Expiration Date",
+        'declined_reason'  => "Quote Declined Reason",
+        'approved'         => "Quote Approval State",
+        'tax'              => "Taxation for Quote",
+    ];
 
     /**
      * A quote can belong to an account
@@ -156,7 +175,7 @@ class Quote extends Model
             if (!$product->frequency || !$product->payments) continue; // Only count financed
             $total += $product->frequency->splitTotal($product->qty * $product->price, $product->payments);
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -181,7 +200,7 @@ class Quote extends Model
             if ($product->frequency && $product->payments) continue; // Don't count financed
             $total += ($product->price * $product->qty) + $product->addonTotal;
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -250,11 +269,12 @@ class Quote extends Model
      */
     public function calculateTax(): void
     {
-        try {
+        try
+        {
             $tax = Finance::taxByQuote($this);
             $this->update(['tax' => $tax]);
             return;
-        } catch(Exception)
+        } catch (Exception)
         {
             // No taxation available - continue;
         }
@@ -273,11 +293,11 @@ class Quote extends Model
             return;
         }
         if (!$rate) return;
-        foreach($this->items as $item)
+        foreach ($this->items as $item)
         {
             if (!$item->item || !$item->item->taxable) continue;
-            $itemTotal = bcmul($item->price * $item->qty,1);
-            $tax = bcmul($itemTotal * ($rate / 100),1);
+            $itemTotal = bcmul($item->price * $item->qty, 1);
+            $tax = bcmul($itemTotal * ($rate / 100), 1);
             $total += $tax;
         }
         $this->update(['tax' => $total]);
@@ -295,8 +315,8 @@ class Quote extends Model
         $totalQuoted = 0;
         foreach ($this->items as $item)
         {
-            $totalCatalog += bcmul($item->getCatalogPrice() * $item->qty,1);
-            $totalQuoted += bcmul($item->price * $item->qty,1);
+            $totalCatalog += bcmul($item->getCatalogPrice() * $item->qty, 1);
+            $totalQuoted += bcmul($item->price * $item->qty, 1);
         }
         return $totalCatalog - $totalQuoted;
     }

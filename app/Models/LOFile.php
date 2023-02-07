@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $mime_type
  * @property mixed $type
  * @property mixed $filename
+ * @property mixed $filesize
  */
 class LOFile extends Model
 {
