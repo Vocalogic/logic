@@ -31,6 +31,12 @@ review their services, pay invoices, or get help.
 #### Quote Creation and Profit Analysis
 ![profit](https://www.vocalogic.com/images/profit.png "Profit Analysis for Quote")
 
+#### Customer View - Shop Category Browser
+![shopcat](https://www.vocalogic.com/images/shopcategory.png "Shop Category View")
+
+#### Customer View - Product/Service Single View
+![shopcat](https://www.vocalogic.com/images/shopitem.png "Shop Product/Service")
+
 #### Logic Provides:
 
 * A branded customer portal where customers can update credit cards, see services, get support, order services, etc.
@@ -47,16 +53,6 @@ review their services, pay invoices, or get help.
 ### Check out the [live demo here](https://demo.logic.host/login).
 
 This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2.
-
-### Installation Requirements and Instructions
-
-* A linux webserver running nginx or apache.
-* PHP v8.2
-* MariaDB v10.6+
-* Composer
-* Redis v5.0.7+
-* NPM 6.14+
-* NodeJS v14.21+
 
 ### Cloud Hosting and Management
 
