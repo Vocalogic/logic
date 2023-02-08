@@ -156,3 +156,4 @@ few ways you can contribute to Logic.
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
+[![All Contributors](https://img.shields.io/github/all-contributors/Vocalogic/logic?color=ee8449&style=flat-square)](#contributors)
