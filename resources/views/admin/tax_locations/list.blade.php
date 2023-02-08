@@ -5,6 +5,7 @@
             <tr>
                 <th>Location</th>
                 <th>Sales Tax Rate</th>
+                <th>Unpaid</th>
             </tr>
             </thead>
             <tbody>
@@ -18,8 +19,12 @@
                         </a>
                     </td>
                     <td>{{number_format($location->rate,2)}}%</td>
+                    <td><a href="/admin/tax_locations/{{$location->id}}/tax_collections">
+                            {{$location->collected()->whereNull('tax_batch_id')->count()}}
+                        </a>
+                    </td>
                 </tr>
-                @endforeach
+            @endforeach
             </tbody>
         </table>
     </div>
