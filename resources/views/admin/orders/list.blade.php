@@ -27,7 +27,7 @@
                     </td>
                     <td>
                         @if($order->invoice)
-                        <a href="/admin/accounts/{{$order->account->id}}/invoices/{{$order->invoice->id}}">#{{$order->invoice->id}}</a>
+                        <a href="/admin/invoices/{{$order->invoice->id}}">#{{$order->invoice->id}}</a>
                         @endif
                     </td>
                     <td>{{$order->items()->count()}}</td>
