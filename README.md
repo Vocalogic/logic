@@ -146,4 +146,13 @@ few ways you can contribute to Logic.
 * Pizza. You could send Pizza to our offices at 190 Bluegrass Valley Parkway, Alpharetta, GA. 30005. Just no pineapple
   please.
 
+## Contributors
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
