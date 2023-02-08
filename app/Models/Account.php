@@ -99,7 +99,7 @@ class Account extends Model
         'bills_on'              => "Billing Day",
         'billing_email'         => "Billing Email",
         'auto_bill'             => "Automatic Billing",
-        'is_commissionable'     => "Commissionable Mode",
+        'is_commissionable'     => "Commissionable Mode|bool",
         'taxable'               => "Customer Tax Mode",
         'account_credit'        => "Account Credit Balance",
         'account_credit_reason' => "Reason for Credit"
