@@ -107,6 +107,11 @@ class LeadController extends Controller
             'lead_type_id' => 'required',
             'email'        => 'required'
         ]);
+        $request->merge(['email' => strtolower($request->email)]);
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL))
+        {
+            throw new LogicException("A valid email address is required.");
+        }
         if (User::where('email', $request->email)->count())
         {
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
