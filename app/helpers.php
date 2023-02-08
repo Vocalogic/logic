@@ -350,6 +350,26 @@ if (!function_exists('setting'))
         return $new;
     }
 
+    /**
+     * Do we have a tax integration handler or are we handling taxes ourselves?
+     * @return Integration|null
+     */
+    function getTaxIntegration(): ?IntegrationRegistry
+    {
+        foreach (IntegrationRegistry::cases() as $case)
+        {
+            if ($case->isEnabled())
+            {
+                if(isset($case->connect()->config->use_integration_tax) &&
+                    $case->connect()->config->use_integration_tax == 'Y')
+                {
+                    return $case;
+                }
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Basic Byte Formatter

@@ -46,7 +46,7 @@ class QBOInvoice extends QBOCore
      */
     public function byInvoice(Invoice $invoice): mixed
     {
-        if ($invoice->items()->count() == 0) return;
+        if ($invoice->items()->count() == 0) return null;
         if ($invoice->finance_invoice_id)
         {
             $inv = $this->find($invoice->finance_invoice_id);
