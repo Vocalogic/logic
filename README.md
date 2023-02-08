@@ -1,4 +1,7 @@
 ### Logic - Open Source Sales and Billing Tool for Small Business
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 **Logic** is an open source project started by Chris Horne ([@devhorne](https://www.twitter.com/devhorne)), initially to
 manage the day to day business process for [Vocalogic](https://www.vocalogic.com), A business telephone/VOIP Provider in
@@ -149,6 +152,20 @@ few ways you can contribute to Logic.
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://loganskidmore.dev"><img src="https://avatars.githubusercontent.com/u/14035888?v=4?s=100" width="100px;" alt="jlskidmore"/><br /><sub><b>jlskidmore</b></sub></a><br /><a href="https://github.com/Vocalogic/logic/commits?author=jlskidmore" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 
