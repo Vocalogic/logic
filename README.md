@@ -62,65 +62,8 @@ This helps further fund development and grow the project.
 
 If you would rather just download and host the project yourself on your own servers, you can do so using the steps
 below. Feel free to reach out for support contract options for large production environments to help further
-fund development of this application. Please refer to the [full installation guide](https://logic.readme.io/docs) for
+fund development of this application. Please refer to the [full installation guide](https://logic.readme.io/docs/fresh-install) for
 more information.
-
-#### Create a MySQL Database
-
-````
-CREATE DATABASE logic;
-GRANT all on logic.* to 'logic'@'localhost' IDENTIFIED by 'MyPassw0rd';
-````
-
-#### Clone the Project
-
-````
-git clone https://www.github.com/Vocalogic/logic logic
-cd logic
-cp .env.example .env
-````
-
-#### Edit the .env file
-
-You will need to edit a few fields inside the .env file
-
-````
-APP_URL=http://localhost        # Your FQDN to your installation
-APP_NAME="Logic"                # You can leave this
-BYPASS_ENABLED=false            # This allows auto-login from Vocalogic for support. Set to true to enable. 
-REDIS_QUEUE=logic               # Your redis queue name. Some use 'default'
-APP_TIMEZONE="America/New_York" # Your PHP Formatted Timezone
-
-DB_HOST=127.0.0.1               # Database Host
-DB_PORT=3306                    # Database Port
-DB_DATABASE=logic               # Database Name
-DB_USERNAME=logic               # Database Username     
-DB_PASSWORD=                    # Database Password
-````
-
-#### Finish using Upgrade Command
-
-````
-./artisan key:generate
-./artisan logic:upgrade
-````
-
-**NOTE**: If you receive any errors from the above command, please review
-the [step-by-step installation guide](https://logic.readme.io/docs) for
-additional help.
-
-#### Final Commands
-
-````
-chmod 777 storage -R          # This is required for sessions, file uploads, etc.
-chmod 777 bootstrap -R        # Cached Files Directory needs to be writable.
-./artisan key:gen             # Generate the application Key
-````
-
-For detailed step-by-step instructions please refer to the installation guide.
-
-Finally, visit your URL, and you will be redirected to the installation page where you will set up your company
-and initial admin user.
 
 ### User Manual
 
