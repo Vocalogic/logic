@@ -1,4 +1,7 @@
 ### Logic - Open Source Sales and Billing Tool for Small Business
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 **Logic** is an open source project started by Chris Horne ([@devhorne](https://www.twitter.com/devhorne)), initially to
 manage the day to day business process for [Vocalogic](https://www.vocalogic.com), A business telephone/VOIP Provider in
@@ -22,6 +25,18 @@ Logic is designed for anyone that runs a service-based business, that needs a wa
 automate billing, take credit cards, process ACH transactions, and give their customers a portal to login and
 review their services, pay invoices, or get help.
 
+#### Product Catalog Example
+![catalog]( https://www.vocalogic.com/images/catalog.png "Product Catalog Entry")
+
+#### Quote Creation and Profit Analysis
+![profit](https://www.vocalogic.com/images/profit.png "Profit Analysis for Quote")
+
+#### Customer View - Shop Category Browser
+![shopcat](https://www.vocalogic.com/images/shopcategory.png "Shop Category View")
+
+#### Customer View - Product/Service Single View
+![shopcat](https://www.vocalogic.com/images/shopitem.png "Shop Product/Service")
+
 #### Logic Provides:
 
 * A branded customer portal where customers can update credit cards, see services, get support, order services, etc.
@@ -39,16 +54,6 @@ review their services, pay invoices, or get help.
 
 This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2.
 
-### Installation Requirements and Instructions
-
-* A linux webserver running nginx or apache.
-* PHP v8.2
-* MariaDB v10.6+
-* Composer
-* Redis v5.0.7+
-* NPM 6.14+
-* NodeJS v14.21+
-
 ### Cloud Hosting and Management
 
 If you just want to use the application and host with Vocalogic,
@@ -59,65 +64,8 @@ This helps further fund development and grow the project.
 
 If you would rather just download and host the project yourself on your own servers, you can do so using the steps
 below. Feel free to reach out for support contract options for large production environments to help further
-fund development of this application. Please refer to the [full installation guide](https://logic.readme.io/docs) for
+fund development of this application. Please refer to the [full installation guide](https://logic.readme.io/docs/fresh-install) for
 more information.
-
-#### Create a MySQL Database
-
-````
-CREATE DATABASE logic;
-GRANT all on logic.* to 'logic'@'localhost' IDENTIFIED by 'MyPassw0rd';
-````
-
-#### Clone the Project
-
-````
-git clone https://www.github.com/Vocalogic/logic logic
-cd logic
-cp .env.example .env
-````
-
-#### Edit the .env file
-
-You will need to edit a few fields inside the .env file
-
-````
-APP_URL=http://localhost        # Your FQDN to your installation
-APP_NAME="Logic"                # You can leave this
-BYPASS_ENABLED=false            # This allows auto-login from Vocalogic for support. Set to true to enable. 
-REDIS_QUEUE=logic               # Your redis queue name. Some use 'default'
-APP_TIMEZONE="America/New_York" # Your PHP Formatted Timezone
-
-DB_HOST=127.0.0.1               # Database Host
-DB_PORT=3306                    # Database Port
-DB_DATABASE=logic               # Database Name
-DB_USERNAME=logic               # Database Username     
-DB_PASSWORD=                    # Database Password
-````
-
-#### Finish using Upgrade Command
-
-````
-./artisan key:generate
-./artisan logic:upgrade
-````
-
-**NOTE**: If you receive any errors from the above command, please review
-the [step-by-step installation guide](https://logic.readme.io/docs) for
-additional help.
-
-#### Final Commands
-
-````
-chmod 777 storage -R          # This is required for sessions, file uploads, etc.
-chmod 777 bootstrap -R        # Cached Files Directory needs to be writable.
-./artisan key:gen             # Generate the application Key
-````
-
-For detailed step-by-step instructions please refer to the installation guide.
-
-Finally, visit your URL, and you will be redirected to the installation page where you will set up your company
-and initial admin user.
 
 ### User Manual
 
@@ -146,4 +94,28 @@ few ways you can contribute to Logic.
 * Pizza. You could send Pizza to our offices at 190 Bluegrass Valley Parkway, Alpharetta, GA. 30005. Just no pineapple
   please.
 
+## Contributors
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://loganskidmore.dev"><img src="https://avatars.githubusercontent.com/u/14035888?v=4?s=100" width="100px;" alt="jlskidmore"/><br /><sub><b>jlskidmore</b></sub></a><br /><a href="https://github.com/Vocalogic/logic/commits?author=jlskidmore" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sodu-parisev"><img src="https://avatars.githubusercontent.com/u/13131900?v=4?s=100" width="100px;" alt="Sodu"/><br /><sub><b>Sodu</b></sub></a><br /><a href="https://github.com/Vocalogic/logic/commits?author=sodu-parisev" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->

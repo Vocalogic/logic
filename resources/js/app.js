@@ -196,13 +196,32 @@ $(document).ready(function () {
         });
     }
 
+    /**
+     * The .live class uses the main layout's modal init and uses
+     * an ajax call using the send() method to populate the modal-body.
+     */
     if ($('.live').length) {
         $('.live').click(function (e) {
             e.preventDefault();
             let that = $(this);
             let url = that.attr('href');
             let title = that.attr('data-title');
-            let target = that.attr('data-target') ? that.attr('data-target') : "#liveModal";
+            let direction = that.attr('data-position') ? that.attr('data-position') : "center";
+            let target;
+            if (that.attr('data-target'))
+            {
+                target = that.attr('data-target') ? that.attr('data-target') : "#liveModal";
+            }
+            else {
+                switch (direction) {
+                    case 'center' : target = "#liveModal";
+                    break;
+                    case 'left' :  target = "#liveLeft";
+                    break;
+                    case 'right' :  target = "#liveRight";
+                    break;
+                }
+            }
             send(url, 'GET', null, function (data) {
                 let modal = $(target);
                 modal.find('.modal-title').text(title);
@@ -220,37 +239,7 @@ $(document).ready(function () {
 
     }
 
-    if ($('.liveLeft').length) {
-        $('.liveLeft').click(function (e) {
-            e.preventDefault();
-            let that = $(this);
-            let url = that.attr('href');
-            let title = that.attr('data-title');
-            let target = that.attr('data-target') ? that.attr('data-target') : "#liveLeft";
-            send(url, 'GET', null, function (data) {
-                let modal = $(target);
-                modal.find('.modal-title').text(title);
-                modal.find('.modal-body').html(data);
-                modal.modal('show');
-            });
-        });
-    }
 
-    if ($('.liveRight').length) {
-        $('.liveRight').click(function (e) {
-            e.preventDefault();
-            let that = $(this);
-            let url = that.attr('href');
-            let title = that.attr('data-title');
-            let target = that.attr('data-target') ? that.attr('data-target') : "#liveRight";
-            send(url, 'GET', null, function (data) {
-                let modal = $(target);
-                modal.find('.modal-title').text(title);
-                modal.find('.modal-body').html(data);
-                modal.modal('show');
-            });
-        });
-    }
 
     // X-Editable
     if ($('.xedit').length) {

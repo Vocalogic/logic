@@ -174,18 +174,15 @@ class Finance
      */
     static public function taxByQuote(Quote $quote) : float
     {
-        foreach (IntegrationRegistry::cases() as $case)
+        $integration = getTaxIntegration();
+        if (!$integration) return 0;
+        try
         {
-            if ($case->isEnabled())
-            {
-                if(isset($case->connect()->config->use_integration_tax) &&
-                    $case->connect()->config->use_integration_tax == 'Y')
-                {
-                    return $case->connect()->taxByQuote($quote);
-                }
-            }
+            return $integration->connect()->taxByQuote($quote);
+        } catch (Exception)
+        {
+            return 0;
         }
-        throw new Exception("No Alternate Tax Engines Available.");
     }
 
     /**
@@ -196,18 +193,15 @@ class Finance
      */
     static public function taxByInvoice(Invoice $invoice): float
     {
-        foreach (IntegrationRegistry::cases() as $case)
+        $integration = getTaxIntegration();
+        if (!$integration) return 0;
+        try
         {
-            if ($case->isEnabled())
-            {
-                if(isset($case->connect()->config->use_integration_tax) &&
-                    $case->connect()->config->use_integration_tax == 'Y')
-                {
-                    return $case->connect()->taxByInvoice($invoice);
-                }
-            }
+            return $integration->connect()->taxByInvoice($invoice);
+        } catch(Exception)
+        {
+            return 0;
         }
-        throw new Exception("No Alternate Tax Engines Available.");
     }
 
     /**

@@ -36,7 +36,6 @@ class QuoteItem extends Model
         'qty'            => "Quantity",
         'notes'          => "Item Notes",
         'description'    => "Item Description",
-        'frequency'      => "Financing Frequency",
         'payments'       => "Number of Payments Required",
         'finance_charge' => "Finance Charge Assessed"
     ];

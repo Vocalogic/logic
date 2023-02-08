@@ -511,6 +511,7 @@ class Invoice extends Model
         if ($this->balance <= 0)
         {
             $this->update(['status' => InvoiceStatus::PAID, 'paid_on' => now()]);
+            $this->processTaxes();
             $order = Order::where('invoice_id', $this->id)->first();
             if ($order)
             {
@@ -714,5 +715,25 @@ class Invoice extends Model
             $years[$year][] = $invoice;
         }
         return $years;
+    }
+
+    /**
+     * If Logic is handling taxes, then we need to create a tax
+     * collection entry. Just take the tax on the invoice and
+     * the location.
+     * @return void
+     */
+    private function processTaxes(): void
+    {
+        // First make sure we don't duplicate tax entries.
+        if (TaxCollection::where('invoice_id', $this->id)->count()) return;
+        $location = TaxLocation::where('location', $this->account->state)->first();
+        if (!$location) return;
+        if (getTaxIntegration() !== null) return; // Don't do anything if something else is handling.
+        TaxCollection::create([
+            'invoice_id'      => $this->id,
+            'tax_location_id' => $location->id,
+            'amount'          => $this->tax
+        ]);
     }
 }
