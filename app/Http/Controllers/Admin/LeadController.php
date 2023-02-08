@@ -79,6 +79,14 @@ class LeadController extends Controller
         {
             $request->merge(['forecast_date' => Carbon::parse($request->forecast_date)]);
         }
+        if ($request->email)
+        {
+            $request->merge(['email' => strtolower($request->email)]);
+            if (!filter_var($request->email, FILTER_VALIDATE_EMAIL))
+            {
+                throw new LogicException("A valid email address is required.");
+            }
+        }
         if ($request->email && User::where('email', $request->email)->count())
         {
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
