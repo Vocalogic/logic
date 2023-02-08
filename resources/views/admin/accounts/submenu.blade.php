@@ -1,7 +1,7 @@
 <div class="text-center">
     <h6 class="card-title">{{$account->name}}</h6>
     @if($account->agent)
-        <span class="text-muted">Agent: <b>{{$account->agent->name}}</b></span>
+        <span class="text-muted">Agent: <b>{{$account->agent->name}}</b></span><br/>
     @endif
     @if($account->affiliate)
         <span class="text-muted fs-7">Affiliate: <b>{{$account->affiliate->name}}</b></span>
