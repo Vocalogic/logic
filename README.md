@@ -25,6 +25,12 @@ Logic is designed for anyone that runs a service-based business, that needs a wa
 automate billing, take credit cards, process ACH transactions, and give their customers a portal to login and
 review their services, pay invoices, or get help.
 
+#### Product Catalog Example
+![catalog]( https://www.vocalogic.com/images/catalog.png "Product Catalog Entry")
+
+#### Quote Creation and Profit Analysis
+![profit](https://www.vocalogic.com/images/profit.png "Profit Analysis for Quote")
+
 #### Logic Provides:
 
 * A branded customer portal where customers can update credit cards, see services, get support, order services, etc.
