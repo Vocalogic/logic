@@ -11,7 +11,7 @@
             @foreach(\App\Models\TaxLocation::orderBy('location')->get() as $location)
                 <tr>
                     <td>
-                        <a class="live"
+                        <a class="live" data-position="right"
                            data-title="Edit {{$location->location}}"
                            href="/admin/tax_locations/{{$location->id}}">
                             {{$location->location}}
