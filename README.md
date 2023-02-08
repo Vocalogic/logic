@@ -1,6 +1,6 @@
 ### Logic - Open Source Sales and Billing Tool for Small Business
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 **Logic** is an open source project started by Chris Horne ([@devhorne](https://www.twitter.com/devhorne)), initially to
@@ -158,6 +158,7 @@ few ways you can contribute to Logic.
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="http://loganskidmore.dev"><img src="https://avatars.githubusercontent.com/u/14035888?v=4?s=100" width="100px;" alt="jlskidmore"/><br /><sub><b>jlskidmore</b></sub></a><br /><a href="https://github.com/Vocalogic/logic/commits?author=jlskidmore" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sodu-parisev"><img src="https://avatars.githubusercontent.com/u/13131900?v=4?s=100" width="100px;" alt="Sodu"/><br /><sub><b>Sodu</b></sub></a><br /><a href="https://github.com/Vocalogic/logic/commits?author=sodu-parisev" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
