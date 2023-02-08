@@ -140,10 +140,10 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function addPaymentMethod(Account $account, string $token): mixed
+    public function addPaymentMethod(Account $account, string $token, string $expiry, string $cvv, string $postal): mixed
     {
         $lp = new LPCore($this->config);
-        $result = $lp->preauth($token, $account->name);
+        $result = $lp->preauth($token, $account->name, $expiry, $cvv, $postal);
         if ($result->respstat != 'A')
         {
             throw new LogicException("Authorization Declined.");

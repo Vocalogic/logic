@@ -12,13 +12,20 @@ use Livewire\Component;
 
 class LogicPayComponent extends Component
 {
-    public         $listeners          = ['logicToken'];
-    public string  $message            = "Awaiting New Payment Details..";
-    public string  $messageColor       = 'info';
-    public bool    $awaitingExpiration = false;
-    public string  $expiration         = '';
+    public         $listeners       = ['logicToken'];
+    public string  $message         = "Enter New Card Number to Preauthorize";
+    public string  $messageColor    = 'info';
+    public string  $expiration      = '';
+    public string  $expiry          = '';
+    public string  $postal          = '';
+    public string  $cvv             = '';
     public Account $account;
     public string  $token;
+    public bool    $canAttempt      = false;
+    public bool    $validExpiration = false;
+    public bool    $validPostal     = false;
+    public bool    $validCVV        = false;
+    public bool    $complete        = false;
 
     /**
      * Render Component (also spawns listener for the token)
@@ -26,6 +33,10 @@ class LogicPayComponent extends Component
      */
     public function render(): View
     {
+        $this->validExpiration = (strlen($this->expiration) == 4 && is_numeric($this->expiration));
+        $this->validPostal = strlen($this->postal) == 5 & is_numeric($this->postal);
+        $this->validCVV = strlen($this->cvv) > 2 && is_numeric($this->cvv);
+        $this->canAttempt = $this->validExpiration && $this->validPostal && $this->validCVV && $this->token;
         return view('admin.accounts.billing.logic_component');
     }
 
@@ -33,26 +44,24 @@ class LogicPayComponent extends Component
      * Receive Token from Emitter
      * @param string $token
      * @return void
-     * @throws GuzzleException
      */
     public function logicToken(string $token): void
     {
-        $this->message = "Attempting to Validate..";
+        $this->message = "Encrypted Card Number, Awaiting Input..";
         $this->token = $token;
-        $this->attemptAuthorization();
     }
 
     /**
-     * Attempt to Authorize $1.00 with this token.
+     * Attempt to Authorize Card
      * @return void
      * @throws GuzzleException
      */
-    private function attemptAuthorization(): void
+    public function attemptAuthorization(): void
     {
         $lp = new LogicPay();
         try
         {
-            $lp->addPaymentMethod($this->account, $this->token);
+            $lp->addPaymentMethod($this->account, $this->token, $this->expiration, $this->cvv, $this->postal);
         } catch (LogicException $e)
         {
             $this->message = $e->getMessage();
@@ -61,41 +70,14 @@ class LogicPayComponent extends Component
         }
         $this->account->refresh();
         $this->messageColor = 'success';
-        $this->message = "<span class='text-success'>Card Authorized! Verify Expiration Date</span>";
-        $this->awaitingExpiration = true;
-    }
-
-
-    /**
-     * Attempt to save Expiration
-     * @return mixed
-     */
-    public function saveExpiration(): mixed
-    {
-        if (!$this->expiration)
-        {
-            $this->message = "<span class='text-danger'>Expiration date verification required for validation.</span>";
-            return null;
-        }
-        if (strlen($this->expiration) != 4)
-        {
-            $this->message = "<span class='text-danger'>Expiration date must be MMYY format.</span>";
-            return null;
-        }
+        $this->message = "Card Successfully Authorized";
+        $this->complete = true;
         $data = [
-          'expiration' => $this->expiration
+            'expiration' => $this->expiration
         ];
         $this->account->update(['merchant_metadata' => $data]);
-        if (user()->account->id > 1)
-        {
-            sysact(ActivityType::Account, user()->account->id, "updated their credit card information for ");
-            return redirect()->to("/shop/account/profile")->with('message',
-                "Your payment method has been updated with " . setting('brand.name') . " Successfully!");
-        }
-        else
-        {
-            return redirect()->to("/admin/accounts/{$this->account->id}")
-                ->with('message', "Payment Method Updated Successfully!");
-        }
     }
+
+
+
 }

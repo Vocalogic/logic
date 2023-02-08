@@ -54,13 +54,16 @@ class LPCore extends APICore
 
     /**
      * Attempt to Authorize a given token.
-     * @param string $token
-     * @param string $name
+     * @param string      $token
+     * @param string      $name
+     * @param string|null $expiry
+     * @param string|null $cvv
+     * @param string|null $postal
      * @return mixed
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function preauth(string $token, string $name): object
+    public function preauth(string $token, string $name, ?string $expiry = null, ?string $cvv = null, string $postal = null): object
     {
         $amount = 0;
         $data = [
@@ -72,6 +75,18 @@ class LPCore extends APICore
             'cofscheduled' => 'N',
             'ecomind'      => 'E'
         ];
+        if ($cvv)
+        {
+            $data['cvv2'] = $cvv;
+        }
+        if ($postal)
+        {
+            $data['postal'] = $postal;
+        }
+        if ($expiry)
+        {
+            $data['expiry'] = $expiry;
+        }
         return $this->send($this->baseUrl . "rest/auth", 'post', $data);
     }
 
