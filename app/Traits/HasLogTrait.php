@@ -37,10 +37,18 @@ trait HasLogTrait
      */
     public function getLogs(): Collection
     {
-        return AppLog::query()
-            ->where('type', self::class)
-            ->where('type_id', $this->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+
+        $logs = $this->logs()->orderBy('created_at', 'desc')->get();
+        if (isset($this->logRelationships))
+        {
+            foreach($this->logRelationships as $relationship)
+            {
+                foreach ($this->{$relationship} as $item)
+                {
+                    $logs = $logs->concat($item->logs()->get());
+                }
+            }
+        }
+        return $logs;
     }
 }

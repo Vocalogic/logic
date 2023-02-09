@@ -106,17 +106,16 @@ class QuoteController extends Controller
         {
             sysact(ActivityType::LeadQuote, $quote->id,
                 "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
-            _log($quote, "Quote Created");
-            _log($obj, "Quote #{$quote->id} created."); // Log to lead as well.
+            // Log to lead as well.
         }
         else
         {
             sysact(ActivityType::AccountQuote, $quote->id,
                 "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
-            _log($quote, "Quote Created");
-            _log($obj, "Quote #{$quote->id} created."); // Log to account as well.
+            // Log to account as well.
         }
-        _log($quote, 'Quote created');
+        _log($quote, "Quote Created");
+        _log($obj, "Quote #{$quote->id} created.");
         return redirect()->to("/admin/quotes/$quote->id")->with('message', "Quote #$quote->id created.");
     }
 
@@ -167,8 +166,7 @@ class QuoteController extends Controller
             'frequency'       => $item->type == 'services' ? $item->frequency : null,
         ]);
         $qitem->update(['ord' => $qitem->setNewOrd()]);
-        _log($quote, $item->name . " added to quote.");
-        _log($qitem, "Item Added");
+        _log($qitem, $item->name . " added to quote.");
         $quote->reord();
         $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
@@ -239,7 +237,7 @@ class QuoteController extends Controller
             'finance_charge'  => $request->finance_charge,
             'notes'           => $request->notes
         ]);
-        _log($item, "Item Updated", $old);
+        _log($item, "{$item->item->name} Updated", $old);
         $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return redirect()->back()->with('message', $item->item->name . " updated.");
@@ -272,7 +270,7 @@ class QuoteController extends Controller
         {
             $quote->lead->quotes()->where('id', '!=', $quote->id)->update(['preferred' => false]);
         }
-        _log($quote, "Quote Updated", $old);
+        _log($quote, "Quote Settings Updated", $old);
         return redirect()->back()->with('message', "Quote settings updated.");
     }
 

@@ -142,14 +142,6 @@ class Lead extends Model
         return $this->hasMany(Quote::class);
     }
 
-    /**
-     * A lead can have many Telephone Numbers to port.
-     * @return HasMany
-     */
-    public function tns(): HasMany
-    {
-        return $this->hasMany(LeadTn::class);
-    }
 
     /**
      * A lead can have an origin.
