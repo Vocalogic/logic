@@ -14,6 +14,7 @@ use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
 use App\Operations\Integrations\Accounting\Finance;
 use App\Structs\STemplate;
+use App\Traits\HasLogTrait;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,7 +52,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Quote extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasLogTrait;
 
     protected    $guarded = ['id'];
     protected    $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];

@@ -19,17 +19,11 @@ class LogsController extends Controller
      * @param int|null $logseverity
      * @return View
      */
-    public function show(string $model, int $id, int $logseverity = null): View
+    public function show(string $model, int $id): View
     {
         $logs = AppLog::query()
             ->where('type', "App\\Models\\{$model}")
             ->where('type_id', $id)
-            ->when(!empty($logseverity), function (Builder $query) use ($logseverity) {
-                $severity = LogSeverity::tryFrom($logseverity);
-                if ($severity instanceof LogSeverity) {
-                    $query->where('log_level', $severity->value);
-                }
-            })
             ->get();
         return view('admin.logs.show', ['logs' => $logs]);
     }

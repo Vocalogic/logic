@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use App\Exceptions\LogicException;
+use App\Traits\HasLogTrait;
 
 /**
  * @property mixed        $items
@@ -46,6 +47,8 @@ use App\Exceptions\LogicException;
  */
 class Invoice extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
 
     public $dates = ['sent_on', 'due_on', 'paid_on'];

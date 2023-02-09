@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\BillFrequency;
 use App\Operations\Admin\AnalysisEngine;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,6 +26,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class QuoteItem extends Model
 {
+    use HasLogTrait;
+
     protected    $guarded = ['id'];
     public       $casts   = [
         'frequency' => BillFrequency::class,

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\ACL;
+use App\Traits\HasLogTrait;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,6 +36,8 @@ use LogicException;
  */
 class Lead extends Model
 {
+    use HasLogTrait;
+
     protected    $guarded = ['id'];
     public       $dates   = ['forecast_date'];
     public array $tracked = [
