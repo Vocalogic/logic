@@ -1,6 +1,7 @@
 @extends('layouts.admin', ['title' => "Order #$order->id", 'crumbs' => [
      '/admin/orders' => "Orders",
-     "Order #$order->id"
+     "Order #$order->id",
+     'log' => $order->logs()->exists() ? $order->logLink : null
 ]])
 
 @section('pre')

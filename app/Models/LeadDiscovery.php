@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LeadDiscovery extends Model
 {
+    use HasLogTrait;
+
     protected    $guarded = ['id'];
     public array $tracked = [
         'discovery_id' => "Discovery Question|discovery.question",

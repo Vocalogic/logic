@@ -44,6 +44,7 @@ use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\VersionController;
+use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\LandingController;
@@ -61,7 +62,6 @@ use App\Http\Controllers\Shop\ShopAccountController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\TfaController;
 use Illuminate\Support\Facades\Route;
-use Modules\Voip\Http\Controllers\Admin\ProvisioningController;
 
 
 Route::get('/', [LandingController::class, 'index']);
@@ -107,7 +107,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], function () {
     Route::resource('users', UserController::class);
-    Route::resource('provisionings', ProvisioningController::class);
     Route::resource('accounts.users', AccountUserController::class);
     Route::resource('origins', OriginController::class);
     Route::resource('categories.tag_categories', TagCategoryController::class);
@@ -546,6 +545,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::put('lead_statuses/{status}', [LeadTypeController::class, 'updateStatus']);
     Route::post('lead_statuses', [LeadTypeController::class, 'storeStatus']);
     Route::delete('lead_statuses/{status}', [LeadTypeController::class, 'destroyStatus']);
+
+    // Logs page
+    Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
 
 });
 

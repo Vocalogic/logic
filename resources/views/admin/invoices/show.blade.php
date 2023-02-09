@@ -1,9 +1,10 @@
-@extends('layouts.admin', ['title' => "Invoice #$invoice->id",
-'crumbs' => [
-    "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
-    "Invoice #$invoice->id"
-]
-
+@extends('layouts.admin', [
+    'title' => "Invoice #$invoice->id",
+    'crumbs' => [
+        "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
+        "Invoice #$invoice->id"
+    ],
+    'log' => $invoice->logs()->exists() ? $invoice->logLink : null
 ])
 
 @section('pre')

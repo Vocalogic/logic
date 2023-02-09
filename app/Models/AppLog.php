@@ -49,4 +49,12 @@ class AppLog extends Model
         if (json_decode($this->detail)) return json_decode($this->detail);
         return $this->detail;
     }
+
+    /**
+     * Get the parent loggable model (invoice, quote and etc).
+     */
+    public function loggable()
+    {
+        return $this->morphTo(__FUNCTION__, 'type', 'type_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\BillItemType;
 use App\Enums\Core\OrderStatus;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -19,6 +20,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Order extends Model
 {
+    use HasLogTrait;
+    
     protected $guarded = ['id'];
     public $casts = ['status' => OrderStatus::class];
 
