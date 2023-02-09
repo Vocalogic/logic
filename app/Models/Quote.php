@@ -77,6 +77,13 @@ class Quote extends Model
     ];
 
     /**
+     * When showing the log entries for a quote, we want to
+     * add the item logs as well.
+     * @var array|string[]
+     */
+    public array $logRelationships = ['items'];
+
+    /**
      * A quote can belong to an account
      * @return BelongsTo
      */

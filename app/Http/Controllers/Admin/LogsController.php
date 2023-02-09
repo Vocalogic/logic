@@ -15,17 +15,25 @@ class LogsController extends Controller
     /**
      * Shows list of log entries for a model
      * @param string $model
-     * @param int $id
-     * @param int|null $logseverity
+     * @param int    $id
      * @return View
      */
     public function show(string $model, int $id): View
     {
-        $logs = AppLog::query()
-            ->where('type', "App\\Models\\{$model}")
-            ->where('type_id', $id)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $model = ucfirst($model);
+        $class = "\\App\\Models\\$model";
+        try
+        {
+            $entity = $class::find($id);
+            if (isset($entity))
+            {
+                $logs = $entity->getLogs();
+            }
+            else $logs = collect(); // empty collection if no model/record found
+        } catch (Throwable)
+        {
+            $logs = collect();
+        }
         return view('admin.logs.show', ['logs' => $logs]);
     }
 }

@@ -1,7 +1,7 @@
 @extends('layouts.admin', [
     'title' => $quote->lead ? $quote->lead->company : $quote->account->name . " Quote #{$quote->id}",
     'crumbs' => $crumbs,
-    'log' => $quote->logs()->exists() ? $quote->logLink : null
+    'log' => $quote->logLink
 ])
 
 @section('pre')

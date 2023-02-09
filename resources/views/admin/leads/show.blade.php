@@ -1,8 +1,9 @@
 @extends('layouts.admin', ['title' => $lead->company, 'crumbs' => [
      '/admin/leads' => "Leads",
      $lead->company .  " ($lead->contact)",
-     'log' => $lead->logs()->exists() ? $lead->logLink : null
-]])
+    ],
+     'log' => $lead->logLink
+])
 
 @section('pre')
     <div class="row align-items-center">

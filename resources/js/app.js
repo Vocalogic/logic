@@ -207,6 +207,7 @@ $(document).ready(function () {
             let url = that.attr('href');
             let title = that.attr('data-title');
             let direction = that.attr('data-position') ? that.attr('data-position') : "center";
+            let size = that.attr('data-size') ? that.attr('data-size') : 'modal-lg';
             let target;
             if (that.attr('data-target'))
             {
@@ -224,6 +225,7 @@ $(document).ready(function () {
             }
             send(url, 'GET', null, function (data) {
                 let modal = $(target);
+                modal.find('.modal-dialog').addClass(size);
                 modal.find('.modal-title').text(title);
                 modal.find('.modal-body').html(data);
                 modal.modal('show');
