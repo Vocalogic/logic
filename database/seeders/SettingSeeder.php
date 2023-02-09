@@ -99,9 +99,18 @@ class SettingSeeder extends Seeder
         $this->buildSetting('invoices.cancelcontract', 'Cancellation Days Required (w/ Contract)', 'number', 90,
             'Invoice',
             'If a customer wishes to cancel in a contract, how many days before end of contract is required?', '0|90');
+
+        $this->buildSetting('invoices.lateFeeDays', 'Days before Late Fee is Assessed', 'number', 15,
+            'Invoice',
+            'If an invoice is past due, how many days before a late fee is assessed?', '1|90');
+        $this->buildSetting('invoices.lateFeePercentage', 'Default Late Fee Percentage?', 'input', '2.5',
+            'Invoice',
+            'What is the default late fee percentage to apply to a invoice if assessed?');
+        $this->buildSetting('invoices.lateFeeVerbiage', 'Late fee Description?', 'input', 'Standard Late Fee Charge for Past Due Invoice',
+            'Invoice',
+            'When adding the line item for a past due charge, enter the description for this line item');
         $this->buildSetting('invoices.help', 'Invoice Help Area', 'textarea', $this->getInvoiceHelp(), 'Invoice',
             'Enter the additional help area for a monthly invoice');
-
 
         // Leads Configuration
         $this->buildSetting('leads.aging', 'Require Lead Update (in days)', 'number', 0, 'Lead',

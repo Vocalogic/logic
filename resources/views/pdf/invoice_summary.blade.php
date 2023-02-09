@@ -326,7 +326,7 @@
                     <td style="font-size: 12px;">{{$invoice->account->name}}
                         <br/>
                         {{$invoice->account->phone}}<br/>
-                        {{$invoice->account->admin->email}}
+                        {{$invoice->account->admin?->email}}
                     </td>
                 </table>
             </div>
@@ -450,7 +450,7 @@
 
 <div class='footer'>
     {{setting('brand.name')}} Invoice #{{$invoice->id}} - Generated
-    for {{$invoice->account->admin->name}}
+    for {{$invoice->account->admin?->name}}
     with {{$invoice->account->name}}
     <span class='pagenum'></span>
 </div>

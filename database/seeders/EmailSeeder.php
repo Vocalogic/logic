@@ -96,6 +96,10 @@ class EmailSeeder extends Seeder
             'Email sent when an invoice is past due and has reached the pending suspension period.',
             "[NOTICE OF PENDING SUSPENSION] Invoice #{invoice.id} is {invoice.daysPastDue} days PAST DUE");
 
+        $this->buildEmail('invoice.lateFeeCharged', self::CAT_FINANCE, 'Invoice Late Fee Charged',
+            'Email sent when and invoice is past due and a late fee has been charged.',
+            "Invoice #{invoice.id} has been updated to include a Late Fee");
+
         $this->buildEmail('invoice.terminationPending', self::CAT_FINANCE, 'Invoice Past Due - Pending Termination',
             'Email sent when an invoice is past due and has reached the pending termination period.',
             "[NOTICE OF PENDING TERMINATION] Invoice #{invoice.id} is {invoice.daysPastDue} days PAST DUE");

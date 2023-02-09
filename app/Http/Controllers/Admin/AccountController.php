@@ -351,10 +351,11 @@ class AccountController extends Controller
         ]);
 
         $account = Account::create([
-            'name'           => $request->name,
-            'active'         => true,
-            'payment_method' => setting('invoices.default'),
-            'agent_id'       => user()->id
+            'name'                => $request->name,
+            'active'              => true,
+            'payment_method'      => setting('invoices.default'),
+            'agent_id'            => user()->id,
+            'late_fee_percentage' => setting('invoices.lateFeePercentage')
         ]);
         $account->generateHash();
         $user->update(['account_id' => $account->id]);

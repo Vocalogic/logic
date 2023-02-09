@@ -45,13 +45,18 @@ class BillingEngine
                 // #147 - Check Suspension and Termination Notices
                 if (now()->diffInDays($invoice->due_on) > setting('invoices.terminationDays'))
                 {
-                    info(now()->diffInDays($invoice->due_on));
                     $invoice->sendTerminationNotice();
                     continue; // don't send suspension again. (or try to)
                 }
                 if (now()->diffInDays($invoice->due_on) > setting('invoices.suspensionDays'))
                 {
                     $invoice->sendSuspensionNotice();
+                }
+                $lateFeeTarget = $invoice->due_on->addDays(setting('invoices.lateFeeDays'));
+                if (!$invoice->account->impose_late_fee) continue; // only if this account has late fees enabled.
+                if (now() >= $lateFeeTarget)
+                {
+                    $invoice->assessLateFee();
                 }
             }
         }
