@@ -1,4 +1,8 @@
-@extends('layouts.admin', ['title' => $quote->lead ? $quote->lead->company : $quote->account->name . " Quote #{$quote->id}", 'crumbs' => $crumbs])
+@extends('layouts.admin', [
+    'title' => $quote->lead ? $quote->lead->company : $quote->account->name . " Quote #{$quote->id}",
+    'crumbs' => $crumbs,
+    'log' => $quote->logs()->exists() ? $quote->logLink : null
+])
 
 @section('pre')
     <div class="row align-items-center">

@@ -24,6 +24,7 @@ class LogsController extends Controller
         $logs = AppLog::query()
             ->where('type', "App\\Models\\{$model}")
             ->where('type_id', $id)
+            ->orderBy('created_at', 'desc')
             ->get();
         return view('admin.logs.show', ['logs' => $logs]);
     }

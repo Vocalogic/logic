@@ -26,6 +26,6 @@ trait HasLogTrait
     {
         $classpath = explode('\\', self::class);
         $classname = array_pop($classpath);
-        return "/logs/{$classname}/{$this->id}";
+        return "/admin/logs/{$classname}/{$this->id}";
     }
 }
