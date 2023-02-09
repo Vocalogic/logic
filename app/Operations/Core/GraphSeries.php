@@ -317,7 +317,6 @@ class GraphSeries
 
         $mrrPlots = [];
         $invoicePlots = [];
-        info("Months is ". $this->request->months);
         foreach (range(0, $this->request->months ?? 6) as $month)
         {
             $start = now()->subMonths($month)->startOfMonth();

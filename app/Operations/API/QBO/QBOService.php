@@ -2,6 +2,7 @@
 
 namespace App\Operations\API\QBO;
 
+use App\Exceptions\LogicException;
 use App\Models\BillItem;
 use App\Models\Integration;
 use GuzzleHttp\Exception\GuzzleException;
@@ -36,6 +37,7 @@ class QBOService extends QBOCore
      * @param BillItem $item
      * @return void
      * @throws GuzzleException
+     * @throws LogicException
      */
     public function byItem(BillItem $item): void
     {
@@ -67,6 +69,7 @@ class QBOService extends QBOCore
         $data->Sku = $item->code;
         $data->Description = strip_tags($desc);
         $data->UnitPrice = moneyFormat($price, false);
+        $data->Taxable = $item->taxable ? 'true' : 'false';
         $data->ParentRef = (object)[
             'value' => $item->category->finance_category_id
         ];
@@ -96,7 +99,7 @@ class QBOService extends QBOCore
      * Attempt to find a service by its name to prevent duplicates.
      * @param mixed $name
      * @return int
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function findByName(mixed $name): int
     {
