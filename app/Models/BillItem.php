@@ -69,6 +69,7 @@ use League\CommonMark\MarkdownConverter;
  * @property float|mixed $min_price
  * @property float|mixed $max_price
  * @property mixed       $confirmation_dialog
+ * @property mixed       $taxable
  */
 class BillItem extends Model
 {
