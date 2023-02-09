@@ -34,14 +34,15 @@
                             <span class="text-secondary small">{{$item->name}}</span>
                         </a>
                     @endif
+                        @if($item->children()->count())
+                            <a href="#" data-bs-toggle="popover" data-bs-html="true"
+                               data-bs-title="{{$item->name}} Variations"
+                               data-bs-content="{!! $item->variantExport !!}"><span
+                                    class="badge bg-{{bm()}}primary">+{{$item->children()->count()}}</span></a>
+                        @endif
                 </td>
-                @if($item->children()->count())
-                    <a href="#" data-bs-toggle="popover" data-bs-html="true"
-                       data-bs-title="{{$item->name}} Variations"
-                       data-bs-content="{!! $item->variantExport !!}"><span
-                            class="badge bg-{{bm()}}primary">+{{$item->children()->count()}}</span></a>
-                    @endif
-                    </td>
+
+
                     <td>{{$item->description}}</a>
                         <br/>
                         @if($item->is_shipped)

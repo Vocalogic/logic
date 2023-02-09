@@ -80,6 +80,21 @@ enum IntegrationRegistry: string
     }
 
     /**
+     * Can this integration handle tax? If so, we will check
+     * for the use_integration_tax setting on the integration
+     * to see if we are defering our tax calculations to the integration.
+     * @return bool
+     */
+    public function canHandleTax(): bool
+    {
+        return match ($this)
+        {
+            self::QuickbooksOnline => true,
+            default => false
+        };
+    }
+
+    /**
      * Can this integration process ACH?
      * @return bool
      */
@@ -100,6 +115,19 @@ enum IntegrationRegistry: string
     {
         $class = $this->getIntegration();
         return new $class();
+    }
+
+    /**
+     * Method to determine if a particular integration is enabled.
+     * This is used for cases where we loop through the entire registry
+     * to see if a particular key is in use.
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        $i = Integration::where('ident', $this->value)->first();
+        if (!$i) return false;
+        return $i->enabled;
     }
 
     /**

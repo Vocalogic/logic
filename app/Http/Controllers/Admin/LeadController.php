@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,7 @@ use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\User;
 use App\Operations\Core\LoFileHandler;
+use App\Operations\Integrations\Accounting\Finance;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
@@ -72,15 +74,30 @@ class LeadController extends Controller
      */
     public function update(Lead $lead, Request $request): RedirectResponse
     {
+        $old = $lead->replicate();
         if ($request->forecast_date)
         {
             $request->merge(['forecast_date' => Carbon::parse($request->forecast_date)]);
+        }
+        if ($request->email)
+        {
+            $request->merge(['email' => strtolower($request->email)]);
+            if (!filter_var($request->email, FILTER_VALIDATE_EMAIL))
+            {
+                throw new LogicException("A valid email address is required.");
+            }
         }
         if ($request->email && User::where('email', $request->email)->count())
         {
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
         }
         $lead->update($request->all());
+        // Go through and recalculate tax on each quote in case a state or taxation was changed.
+        foreach ($lead->quotes as $quote)
+        {
+            $quote->calculateTax();
+        }
+        _log($lead, "Lead Details Updated", $old);
         return redirect()->to("/admin/leads/$lead->id")->with('message', $lead->company . " updated successfully.");
     }
 
@@ -92,13 +109,17 @@ class LeadController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-
         $request->validate([
             'company'      => 'required',
             'contact'      => 'required',
             'lead_type_id' => 'required',
             'email'        => 'required'
         ]);
+        $request->merge(['email' => strtolower($request->email)]);
+        if (!filter_var($request->email, FILTER_VALIDATE_EMAIL))
+        {
+            throw new LogicException("A valid email address is required.");
+        }
         if (User::where('email', $request->email)->count())
         {
             throw new LogicException("This email already exists as an account and cannot be set for this lead.");
@@ -118,21 +139,8 @@ class LeadController extends Controller
             'lead_origin_detail' => $request->lead_origin_detail
         ]);
         sysact(ActivityType::Lead, $lead->id, "created lead ");
+        _log($lead, "Lead Created");
         return redirect()->to("/admin/leads/$lead->id")->with('message', $request->company . " created successfully.");
-    }
-
-
-    /**
-     * Update Lead Inline
-     * @param Lead    $lead
-     * @param Request $request
-     * @return array
-     */
-    public function live(Lead $lead, Request $request): array
-    {
-        $allowed = ['company', 'contact', 'email'];
-        $lead->update([$request->name => $request->value]);
-        return ['success' => true];
     }
 
     /**
@@ -145,7 +153,9 @@ class LeadController extends Controller
     public function uploadLogo(Lead $lead, Request $request): RedirectResponse
     {
         if (!$request->hasFile('logo'))
+        {
             throw new LogicException("You must select a logo to upload.");
+        }
         $lo = new LoFileHandler();
         if ($lead->logo_id)
         {
@@ -154,6 +164,9 @@ class LeadController extends Controller
         $file = $lo->createFromRequest($request, 'logo', FileType::Image, $lead->id);
         $lo->unlock($file);
         $lead->update(['logo_id' => $file->id]);
+        _log($lead, "New Logo Uploaded");
+        _log($lead, "New Logo Uploaded", null, "File ID $file->id ($file->filename) Size: $file->filesize bytes",
+            LogSeverity::Debug);
         return redirect()->to("/admin/leads/$lead->id");
     }
 
@@ -168,12 +181,18 @@ class LeadController extends Controller
         $disc = $lead->discoveries()->where('discovery_id', $request->pk)->first();
         if (!$disc)
         {
-            $lead->discoveries()->create([
+            $disc = $lead->discoveries()->create([
                 'discovery_id' => $request->pk,
                 'value'        => $request->value
             ]);
+            _log($disc, "Discovery Question Answered");
         }
-        else $disc->update(['value' => $request->value]);
+        else
+        {
+            $old = $disc->replicate();
+            $disc->update(['value' => $request->value]);
+            _log($disc, "Discovery Question Updated", $old);
+        }
         return ['success' => true];
     }
 
@@ -185,7 +204,9 @@ class LeadController extends Controller
      */
     public function rating(Lead $lead, Request $request)
     {
+        $old = $lead->replicate();
         $lead->update(['rating' => $request->value]);
+        _log($lead, "Lead Rating Updated", $old);
         return ['success' => "Rating Updated"];
     }
 
@@ -197,6 +218,7 @@ class LeadController extends Controller
     public function sendDiscovery(Lead $lead): array
     {
         $lead->sendDiscovery();
+        _log($lead, "Discovery Questionnaire Sent to $lead->contact");
         return ['callback' => 'reload'];
     }
 
@@ -210,6 +232,7 @@ class LeadController extends Controller
     public function close(Lead $lead, Request $request): RedirectResponse
     {
         $request->validate(['reason' => 'required']);
+        $old = $lead->replicate();
         if (!$request->reactivate_on)
         {
             $lead->update([
@@ -220,6 +243,7 @@ class LeadController extends Controller
                 ]
             );
             sysact(ActivityType::Lead, $lead->id, "marked lead as lost ($request->reason) for ");
+            _log($lead, "Lead marked as lost without reactivation", $old);
         }
         else
         {
@@ -233,11 +257,18 @@ class LeadController extends Controller
             ]);
             sysact(ActivityType::Lead, $lead->id,
                 "suspended lead ($request->reason). Reactivation scheduled for " . $conv->format("m/d/y") . " for ");
+            _log($lead, "Lead marked as lost with reactivation date", $old);
         }
         if ($lead->partner)
         {
             $lead->partner->disconnectLead($lead);
             $lead->update(['partner_id' => 0]);
+        }
+        if ($lead->finance_customer_id)
+        {
+            _log($lead, "Removing Lead from Finance System", null,
+                "Remote Finance Customer ID: $lead->finance_customer_id", LogSeverity::Debug);
+            Finance::removeLead($lead);
         }
         return redirect()->to("/admin/leads");
     }
@@ -276,7 +307,9 @@ class LeadController extends Controller
      */
     public function saveDiscovery(Lead $lead, Request $request): RedirectResponse
     {
+        $old = $lead->replicate();
         $lead->update(['discovery' => $request->discovery]);
+        _log($lead, "Discovery Information Updated", $old);
         return redirect()->back()->with('message', 'Discovery information saved.');
     }
 
@@ -298,7 +331,9 @@ class LeadController extends Controller
      */
     public function setStatus(Lead $lead, Request $request): RedirectResponse
     {
+        $old = $lead->replicate();
         $lead->setStatus($request->lead_status_id);
+        _log($lead, "Status Changed", $old);
         return redirect()->back()->with('message', "Lead Status Updated");
     }
 
@@ -311,6 +346,7 @@ class LeadController extends Controller
     {
         $lead->update(['active' => 1, 'lead_status_id' => 1]);
         sysact(ActivityType::Lead, $lead->id, "reactivated lead ");
+        _log($lead, "Lead was reactivated.");
         return ['callback' => "reload"];
     }
 

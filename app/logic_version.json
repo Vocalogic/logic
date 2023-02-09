@@ -1,5 +1,5 @@
 {
-    "version" : "1.1.12",
-    "summary" : "User interface updates, small bug fixes and invoice suspension/termination templates",
-    "changelog" : "https://dash.readme.com/project/logic/v1.1.12/changelog/v1112-release-020223"
+    "version" : "1.1.13",
+    "summary" : "Logging System, LogicPay Updates, Taxation System, Various Bug Fixes",
+    "changelog" : "https://logic.readme.io/changelog/v1113-release-020923"
 }

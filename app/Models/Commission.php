@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $amount
  * @property mixed $invoice
  * @property mixed $user
+ * @property mixed $affiliate
  */
 class Commission extends Model
 {
@@ -37,6 +38,15 @@ class Commission extends Model
     }
 
     /**
+     * A commission could belong to an affiliate not a user/agent
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
+    }
+
+    /**
      * Commission off an invoice.
      * @return BelongsTo
      */
@@ -54,10 +64,18 @@ class Commission extends Model
         return $this->belongsTo(CommissionBatch::class, 'commission_batch_id');
     }
 
+    /**
+     * Send email template for notification of a new commission.
+     * @return void
+     */
     public function notifyNew() : void
     {
+        if ($this->affiliate)
+        {
+            template('agent.commission', null, [$this], [], $this->affiliate->email, $this->affiliate->name);
+            return;
+        }
         template('agent.commission', $this->user, [$this]);
-
     }
 
     /**

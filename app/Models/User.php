@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\Core\ACL;
-use App\Enums\Core\EventType;
 use App\Operations\Core\Gravatar;
 use Firebase\JWT\JWT;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -193,24 +192,6 @@ class User extends Authenticatable
     public function getAvatarAttribute(): string
     {
         return Gravatar::get($this->email);
-    }
-
-    /**
-     * A user has many notifications
-     * @return HasMany
-     */
-    public function notifications(): HasMany
-    {
-        return $this->hasMany(LOLog::class, 'user_id')->where('type', EventType::SEV_NOTIFY);
-    }
-
-    /**
-     * Get the number of unread notifications.
-     * @return int
-     */
-    public function getUnreadAttribute(): int
-    {
-        return $this->notifications()->where('read', false)->count();
     }
 
     /**

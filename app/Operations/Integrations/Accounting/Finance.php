@@ -2,11 +2,15 @@
 
 namespace App\Operations\Integrations\Accounting;
 
+use App\Enums\Core\IntegrationRegistry;
 use App\Enums\Core\IntegrationType;
 use App\Models\Account;
 use App\Models\BillCategory;
 use App\Models\BillItem;
+use App\Models\Integration;
 use App\Models\Invoice;
+use App\Models\Lead;
+use App\Models\Quote;
 use App\Models\Transaction;
 use Exception;
 
@@ -157,6 +161,64 @@ class Finance
         } catch (Exception $e)
         {
             info("Unable to sync transaction $transaction->id to Accounting : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * If we have an integration that can handle taxes, and said integration
+     * is active and the use_integration_tax var is set to 'Y' then we will
+     * use the corresponding integration to pull the tax for us.
+     * @param Quote $quote
+     * @return float
+     * @throws Exception
+     */
+    static public function taxByQuote(Quote $quote) : float
+    {
+        $integration = getTaxIntegration();
+        if (!$integration) return 0;
+        try
+        {
+            return $integration->connect()->taxByQuote($quote);
+        } catch (Exception)
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Similar to Quote but for Invoices
+     * @param Invoice $invoice
+     * @return float
+     * @throws Exception
+     */
+    static public function taxByInvoice(Invoice $invoice): float
+    {
+        $integration = getTaxIntegration();
+        if (!$integration) return 0;
+        try
+        {
+            return $integration->connect()->taxByInvoice($invoice);
+        } catch(Exception)
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Remove a customer record from a lead being lost.
+     * @param Lead $lead
+     * @return void
+     */
+    static public function removeLead(Lead $lead) : void
+    {
+        $x = new self;
+        try
+        {
+            getIntegration($x->type)->connect()->removeLead($lead);
+            $lead->update(['finance_customer_id' => null]);
+        } catch (Exception $e)
+        {
+            info("Unable to remove lead from Accounting : " . $e->getMessage());
         }
     }
 

@@ -94,8 +94,32 @@
                                         <div class="dashboard-title mb-3">
                                             <h3>Billing Info</h3>
                                         </div>
+                                    <div class="card">
+                                        <div class="card-body">
 
-                                        <div class="table-responsive">
+                                        @if($account->merchant_payment_token)
+                                            @if($account->merchant_payment_type)
+                                                <span class="text-success"><i class="fa fa-check"></i>You have a {{$account->merchant_payment_type}} ending in {{$account->merchant_payment_last4}} on file with {{setting('brand.name')}}</span>
+                                            @else
+                                                <span class="text-success"><i class="fa fa-check"></i>&nbsp;&nbsp; <b>You have a credit card on file with {{setting('brand.name')}}</b></span>
+                                            @endif
+                                        @else
+                                            <span class="text-danger"><i class="fa fa-exclamation-circle"></i> You have no credit card on file.</span>
+                                        @endif
+                                        @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::Stripe)
+                                            @include('admin.accounts.billing.merchant_stripe')
+                                        @endif
+
+
+                                        @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::LogicPay)
+                                            <div class="card">
+                                                @include('admin.accounts.billing.merchant_logic')
+                                            </div>
+                                        @endif
+
+                                        </div>
+                                    </div>
+
                                             <table class="table">
                                                 <tbody>
                                                 <tr>
@@ -108,25 +132,10 @@
                                                 <tr>
                                                     <td>Payment Details:</td>
                                                     <td>
-                                                        @if($account->merchant_payment_token)
-                                                            @if($account->merchant_payment_type)
-                                                            <span class="text-success"><i class="fa fa-check"></i>You have a {{$account->merchant_payment_type}} ending in {{$account->merchant_payment_last4}} on file with {{setting('brand.name')}}</span>
-                                                                @else
-                                                                <span class="text-success"><i class="fa fa-check"></i>&nbsp;&nbsp; <b>You have a credit card on file with {{setting('brand.name')}}</b></span>
-                                                            @endif
-                                                        @else
-                                                            <span class="text-danger"><i class="fa fa-exclamation-circle"></i> You have no credit card on file.</span>
-                                                        @endif
-                                                            @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::Stripe)
-                                                                @include('admin.accounts.billing.merchant_stripe')
-                                                            @endif
+                                                        <div class="row">
+                                                            <div class="col-lg-12"></div>
+                                                        </div>
 
-
-                                                            @if(getIntegration(\App\Enums\Core\IntegrationType::Merchant) == \App\Enums\Core\IntegrationRegistry::LogicPay)
-                                                                <div class="card">
-                                                                @include('admin.accounts.billing.merchant_logic')
-                                                                </div>
-                                                            @endif
 
                                                     </td>
                                                 </tr>
@@ -147,17 +156,11 @@
 
                                                 </tbody>
                                             </table>
-                                        </div>
 
 
                                     </div>
 
-                                    <div class="col-xxl-5">
-                                        <div class="profile-image">
-                                            <img src="/ec/assets/images/inner-page/dashboard-profile.png"
-                                                 class="img-fluid blur-up lazyloaded" alt="">
-                                        </div>
-                                    </div>
+
                                 </div>
 
                             </div>

@@ -1,9 +1,10 @@
-@extends('layouts.admin', ['title' => "Invoice #$invoice->id",
-'crumbs' => [
-    "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
-    "Invoice #$invoice->id"
-]
-
+@extends('layouts.admin', [
+    'title' => "Invoice #$invoice->id",
+    'crumbs' => [
+        "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
+        "Invoice #$invoice->id"
+    ],
+    'log' => $invoice->logs()->exists() ? $invoice->logLink : null
 ])
 
 @section('pre')
@@ -18,6 +19,12 @@
                     | Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
                                          href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
                     </a>
+                @if($invoice->account->agent)
+                    | Agent: <b>{{$invoice->account->agent->name}}</b>
+                @endif
+                @if($invoice->account->affiliate)
+                    | Affiliate: <b>{{$invoice->account->affiliate->name}}</b>
+                @endif
             </small>
         </div>
 
@@ -82,6 +89,20 @@
                             <td><input type="submit" name="add" value="+" class="btn btn-primary">
                             </td>
                         </tr>
+                        @endif
+                        @if($invoice->tax > 0)
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:right;"><strong>Subtotal:</strong></td>
+                                <td>${{moneyFormat($invoice->subtotal)}}</td>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td style="text-align:right;"><strong>Tax:</strong></td>
+                                <td>${{moneyFormat($invoice->tax)}}</td>
+                            </tr>
                         @endif
                         <tr>
                             <td>&nbsp;</td>

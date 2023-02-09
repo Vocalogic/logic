@@ -40,12 +40,13 @@ class QBOInvoice extends QBOCore
      * Create or Update an Invoice. Will get SyncToken first if an invoice
      * link already exists.
      * @param Invoice $invoice
-     * @return void
-     * @throws GuzzleException|LogicException
+     * @return mixed
+     * @throws GuzzleException
+     * @throws LogicException
      */
-    public function byInvoice(Invoice $invoice): void
+    public function byInvoice(Invoice $invoice): mixed
     {
-        if ($invoice->items()->count() == 0) return;
+        if ($invoice->items()->count() == 0) return null;
         if ($invoice->finance_invoice_id)
         {
             $inv = $this->find($invoice->finance_invoice_id);
@@ -105,15 +106,17 @@ class QBOInvoice extends QBOCore
         if (isset($res->Invoice) && isset($res->Invoice->Id))
         {
             $invoice->update(['finance_invoice_id' => $res->Invoice->Id]);
+            $invoice->refresh();
+            return $res->Invoice;
         }
-        $invoice->refresh();
+        return null;
     }
 
     /**
      * Remove an invoice.
      * @param Invoice $invoice
      * @return void
-     * @throws GuzzleException
+     * @throws GuzzleException|LogicException
      */
     public function deleteBy(Invoice $invoice): void
     {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\BillFrequency;
 use App\Operations\Admin\AnalysisEngine;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -25,10 +26,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class QuoteItem extends Model
 {
-    protected $guarded = ['id'];
-    public    $casts   = [
+    use HasLogTrait;
+
+    protected    $guarded = ['id'];
+    public       $casts   = [
         'frequency' => BillFrequency::class,
         'meta'      => 'json'
+    ];
+    public array $tracked = [
+        'item_id'        => "Catalog Item|item.name",
+        'price'          => "Price|money",
+        'qty'            => "Quantity",
+        'notes'          => "Item Notes",
+        'description'    => "Item Description",
+        'payments'       => "Number of Payments Required",
+        'finance_charge' => "Finance Charge Assessed"
     ];
 
     /**
@@ -265,7 +277,7 @@ class QuoteItem extends Model
     {
         $catalogPrice = $this->getCatalogPrice();
         $diff = $this->price / $catalogPrice;
-        return (int) (100 - round($diff * 100));
+        return (int)(100 - round($diff * 100));
     }
 
     /**

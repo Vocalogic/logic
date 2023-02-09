@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use App\Exceptions\LogicException;
+use App\Traits\HasLogTrait;
 
 /**
  * @property mixed        $items
@@ -42,9 +43,12 @@ use App\Exceptions\LogicException;
  * @property mixed        $recurring
  * @property mixed        $suspension_sent
  * @property mixed        $termination_sent
+ * @property mixed        $tax
  */
 class Invoice extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
 
     public $dates = ['sent_on', 'due_on', 'paid_on'];
@@ -105,6 +109,20 @@ class Invoice extends Model
     }
 
     /**
+     * Get subtotal for invoice.
+     * @return int
+     */
+    public function getSubtotalAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->items as $item)
+        {
+            $total += ($item->price * $item->qty);
+        }
+        return bcmul($total, 1);
+    }
+
+    /**
      * Get total for invoice.
      * @return int
      */
@@ -115,6 +133,7 @@ class Invoice extends Model
         {
             $total += ($item->price * $item->qty);
         }
+        $total += $this->tax;
         return bcmul($total, 1);
     }
 
@@ -140,7 +159,7 @@ class Invoice extends Model
         {
             $total -= $transaction->amount;
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -150,6 +169,30 @@ class Invoice extends Model
     public function getBalanceFormattedAttribute(): string
     {
         return "$" . moneyFormat($this->balance);
+    }
+
+    /**
+     * Get the tax for a quote.
+     * @return void
+     */
+    public function calculateTax(): void
+    {
+        $total = 0;
+        $rate = TaxLocation::findByLocation($this->account->state);
+        if (!$rate) return;
+        if (!$this->account->taxable)
+        {
+            $this->update(['tax' => 0]);
+            return;
+        }
+        foreach ($this->items as $item)
+        {
+            if (!$item->item || !$item->item->taxable) continue;
+            $itemTotal = bcmul($item->price * $item->qty, 1);
+            $tax = bcmul($itemTotal * ($rate / 100), 1);
+            $total += $tax;
+        }
+        $this->update(['tax' => $total]);
     }
 
     /**
@@ -229,7 +272,7 @@ class Invoice extends Model
                 $total += $item->price * $item->qty;
             }
         }
-        return bcmul($total,1);
+        return bcmul($total, 1);
     }
 
     /**
@@ -360,7 +403,7 @@ class Invoice extends Model
             $totalCatalog += $item->getCatalogPrice() * $item->qty;
             $totalQuoted += $item->price * $item->qty;
         }
-        return bcmul($totalCatalog - $totalQuoted,1);
+        return bcmul($totalCatalog - $totalQuoted, 1);
     }
 
     /**
@@ -471,6 +514,7 @@ class Invoice extends Model
         if ($this->balance <= 0)
         {
             $this->update(['status' => InvoiceStatus::PAID, 'paid_on' => now()]);
+            $this->processTaxes();
             $order = Order::where('invoice_id', $this->id)->first();
             if ($order)
             {
@@ -541,21 +585,22 @@ class Invoice extends Model
      */
     private function createCommission(): void
     {
-        if (!$this->account->partner_id && !$this->account->agent_id) return;   // Not sold by a partner or agent
+        // Check to see if we have any form of commissionable agent here.
+        if (!$this->account->partner_id && !$this->account->agent_id && !$this->account->affiliate_id) return;
         if (!$this->account->is_commissionable) return;                         // Not Commissionable
         if (!$this->recurring) return;                                          // Not a recurring invoice.
         if ($this->commission) return;                                          // already has a commission
         $amount = AnalysisEngine::byInvoice($this);
 
-
-        $this->account->update(['spiffed' => true]);
+        $this->account->update(['spiffed' => true]);                            // Do not spiff more than once.
         if ($amount > 0)
         {
             $comm = $this->commission()->create([
-                'account_id' => $this->account->partner_id ?: 1, // No partner, set as house account.
-                'user_id'    => $this->account->agent_id,
-                'status'     => CommissionStatus::PendingPayment,
-                'amount'     => $amount
+                'account_id'   => $this->account->partner_id ?: 1, // No partner, set as house account.
+                'user_id'      => $this->account->agent_id ?: 0,
+                'affiliate_id' => $this->account->affiliate_id ?: 0,
+                'status'       => CommissionStatus::PendingPayment,
+                'amount'       => $amount
             ]);
             $comm->refresh();
             $comm->notifyNew();
@@ -673,5 +718,25 @@ class Invoice extends Model
             $years[$year][] = $invoice;
         }
         return $years;
+    }
+
+    /**
+     * If Logic is handling taxes, then we need to create a tax
+     * collection entry. Just take the tax on the invoice and
+     * the location.
+     * @return void
+     */
+    private function processTaxes(): void
+    {
+        // First make sure we don't duplicate tax entries.
+        if (TaxCollection::where('invoice_id', $this->id)->count()) return;
+        $location = TaxLocation::where('location', $this->account->state)->first();
+        if (!$location) return;
+        if (getTaxIntegration() !== null) return; // Don't do anything if something else is handling.
+        TaxCollection::create([
+            'invoice_id'      => $this->id,
+            'tax_location_id' => $location->id,
+            'amount'          => $this->tax
+        ]);
     }
 }

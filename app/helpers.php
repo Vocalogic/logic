@@ -2,16 +2,15 @@
 
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\CommKey;
-use App\Enums\Core\EventType;
 use App\Enums\Core\IntegrationRegistry;
 use App\Enums\Core\IntegrationType;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Core\MetricType;
 use App\Enums\Core\ModuleRegistry;
 use App\Models\Account;
 use App\Models\Activity;
 use App\Models\Integration;
 use App\Models\LOFile;
-use App\Models\LOLog;
 use App\Models\Metric;
 use App\Models\Provider;
 use App\Models\Setting;
@@ -20,12 +19,14 @@ use App\Operations\Admin\MorningStatus;
 use App\Operations\API\Control;
 use App\Operations\Shop\ShopBus;
 use App\Operations\Shop\ShopOperation;
+use App\Operations\Core\LogOperation;
 use App\Structs\STemplate;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use League\CommonMark\CommonMarkConverter;
+use Illuminate\Database\Eloquent\Model;
 
 if (!function_exists('setting'))
 {
@@ -172,54 +173,26 @@ if (!function_exists('setting'))
 
     /**
      * Log an event or notification
-     * @param EventType   $category
-     * @param EventType   $type
+     * @param Model       $model
      * @param string      $message
-     * @param string|null $title
-     * @param string|null $url
-     * @param int|null    $user_id
-     * @param int         $account_id
+     * @param Model|null  $old
+     * @param string|null $details
+     * @param LogSeverity $logSeverity
      * @return void
      */
     function _log(
-        EventType $category,
-        EventType $type,
+        Model $model,
         string $message,
-        string $title = null,
-        string $url = null,
-        ?int $user_id = null,
-        int $account_id = 1
+        ?Model $old = null,
+        ?string $details = null,
+        LogSeverity $logSeverity = LogSeverity::Info
     ): void {
-        if ((!$user_id) && !auth()->guest())
-        {
-            $user_id = user()->id;
+        try {
+            $service = new LogOperation();
+            $service->write($model, $message, $logSeverity, $details, $old);
         }
-        if ($account_id > 1)
-        {
-            (new LOLog)->create([
-                'category'   => $category,
-                'message'    => $message,
-                'title'      => $title,
-                'link'       => $url,
-                'account_id' => $account_id,
-                'type'       => $type,
-                'user_id'    => $user_id
-            ]);
-        }
-        else
-        {
-            foreach (User::where('account_id', 1)->get() as $user)
-            {
-                (new LOLog)->create([
-                    'category'   => $category,
-                    'message'    => $message,
-                    'title'      => $title,
-                    'link'       => $url,
-                    'account_id' => $account_id,
-                    'type'       => $type,
-                    'user_id'    => $user->id
-                ]);
-            }
+        catch (\Exception $e) {
+            logger('Logging error: ' . $e->getMessage() . " " . $e->getFile() . " - " . $e->getLine());
         }
     }
 
@@ -258,8 +231,7 @@ if (!function_exists('setting'))
         } catch (Exception $e)
         {
             info("Failure to send email: " . $e->getMessage());
-            _log(EventType::Mail, EventType::SEV_ERROR, $e->getMessage(), null, null, user()?->id,
-                user()?->account?->id);
+            _log(user(), "Failure to send email: " . $e->getMessage(), LogSeverity::Error);
         }
         return null;
     }
@@ -376,6 +348,26 @@ if (!function_exists('setting'))
             $new->add($entry);
         }
         return $new;
+    }
+
+    /**
+     * Do we have a tax integration handler or are we handling taxes ourselves?
+     * @return Integration|null
+     */
+    function getTaxIntegration(): ?IntegrationRegistry
+    {
+        foreach (IntegrationRegistry::cases() as $case)
+        {
+            if ($case->isEnabled())
+            {
+                if(isset($case->connect()->config->use_integration_tax) &&
+                    $case->connect()->config->use_integration_tax == 'Y')
+                {
+                    return $case;
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -651,7 +643,7 @@ if (!function_exists('setting'))
         $value = onlyNumbers($value);
         if (!$value) return 0;
         $value = $value * 100;
-        return (int)$value;
+        return bcmul($value,1);
     }
 
     /**

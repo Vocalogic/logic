@@ -47,7 +47,13 @@
         <tbody>
         @foreach($batch->commissions as $c)
             <tr>
-                <td>{{$c->user->name}}</td>
+                <td>
+                    @if($c->user)
+                    {{$c->user->name}}
+                    @else
+                    {{$c->affiliate?->name}}
+                    @endif
+                </td>
                 <td>#{{$c->invoice->id}}</td>
                 <td>${{moneyFormat($c->amount)}}</td>
                 <td>{{$c->scheduled_on ? $c->scheduled_on->format("m/d/y") : "N/A"}}</td>

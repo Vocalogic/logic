@@ -114,9 +114,11 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
      */
     public function authorize(Invoice $invoice, int $amount): string
     {
-        $lp = new LPCore();
+        $lp = new LPCore($this->config);
         //   $result = $lp->authorizeInstance($invoice->account->merchant_payment_token, $amount, $invoice->account->name, '341', '30005', "1025");
-        $result = $lp->authorize($invoice->account->merchant_payment_token, $amount, $invoice->account->name);
+        $meta = (object) $invoice->account->merchant_metadata;
+        $expiry = (isset($meta->expiration) && $meta->expiration) ? $meta->expiration : null;
+        $result = $lp->authorize($invoice->account->merchant_payment_token, $amount, $invoice->account->name, $expiry);
         if ($result->respstat == 'A')
         {
             $invoice->account->update(['merchant_payment_token' => $result->token]); // Refresh with new token
@@ -138,11 +140,10 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function addPaymentMethod(Account $account, string $token): mixed
+    public function addPaymentMethod(Account $account, string $token, string $expiry, string $cvv, string $postal): mixed
     {
-        $lp = new LPCore();
-        $result = $lp->preauth($token, $account->name);
-
+        $lp = new LPCore($this->config);
+        $result = $lp->preauth($token, $account->name, $expiry, $cvv, $postal);
         if ($result->respstat != 'A')
         {
             throw new LogicException("Authorization Declined.");
@@ -197,7 +198,7 @@ class LogicPay extends BaseIntegration implements Integration, MerchantInterface
      */
     public function ach(Invoice $invoice, int $amount): string
     {
-        $lp = new LPCore();
+        $lp = new LPCore($this->config);
         $result = $lp->processACH($invoice->account->merchant_ach_aba, $invoice->account->merchant_ach_account, $amount,
             $invoice->account->name);
         if ($result->respstat == 'A')

@@ -2,24 +2,30 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Enums\Core\ActivityType;
 use App\Exceptions\LogicException;
 use App\Models\Account;
-use App\Operations\API\LogicPay\LPCore;
 use App\Operations\Integrations\Merchant\LogicPay;
-use Exception;
 use GuzzleHttp\Exception\GuzzleException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\View;
 use Livewire\Component;
-use Livewire\Redirector;
 
 class LogicPayComponent extends Component
 {
-    public         $listeners    = ['logicToken'];
-    public string  $message      = "Awaiting New Payment Details..";
-    public string  $messageColor = 'info';
+    public         $listeners       = ['logicToken'];
+    public string  $message         = "Enter New Card Number to Preauthorize";
+    public string  $messageColor    = 'info';
+    public string  $expiration      = '';
+    public string  $expiry          = '';
+    public string  $postal          = '';
+    public string  $cvv             = '';
     public Account $account;
     public string  $token;
+    public bool    $canAttempt      = false;
+    public bool    $validExpiration = false;
+    public bool    $validPostal     = false;
+    public bool    $validCVV        = false;
+    public bool    $complete        = false;
 
     /**
      * Render Component (also spawns listener for the token)
@@ -27,6 +33,10 @@ class LogicPayComponent extends Component
      */
     public function render(): View
     {
+        $this->validExpiration = (strlen($this->expiration) == 4 && is_numeric($this->expiration));
+        $this->validPostal = strlen($this->postal) == 5 & is_numeric($this->postal);
+        $this->validCVV = strlen($this->cvv) > 2 && is_numeric($this->cvv);
+        $this->canAttempt = $this->validExpiration && $this->validPostal && $this->validCVV && $this->token;
         return view('admin.accounts.billing.logic_component');
     }
 
@@ -34,42 +44,40 @@ class LogicPayComponent extends Component
      * Receive Token from Emitter
      * @param string $token
      * @return void
-     * @throws GuzzleException
      */
     public function logicToken(string $token): void
     {
-        $this->message = "Attempting to Validate..";
+        $this->message = "Encrypted Card Number, Awaiting Input..";
         $this->token = $token;
-        $this->attemptAuthorization();
     }
 
     /**
-     * Attempt to Authorize $1.00 with this token.
-     * @return mixed
+     * Attempt to Authorize Card
+     * @return void
      * @throws GuzzleException
      */
-    private function attemptAuthorization(): mixed
+    public function attemptAuthorization(): void
     {
         $lp = new LogicPay();
         try
         {
-            $result = $lp->addPaymentMethod($this->account, $this->token);
+            $lp->addPaymentMethod($this->account, $this->token, $this->expiration, $this->cvv, $this->postal);
         } catch (LogicException $e)
         {
             $this->message = $e->getMessage();
             $this->messageColor = 'danger';
-            return null;
+            return;
         }
         $this->account->refresh();
-        $this->message = "<span class='text-success'>Payment Authorized! ($result->authcode)</span>";
-        if (user()->account->id > 1)
-        {
-            return redirect()->to("/shop/account/profile")->with('message', "Your payment method has been updated with ".setting('brand.name'). " Successfully!");
-        }
-        else
-        {
-            return redirect()->to("/admin/accounts/{$this->account->id}")
-                ->with('message', "Payment Method Updated Successfully!");
-        }
+        $this->messageColor = 'success';
+        $this->message = "Card Successfully Authorized";
+        $this->complete = true;
+        $data = [
+            'expiration' => $this->expiration
+        ];
+        $this->account->update(['merchant_metadata' => $data]);
     }
+
+
+
 }

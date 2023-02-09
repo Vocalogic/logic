@@ -32,6 +32,7 @@ class CommissionBatchController extends Controller
     {
         // First we need to run through and figure out how many users need a batch created.
         $u = [];
+        $af = [];
 
         foreach ($request->all() as $key => $val)
         {
@@ -40,13 +41,23 @@ class CommissionBatchController extends Controller
                 $x = explode("c_", $key);
                 $cid = $x[1];
                 $com = Commission::find($cid);
-                if (!in_array($com->user_id, $u))
+                if ($com->user_id)
                 {
-                    $u[] = $com->user_id;
+                    if (!in_array($com->user_id, $u))
+                    {
+                        $u[] = $com->user_id;
+                    }
+                }
+                if ($com->affiliate_id)
+                {
+                    if (!in_array($com->affiliate_id, $af))
+                    {
+                        $af[] = $com->affiliate_id;
+                    }
                 }
             }
         }
-        // Ok, now we have an array of users that need batches.. We'll go through them one at a time.
+        // Ok, now we have an array of users or affiliates that need batches.. We'll go through them one at a time.
         foreach ($u as $user)
         {
             $batch = (new CommissionBatch)->create([
@@ -60,6 +71,30 @@ class CommissionBatchController extends Controller
                     $cid = $x[1];
                     $com = Commission::find($cid);
                     if ($com->user_id == $user)
+                    {
+                        $com->update(['commission_batch_id' => $batch->id]);
+                    }
+                }
+            }
+            $batch->refresh();
+            $batch->notifyNew();
+        }
+
+        // Let's loop over our affiliate array now and do the same (probably should refactor this now)
+        foreach ($af as $affiliate)
+        {
+            $batch = (new CommissionBatch)->create([
+                'affiliate_id' => $affiliate,
+                'user_id'      => 0,
+            ]);
+            foreach ($request->all() as $key => $val)
+            {
+                if (str_contains($key, "c_"))
+                {
+                    $x = explode("c_", $key);
+                    $cid = $x[1];
+                    $com = Commission::find($cid);
+                    if ($com->affiliate_id == $affiliate)
                     {
                         $com->update(['commission_batch_id' => $batch->id]);
                     }
@@ -115,8 +150,8 @@ class CommissionBatchController extends Controller
             foreach ($commissionBatch->commissions as $commission)
             {
                 $commission->update([
-                   'status' => CommissionStatus::Paid,
-                   'active' => false,
+                    'status' => CommissionStatus::Paid,
+                    'active' => false,
                 ]);
             }
             $commissionBatch->refresh();

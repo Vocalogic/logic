@@ -30,6 +30,7 @@
 
             <!-- Menu: Sub menu ul -->
             <ul class="sub-menu collapse" id="menu-admin">
+                <li><a class="ms-link" href="/admin/affiliates">Affiliates</a></li>
                 <li><a class="ms-link" href="/admin/coupons">Coupons</a></li>
                 <li><a class="ms-link" href="/admin/discovery">Discovery Builder</a></li>
                 <li><a class="ms-link" href="/admin/email_templates">Email Templates</a></li>
@@ -44,6 +45,7 @@
                 <li><a class="ms-link" href="/admin/bill_categories/products">Products</a></li>
                 <li><a class="ms-link" href="/admin/bill_categories/services">Services</a></li>
                 <li><a class="ms-link" href="/admin/settings">Settings</a></li>
+                <li><a class="ms-link" href="/admin/tax_locations">Tax Locations</a></li>
                 <li><a class="ms-link" href="/admin/terms">TOS Manager</a></li>
                 <li><a class="ms-link" href="/admin/vendors">Vendors</a></li>
 

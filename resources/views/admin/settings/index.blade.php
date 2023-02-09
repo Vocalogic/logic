@@ -1,4 +1,6 @@
 @extends('layouts.admin', ['title' => "Logic Settings",
+'video' => "https://www.youtube.com/watch?v=pYMHh8H4J_k&t=2s",
+'docs' => "https://logic.readme.io/docs/brand-settings",
 'crumbs' => [
     'Settings'
 ]])

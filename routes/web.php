@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\AccountUserController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AffiliateController;
 use App\Http\Controllers\Admin\AssistantController;
 use App\Http\Controllers\Admin\BillItemCategoryController;
 use App\Http\Controllers\Admin\BillItemController;
@@ -36,11 +37,14 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\ShipmentController;
 use App\Http\Controllers\Admin\TagCategoryController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\TaxCollectionController;
+use App\Http\Controllers\Admin\TaxLocationController;
 use App\Http\Controllers\Admin\TermController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VendorController;
 use App\Http\Controllers\Admin\VersionController;
+use App\Http\Controllers\Admin\LogsController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\InstallController;
 use App\Http\Controllers\LandingController;
@@ -58,7 +62,6 @@ use App\Http\Controllers\Shop\ShopAccountController;
 use App\Http\Controllers\Shop\ShopController;
 use App\Http\Controllers\TfaController;
 use Illuminate\Support\Facades\Route;
-use Modules\Voip\Http\Controllers\Admin\ProvisioningController;
 
 
 Route::get('/', [LandingController::class, 'index']);
@@ -104,7 +107,6 @@ Route::group(['middleware' => ['auth', 'admin']], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], function () {
     Route::resource('users', UserController::class);
-    Route::resource('provisionings', ProvisioningController::class);
     Route::resource('accounts.users', AccountUserController::class);
     Route::resource('origins', OriginController::class);
     Route::resource('categories.tag_categories', TagCategoryController::class);
@@ -113,6 +115,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::resource('file_categories', FileCategoryController::class);
     Route::resource('meetings', MeetingController::class);
     Route::resource('partners', PartnerController::class);
+    Route::resource('affiliates', AffiliateController::class);
+    Route::resource('tax_locations', TaxLocationController::class);
+    Route::resource('tax_locations.tax_collections', TaxCollectionController::class);
     Route::get('partners/{partner}/remote/invoice/{id}', [PartnerController::class, 'getRemoteInvoice']);
     Route::get('partners/{partner}/invoice/{id}', [PartnerController::class, 'getLocalInvoice']);
 
@@ -540,6 +545,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::put('lead_statuses/{status}', [LeadTypeController::class, 'updateStatus']);
     Route::post('lead_statuses', [LeadTypeController::class, 'storeStatus']);
     Route::delete('lead_statuses/{status}', [LeadTypeController::class, 'destroyStatus']);
+
+    // Logs page
+    Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
 
 });
 

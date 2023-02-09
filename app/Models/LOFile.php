@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,9 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $mime_type
  * @property mixed $type
  * @property mixed $filename
+ * @property mixed $filesize
  */
 class LOFile extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
     public    $table   = "lo_files";
 

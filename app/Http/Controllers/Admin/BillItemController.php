@@ -304,6 +304,8 @@ class BillItemController extends Controller
      */
     public function pricingUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
+        if(!$request->taxable) $request->merge(['taxable' => false]); // for switch
+
         if ($item->type == 'services')
         {
             $request->validate([

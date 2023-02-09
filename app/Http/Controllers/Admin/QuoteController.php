@@ -106,12 +106,16 @@ class QuoteController extends Controller
         {
             sysact(ActivityType::LeadQuote, $quote->id,
                 "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
+            // Log to lead as well.
         }
         else
         {
             sysact(ActivityType::AccountQuote, $quote->id,
                 "started <a href='/admin/quotes/$quote->id'>Quote #{$quote->id}</a> for ");
+            // Log to account as well.
         }
+        _log($quote, "Quote Created");
+        _log($obj, "Quote #{$quote->id} created.");
         return redirect()->to("/admin/quotes/$quote->id")->with('message', "Quote #$quote->id created.");
     }
 
@@ -162,7 +166,9 @@ class QuoteController extends Controller
             'frequency'       => $item->type == 'services' ? $item->frequency : null,
         ]);
         $qitem->update(['ord' => $qitem->setNewOrd()]);
+        _log($qitem, $item->name . " added to quote.");
         $quote->reord();
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return redirect()->back()->with('message', $item->name . " added to Quote #$quote->id");
     }
@@ -181,8 +187,10 @@ class QuoteController extends Controller
             throw new LogicException("Quote has already been executed. Unable to remove item.");
         }
         session()->flash('message', $item->item->name . " removed from quote.");
+        _log($quote, "{$item->item->name} Removed from Quote");
         $item->delete();
         $quote->reord();
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return ['callback' => "reload"];
     }
@@ -216,6 +224,7 @@ class QuoteController extends Controller
         {
             $request->merge(['description' => $item->item->description]);
         }
+        $old = $item->replicate();
         $item->update([
             'price'           => convertMoney($request->price),
             'description'     => $request->description,
@@ -228,6 +237,8 @@ class QuoteController extends Controller
             'finance_charge'  => $request->finance_charge,
             'notes'           => $request->notes
         ]);
+        _log($item, "{$item->item->name} Updated", $old);
+        $quote->calculateTax();
         sbus()->emitQuoteUpdated($quote);
         return redirect()->back()->with('message', $item->item->name . " updated.");
     }
@@ -245,6 +256,7 @@ class QuoteController extends Controller
         {
             throw new LogicException("Quote has already been executed. Unable to update quote settings.");
         }
+        $old = $quote->replicate();
         $quote->update([
             'name'       => $request->name,
             'preferred'  => $request->preferred,
@@ -258,6 +270,7 @@ class QuoteController extends Controller
         {
             $quote->lead->quotes()->where('id', '!=', $quote->id)->update(['preferred' => false]);
         }
+        _log($quote, "Quote Settings Updated", $old);
         return redirect()->back()->with('message', "Quote settings updated.");
     }
 
@@ -290,6 +303,7 @@ class QuoteController extends Controller
     public function send(Quote $quote): array
     {
         $quote->send();
+        _log($quote, "Quote Sent to Customer");
         session()->flash("message", "Quote #{$quote->id} sent successfully.");
         return ['callback' => 'reload'];
     }
@@ -303,9 +317,11 @@ class QuoteController extends Controller
      */
     public function destroy(Quote $quote, Request $request): RedirectResponse|array
     {
+        $old = $quote->replicate();
         if (!$request->reason) throw new LogicException("You must enter a reason for the decline.");
         $quote->update(['declined_reason' => $request->reason]);
         sysact(ActivityType::AccountQuote, $quote->id, "declined Quote #$quote->id ($request->reason)");
+        _log($quote, "Quote Deactivated/Archived/Closed", $old);
         $quote->delete();
         if ($request->ajax())
         {
@@ -321,7 +337,9 @@ class QuoteController extends Controller
      */
     public function togglePresentable(Quote $quote): RedirectResponse
     {
+        $old = $quote->replicate();
         $quote->update(['presentable' => !$quote->presentable]);
+        _log($quote, "Quote Presentable State Changed", $old);
         return redirect()->back();
     }
 
@@ -346,9 +364,8 @@ class QuoteController extends Controller
                 ]);
             }
         }
-        return redirect()->to("/admin/accounts/{$quote->account->id}?active=quotes&quote=$quote->id");
+        return redirect()->to("/admin/quotes/$quote->id");
     }
-
 
     /**
      * Execute coterm contract
@@ -358,6 +375,7 @@ class QuoteController extends Controller
     public function executeCoterm(Quote $quote): array
     {
         $quote->executeCoterm();
+        _log($quote, "Co-Term Contract Executed");
         return ['callback' => "redirect:/admin/accounts/{$quote->account->id}?active=services"];
     }
 
@@ -513,11 +531,13 @@ class QuoteController extends Controller
      */
     public function approve(Quote $quote): array
     {
+        $old = $quote->replicate();
         $quote->update([
             'approved'    => true,
             'approved_by' => user()->id,
             'approved_on' => now()
         ]);
+        _log($quote, "Quote Approved", $old);
         return ['callback' => 'reload'];
     }
 }

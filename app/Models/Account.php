@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\AccountFileType;
 use App\Enums\Core\ACL;
+use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
 use App\Enums\Core\IntegrationType;
 use App\Enums\Core\InvoiceStatus;
@@ -68,12 +69,41 @@ use Illuminate\Support\Str;
  * @property mixed         $quotes
  * @property mixed         $agent_id
  * @property mixed         $parent
+ * @property mixed         $taxable
  */
 class Account extends Model
 {
     protected $guarded = ['id'];
     public    $dates   = ['next_bill'];
-    public    $casts   = ['payment_method' => PaymentMethod::class];
+    public    $casts   = [
+        'payment_method'    => PaymentMethod::class,
+        'merchant_metadata' => 'json'
+    ];
+
+    /**
+     * Define our array of tracked changes. This will be used for the
+     * logging class to optional compare a previous instance of an
+     * object before it was changed and print human readable changes.
+     * @var array
+     */
+    public array $tracked = [
+        'name'                  => "Account Name",
+        'address'               => "Address",
+        'address2'              => "Address Line 2",
+        'city'                  => "City",
+        'state'                 => "State",
+        'postcode'              => "Zip/Postal Code",
+        'active'                => "Active State",
+        'agent_id'              => "Sales Agent|agent.name", // use | for a relationship on the model dotted and field
+        'next_bill'             => "Next Bill Date",
+        'bills_on'              => "Billing Day",
+        'billing_email'         => "Billing Email",
+        'auto_bill'             => "Automatic Billing",
+        'is_commissionable'     => "Commissionable Mode|bool",
+        'taxable'               => "Customer Tax Mode",
+        'account_credit'        => "Account Credit Balance",
+        'account_credit_reason' => "Reason for Credit"
+    ];
 
     public function users(): HasMany
     {
@@ -213,6 +243,15 @@ class Account extends Model
     public function pricings(): HasMany
     {
         return $this->hasMany(AccountPricing::class);
+    }
+
+    /**
+     * An account can have an affiliate for commissions (via coupon)
+     * @return BelongsTo
+     */
+    public function affiliate(): BelongsTo
+    {
+        return $this->belongsTo(Affiliate::class);
     }
 
     /**
@@ -791,6 +830,9 @@ class Account extends Model
         {
             $invoice->createOrder();
         }
+        $total = "$" . moneyFormat($invoice->total);
+        sysact(ActivityType::Account, $this->id,
+            "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
     }
 
     /**
