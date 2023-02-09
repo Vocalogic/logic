@@ -102,7 +102,9 @@ class Account extends Model
         'is_commissionable'     => "Commissionable Mode|bool",
         'taxable'               => "Customer Tax Mode",
         'account_credit'        => "Account Credit Balance",
-        'account_credit_reason' => "Reason for Credit"
+        'account_credit_reason' => "Reason for Credit",
+        'impose_late_fee'       => "Late Fee Assessment|bool",
+        'late_fee_percentage'   => "Late Fee Percentage"
     ];
 
     public function users(): HasMany

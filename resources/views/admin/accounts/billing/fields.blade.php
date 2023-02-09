@@ -94,6 +94,23 @@
                             </div>
                         </div>
 
+                        <div class="col-lg-12 col-md-12 mt-2">
+                            <div class="form-floating">
+                                {!! Form::select('impose_late_fee', [1 => 'Yes', 0 => 'No'], $account->impose_late_fee, ['class' => 'form-control']) !!}
+                                <label>Impose late fee if past due?</label>
+                                <span class="helper-text">If Yes, when an invoice reaches <b>{{setting('invoices.lateFeeDays')}} days</b> past due a fee will be added.</span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12 col-md-12 mt-2">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="late_fee_percentage"
+                                       value="{{$account->late_fee_percentage}}">
+                                <label>Late Fee Percentage</label>
+                                <span class="helper-text">Enter the percentage to be added for the late fee?</span>
+                            </div>
+                        </div>
+
                         <div class="col-lg-12 col-md-12 mt-3">
                             <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
                                 <i class="fa fa-save"></i> Update Service Billing

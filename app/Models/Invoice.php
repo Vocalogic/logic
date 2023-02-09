@@ -44,6 +44,8 @@ use App\Traits\HasLogTrait;
  * @property mixed        $suspension_sent
  * @property mixed        $termination_sent
  * @property mixed        $tax
+ * @property mixed        $has_late_fee
+ * @property mixed        $lateFee
  */
 class Invoice extends Model
 {
@@ -193,6 +195,58 @@ class Invoice extends Model
             $total += $tax;
         }
         $this->update(['tax' => $total]);
+    }
+
+    /**
+     * This helper is used for email templates and calculations
+     * for getting the late fee percentage.
+     * @return string
+     */
+    public function getLateFeePercentageAttribute(): string
+    {
+        return $this->account->late_fee_percentage ?: setting('invoices.lateFeePercentage');
+    }
+
+    /**
+     * This helper will determine what a late fee should be on this invoice.
+     * @return int
+     */
+    public function getLateFeeAttribute(): int
+    {
+        $perc = $this->getLateFeePercentageAttribute();
+        if ($perc <= 0) return 0; // avoid divide by zero.
+        return bcmul($this->total * ($perc / 100), 1);
+    }
+
+    /**
+     * Actual Late Fee in Template Format
+     * @return string
+     */
+    public function getLateFeeFormattedAttribute(): string
+    {
+        return moneyFormat($this->lateFee);
+    }
+
+    /**
+     * Assess a late fee if not found.
+     * @return void
+     */
+    public function assessLateFee(): void
+    {
+        if ($this->has_late_fee) return;
+        $fee = $this->lateFee;
+        $this->items()->create([
+            'code'         => "LATE-FEE",
+            'name'         => "LATE FEE",
+            'description'  => setting('invoices.lateFeeVerbiage'),
+            'qty'          => 1,
+            'price'        => $fee,
+            'bill_item_id' => 0
+        ]);
+        $this->update(['has_late_fee' => true]);
+        $this->refresh();
+        _log($this, "Customer charged $" . $this->getLateFeeFormattedAttribute() . " in late fees.");
+        $this->account->sendBillingEmail('invoice.lateFeeCharged', [$this], [$this->pdf(true)]);
     }
 
     /**
