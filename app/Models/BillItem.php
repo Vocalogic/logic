@@ -83,6 +83,24 @@ class BillItem extends Model
     ];
 
     /**
+     * Define our array of tracked changes. This will be used for the
+     * logging class to optional compare a previous instance of an
+     * object before it was changed and print human-readable changes.
+     * @var array
+     */
+    public array $tracked = [
+        'name'                  => "Product Name",
+        'code'                  => "Product SKU",
+        'description'           => "Description",
+        'nrc'                   => "One-Time Price|money",
+        'msrp'                  => "Service MSRP|money",
+        'ex_capex'              => "Product Cost|money",
+        'min_price'             => "Minimum Selling Price|money",
+        'max_price'             => "Maximum Selling Price|money",
+        'ex_capex_description'  => "Capital Expense Description",
+    ];
+
+    /**
      * An item belongs to a category.
      * @return BelongsTo
      */

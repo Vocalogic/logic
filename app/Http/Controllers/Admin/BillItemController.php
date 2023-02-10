@@ -133,6 +133,7 @@ class BillItemController extends Controller
             'slug'                  => Str::slug($item->name),
             'msrp'                  => $request->price * 100,
         ]);
+        _log($i, 'imp');
         if ($item->product)
         {
             $i->update(['nrc' => $request->price * 100]);
@@ -263,6 +264,7 @@ class BillItemController extends Controller
             'name'        => 'required',
             'description' => 'required'
         ]);
+        $oldItem = clone $item;
         $item->update([
             'code'            => strtoupper(Str::slug($request->code)),
             'name'            => $request->name,
@@ -273,6 +275,7 @@ class BillItemController extends Controller
             'allow_backorder' => $request->allow_backorder,
             'slug'            => Str::slug($item->name)
         ]);
+        _log($item, "Product '{$oldItem->name}' has been updated.", $oldItem);
         return redirect()
             ->to("/admin/category/$cat->id/items/$item->id/pricing")
             ->with('message', "Definitions updated successfully.");
@@ -447,6 +450,8 @@ class BillItemController extends Controller
         $item->tags()->create([
             'tag_id' => $request->tag
         ]);
+        $tag = Tag::find($request->tag);
+        _log($item, "Tag '{$tag->name}' has been added");
         return redirect()->back()->with('message', 'Tag applied successfully');
     }
 
@@ -601,6 +606,7 @@ class BillItemController extends Controller
             'description'      => 'TODO: Change Description',
             'shop_show'        => false
         ]);
+        _log($item, "Product '{$request->name}' has been created");
         if ($cat->type == 'services')
         {
             $item->update(['mrc' => convertMoney($request->price)]);
@@ -677,6 +683,7 @@ class BillItemController extends Controller
             'name'        => $request->name,
             'description' => $request->description
         ]);
+        _log($item, "Addon group '{$request->name}' has been created for product '{$item->name}'");
         return redirect()->back()->with('message', $request->name . " created successfully.");
     }
 
@@ -709,7 +716,9 @@ class BillItemController extends Controller
         $request->validate([
             'name' => "required"
         ]);
+        $oldAddon = clone $addon;
         $addon->update($request->all());
+        _log($addon, "Addon group has been updated", $oldAddon);
         return redirect()->back()->with('message', $addon->name . " updated successfully.");
     }
 
@@ -865,6 +874,7 @@ class BillItemController extends Controller
             $lo->unlock($file);
             $item->update(['slick_id' => $file->id]);
         }
+        _log($item, "Photos has been updated for product '{$item->name}'.");
     }
 
     /**
@@ -1019,6 +1029,7 @@ class BillItemController extends Controller
     {
         $request->validate(['item' => 'required', 'answer_type' => 'required']);
         $item->meta()->create($request->all());
+        _log($item, "Requirement '{$request->item} has been added.");
         return redirect()->back()->with('message', "Data Requirement created successfully.");
     }
 
@@ -1038,7 +1049,16 @@ class BillItemController extends Controller
     ): RedirectResponse {
 
         $request->validate(['item' => 'required', 'answer_type' => 'required']);
+        if ($request->item != $meta->item)
+        {
+            $message = "Requirement '{$meta->item}' has been updated to '{$request->item}'.";
+        }
+        else
+        {
+            $message = "Requirement '{$meta->item}' has been updated.";
+        }
         $meta->update($request->all());
+        _log($item, $message);
         return redirect()->back()->with('message', "Data Requirement updated successfully.");
     }
 
@@ -1052,6 +1072,7 @@ class BillItemController extends Controller
     public function removeMeta(BillCategory $cat, BillItem $item, BillItemMeta $meta): array
     {
         $meta->delete();
+        _log($item, "Requirement '{$meta->item}' has been removed.");
         return ['callback' => 'reload'];
     }
 
@@ -1098,6 +1119,7 @@ class BillItemController extends Controller
             'question' => $request->question,
             'answer'   => $request->answer
         ]);
+        _log($item, "Faq question '{$request->question}' has been created.");
         return redirect()->back()->with('message', "FAQ added successfully.");
     }
 
@@ -1127,10 +1149,18 @@ class BillItemController extends Controller
             'question' => 'required',
             'answer'   => 'required'
         ]);
+        if ($faq->question != $request->question) {
+            $message = "FAQ questions '{$faq->question}' has been updated to '{$request->question}'.";
+        }
+        else
+        {
+            $message = "FAQ questions '{$faq->question}' has been updated.";
+        }
         $faq->update([
             'question' => $request->question,
             'answer'   => $request->answer
         ]);
+        _log($item, $message);
         return redirect()->back()->with('message', "FAQ updated successfully.");
     }
 
