@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\BillFrequency;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -20,6 +21,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AccountItem extends Model
 {
+    use HasLogTrait;
+    
     protected $guarded = ['id'];
     public    $dates   = ['next_bill_date', 'suspend_on', 'terminate_on', 'requested_termination_date'];
     public    $casts   = [
