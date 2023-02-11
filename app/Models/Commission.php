@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\CommissionStatus;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -14,10 +15,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Commission extends Model
 {
+    use HasLogTrait;
     protected $guarded = ['id'];
 
-    public $casts = ['status' => CommissionStatus::class];
-    public $dates = ['scheduled_on'];
+    public       $casts   = ['status' => CommissionStatus::class];
+    public       $dates   = ['scheduled_on'];
+    public array $tracked = [
+        'status'              => "Commission Status|enum",
+        'scheduled_on'        => "Commission Scheduled",
+        'amount'              => "Commission Amount|money",
+        'active'              => "Commission Active State|bool",
+        'commission_batch_id' => "Batched Commission",
+        'edit_note'           => "Commission Notes",
+        'affiliate_id'        => "Affiliate"
+    ];
 
     /**
      * Commission belongs to an account
@@ -68,7 +79,7 @@ class Commission extends Model
      * Send email template for notification of a new commission.
      * @return void
      */
-    public function notifyNew() : void
+    public function notifyNew(): void
     {
         if ($this->affiliate)
         {

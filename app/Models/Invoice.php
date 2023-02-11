@@ -53,8 +53,20 @@ class Invoice extends Model
 
     protected $guarded = ['id'];
 
-    public $dates = ['sent_on', 'due_on', 'paid_on'];
-    public $casts = ['status' => InvoiceStatus::class];
+    public       $dates            = ['sent_on', 'due_on', 'paid_on'];
+    public       $casts            = ['status' => InvoiceStatus::class];
+    public array $tracked          = [
+        'status'           => "Invoice Status|enum",
+        'sent_on'          => "Sent On",
+        'paid_on'          => "Paid On",
+        'po'               => "Purchase Order #",
+        'suspension_sent'  => "Suspension Notice Sent",
+        'termination_sent' => "Termination Notice Sent",
+        'tax'              => "Tax Amount|money",
+        'has_late_fee'     => "Sent Late Fee Notification|bool",
+        'total'            => "Invoice Total|money",
+    ];
+    public array $logRelationships = ['items', 'transactions', 'commission'];
 
     /**
      * An invoice belongs to an account
@@ -592,6 +604,7 @@ class Invoice extends Model
         sysact(ActivityType::NewTransaction, $transaction->id,
             "made a payment of $" . moneyFormat($amount) .
             " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> for {$this->account->name} via ");
+        _log($transaction, "Payment of $" . moneyFormat($amount). " applied to Invoice #$this->id");
         return $transaction;
     }
 
