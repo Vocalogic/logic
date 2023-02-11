@@ -27,6 +27,18 @@ class AccountItem extends Model
         'meta'         => 'json'
     ];
 
+    public array $tracked = [
+        'allowed_overage' => "Allowed Overage",
+        'allowed_qty'     => "Allowed Quantity",
+        'addons'          => "Addons",
+        'account'         => "Account",
+        'item'            => "Item",
+        'meta'            => "Meta",
+        'qty'             => "Quantity",
+        'quote'           => "Quote",
+        'price'           => "Price",
+    ];
+
     /**
      * Pivot to Account
      * @return BelongsTo
