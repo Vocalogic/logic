@@ -12,7 +12,7 @@
         <tr>
             <td>
                 <strong>[{{$item->code}}] {{$item->name}}</strong><br/>
-                <small class="text-muted">{{$item->description}}</small>
+                <small class="text-muted">{!! $item->description !!}</small>
             </td>
             <td>{{$item->status}}</td>
             <td><a data-title="Assign Ownership" href="/admin/orders/{{$order->id}}/items/{{$item->id}}/assign" class="live">{{$item->assigned ? $item->assigned->short : "Unassigned"}}</a>
@@ -20,7 +20,7 @@
                     <i class="text-danger fa fa-exclamation-circle"></i>
                 @endif
             </td>
-            <td><a href="/admin/orders/{{$order->id}}/items/{{$item->id}}/notes" class="liveRight" data-title="{{$item->name}} Notes"><span class="badge bg-{{bm()}}info">{{$item->notes()->count()}}</span></a></td>
+            <td><a href="/admin/orders/{{$order->id}}/items/{{$item->id}}/notes" class="live" data-position="right" data-title="{{$item->name}} Notes"><span class="badge bg-{{bm()}}info">{{$item->notes()->count()}}</span></a></td>
         </tr>
     @endforeach
 
