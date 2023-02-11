@@ -1,8 +1,8 @@
 @extends('layouts.admin', ['title' => "Order #$order->id", 'crumbs' => [
      '/admin/orders' => "Orders",
      "Order #$order->id",
-     'log' => $order->logs()->exists() ? $order->logLink : null
-]])
+],
+'log' => $order->logLink])
 
 @section('pre')
     <div class="row align-items-center">
@@ -10,7 +10,6 @@
             <h1 class="fs-5 color-900 mt-1 mb-0">Order #{{$order->id}} ({{$order->account->name}})</h1>
             <small class="text-muted">{{$order->name}}</small>
         </div>
-
     </div> <!-- .row end -->
 
 @endsection
@@ -24,18 +23,21 @@
             @endif
 
 
-                @if($order->hasBeen(\App\Enums\Core\OrderStatus::Verified) && !$order->hasBeen(\App\Enums\Core\OrderStatus::InProgress))
-                    <a class="confirm btn btn-{{bm()}}info" data-message="Set order to in progress (being shipped or provisioned)"
-                       data-method="GET"
-                       href="/admin/orders/{{$order->id}}/progress"><i class="fa fa-refresh"></i> Set Order to In Progress</a>
+            @if($order->hasBeen(\App\Enums\Core\OrderStatus::Verified) && !$order->hasBeen(\App\Enums\Core\OrderStatus::InProgress))
+                <a class="confirm btn btn-{{bm()}}info"
+                   data-message="Set order to in progress (being shipped or provisioned)"
+                   data-method="GET"
+                   href="/admin/orders/{{$order->id}}/progress"><i class="fa fa-refresh"></i> Set Order to In
+                    Progress</a>
 
-                @endif
-
-            @if($order->invoice->balance > 0)
-                    <div class="mt-3 alert alert-danger">WARNING: <a href="/admin/accounts/{{$order->account->id}}/invoices/{{$order->invoice->id}}">Invoice {{$order->invoice->id}}</a> has not been paid.
-                    </div>
             @endif
 
+            @if($order->invoice->balance > 0)
+                <div class="mt-3 alert alert-danger">WARNING: <a
+                        href="/admin/accounts/{{$order->account->id}}/invoices/{{$order->invoice->id}}">Invoice {{$order->invoice->id}}</a>
+                    has not been paid.
+                </div>
+            @endif
 
 
         </div>
