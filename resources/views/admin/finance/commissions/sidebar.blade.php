@@ -8,7 +8,7 @@
     <h6 class="card-title mb-3 pt-2 text-center fs-6">Status</h6>
     <ul class="list-group list-group-custom">
         <li class="list-group-item d-flex justify-content-between">
-            <a class="color-600" href="/admin/leads">Active</a>
+            <a class="color-600" href="/admin/finance/commissions">Active</a>
             <span class="badge bg-info">
                 {{\App\Models\Lead::where('active', true)->count()}}
             </span>
