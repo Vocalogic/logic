@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Core\PaymentMethod;
 use App\Operations\Integrations\Merchant\Merchant;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -20,7 +21,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Transaction extends Model
 {
-    protected $guarded = ['id'];
+    use HasLogTrait;
+
+    protected    $guarded = ['id'];
+    public array $tracked = [
+        'amount'  => "Amount Charged",
+        'details' => "Transaction Details",
+    ];
 
     /**
      * A payment belongs to an invoice.

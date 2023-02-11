@@ -750,6 +750,7 @@ class Account extends Model
             'status'    => InvoiceStatus::DRAFT,
             'recurring' => true
         ]);
+        _log($invoice, "Monthly Invoice Generated");
         foreach ($this->items as $item)
         {
             if (!$item->item) continue; // Service was deleted.
@@ -781,7 +782,7 @@ class Account extends Model
                 $notes .= "<br>" . $item->iterateMeta(true);
             }
 
-            $invoice->items()->create([
+            $ii = $invoice->items()->create([
                 'bill_item_id' => $item->bill_item_id,
                 'code'         => $item->item->code,
                 'name'         => $item->item->name,
@@ -789,6 +790,7 @@ class Account extends Model
                 'price'        => $item->price,
                 'qty'          => $item->qty
             ]);
+            _log($ii, "Added {$item->item->name} to Invoice");
 
             // If addons are listed for this service item, we include them below
             if ($item->addons()->count())
@@ -796,7 +798,7 @@ class Account extends Model
                 foreach ($item->addons as $addon)
                 {
                     $note = $addon->notes ? " - " . $addon->notes : null;
-                    $invoice->items()->create([
+                    $ii = $invoice->items()->create([
                         'bill_item_id' => $item->bill_item_id,
                         'code'         => $item->item->code,
                         'name'         => $item->item->name . " - $addon->name",
@@ -804,6 +806,7 @@ class Account extends Model
                         'price'        => $addon->price,
                         'qty'          => $addon->qty
                     ]);
+                    _log($ii, "Added {$item->item->name} from Addon to Invoice");
                 }
             }
 
@@ -833,6 +836,7 @@ class Account extends Model
             $invoice->createOrder();
         }
         $total = "$" . moneyFormat($invoice->total);
+        _log($invoice, "Monthly Invoice Total Final: $total");
         sysact(ActivityType::Account, $this->id,
             "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
     }

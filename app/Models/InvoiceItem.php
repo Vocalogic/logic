@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -9,10 +10,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $invoice
  * @property mixed $item
  * @property mixed $price
+ * @property mixed $code
+ * @property mixed $name
  */
 class InvoiceItem extends Model
 {
+    use HasLogTrait;
     protected $guarded = ['id'];
+
+    public array $tracked = [
+        'code'        => "Item Code",
+        'name'        => "Item Name",
+        'description' => "Item Description",
+        'qty'         => "Quantity",
+        'price'       => "Price|money"
+    ];
 
     /**
      * An item belongs to an invoice
@@ -86,7 +98,7 @@ class InvoiceItem extends Model
     {
         $catalogPrice = $this->getCatalogPrice();
         $diff = $this->price / $catalogPrice;
-        return (int) (100 - round($diff * 100));
+        return (int)(100 - round($diff * 100));
     }
 
     /**
