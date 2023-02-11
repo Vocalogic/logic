@@ -671,7 +671,7 @@ class Invoice extends Model
             ]);
             $comm->refresh();
             $comm->notifyNew();
-
+            _log($comm, "Commission Generated for $" . moneyFormat($amount));
         }
     }
 
