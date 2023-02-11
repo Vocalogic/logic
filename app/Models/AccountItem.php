@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AccountItem extends Model
 {
     use HasLogTrait;
-    
+
     protected $guarded = ['id'];
     public    $dates   = ['next_bill_date', 'suspend_on', 'terminate_on', 'requested_termination_date'];
     public    $casts   = [

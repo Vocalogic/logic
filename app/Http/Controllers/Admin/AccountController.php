@@ -111,12 +111,13 @@ class AccountController extends Controller
      */
     public function addItem(Account $account, BillItem $item): RedirectResponse
     {
-        $account->items()->create([
+        $accItem = $account->items()->create([
             'bill_item_id' => $item->id,
             'description'  => $item->description,
             'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
+        _log($accItem, "Account item added.");
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         return redirect()->to("/admin/accounts/$account->id/services")
