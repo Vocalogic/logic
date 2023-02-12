@@ -36,4 +36,12 @@ class LogsController extends Controller
         }
         return view('admin.logs.show', ['logs' => $logs]);
     }
+
+    /**
+     * Extended log view
+     */
+    public function extendedView(string $model, int $id): View
+    {
+        return view('admin.logs.extended');
+    }
 }

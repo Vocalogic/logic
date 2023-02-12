@@ -547,6 +547,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('lead_statuses/{status}', [LeadTypeController::class, 'destroyStatus']);
 
     // Logs page
+    Route::get('logs/extended/{model}/{id}', [LogsController::class, 'extendedView']);
     Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
 
 });
