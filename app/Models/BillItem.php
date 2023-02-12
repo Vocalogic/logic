@@ -7,15 +7,6 @@ use App\Enums\Core\BillItemType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use League\CommonMark\CommonMarkConverter;
-use League\CommonMark\Environment\Environment;
-use League\CommonMark\Extension\Autolink\AutolinkExtension;
-use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
-use League\CommonMark\Extension\DisallowedRawHtml\DisallowedRawHtmlExtension;
-use League\CommonMark\Extension\Strikethrough\StrikethroughExtension;
-use League\CommonMark\Extension\Table\TableExtension;
-use League\CommonMark\Extension\TaskList\TaskListExtension;
-use League\CommonMark\MarkdownConverter;
 
 /**
  * @property mixed        $feature_list
@@ -89,16 +80,31 @@ class BillItem extends Model
      * @var array
      */
     public array $tracked = [
-        'name'                  => "Product Name",
-        'code'                  => "Product SKU",
-        'description'           => "Description",
-        'nrc'                   => "One-Time Price|money",
-        'msrp'                  => "Service MSRP|money",
-        'ex_capex'              => "Product Cost|money",
-        'min_price'             => "Minimum Selling Price|money",
-        'max_price'             => "Maximum Selling Price|money",
-        'ex_capex_description'  => "Capital Expense Description",
+        'name'                   => "Product Name",
+        'code'                   => "Product SKU",
+        'description'            => "Description",
+        'nrc'                    => "One-Time Price|money",
+        'msrp'                   => "Service MSRP|money",
+        'ex_capex'               => "Product Cost|money",
+        'min_price'              => "Minimum Selling Price|money",
+        'max_price'              => "Maximum Selling Price|money",
+        'ex_capex_description'   => "Capital Expense Description",
+        'reservation_mode'       => "Reservation Mode|bool",
+        'reservation_price'      => "Reservation Price",
+        'reservation_details'    => "Reservation Details",
+        'reservation_time'       => "Reservation Time",
+        'reservation_refund'     => "Reservation Refund Details",
+        'variation_category'     => "Variation Category",
+        'variation_name'         => "Variation Name",
+        'shop_show'              => "Show item in Shop|bool",
+        'msrp_note'              => "MSRP Note to Guests",
+        'confirmation_dialog'    => "Confirmation Dialog",
+        'marketing_description'  => "Confirmation Dialog",
+        'feature_headline'       => "Feature Headline",
+        'feature_list'           => "Feature List",
     ];
+
+    public array $logRelationships = ['addons', 'faqs', 'meta', 'children', 'tags'];
 
     /**
      * An item belongs to a category.

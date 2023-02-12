@@ -133,7 +133,7 @@ class BillItemController extends Controller
             'slug'                  => Str::slug($item->name),
             'msrp'                  => $request->price * 100,
         ]);
-        _log($i, 'imp');
+        _log($i, 'Product has been imported.');
         if ($item->product)
         {
             $i->update(['nrc' => $request->price * 100]);
@@ -336,7 +336,10 @@ class BillItemController extends Controller
             'max_price' => convertMoney($request->max_price)
         ]);
 
+        $old = clone $item;
         $item->update($request->all());
+
+        _log($item, 'Product prices have been updated.', $old);
 
         // Discount Term Updater
         foreach ($request->all() as $key => $val)
@@ -387,6 +390,7 @@ class BillItemController extends Controller
         {
             throw new LogicException("There was a problem uploading your photos - " . $e->getMessage());
         }
+        _log($item, 'Product photos have been updated.');
         return redirect()
             ->to("/admin/category/$cat->id/items/$item->id/addons")
             ->with('message', "Photos updated successfully.");
@@ -447,11 +451,10 @@ class BillItemController extends Controller
     public function saveTag(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
         $request->validate(['tag' => 'required']);
-        $item->tags()->create([
+        $tag = $item->tags()->create([
             'tag_id' => $request->tag
         ]);
-        $tag = Tag::find($request->tag);
-        _log($item, "Tag '{$tag->name}' has been added");
+        _log($tag, "Tag has been added.");
         return redirect()->back()->with('message', 'Tag applied successfully');
     }
 
@@ -498,7 +501,9 @@ class BillItemController extends Controller
      */
     public function updateReservation(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
+        $old = clone $item;
         $item->update($request->all());
+        _log($item, "Product reservation details have been updated", $old);
         return redirect()->to("/admin/category/$cat->id/items/$item->id/variation")
             ->with('message', "Reservation Details Saved");
     }
@@ -529,7 +534,9 @@ class BillItemController extends Controller
      */
     public function variationUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
+        $old = clone $item;
         $item->update($request->all());
+        _log($item, "Variation details have been updated.", $old);
         return redirect()->to("/admin/category/$cat->id/items/$item->id/shop")
             ->with('message', "Variation Details Saved");
     }
@@ -560,7 +567,9 @@ class BillItemController extends Controller
      */
     public function shopUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
+        $old = clone $item;
         $item->update($request->all());
+        _log($item, "Product shop settings have been updated.", $old);
         return redirect()->to("/admin/category/$cat->id/items");
     }
 
@@ -606,7 +615,7 @@ class BillItemController extends Controller
             'description'      => 'TODO: Change Description',
             'shop_show'        => false
         ]);
-        _log($item, "Product '{$request->name}' has been created");
+        _log($item, "Product '{$request->name}' has been created.");
         if ($cat->type == 'services')
         {
             $item->update(['mrc' => convertMoney($request->price)]);
@@ -679,11 +688,11 @@ class BillItemController extends Controller
         $request->validate([
             'name' => "required"
         ]);
-        $item->addons()->create([
+        $addon = $item->addons()->create([
             'name'        => $request->name,
             'description' => $request->description
         ]);
-        _log($item, "Addon group '{$request->name}' has been created for product '{$item->name}'");
+        _log($addon, "Addon group has been created.");
         return redirect()->back()->with('message', $request->name . " created successfully.");
     }
 
@@ -785,6 +794,7 @@ class BillItemController extends Controller
             'notes'        => $request->notes,
             'max'          => $request->max ?: 1
         ]);
+        _log($addon, "Option '{$request->name}' has been added.");
         return redirect()->back();
     }
 
@@ -821,6 +831,7 @@ class BillItemController extends Controller
             'notes'        => $request->notes,
             'max'          => $request->max ?: 1
         ]);
+        _log($addon, "Option '{$option->name}' has been updated.");
         return redirect()->back();
     }
 
@@ -874,7 +885,6 @@ class BillItemController extends Controller
             $lo->unlock($file);
             $item->update(['slick_id' => $file->id]);
         }
-        _log($item, "Photos has been updated for product '{$item->name}'.");
     }
 
     /**
@@ -984,6 +994,7 @@ class BillItemController extends Controller
                 ]);
             }
         }
+        _log($new, 'Product variation has been created.');
         return redirect()->to("/admin/category/$cat->id/items/$new->id");
     }
 
@@ -1028,8 +1039,8 @@ class BillItemController extends Controller
     public function saveMeta(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
         $request->validate(['item' => 'required', 'answer_type' => 'required']);
-        $item->meta()->create($request->all());
-        _log($item, "Requirement '{$request->item} has been added.");
+        $meta = $item->meta()->create($request->all());
+        _log($meta, "Requirement '{$request->item} has been added.");
         return redirect()->back()->with('message', "Data Requirement created successfully.");
     }
 
@@ -1049,16 +1060,9 @@ class BillItemController extends Controller
     ): RedirectResponse {
 
         $request->validate(['item' => 'required', 'answer_type' => 'required']);
-        if ($request->item != $meta->item)
-        {
-            $message = "Requirement '{$meta->item}' has been updated to '{$request->item}'.";
-        }
-        else
-        {
-            $message = "Requirement '{$meta->item}' has been updated.";
-        }
+        $old = clone $meta;
         $meta->update($request->all());
-        _log($item, $message);
+        _log($meta, "Requirement has been updated.", $old);
         return redirect()->back()->with('message', "Data Requirement updated successfully.");
     }
 
@@ -1115,11 +1119,11 @@ class BillItemController extends Controller
             'question' => 'required',
             'answer'   => 'required'
         ]);
-        $item->faqs()->create([
+        $faq = $item->faqs()->create([
             'question' => $request->question,
             'answer'   => $request->answer
         ]);
-        _log($item, "Faq question '{$request->question}' has been created.");
+        _log($faq, "Faq question '{$request->question}' has been created.");
         return redirect()->back()->with('message', "FAQ added successfully.");
     }
 
@@ -1149,18 +1153,12 @@ class BillItemController extends Controller
             'question' => 'required',
             'answer'   => 'required'
         ]);
-        if ($faq->question != $request->question) {
-            $message = "FAQ questions '{$faq->question}' has been updated to '{$request->question}'.";
-        }
-        else
-        {
-            $message = "FAQ questions '{$faq->question}' has been updated.";
-        }
+        $old = clone $faq;
         $faq->update([
             'question' => $request->question,
             'answer'   => $request->answer
         ]);
-        _log($item, $message);
+        _log($faq, "FAQ question has been updated.", $old);
         return redirect()->back()->with('message', "FAQ updated successfully.");
     }
 
@@ -1174,6 +1172,7 @@ class BillItemController extends Controller
     public function deleteFaq(BillCategory $cat, BillItem $item, BillItemFaq $faq): array
     {
         $faq->delete();
+        _log($faq, "FAQ question has been deleted.");
         return ['callback' => 'reload'];
     }
 
@@ -1198,6 +1197,7 @@ class BillItemController extends Controller
     public function changeCategory(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
         $item->update(['bill_category_id' => $request->category_id]);
+        _log($item, "Product category has been changed.");
         return redirect()->back()->with('message', 'Category Updated Successfully');
     }
 
