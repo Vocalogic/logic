@@ -782,6 +782,7 @@ class AccountController extends Controller
             'merchant_ach_aba'       => $request->routing,
             'merchant_ach_account'   => $request->account
         ]);
+        _log($account, "ACH Payment Details Updated.");
         return redirect()->back()->with('message', 'ACH Payment Details Updated');
     }
 
@@ -821,6 +822,7 @@ class AccountController extends Controller
                 }
             }
         }
+        _log($item, "$item->name requirements updated.");
         return redirect()->back()->with('message', "Requirements saved successfully.");
     }
 
@@ -867,6 +869,7 @@ class AccountController extends Controller
             'price'          => $item->type == 'services' ? $item->mrc : $item->nrc,
             'price_children' => $item->type == 'services' ? $item->mrc : $item->nrc,
         ]);
+        _log($account, "$item->name added for special pricing.");
         return redirect()->back()->with('message', $item->name . " Added for Special Pricing");
     }
 
@@ -880,6 +883,7 @@ class AccountController extends Controller
     public function pricingUpdate(Account $account, AccountPricing $item, Request $request): array
     {
         $item->update([$request->name => convertMoney($request->value)]);
+        _log($account, $item->item->name . " special pricing updated.");
         return ['success' => true];
     }
 
@@ -893,6 +897,7 @@ class AccountController extends Controller
     {
         session()->flash('message', $item->item->name . " removed from special pricing.");
         $item->delete();
+        _log($account, $item->item->name . " removed special pricing.");
         return ['callback' => 'reload'];
     }
 
