@@ -81,6 +81,13 @@ class Account extends Model
     ];
 
     /**
+     * When showing the log entries for a quote, we want to
+     * add the item logs as well.
+     * @var array|string[]
+     */
+    public array $logRelationships = ['items'];
+
+    /**
      * Define our array of tracked changes. This will be used for the
      * logging class to optional compare a previous instance of an
      * object before it was changed and print human readable changes.
