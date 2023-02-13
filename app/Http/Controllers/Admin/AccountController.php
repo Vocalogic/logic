@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\ACL;
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Core\PaymentMethod;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
@@ -310,6 +311,10 @@ class AccountController extends Controller
             'auth_required'    => $request->public ? 0 : 1,
             'file_category_id' => $category->id
         ]);
+        _log($account, "$file->filename Uploaded");
+        _log($account, "$file->filename Uploaded", null,
+            "File ID $file->id ($file->filename) Size: $file->filesize bytes",
+            LogSeverity::Debug);
         return redirect()->to("/admin/accounts/$account->id/files")->with('message', "File uploaded successfully.");
     }
 
@@ -324,6 +329,7 @@ class AccountController extends Controller
     {
         $handle = new LoFileHandler();
         $handle->delete($file->id);
+        _log($account, "$file->filename deleted.");
         return ['callback' => 'reload'];
     }
 
