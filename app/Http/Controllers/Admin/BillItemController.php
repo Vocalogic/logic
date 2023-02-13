@@ -1202,17 +1202,7 @@ class BillItemController extends Controller
         return redirect()->back()->with('message', 'Category Updated Successfully');
     }
 
-    /**
-     * Show AI Generation Component
-     * @param BillCategory $cat
-     * @param BillItem     $item
-     * @return View
-     */
-    public function marketing(BillCategory $cat, BillItem $item): View
-    {
-        $crumbs = $this->generateCrumbs($cat, $item);
-        return view('admin.bill_items.generator', ['item' => $item, 'crumbs' => $crumbs]);
-    }
+
 
     /**
      * Reassign descriptions based on new item description
