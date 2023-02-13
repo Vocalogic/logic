@@ -3,7 +3,7 @@
     "/admin/accounts/$account->id" => $account->name,
     'Pricing'
 
-]])
+], 'log' => $account->logLink])
 @section('content')
     <div class="row">
         <div class="col-lg-2 col-xs-12">
