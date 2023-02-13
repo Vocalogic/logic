@@ -524,6 +524,7 @@ class AccountController extends Controller
     public function removeAddon(Account $account, AccountItem $item, AccountAddon $addon): array
     {
         $addon->delete();
+        _log($item, "$addon->name removed from $item->name service.");
         return ['callback' => 'reload'];
     }
 
@@ -558,6 +559,7 @@ class AccountController extends Controller
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
                     ]);
+                    _log($item, "$oitem->name added to $item->name service.");
                 }
                 else
                 {
@@ -570,6 +572,7 @@ class AccountController extends Controller
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
                     ]);
+                    _log($item, "$oitem->name updated on $item->name service.");
                 }
             } // if match on add_
         }
