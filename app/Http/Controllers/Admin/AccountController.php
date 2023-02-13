@@ -600,6 +600,7 @@ class AccountController extends Controller
             'cancel_reason' => $request->reason,
             'active'        => 0
         ]);
+        _log($account, "Account cancelled.");
         return redirect()->to("/admin/accounts");
     }
 
@@ -637,6 +638,7 @@ class AccountController extends Controller
             }
         }
         $account->sendSuspensionNotice();
+        _log($account, "Account suspension scheduled and notice sent.");
         return redirect()->back()->with(['message' => "Suspension Notice Sent"]);
     }
 
@@ -675,6 +677,7 @@ class AccountController extends Controller
             }
         }
         $account->sendTerminationNotice();
+        _log($account, "Service termination scheduled and notice sent.");
         return redirect()->back()->with(['message' => "Termination Notice Sent"]);
     }
 
@@ -688,6 +691,7 @@ class AccountController extends Controller
     {
         $item->update(['suspend_on' => null, 'suspend_reason' => null]);
         $item->sendImmediateSuspension();
+        _log($item, $item->name . " service SUSPENDED.");
         return ['callback' => 'reload'];
     }
 
@@ -701,6 +705,7 @@ class AccountController extends Controller
     {
         $item->update(['terminate_on' => null, 'terminate_reason' => null]);
         $item->sendImmediateTermination();
+        _log($item, $item->name . " service TERMINATED.");
         return ['callback' => 'reload'];
     }
 
