@@ -90,7 +90,7 @@
                         <div class="form-floating">
                             <input type="text" class="form-control" name="ex_capex"
                                    value="{{moneyFormat($item->ex_capex,2)}}">
-                            <label>Product Cost (Captial Expense)</label>
+                            <label>Product Cost (Capital Expense)</label>
                             <span
                                 class="helper-text">Enter the price for this product</span>
                         </div>
@@ -108,7 +108,7 @@
                         <div class="form-floating">
                             <input type="text" class="form-control" name="ex_capex_description"
                                    value="{{$item->ex_capex_description}}">
-                            <label>Captial Expense Description</label>
+                            <label>Capital Expense Description</label>
                             <span
                                 class="helper-text">Enter a description (i.e. This is the price from the vendor)</span>
                         </div>

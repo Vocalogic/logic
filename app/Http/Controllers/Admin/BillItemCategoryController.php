@@ -67,6 +67,7 @@ class BillItemCategoryController extends Controller
             'slug'        => Str::slug($request->shop_name),
             'shop_offer'  => $request->shop_offer
         ]);
+        _log($cat, "Category '{$request->name}' has been created.");
         if ($request->hasFile('shop_offer_image_id'))
         {
             $lo = new LoFileHandler();
