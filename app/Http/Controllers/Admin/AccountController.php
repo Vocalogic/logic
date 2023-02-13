@@ -117,7 +117,7 @@ class AccountController extends Controller
             'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
-        _log($accItem, "Account item added.");
+        _log($accItem, $item->name . " added to monthly services.");
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         return redirect()->to("/admin/accounts/$account->id/services")
@@ -133,11 +133,13 @@ class AccountController extends Controller
      */
     public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
     {
+        $old = $item->replicate();
+
         if (!$request->description)
         {
             $request->merge(['description' => $item->item->description]);
         }
-        $item->update([
+        $accItem = $item->update([
             'price'           => convertMoney($request->price),
             'qty'             => $request->qty,
             'notes'           => $request->notes,
@@ -147,6 +149,8 @@ class AccountController extends Controller
             'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency
         ]);
+
+        _log($accItem, $item->name . " updated.", $old);
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         if ($request->contract_quote_id)
@@ -168,6 +172,7 @@ class AccountController extends Controller
      */
     public function delItem(Account $account, AccountItem $item): array
     {
+        _log($item, $item->name . " removed from monthly services.");
         $item->delete();
         return ['callback' => 'reload'];
     }
