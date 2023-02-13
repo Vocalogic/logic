@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+use App\Traits\HasLogTrait;
 
 /**
  * @property mixed         $admin
@@ -73,12 +74,21 @@ use Illuminate\Support\Str;
  */
 class Account extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
     public    $dates   = ['next_bill'];
     public    $casts   = [
         'payment_method'    => PaymentMethod::class,
         'merchant_metadata' => 'json'
     ];
+
+    /**
+     * When showing the log entries for an account, we want to
+     * add the item logs as well.
+     * @var array|string[]
+     */
+    public array $logRelationships = ['items'];
 
     /**
      * Define our array of tracked changes. This will be used for the
