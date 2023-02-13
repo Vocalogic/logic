@@ -1244,10 +1244,9 @@ class BillItemController extends Controller
                     $item->update(['description' => $gpt->byItem($item, $request->mode)]);
                     break;
                 case 'faq':
-                    $items = json_decode($gpt->byItem($item, $request->mode, 10));
+                    $items = json_decode($gpt->byItem($item, $request->mode, 3));
                     if (is_array($items))
                     {
-                        $item->faqs()->delete();
                         foreach ($items as $aitem)
                         {
                             $item->faqs()->create([

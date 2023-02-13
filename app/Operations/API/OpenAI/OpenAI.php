@@ -71,7 +71,7 @@ class OpenAI
         {
             'invoice' => sprintf("Create an invoice line item description, without price, replacing the word 'this' with 'the', limited to %d sentences for the following product: %s",
                 $sentences, $item->name),
-            'faq' => sprintf("Create a list of %d frequently asked questions for the product: '%s' returned as a json array with the child objects having the keys 'question' and 'answer' accordingly.",
+            'faq' => sprintf("Create a list of %d frequently asked questions for the product: '%s' returned as a json array with the child objects having only the keys 'question' and 'answer' accordingly.",
                 $sentences, $item->name),
             'marketing' => sprintf("Create a product marketing description, formatted in html, for the following product: '%s' limited to %d paragraphs.",
                 $item->name, $sentences),
