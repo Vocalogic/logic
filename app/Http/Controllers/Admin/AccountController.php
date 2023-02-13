@@ -141,9 +141,6 @@ class AccountController extends Controller
             'qty'             => $request->qty,
             'notes'           => $request->notes,
             'description'     => $request->description,
-            'allowed_qty'     => $request->allowed_qty,
-            'allowed_type'    => $request->allowed_type,
-            'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency
         ]);
         AccountObserver::$running = true; // Disable observer for next call.

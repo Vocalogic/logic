@@ -10,9 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property mixed        $allowed_type
- * @property mixed        $allowed_qty
- * @property mixed        $allowed_overage
  * @property mixed        $id
  * @property mixed        $addons
  * @property mixed        $price
@@ -120,19 +117,7 @@ class QuoteItem extends Model
         return $this->item->msrp - $this->price;
     }
 
-    /**
-     * Get a text representation of the qty allowed.
-     * @return string
-     */
-    public function getAllowanceAttribute(): string
-    {
-        return sprintf("%s Allowed: %d (Overage Rate: $%s p/%s)",
-            $this->allowed_type->getHuman(),
-            $this->allowed_qty,
-            number_format($this->allowed_overage, 3),
-            $this->allowed_type->getShort()
-        );
-    }
+
 
     /**
      * When adding a quote item what order should we assign it?

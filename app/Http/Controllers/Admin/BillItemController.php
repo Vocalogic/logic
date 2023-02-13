@@ -20,6 +20,7 @@ use App\Models\QuoteItemAddon;
 use App\Models\Tag;
 use App\Models\TagCategory;
 use App\Operations\API\Control;
+use App\Operations\API\OpenAI\OpenAI;
 use App\Operations\Core\LoFileHandler;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\View\View;
@@ -307,7 +308,7 @@ class BillItemController extends Controller
      */
     public function pricingUpdate(BillCategory $cat, BillItem $item, Request $request): RedirectResponse
     {
-        if(!$request->taxable) $request->merge(['taxable' => false]); // for switch
+        if (!$request->taxable) $request->merge(['taxable' => false]); // for switch
 
         if ($item->type == 'services')
         {
@@ -1201,17 +1202,7 @@ class BillItemController extends Controller
         return redirect()->back()->with('message', 'Category Updated Successfully');
     }
 
-    /**
-     * Show AI Generation Component
-     * @param BillCategory $cat
-     * @param BillItem     $item
-     * @return View
-     */
-    public function marketing(BillCategory $cat, BillItem $item): View
-    {
-        $crumbs = $this->generateCrumbs($cat, $item);
-        return view('admin.bill_items.generator', ['item' => $item, 'crumbs' => $crumbs]);
-    }
+
 
     /**
      * Reassign descriptions based on new item description
@@ -1232,6 +1223,54 @@ class BillItemController extends Controller
             $qi->update(['description' => $item->description]);
         }
         session()->flash('message', "Descriptions updated on all account services and quotes.");
+        return ['callback' => 'reload'];
+    }
+
+    /**
+     * Generate Descriptions using OpenAI's ChatGPT
+     * @param BillCategory $cat
+     * @param BillItem     $item
+     * @param Request      $request
+     * @return array
+     */
+    public function ai(BillCategory $cat, BillItem $item, Request $request): array
+    {
+        try
+        {
+            $gpt = new OpenAI();
+            switch ($request->mode)
+            {
+                case 'invoice' :
+                    $item->update(['description' => $gpt->byItem($item, $request->mode)]);
+                    break;
+                case 'faq':
+                    $items = json_decode($gpt->byItem($item, $request->mode));
+                    info(print_r($items,true));
+                    if (is_array($items))
+                    {
+                        $item->faqs()->delete();
+                        foreach ($items as $aitem)
+                        {
+                            $item->faqs()->create([
+                                'question' => $aitem->question,
+                                'answer'   => $aitem->answer
+                            ]);
+                        }
+                    }
+                    break;
+                case 'marketing' :
+                    $item->update(['marketing_description' => $gpt->byItem($item, $request->mode, 5)]);
+                break;
+                case 'features' :
+                    $item->update(['feature_list' => $gpt->byItem($item, $request->mode, 10)]);
+                    break;
+            }
+        } catch (LogicException $e)
+        {
+            session()->flash('error', $e->getMessage());
+            return ['callback' => "reload"];
+        }
+        session()->flash('message', "Item updated using AI successfully.");
         return ['callback' => 'reload'];
     }
 

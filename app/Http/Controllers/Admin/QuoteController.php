@@ -160,9 +160,6 @@ class QuoteController extends Controller
             'price'           => $price,
             'description'     => $item->description,
             'qty'             => 1,
-            'allowed_qty'     => $item->allowed_qty,
-            'allowed_type'    => $item->allowed_type,
-            'allowed_overage' => $item->allowed_overage,
             'frequency'       => $item->type == 'services' ? $item->frequency : null,
         ]);
         $qitem->update(['ord' => $qitem->setNewOrd()]);
@@ -229,9 +226,6 @@ class QuoteController extends Controller
             'price'           => convertMoney($request->price),
             'description'     => $request->description,
             'qty'             => $request->qty,
-            'allowed_qty'     => $request->allowed_qty,
-            'allowed_type'    => $request->allowed_type,
-            'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency,
             'payments'        => $request->payments,
             'finance_charge'  => $request->finance_charge,

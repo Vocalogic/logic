@@ -21,9 +21,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed        $name
  * @property mixed        $category
  * @property mixed        $code
- * @property mixed        $allowed_type
- * @property mixed        $allowed_qty
- * @property mixed        $allowed_overage
  * @property mixed        $frequency
  * @property mixed        $lid
  * @property mixed        $marketing_description
