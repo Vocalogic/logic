@@ -172,7 +172,7 @@ class AccountController extends Controller
      */
     public function delItem(Account $account, AccountItem $item): array
     {
-        _log($item, $item->name . " removed from monthly services.");
+        _log($account, $item->name . " removed from monthly services.");
         $item->delete();
         return ['callback' => 'reload'];
     }
