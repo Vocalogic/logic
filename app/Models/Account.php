@@ -75,7 +75,7 @@ use App\Traits\HasLogTrait;
 class Account extends Model
 {
     use HasLogTrait;
-    
+
     protected $guarded = ['id'];
     public    $dates   = ['next_bill'];
     public    $casts   = [
