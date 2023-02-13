@@ -464,6 +464,7 @@ class AccountController extends Controller
             return redirect()->to("/admin/accounts/$account->id/profile")
                 ->with('error', 'Transaction Declined: ' . $e->getMessage());
         }
+        _log($account, "Payment method added.");
         $account->update(['declined' => 0]);
         return redirect()->back();
     }
@@ -498,6 +499,7 @@ class AccountController extends Controller
     public function updateS3(Account $account, Request $request): RedirectResponse
     {
         $account->update($request->all());
+        _log($account, "S3 credentials updated.");
         return redirect()->back();
     }
 
