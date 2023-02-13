@@ -1,8 +1,8 @@
-@extends('layouts.admin', ['title' => $account->name, 'crumbs' => [
-    '/admin/accounts' => "Accounts",
-    $account->name
-
-]])
+@extends('layouts.admin', [
+    'title' => $account->name,
+    'crumbs' => ['/admin/accounts' => "Accounts",$account->name],
+    'log' => $account->logLink
+])
 @section('content')
     <div class="row">
 
