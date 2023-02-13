@@ -139,7 +139,7 @@ class AccountController extends Controller
         {
             $request->merge(['description' => $item->item->description]);
         }
-        $accItem = $item->update([
+        $item->update([
             'price'           => convertMoney($request->price),
             'qty'             => $request->qty,
             'notes'           => $request->notes,
@@ -150,7 +150,7 @@ class AccountController extends Controller
             'frequency'       => $request->frequency
         ]);
 
-        _log($accItem, $item->name . " updated.", $old);
+        _log($item, $item->name . " updated.", $old);
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         if ($request->contract_quote_id)
