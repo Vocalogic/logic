@@ -15,6 +15,18 @@
                    href="/admin/category/{{$cat->id}}/items/{{$item->id}}/faqs/create">
                     <i class="fa fa-plus"></i> Create new FAQ
                 </a>
+                @if(setting('quotes.openai'))
+                    <a class="btn btn-secondary confirm"
+                       data-message="WARNING! This will remove any existing frequently asked questions and replace with
+                       information obtained from OpenAI. Proceed with Caution! "
+                       data-method="GET"
+                       data-title="Overwrite with AI?"
+                       data-loading="Querying GPT for Frequently Asked Questions"
+                       data-confirm="Continue Using AI"
+                       href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/ai?mode=faq">
+                        <i class="fa fa-expand"></i> Generate using AI
+                    </a>
+                @endif
                 <table class="table table-sm mt-3">
                     <thead>
                     <tr>

@@ -22,6 +22,15 @@ class MarketingGeneratorComponent extends Component
     public string $faq           = '';
     public string $message       = '';
 
+    /**
+     * Separating out the different areas where we can use
+     * openAI to assist with each section individually.
+     * Options will be quote, faq, feature highlights, and
+     * marketing description.
+     * @var string
+     */
+    public string $mode;
+
     public array $images = [];
     public string $quoteDescription = '';
 
@@ -149,7 +158,7 @@ class MarketingGeneratorComponent extends Component
      */
     public function render(): View
     {
-        return view('admin.bill_items.generator_component');
+        return view("admin.bill_items.ai.$this->mode");
     }
 
 }

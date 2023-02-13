@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property float     $allowed_overage
- * @property int       $allowed_qty
  * @property mixed     $addons
  * @property mixed     $account
  * @property mixed     $item

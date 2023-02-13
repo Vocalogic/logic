@@ -166,6 +166,7 @@ $(document).ready(function () {
             icon: icon,
             showCancelButton: true,
             confirmButtonText: confirmText,
+
         }).then(function (result) {
             if (result.isConfirmed) {
                 let result = send(location, method, null, null, null, loadingMessage);
@@ -295,7 +296,7 @@ $(document).ready(function () {
             toast: true,
             position: 'center',
             showConfirmButton: false,
-            timer: 4000
+            timer: 45000
         });
 
         Toast.fire({
