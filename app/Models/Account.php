@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
+use App\Traits\HasLogTrait;
 
 /**
  * @property mixed         $admin
@@ -73,6 +74,8 @@ use Illuminate\Support\Str;
  */
 class Account extends Model
 {
+    use HasLogTrait;
+    
     protected $guarded = ['id'];
     public    $dates   = ['next_bill'];
     public    $casts   = [
@@ -81,7 +84,7 @@ class Account extends Model
     ];
 
     /**
-     * When showing the log entries for a quote, we want to
+     * When showing the log entries for an account, we want to
      * add the item logs as well.
      * @var array|string[]
      */
