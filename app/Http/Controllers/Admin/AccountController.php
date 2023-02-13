@@ -439,6 +439,9 @@ class AccountController extends Controller
         $file = $lo->createFromRequest($request, 'logo', FileType::Image, $account->id);
         $lo->unlock($file);
         $account->update(['logo_id' => $file->id]);
+        _log($account, "New Logo Uploaded");
+        _log($account, "New Logo Uploaded", null, "File ID $file->id ($file->filename) Size: $file->filesize bytes",
+            LogSeverity::Debug);
         return redirect()->to("/admin/accounts/$account->id");
     }
 
