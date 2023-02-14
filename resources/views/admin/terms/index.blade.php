@@ -14,32 +14,27 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+
+        <div class="col-lg-2 col-xs-12 mt-2">
+
+            <a class="btn btn-primary w-100 btn-block mt-3" href="/admin/terms/create"><i class="fa fa-plus"></i> New Terms
+            </a>
+        </div>
+        <div class="col-lg-10 col-xs-12">
             <div class="card">
                 <div class="card-body">
-
                     <table class="table table-striped">
-                        <a class="btn btn-primary btn-block pull-right" href="/admin/terms/create"
-                           type="button"><i class="fa fa-plus"></i> New Terms
-                        </a>
                         <thead>
                         <tr>
                             <td>Name</td>
-                            <td></td>
+                            <td>Products/Services Assigned</td>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach(\App\Models\Term::all() as $term)
                             <tr>
                                 <td><a href="/admin/terms/{{$term->id}}">{{$term->name}}</a></td>
-                                <td>
-                                    <a href="/admin/terms/{{$term->id}}" class="btn btn-link btn-sm text-danger confirm"
-                                       data-method="DELETE"
-                                       data-message="Are you sure you want to delete these terms?"
-                                       data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Terms"><i
-                                            class="fa fa-trash"></i>
-                                    </a>
-                                </td>
+                                <td>{{$term->items()->count()}}</td>
                             </tr>
                         @endforeach
                         </tbody>

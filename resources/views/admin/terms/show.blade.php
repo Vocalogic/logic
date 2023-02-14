@@ -21,10 +21,9 @@
                 @method($term->id ? "PUT" : "POST")
                 <div class="row mb-2">
                     <div class="col-lg-12">
-                        <div class="form-floating">
-                            <input type="text" name="name" class="form-control" value="{{$term->name}}">
-                            <label>Name</label>
-                        </div>
+                        <x-form-input name="name" label="Terms of Service Name" value="{{$term->name}}" icon="list">
+                            Enter the name for this terms of service
+                        </x-form-input>
                     </div>
                 </div>
                 <div class="row">

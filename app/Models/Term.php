@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Structs\STemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use League\CommonMark\CommonMarkConverter;
 
 /**
@@ -14,6 +15,15 @@ use League\CommonMark\CommonMarkConverter;
 class Term extends Model
 {
     protected $guarded = ['id'];
+
+    /**
+     * A TOS can be assigned to many bill items.
+     * @return HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(BillItem::class, 'tos_id');
+    }
 
     /**
      * Return markdown to html for body.

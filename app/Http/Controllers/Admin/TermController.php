@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\BillItem;
 use App\Models\Term;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -71,6 +72,7 @@ class TermController extends Controller
      */
     public function destroy(Term $term): array
     {
+        BillItem::where('tos_id', $term->id)->update(['tos_id' => null]);
         $term->delete();
         session()->flash('message', "Terms of Service Deleted");
         return ['callback' => "redirect:/admin/terms"];
