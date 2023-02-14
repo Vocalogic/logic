@@ -6,6 +6,7 @@ use App\Enums\Core\LogSeverity;
 use App\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AppLog;
+use Illuminate\Support\Collection;
 
 /**
  * Service class that handles log entries
@@ -196,5 +197,33 @@ class LogOperation
             }
         }
         return implode(", ", $changes);
+    }
+
+    /**
+     * loads model by given model slug
+     * @param  string  $model
+     * @param  int  $id
+     * @return Model|null
+     */
+    public function loadModel(string $model, int $id): Model|null
+    {
+        $model = ucfirst($model);
+        $class = "\\App\\Models\\$model";
+
+        try
+        {
+            $entity = $class::find($id);
+        } catch (Throwable)
+        {
+            return null;
+        }
+
+        return $entity;
+    }
+
+    public function getModelLogs(string $model, int $id): Collection
+    {
+        $entity = $this->loadModel($model, $id);
+        return $entity !== null ? $entity->getLogs() : collect();
     }
 }
