@@ -25,14 +25,13 @@
                         <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Type</td>
+                            <td></td>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach(\App\Models\Term::all() as $term)
                             <tr>
                                 <td><a href="/admin/terms/{{$term->id}}">{{$term->name}}</a></td>
-                                <td>{{$term->type->name}}</td>
                                 <td>
                                     <a href="/admin/terms/{{$term->id}}" class="btn btn-link btn-sm text-danger confirm"
                                        data-method="DELETE"
