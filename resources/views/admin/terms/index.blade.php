@@ -19,6 +19,9 @@
                 <div class="card-body">
 
                     <table class="table table-striped">
+                        <a class="btn btn-primary btn-block pull-right" href="/admin/terms/create"
+                           type="button"><i class="fa fa-plus"></i> New Terms
+                        </a>
                         <thead>
                         <tr>
                             <td>Name</td>

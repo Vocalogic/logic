@@ -29,11 +29,35 @@ class TermController extends Controller
     }
 
     /**
+     * @return View
+     */
+    public function create(): view
+    {
+        return view('admin.terms.show')->with('term', new Term);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate(['name' => 'required', 'body' => 'required']);
+        (new Term)->create([
+            'name'         => $request->name,
+            'body'         => $request->body,
+            'lead_type_id' => 0 // TODO fix this after testing
+        ]);
+
+        return redirect()->to("/admin/terms")->with('message', "Terms of Service Saved");
+    }
+
+    /**
      * Show Terms Editor
      * @param Term $term
      * @return View
      */
-    public function show(Term $term) : View
+    public function show(Term $term): View
     {
         return view('admin.terms.show')->with('term', $term);
     }
