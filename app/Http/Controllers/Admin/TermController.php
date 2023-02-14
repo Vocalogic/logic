@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\LeadType;
 use App\Models\Term;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,13 +17,6 @@ class TermController extends Controller
      */
     public function index(): View
     {
-        foreach (LeadType::all() as $type)
-        {
-            if (!$type->term)
-            {
-                $type->term()->create(['name' => $type->name . " Terms of Service"]);
-            }
-        }
         return view('admin.terms.index');
     }
 
@@ -44,9 +36,8 @@ class TermController extends Controller
     {
         $request->validate(['name' => 'required', 'body' => 'required']);
         (new Term)->create([
-            'name'         => $request->name,
-            'body'         => $request->body,
-            'lead_type_id' => 0 // TODO fix this after testing
+            'name' => $request->name,
+            'body' => $request->body,
         ]);
 
         return redirect()->to("/admin/terms")->with('message', "Terms of Service Saved");
@@ -83,7 +74,6 @@ class TermController extends Controller
         $term->delete();
         session()->flash('message', "Terms of Service Deleted");
         return ['callback' => "redirect:/admin/terms"];
-
     }
 
 
