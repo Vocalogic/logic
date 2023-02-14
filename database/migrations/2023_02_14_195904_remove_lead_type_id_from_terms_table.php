@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('terms', function (Blueprint $table) {
-            $table->dropColumn('terms');
+            $table->dropColumn('lead_type_id');
         });
     }
 
