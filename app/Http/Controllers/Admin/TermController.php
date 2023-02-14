@@ -50,5 +50,15 @@ class TermController extends Controller
         return redirect()->to("/admin/terms")->with('message', "Terms of Service Updated");
     }
 
+    /**
+     * @param Term $term
+     * @return RedirectResponse
+     */
+    public function delete(Term $term): RedirectResponse
+    {
+        $term->delete();
+        return redirect()->to("/admin/terms")->with('message', "Terms of Service Deleted");
+    }
+
 
 }
