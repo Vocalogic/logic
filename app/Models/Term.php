@@ -9,19 +9,11 @@ use League\CommonMark\CommonMarkConverter;
 
 /**
  * @property mixed $body
+ * @property mixed $name
  */
 class Term extends Model
 {
     protected $guarded = ['id'];
-
-    /**
-     * A term belongs to a lead type
-     * @return BelongsTo
-     */
-    public function type(): BelongsTo
-    {
-        return $this->belongsTo(LeadType::class, 'lead_type_id');
-    }
 
     /**
      * Return markdown to html for body.

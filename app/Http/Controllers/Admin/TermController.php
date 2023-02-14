@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\LeadType;
 use App\Models\Term;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -18,14 +17,30 @@ class TermController extends Controller
      */
     public function index(): View
     {
-        foreach (LeadType::all() as $type)
-        {
-            if (!$type->term)
-            {
-                $type->term()->create(['name' => $type->name . " Terms of Service"]);
-            }
-        }
         return view('admin.terms.index');
+    }
+
+    /**
+     * @return View
+     */
+    public function create(): view
+    {
+        return view('admin.terms.show')->with('term', new Term);
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate(['name' => 'required', 'body' => 'required']);
+        (new Term)->create([
+            'name' => $request->name,
+            'body' => $request->body,
+        ]);
+
+        return redirect()->to("/admin/terms")->with('message', "Terms of Service Saved");
     }
 
     /**
@@ -33,7 +48,7 @@ class TermController extends Controller
      * @param Term $term
      * @return View
      */
-    public function show(Term $term) : View
+    public function show(Term $term): View
     {
         return view('admin.terms.show')->with('term', $term);
     }
@@ -46,8 +61,19 @@ class TermController extends Controller
      */
     public function update(Term $term, Request $request): RedirectResponse
     {
-        $term->update(['body' => $request->get('body')]);
+        $term->update($request->all());
         return redirect()->to("/admin/terms")->with('message', "Terms of Service Updated");
+    }
+
+    /**
+     * @param Term $term
+     * @return array
+     */
+    public function destroy(Term $term): array
+    {
+        $term->delete();
+        session()->flash('message', "Terms of Service Deleted");
+        return ['callback' => "redirect:/admin/terms"];
     }
 
 

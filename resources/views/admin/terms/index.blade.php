@@ -19,17 +19,27 @@
                 <div class="card-body">
 
                     <table class="table table-striped">
+                        <a class="btn btn-primary btn-block pull-right" href="/admin/terms/create"
+                           type="button"><i class="fa fa-plus"></i> New Terms
+                        </a>
                         <thead>
                         <tr>
                             <td>Name</td>
-                            <td>Type</td>
+                            <td></td>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach(\App\Models\Term::all() as $term)
                             <tr>
                                 <td><a href="/admin/terms/{{$term->id}}">{{$term->name}}</a></td>
-                                <td>{{$term->type->name}}</td>
+                                <td>
+                                    <a href="/admin/terms/{{$term->id}}" class="btn btn-link btn-sm text-danger confirm"
+                                       data-method="DELETE"
+                                       data-message="Are you sure you want to delete these terms?"
+                                       data-bs-toggle="tooltip" data-bs-placement="top" title="Delete Terms"><i
+                                            class="fa fa-trash"></i>
+                                    </a>
+                                </td>
                             </tr>
                         @endforeach
                         </tbody>
