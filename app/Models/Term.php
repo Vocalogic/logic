@@ -9,6 +9,7 @@ use League\CommonMark\CommonMarkConverter;
 
 /**
  * @property mixed $body
+ * @property mixed $name
  */
 class Term extends Model
 {
