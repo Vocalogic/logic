@@ -52,12 +52,14 @@ class TermController extends Controller
 
     /**
      * @param Term $term
-     * @return RedirectResponse
+     * @return array
      */
-    public function delete(Term $term): RedirectResponse
+    public function destroy(Term $term): array
     {
         $term->delete();
-        return redirect()->to("/admin/terms")->with('message', "Terms of Service Deleted");
+        session()->flash('message', "Terms of Service Deleted");
+        return ['callback' => "redirect:/admin/terms"];
+
     }
 
 

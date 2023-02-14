@@ -33,9 +33,9 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-lg-12">
-                            <a type="submit" class="btn btn-primary pull-right lift ladda" data-style="zoom-out">
+                            <button type="submit" class="btn btn-primary pull-right lift ladda" data-style="zoom-out">
                                 <i class="fa fa-save"></i> {{$term->name?"Save": "Create"}} Service Terms
-                            </a>
+                            </button>
                             @if($term->id)
                                 <a href="/admin/terms/{{$term->id}}"
                                    class="btn btn-danger pull-left lift ladda confirm mr-5"
