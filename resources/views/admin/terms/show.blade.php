@@ -33,9 +33,17 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col-lg-12">
-                            <button type="submit" class="btn btn-primary pull-right ladda" data-style="zoom-out">
+                            <a type="submit" class="btn btn-primary pull-right lift ladda" data-style="zoom-out">
                                 <i class="fa fa-save"></i> {{$term->name?"Save": "Create"}} Service Terms
-                            </button>
+                            </a>
+                            @if($term->id)
+                                <a href="/admin/terms/{{$term->id}}"
+                                   class="btn btn-danger pull-left lift ladda confirm mr-5"
+                                   data-method="DELETE"
+                                   data-message="Are you sure you want to delete these terms?">
+                                    <i class="fa fa-trash"></i> Delete
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
