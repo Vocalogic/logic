@@ -46,7 +46,7 @@ class TermController extends Controller
      */
     public function update(Term $term, Request $request): RedirectResponse
     {
-        $term->update(['body' => $request->get('body')]);
+        $term->update($request->all());
         return redirect()->to("/admin/terms")->with('message', "Terms of Service Updated");
     }
 
