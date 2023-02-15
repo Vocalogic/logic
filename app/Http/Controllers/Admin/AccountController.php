@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\ACL;
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Core\PaymentMethod;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
@@ -39,28 +40,7 @@ class AccountController extends Controller
      */
     public function index(Request $request): View
     {
-        if ($request->show == 'mrr')
-        {
-            $accounts = Account::where('id', '>', 1)
-                ->where('active', 1)
-                ->has('items')
-                ->get();
-        }
-        elseif ($request->show == 'nrc')
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 1)->doesntHave('items')->get();
-
-        }
-        elseif ($request->show == 'inactive')
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 0)->get();
-
-        }
-        else
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 1)->get();
-        }
-        return view('admin.accounts.index', ['accounts' => $accounts]);
+        return view('admin.accounts.index');
     }
 
     /**
@@ -111,12 +91,13 @@ class AccountController extends Controller
      */
     public function addItem(Account $account, BillItem $item): RedirectResponse
     {
-        $account->items()->create([
+        $accItem = $account->items()->create([
             'bill_item_id' => $item->id,
             'description'  => $item->description,
             'price'        => $account->getPreferredPricing($item),
             'qty'          => 1
         ]);
+        _log($accItem, $item->name . " added to monthly services.");
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         return redirect()->to("/admin/accounts/$account->id/services")
@@ -132,6 +113,8 @@ class AccountController extends Controller
      */
     public function updateItem(Account $account, AccountItem $item, Request $request): RedirectResponse
     {
+        $old = $item->replicate();
+
         if (!$request->description)
         {
             $request->merge(['description' => $item->item->description]);
@@ -141,11 +124,10 @@ class AccountController extends Controller
             'qty'             => $request->qty,
             'notes'           => $request->notes,
             'description'     => $request->description,
-            'allowed_qty'     => $request->allowed_qty,
-            'allowed_type'    => $request->allowed_type,
-            'allowed_overage' => $request->allowed_overage,
             'frequency'       => $request->frequency
         ]);
+
+        _log($item, $item->name . " updated.", $old);
         AccountObserver::$running = true; // Disable observer for next call.
         $account->update(['services_changed' => true]);
         if ($request->contract_quote_id)
@@ -167,6 +149,7 @@ class AccountController extends Controller
      */
     public function delItem(Account $account, AccountItem $item): array
     {
+        _log($account, $item->name . " removed from monthly services.");
         $item->delete();
         return ['callback' => 'reload'];
     }
@@ -304,6 +287,10 @@ class AccountController extends Controller
             'auth_required'    => $request->public ? 0 : 1,
             'file_category_id' => $category->id
         ]);
+        _log($account, "$file->filename Uploaded");
+        _log($account, "$file->filename Uploaded", null,
+            "File ID $file->id ($file->filename) Size: $file->filesize bytes",
+            LogSeverity::Debug);
         return redirect()->to("/admin/accounts/$account->id/files")->with('message', "File uploaded successfully.");
     }
 
@@ -318,6 +305,7 @@ class AccountController extends Controller
     {
         $handle = new LoFileHandler();
         $handle->delete($file->id);
+        _log($account, "$file->filename deleted.");
         return ['callback' => 'reload'];
     }
 
@@ -427,6 +415,9 @@ class AccountController extends Controller
         $file = $lo->createFromRequest($request, 'logo', FileType::Image, $account->id);
         $lo->unlock($file);
         $account->update(['logo_id' => $file->id]);
+        _log($account, "New Logo Uploaded");
+        _log($account, "New Logo Uploaded", null, "File ID $file->id ($file->filename) Size: $file->filesize bytes",
+            LogSeverity::Debug);
         return redirect()->to("/admin/accounts/$account->id");
     }
 
@@ -449,6 +440,7 @@ class AccountController extends Controller
             return redirect()->to("/admin/accounts/$account->id/profile")
                 ->with('error', 'Transaction Declined: ' . $e->getMessage());
         }
+        _log($account, "Payment method added.");
         $account->update(['declined' => 0]);
         return redirect()->back();
     }
@@ -483,6 +475,7 @@ class AccountController extends Controller
     public function updateS3(Account $account, Request $request): RedirectResponse
     {
         $account->update($request->all());
+        _log($account, "S3 credentials updated.");
         return redirect()->back();
     }
 
@@ -507,6 +500,7 @@ class AccountController extends Controller
     public function removeAddon(Account $account, AccountItem $item, AccountAddon $addon): array
     {
         $addon->delete();
+        _log($item, "$addon->name removed from $item->name service.");
         return ['callback' => 'reload'];
     }
 
@@ -541,6 +535,7 @@ class AccountController extends Controller
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
                     ]);
+                    _log($item, "$oitem->name added to $item->name service.");
                 }
                 else
                 {
@@ -553,6 +548,7 @@ class AccountController extends Controller
                         'name'                 => $oitem->name,
                         'account_id'           => $account->id
                     ]);
+                    _log($item, "$oitem->name updated on $item->name service.");
                 }
             } // if match on add_
         }
@@ -583,6 +579,7 @@ class AccountController extends Controller
             'cancel_reason' => $request->reason,
             'active'        => 0
         ]);
+        _log($account, "Account cancelled.");
         return redirect()->to("/admin/accounts");
     }
 
@@ -620,6 +617,7 @@ class AccountController extends Controller
             }
         }
         $account->sendSuspensionNotice();
+        _log($account, "Account suspension scheduled and notice sent.");
         return redirect()->back()->with(['message' => "Suspension Notice Sent"]);
     }
 
@@ -658,6 +656,7 @@ class AccountController extends Controller
             }
         }
         $account->sendTerminationNotice();
+        _log($account, "Service termination scheduled and notice sent.");
         return redirect()->back()->with(['message' => "Termination Notice Sent"]);
     }
 
@@ -671,6 +670,7 @@ class AccountController extends Controller
     {
         $item->update(['suspend_on' => null, 'suspend_reason' => null]);
         $item->sendImmediateSuspension();
+        _log($item, $item->name . " service SUSPENDED.");
         return ['callback' => 'reload'];
     }
 
@@ -684,6 +684,7 @@ class AccountController extends Controller
     {
         $item->update(['terminate_on' => null, 'terminate_reason' => null]);
         $item->sendImmediateTermination();
+        _log($item, $item->name . " service TERMINATED.");
         return ['callback' => 'reload'];
     }
 
@@ -757,6 +758,7 @@ class AccountController extends Controller
             'merchant_ach_aba'       => $request->routing,
             'merchant_ach_account'   => $request->account
         ]);
+        _log($account, "ACH Payment Details Updated.");
         return redirect()->back()->with('message', 'ACH Payment Details Updated');
     }
 
@@ -796,6 +798,7 @@ class AccountController extends Controller
                 }
             }
         }
+        _log($item, "$item->name requirements updated.");
         return redirect()->back()->with('message', "Requirements saved successfully.");
     }
 
@@ -842,6 +845,7 @@ class AccountController extends Controller
             'price'          => $item->type == 'services' ? $item->mrc : $item->nrc,
             'price_children' => $item->type == 'services' ? $item->mrc : $item->nrc,
         ]);
+        _log($account, "$item->name added for special pricing.");
         return redirect()->back()->with('message', $item->name . " Added for Special Pricing");
     }
 
@@ -855,6 +859,7 @@ class AccountController extends Controller
     public function pricingUpdate(Account $account, AccountPricing $item, Request $request): array
     {
         $item->update([$request->name => convertMoney($request->value)]);
+        _log($account, $item->item->name . " special pricing updated.");
         return ['success' => true];
     }
 
@@ -868,6 +873,7 @@ class AccountController extends Controller
     {
         session()->flash('message', $item->item->name . " removed from special pricing.");
         $item->delete();
+        _log($account, $item->item->name . " removed special pricing.");
         return ['callback' => 'reload'];
     }
 

@@ -3,13 +3,12 @@
 namespace App\Models;
 
 use App\Enums\Core\BillFrequency;
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property float     $allowed_overage
- * @property int       $allowed_qty
  * @property mixed     $addons
  * @property mixed     $account
  * @property mixed     $item
@@ -20,11 +19,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class AccountItem extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
     public    $dates   = ['next_bill_date', 'suspend_on', 'terminate_on', 'requested_termination_date'];
     public    $casts   = [
         'frequency'    => BillFrequency::class,
         'meta'         => 'json'
+    ];
+
+    public array $tracked = [
+        'allowed_overage' => "Allowed Overage",
+        'allowed_qty'     => "Allowed Quantity",
+        'addons'          => "Addons",
+        'account'         => "Account",
+        'item'            => "Item",
+        'meta'            => "Meta",
+        'qty'             => "Quantity",
+        'quote'           => "Quote",
+        'price'           => "Price",
     ];
 
     /**

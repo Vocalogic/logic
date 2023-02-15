@@ -3,7 +3,7 @@
     "/admin/accounts/$account->id" => $account->name,
     'Quotes'
 
-]])
+], 'log' => $account->logLink])
 @section('content')
     <div class="row">
         <div class="col-lg-2 col-xs-12">

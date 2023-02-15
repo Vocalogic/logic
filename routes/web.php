@@ -271,6 +271,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('category/{cat}/items/{item}/marketing', [BillItemController::class, 'marketing']);
 
     ## Bill Item Subroutes
+    Route::get('category/{cat}/items/{item}/ai', [BillItemController::class, 'ai']);
     Route::get('category/{cat}/items/{item}/respec', [BillItemController::class, 'respec']);
     Route::get('category/{cat}/items/{item}/specs', [BillItemController::class, 'specs']);
     Route::put('category/{cat}/items/{item}/specs', [BillItemController::class, 'specsUpdate']);

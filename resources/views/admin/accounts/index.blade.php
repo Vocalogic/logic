@@ -53,7 +53,8 @@
             </a>
         </div>
         <div class="col-lg-10 col-xs-12">
-            @include('admin.accounts.list')
+            @livewire('iterators.account-iterator-component')
+
         </div>
     </div>
 @endsection

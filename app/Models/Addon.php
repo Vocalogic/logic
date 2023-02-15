@@ -14,6 +14,17 @@ class Addon extends Model
     protected $guarded = ['id'];
 
     /**
+     * Define our array of tracked changes. This will be used for the
+     * logging class to optional compare a previous instance of an
+     * object before it was changed and print human-readable changes.
+     * @var array
+     */
+    public array $tracked = [
+      'name'         => "Addon Name",
+      'description'  => "Description",
+    ];
+
+    /**
      * Addons have many options.
      * @return HasMany
      */
