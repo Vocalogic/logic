@@ -84,6 +84,10 @@ class Account extends Model
         'merchant_metadata' => 'json'
     ];
 
+    public $attributes = [
+      'mrr', 'account_balance'
+    ];
+
     /**
      * When showing the log entries for an account, we want to
      * add the item logs as well.

@@ -40,28 +40,7 @@ class AccountController extends Controller
      */
     public function index(Request $request): View
     {
-        if ($request->show == 'mrr')
-        {
-            $accounts = Account::where('id', '>', 1)
-                ->where('active', 1)
-                ->has('items')
-                ->get();
-        }
-        elseif ($request->show == 'nrc')
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 1)->doesntHave('items')->get();
-
-        }
-        elseif ($request->show == 'inactive')
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 0)->get();
-
-        }
-        else
-        {
-            $accounts = Account::where('id', '>', 1)->where('active', 1)->get();
-        }
-        return view('admin.accounts.index', ['accounts' => $accounts]);
+        return view('admin.accounts.index');
     }
 
     /**
