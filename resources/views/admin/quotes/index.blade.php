@@ -16,7 +16,9 @@
                     </div>
                 </div>
             @else
-                @include('admin.quotes.list')
+                <div class="mt-3">
+                @livewire('iterators.quote-iterator-component')
+                </div>
             @endif
         </div>
     </div>

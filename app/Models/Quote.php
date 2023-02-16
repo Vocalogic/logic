@@ -48,6 +48,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed        $status
  * @property mixed        $tax
  * @property mixed        $finance_quote_id
+ * @property mixed        $created_at
  *
  */
 class Quote extends Model
@@ -151,6 +152,15 @@ class Quote extends Model
     }
 
     /**
+     * Get Total Value Attribute
+     * @return float
+     */
+    public function getTotalValueAttribute(): float
+    {
+        return $this->analysis->profit;
+    }
+
+    /**
      * Get number of items to invoice that don't have financing./
      * @return int
      */
@@ -236,6 +246,15 @@ class Quote extends Model
     public function getAnalysisAttribute(): object
     {
         return AnalysisEngine::byQuote($this);
+    }
+
+    /**
+     * Get how old this quote is
+     * @return int
+     */
+    public function getAgeAttribute(): int
+    {
+        return $this->created_at->diffInDays();
     }
 
     /**

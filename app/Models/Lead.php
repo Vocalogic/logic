@@ -33,6 +33,7 @@ use LogicException;
  * @property mixed $status
  * @property mixed $finance_customer_id
  * @property mixed $taxable
+ * @property mixed $created_at
  */
 class Lead extends Model
 {
@@ -150,6 +151,15 @@ class Lead extends Model
     public function origin(): BelongsTo
     {
         return $this->belongsTo(LeadOrigin::class, 'lead_origin_id');
+    }
+
+    /**
+     * Get the age of the lead in days.
+     * @return int
+     */
+    public function getAgeAttribute(): int
+    {
+        return $this->created_at->diffInDays();
     }
 
     /**

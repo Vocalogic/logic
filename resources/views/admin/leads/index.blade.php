@@ -25,7 +25,7 @@
             @include('admin.leads.statusbar')
         </div>
         <div class="col-lg-10 mt-2">
-            @include('admin.leads.list')
+           @livewire('iterators.lead-iterator-component')
         </div>
     </div>
 
