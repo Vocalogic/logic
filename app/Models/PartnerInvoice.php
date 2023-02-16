@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class PartnerInvoice extends Model
 {
     protected $guarded = ['id'];
-    public $dates = ['paid_on'];
+    public $casts = ['paid_on' => 'datetime'];
     public $appends = ['total'];
 
     /**

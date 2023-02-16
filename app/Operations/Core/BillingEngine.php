@@ -46,16 +46,16 @@ class BillingEngine
                 info("Invoice #$invoice->id is past due. Sending to Notification routine.");
                 $invoice->sendPastDueNotification(); // Method will handle checks.
                 // #147 - Check Suspension and Termination Notices
-                if (now()->diffInDays($invoice->due_on) > setting('invoices.terminationDays'))
+                if (now()->diffInDays($invoice->due_on) > (int) setting('invoices.terminationDays'))
                 {
                     $invoice->sendTerminationNotice();
                     continue; // don't send suspension again. (or try to)
                 }
-                if (now()->diffInDays($invoice->due_on) > setting('invoices.suspensionDays'))
+                if (now()->diffInDays($invoice->due_on) > (int) setting('invoices.suspensionDays'))
                 {
                     $invoice->sendSuspensionNotice();
                 }
-                $lateFeeTarget = $invoice->due_on->addDays(setting('invoices.lateFeeDays'));
+                $lateFeeTarget = $invoice->due_on->addDays((int) setting('invoices.lateFeeDays'));
                 if (!$invoice->account->impose_late_fee) continue; // only if this account has late fees enabled.
                 if (now() >= $lateFeeTarget)
                 {

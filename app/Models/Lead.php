@@ -40,7 +40,7 @@ class Lead extends Model
     use HasLogTrait;
 
     protected    $guarded = ['id'];
-    public       $dates   = ['forecast_date'];
+    public       $casts   = ['forecast_date' => 'datetime'];
     public array $tracked = [
         'company'            => "Company Name",
         'contact'            => "Primary Contact",

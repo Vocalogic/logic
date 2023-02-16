@@ -8,7 +8,6 @@ use App\Models\Activity;
 use App\Models\Lead;
 use App\Models\LOFile;
 use App\Models\Order;
-use App\Models\Provisioning;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
@@ -28,7 +27,6 @@ class ActivityComponent extends Component
     public Lead         $lead;
     public Account      $account;
     public Order        $order;
-    public Provisioning $provisioning;
     public bool         $guest       = false;
     public bool         $private     = false;
     public bool         $partnerMode = false;
@@ -57,7 +55,6 @@ class ActivityComponent extends Component
             'LEAD' => $this->lead->id,
             'ACCOUNT' => $this->account->id,
             'ORDER' => $this->order->id,
-            'PROV' => $this->provisioning->id,
             default => 0
         };
     }
@@ -80,10 +77,6 @@ class ActivityComponent extends Component
         elseif (isset($this->order))
         {
             $this->mode = 'ORDER';
-        }
-        elseif (isset($this->provisioning))
-        {
-            $this->mode = "PROV";
         }
 
         if (isset($this->lead) && $this->lead->partner)

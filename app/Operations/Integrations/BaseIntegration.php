@@ -67,7 +67,11 @@ abstract class BaseIntegration
     {
         $i = IntegrationModel::where('ident', $this->ident->value)->first();
         $reqs = $this->getRequired();
-        $exists = (object) $i->data ?? (object) [];
+        $exists = (object) $i->data;
+        if (empty($exists))
+        {
+            $exists = (object) [];
+        }
         // Scan for new additions.
         foreach ($reqs as $req)
         {

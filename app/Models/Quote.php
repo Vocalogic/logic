@@ -55,9 +55,14 @@ class Quote extends Model
 {
     use SoftDeletes, HasLogTrait;
 
-    protected    $guarded = ['id'];
-    protected    $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];
-    public array $tracked = [
+    protected       $guarded = ['id'];
+    protected $casts   = [
+        'sent_on'          => 'datetime',
+        'expires_on'       => 'datetime',
+        'contract_expires' => 'datetime',
+        'activated_on'     => 'datetime'
+    ];
+    public array    $tracked = [
         'name'             => "Quote Name",
         'status'           => "Status",
         'archived'         => "Archived State",
@@ -193,7 +198,7 @@ class Quote extends Model
             if (!$product->frequency || !$product->payments) continue; // Only count financed
             $total += $product->frequency->splitTotal($product->qty * $product->price, $product->payments);
         }
-        return bcmul($total, 1);
+        return (int) bcmul($total, 1);
     }
 
     /**
@@ -218,7 +223,7 @@ class Quote extends Model
             if ($product->frequency && $product->payments) continue; // Don't count financed
             $total += ($product->price * $product->qty) + $product->addonTotal;
         }
-        return bcmul($total, 1);
+        return (int) bcmul($total, 1);
     }
 
     /**

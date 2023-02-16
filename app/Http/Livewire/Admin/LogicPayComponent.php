@@ -34,7 +34,7 @@ class LogicPayComponent extends Component
     public function render(): View
     {
         $this->validExpiration = (strlen($this->expiration) == 4 && is_numeric($this->expiration));
-        $this->validPostal = strlen($this->postal) == 5 & is_numeric($this->postal);
+        $this->validPostal = strlen($this->postal) == 5 && is_numeric($this->postal);
         $this->validCVV = strlen($this->cvv) > 2 && is_numeric($this->cvv);
         $this->canAttempt = $this->validExpiration && $this->validPostal && $this->validCVV && $this->token;
         return view('admin.accounts.billing.logic_component');

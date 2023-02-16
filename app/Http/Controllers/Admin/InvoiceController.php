@@ -177,12 +177,11 @@ class InvoiceController extends Controller
             $due = Carbon::parse($request->due_on);
             $invoice->update(['due_on' => $due]);
             _log($invoice, "Invoice Updated", $old);
-            return redirect()->back()->with('message', "Due date updated successfully.");
         } catch (\Exception $e)
         {
             throw new \LogicException("Unable to set due date - " . $e->getMessage());
         }
-        return redirect()->back();
+        return redirect()->back()->with('message', "Due date updated successfully.");
     }
 
     /**

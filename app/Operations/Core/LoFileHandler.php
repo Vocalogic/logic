@@ -61,7 +61,7 @@ class LoFileHandler
             Storage::disk(self::DISK)->put($finalLocation, base64_decode($baseData));
         } catch (Exception $e)
         {
-            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", null, null, LogSeverity::Error);
             return null;
         }
         return (new LOFile)->create([
@@ -114,7 +114,7 @@ class LoFileHandler
             Storage::disk(self::DISK)->putFileAs($location, $request->file($key), $real);
         } catch (Exception $e)
         {
-            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", null, null, LogSeverity::Error);
             return null;
         }
         return (new LOFile)->create([
