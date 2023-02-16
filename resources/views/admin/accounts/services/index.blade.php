@@ -99,7 +99,7 @@
                                                     @endforeach
                                                 @endif
                                             </td>
-                                            <td>${{moneyFormat($item->price)}}</td>
+                                           <td>${{moneyFormat($item->price)}} {!! $item->variationDetail !!}</td>
                                             <td>{{$item->qty}}</td>
                                             <td><b>${{moneyFormat(($item->price * $item->qty) + $item->addonTotal)}}</b></td>
                                         </tr>
