@@ -26,9 +26,7 @@ class QuoteController extends Controller
      */
     public function index(): View
     {
-        // Showing all quotes
-        $quotes = Quote::where('archived', false)->get();
-        return view('admin.quotes.index', ['quotes' => $quotes]);
+        return view('admin.quotes.index');
     }
 
     /**

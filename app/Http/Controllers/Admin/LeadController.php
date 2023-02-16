@@ -260,6 +260,7 @@ class LeadController extends Controller
                 "Remote Finance Customer ID: $lead->finance_customer_id", LogSeverity::Debug);
             Finance::removeLead($lead);
         }
+        $lead->quotes()->update(['archived' => true]);
         return redirect()->to("/admin/leads");
     }
 
