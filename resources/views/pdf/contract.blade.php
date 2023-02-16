@@ -180,7 +180,7 @@
 
             <h4>BY: {{$quote->contract_name}}</h4>
             <h4>IP: {{$quote->contract_ip}}</h4>
-            {!! \App\Operations\Core\Signature::renderImage($quote->signature) !!}
+            <img src="{{_file($quote->signature_id)->internal}}">
         </div>
         <div class="right">
             <h3>{{setting('brand.name')}}</h3>
