@@ -10,7 +10,6 @@ use App\Models\AccountItem;
 use App\Models\Activity;
 use App\Models\HardwareOrder;
 use App\Models\Lead;
-use App\Models\LNPOrder;
 use App\Models\Provisioning;
 use App\Models\Shipment;
 use Carbon\Carbon;
@@ -62,22 +61,6 @@ class EventController extends Controller
             }
         }
 
-        // Get LNP Events
-        foreach (LNPOrder::where('active', true)->whereNotNull('foc')->get() as $lnp)
-        {
-            $events[] = (object)[
-                'title' => "FOC: {$lnp->order->account->name}",
-                'start' => $lnp->foc->format("Y-m-d"),
-                'url'   => sprintf("%s/admin/accounts/%d/orders/%d", setting('brand.url'), $lnp->order->account->id,
-                    $lnp->order->id),
-                'color' => "#a2b4c5",
-                'popup' => (object)[
-                    'title'  => $lnp->order->account->name,
-                    'descri' => "LNP Order #$lnp->id completes on this day. Ensure number(s) are configured before 10:30am ET"
-                ],
-            ];
-        }
-
         // Get Shipment Arrivals
         foreach (Shipment::where('active', true)->whereNotNull('expected_arrival')->get() as $hw)
         {
@@ -93,19 +76,6 @@ class EventController extends Controller
             ];
         }
 
-        foreach(Provisioning::where('active', true)->whereNotNull('install_date')->get() as $prov)
-        {
-            $events[] = (object)[
-                'title' => "INST: {$prov->order->account->name}",
-                'start' => $prov->install_date->format("Y-m-d"),
-                'url'   => sprintf("%s/admin/provisionings/%d", setting('brand.url'), $prov->id),
-                'color' => "#18ab94",
-                'popup' => (object)[
-                    'title'  => $prov->order->account->name,
-                    'descri' => "Installation/Go-Live for Phone Service"
-                ],
-            ];
-        }
         // Suspension of Services
         $list = [];
         foreach(AccountItem::whereNotNull('suspend_on')->get() as $item)
@@ -177,24 +147,6 @@ class EventController extends Controller
                 'url'   => sprintf("%s/admin/accounts/%d", setting('brand.url'), $event->refid),
                 'color' => "#a1b2e3"
             ];
-        }
-
-        // Get LNP Events
-        foreach (LNPOrder::with(['order'])->where('active', true)->whereNotNull('foc')->get() as $lnp)
-        {
-            if ($lnp->order->account->id == $account->id)
-            {
-                $events[] = (object)[
-                    'title' => "FOC: {$lnp->order->account->name}",
-                    'start' => $lnp->foc->format("Y-m-d"),
-                    'url'   => sprintf("%s/admin/accounts/%d", setting('brand.url'), $lnp->order->account->id),
-                    'color' => "#a2b4c5",
-                    'popup' => (object)[
-                        'title'  => $lnp->order->account->name,
-                        'descri' => "LNP Order #$lnp->id completes on this day. Ensure number(s) are configured before 10:30am ET"
-                    ],
-                ];
-            }
         }
 
         // Get Hardware Arrival Events

@@ -18,8 +18,7 @@ class Commission extends Model
     use HasLogTrait;
     protected $guarded = ['id'];
 
-    public       $casts   = ['status' => CommissionStatus::class];
-    public       $dates   = ['scheduled_on'];
+    public       $casts   = ['status' => CommissionStatus::class, 'scheduled_on' => 'datetime'];
     public array $tracked = [
         'status'              => "Commission Status|enum",
         'scheduled_on'        => "Commission Scheduled",

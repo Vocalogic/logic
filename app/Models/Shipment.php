@@ -27,13 +27,10 @@ class Shipment extends Model
     protected $guarded = ['id'];
 
     public $casts = [
-        'status' => ShipmentStatus::class,
-    ];
-
-    public $dates = [
-        'shipped_on',
-        'submitted_on',
-        'expected_arrival'
+        'status'           => ShipmentStatus::class,
+        'shipped_on'       => 'datetime',
+        'submitted_on'     => 'datetime',
+        'expected_arrival' => 'datetime'
     ];
 
     /**

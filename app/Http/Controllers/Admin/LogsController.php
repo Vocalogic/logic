@@ -2,13 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\Core\LogSeverity;
-use App\Http\Controllers\Controller;
-use App\Models\Account;
 use App\Models\AppLog;
-use Illuminate\Contracts\View\View;
-use Illuminate\Database\Eloquent\Builder;
+use App\Http\Controllers\Controller;
 use App\Operations\Core\LogOperation;
+use Illuminate\Contracts\View\View;
 
 class LogsController extends Controller
 {

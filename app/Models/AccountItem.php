@@ -9,23 +9,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property mixed     $addons
- * @property mixed     $account
- * @property mixed     $item
- * @property mixed     $meta
- * @property mixed     $qty
- * @property mixed     $quote
- * @property mixed     $price
+ * @property mixed $addons
+ * @property mixed $account
+ * @property mixed $item
+ * @property mixed $meta
+ * @property mixed $qty
+ * @property mixed $quote
+ * @property mixed $price
  */
 class AccountItem extends Model
 {
     use HasLogTrait;
 
     protected $guarded = ['id'];
-    public    $dates   = ['next_bill_date', 'suspend_on', 'terminate_on', 'requested_termination_date'];
     public    $casts   = [
-        'frequency'    => BillFrequency::class,
-        'meta'         => 'json'
+        'frequency'                  => BillFrequency::class,
+        'meta'                       => 'json',
+        'next_bill_date'             => 'datetime',
+        'suspend_on'                 => 'datetime',
+        'terminate_on'               => 'datetime',
+        'requested_termination_date' => 'datetime'
     ];
 
     public array $tracked = [
@@ -116,15 +119,14 @@ class AccountItem extends Model
      */
     public function getPayoffAmountAttribute(): float
     {
-        if (!$this->quote) return 0; // No contracted quote
+        if (!$this->quote) return 0;           // No contracted quote
         if ($this->quote->term <= 0) return 0; // Contract has no term. MTM.
         $endOfContract = $this->quote->contract_expires;
         $monthsBetween = now()->diffInMonths($endOfContract);
         $totalGross = ($this->price * $this->qty) * $monthsBetween;
-        $percOwed = (int) setting('account.term_payoff') / 100; // 80 = .8
+        $percOwed = (int)setting('account.term_payoff') / 100; // 80 = .8
         return $totalGross * $percOwed;
     }
-
 
 
     /**

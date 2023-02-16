@@ -107,7 +107,7 @@ abstract class LwTableComponent extends Component
             });
         }
         $this->maxRecords = $collection->count();
-        $this->maxPages = ceil($this->maxRecords / $this->rowsPerPage);
+        $this->maxPages = (int) ceil($this->maxRecords / $this->rowsPerPage);
         $collection = $collection->take($this->rowsPerPage);
         $active = $this->activePage - 1; // For skipping we want page 1 to be 0 so it skips nothing.
         $skipRecords = $active * $this->rowsPerPage;

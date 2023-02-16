@@ -25,15 +25,6 @@ class BillItemCategoryController extends Controller
         return view('admin.bill_categories.index')->with('type', $type);
     }
 
-    /**
-     * Show Create Form
-     * @param string $type
-     * @return View
-     */
-    public function create(string $type): View
-    {
-        return view('admin.bill_categories.create')->with('type', $type)->with('cat', new BillCategory);
-    }
 
     /**
      * Show Edit Form

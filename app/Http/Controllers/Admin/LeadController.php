@@ -22,30 +22,11 @@ class LeadController extends Controller
 {
     /**
      * Show leads board
-     * @param Request $request
      * @return View
      */
-    public function index(Request $request): View
+    public function index(): View
     {
-        $hasPartners = Partner::count() > 0;
-        if (!$request->status)
-        {
-            $leads = Lead::where('active', true)->get();
-        }
-        else
-        {
-            $leads = Lead::where('lead_status_id', $request->status)->get();
-        }
-        return view('admin.leads.index', ['hasPartners' => $hasPartners, 'leads' => $leads]);
-    }
-
-    /**
-     * Show create form for new lead.
-     * @return View
-     */
-    public function create(): View
-    {
-        return view('admin.leads.create')->with('lead', new Lead);
+        return view('admin.leads.index');
     }
 
     /**
@@ -270,6 +251,7 @@ class LeadController extends Controller
                 "Remote Finance Customer ID: $lead->finance_customer_id", LogSeverity::Debug);
             Finance::removeLead($lead);
         }
+        $lead->quotes()->update(['archived' => true]);
         return redirect()->to("/admin/leads");
     }
 
