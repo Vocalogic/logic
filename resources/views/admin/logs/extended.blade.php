@@ -16,7 +16,7 @@
             <div class="card">
                 <h6 class="card-title mb-3 pt-2 text-center fs-6">Filter by date</h6>
 
-                <form action="" class="mb-2">
+                <form action="{{ request()->url() }}" class="mb-2">
                     <fieldset class="form-icon-group left-icon position-relative">
                         <input
                             type="text"
@@ -25,8 +25,9 @@
                             placeholder="Start date"
                             data-role="datepicker"
                             data-provide="datepicker"
+                            data-date-autoclose="true"
                             data-date-format="mm/dd/yyyy"
-                            value="{{ old('start_date') }}"
+                            value="{{ Request::get('start_date') }}"
                         >
                         <div class="form-icon position-absolute">
                             <i class="fa fa-calendar"></i>
@@ -41,8 +42,9 @@
                             placeholder="End date"
                             data-role="datepicker"
                             data-provide="datepicker"
+                            data-date-autoclose="true"
                             data-date-format="mm/dd/yyyy"
-                            value="{{ old('end_date') }}"
+                            value="{{ Request::get('end_date') }}"
                         >
                         <div class="form-icon position-absolute">
                             <i class="fa fa-calendar"></i>
@@ -50,7 +52,7 @@
                     </fieldset>
 
                     <fieldset class="mt-2">
-                        <button class="btn btn-primary pull-right d-block w-100" type="submit">
+                        <button class="btn btn-primary d-block w-100" type="submit">
                             Search
                         </button>
                     </fieldset>

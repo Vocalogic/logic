@@ -27,7 +27,6 @@ class LogsController extends Controller
     public function extendedView(string $model, int $id, LogOperation $service): View
     {
         return view('admin.logs.extended', [
-          'logs' => AppLog::all(),
           'modelName' => ucfirst($model),
           'entity' => $service->loadModel($model, $id)
         ]);

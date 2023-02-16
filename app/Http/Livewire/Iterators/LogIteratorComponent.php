@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Iterators;
 
 use App\Http\Livewire\Admin\LwTableComponent;
 use App\Models\AppLog;
+use Illuminate\Support\Carbon;
 
 class LogIteratorComponent extends LwTableComponent
 {
@@ -35,19 +36,31 @@ class LogIteratorComponent extends LwTableComponent
     public string $model = AppLog::class;
 
     /**
+     * this is for url query filters
+     */
+    public array $filter;
+
+    /**
+     * initialization
+     */
+    public function mount()
+    {
+        $this->filter = request()->all();
+    }
+
+    /**
      * By default we only want active accounts being shown.
      * @param $collection
-     * @return mixed
      */
     public function preFilters($collection): mixed
     {
-        if (request()->filled('start_date'))
+        if (!empty($this->filter['start_date']))
         {
-            $collection->where('created_at', '>=', request()->start_date);
+            $collection = $collection->whereDate('created_at', '>=', Carbon::createFromFormat('m/d/Y', $this->filter['start_date']));
         }
-        if (request()->filled('end_date'))
+        if (!empty($this->filter['end_date']))
         {
-            $collection->where('created_at', '<=', request()->end_date);
+            $collection = $collection->whereDate('created_at', '<=', Carbon::createFromFormat('m/d/Y', $this->filter['end_date']));
         }
         return $collection;
     }
