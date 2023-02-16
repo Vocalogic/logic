@@ -16,6 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $qty
  * @property mixed $quote
  * @property mixed $price
+ * @property mixed $bill_item_id
+ * @property mixed $globalDifference
  */
 class AccountItem extends Model
 {
@@ -109,6 +111,49 @@ class AccountItem extends Model
     public function getNameAttribute(): string
     {
         return $this->item->name;
+    }
+
+
+    /**
+     * This attribute will look at the price of the given account item
+     * and then compare against the other account's with the same item
+     * and determine how much higher or lower we are percentage wise.
+     * @return array
+     */
+    public function getGlobalDifferenceAttribute(): array
+    {
+        $count = 0; // We want to include qty with this too as it is important.
+        $totalCost = 0;
+        foreach (self::where('bill_item_id', $this->bill_item_id)->get() as $item)
+        {
+            $count += $item->qty;
+            $totalCost += (int)bcmul($item->qty * $item->price, 1);
+        }
+        if ($count == 0) return 0; // Don't divide by 0. (Not sure how we would but..)
+        $average = (int)bcmul($totalCost / $count, 1);
+        $diff = (($this->price - $average) / $average) * 100;
+        return ['perc' => (int)bcmul($diff, 1), 'average' => $average];
+    }
+
+    /**
+     * Take the item's price and compare it with another bill item
+     * and return the percentage of increase or decrease along with
+     * a tooltip that says what the average price sold for this customer
+     * has been.
+     * @return string|null
+     */
+    public function getVariationDetailAttribute(): ?string
+    {
+        $diff = $this->globalDifference;
+        $diffPerc = $diff['perc'];
+        $average = $diff['average'];
+        $less = $diffPerc < 0;
+        $text = sprintf("Average Price: $%s", moneyFormat($average));
+        $icon = $less ? "chevron-down" : "chevron-up"; // Set visual icon
+        $color = $less ? "warning" : "success";        // Set color
+        if ($diffPerc == 0) return null;
+        return "<span class='small fs-7 text-$color' data-bs-toggle='tooltip' data-bs-placement='top' title='$text'>
+            <i class='fa fa-$icon text-$color'></i>{$diffPerc}%</span>";
     }
 
     /**
