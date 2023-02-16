@@ -83,7 +83,7 @@ class Account extends Model
         'merchant_metadata' => 'json',
         'next_bill'         => 'datetime'
     ];
-    public    $attributes = [
+    public    $appends = [
         'mrr',
         'account_balance'
     ];
