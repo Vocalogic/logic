@@ -2,28 +2,15 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-
-**Logic** is an open source project started by Chris Horne ([@devhorne](https://www.twitter.com/devhorne)), initially to
-manage the day to day business process for [Vocalogic](https://www.vocalogic.com), A business telephone/VOIP Provider in
-Atlanta, GA.
-
-We wanted potential customers to be able to browse a shop, pick products and services, generate a quote and either
-download the quote or start services completely unassisted. We also needed flexible automated billing, financing
-options, contract signing and more. Vocal (the phone side) and Logic (the business process) prides itself
-on efficiency for admins to perform tasks, and customer experience for the end user.
-
-#### Development Staging Deployment Status
 [![Laravel Forge Site Deployment Status](https://img.shields.io/endpoint?url=https%3A%2F%2Fforge.laravel.com%2Fsite-badges%2F572f2ddb-50ec-4651-bb97-ea16be33f51e%3Fdate%3D1%26commit%3D1&style=for-the-badge)](https://forge.laravel.com)
 
 
-If you are a developer contributing to the project, the deployment status to staging is shown above. As features 
-are merged into the *develop* branch, they will be auto-deployed to the staging environment. 
+**Logic** is an free open source project that provides an easy to use ecommerce platform for your customers to browse
+your shop, add monthly and one-time products to your cart, optionally sign service contracts, checkout and create an
+account.
 
-#### Who is Logic For?
-
-Logic is designed for anyone that runs a service-based business, that needs a way to track leads, quotes,
-automate billing, take credit cards, process ACH transactions, and give their customers a portal to login and
-review their services, pay invoices, or get help.
+Logic's administrative tools allows for product catalog management, instant cost profit analysis inspection, 
+credit card and ACH integrations, monthly billing and cash flow tools to help streamline your business processes.
 
 #### Product Catalog Example
 ![catalog]( https://www.vocalogic.com/images/catalog.png "Product Catalog Entry")
@@ -52,7 +39,7 @@ review their services, pay invoices, or get help.
 
 ### Check out the [live demo here](https://demo.logic.host/login).
 
-This project was written using [Laravel 9](https://www.laravel.com), and PHP 8.2.
+This project was written using [Laravel 10](https://www.laravel.com), and PHP 8.2.
 
 ### Cloud Hosting and Management
 
