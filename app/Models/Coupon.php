@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Coupon extends Model
 {
     protected $guarded = ['id'];
-    public $dates = ['start', 'end'];
+    public $casts = ['start' => 'datetime', 'end' => 'datetime'];
 
     /**
      * A coupon can have many bill items assigned to it

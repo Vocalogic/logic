@@ -9,7 +9,7 @@ class Metric extends Model
 {
     protected $guarded = ['id'];
 
-    public $dates = ['stamp'];
+    public $casts = ['stamp' => 'datetime'];
     /**
      * A metric belongs to an account
      * @return BelongsTo

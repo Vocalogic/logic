@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
 class Partner extends Model
 {
     protected $guarded = ['id'];
-    public    $dates   = ['invited_on', 'accepted_on'];
+    protected $casts   = ['invited_on' => 'datetime', 'accepted_on' => 'datetime'];
 
     /**
      * Get Commission In Human Readable
@@ -216,7 +216,7 @@ class Partner extends Model
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function checkCommissions() : void
+    public function checkCommissions(): void
     {
         $p = new PartnerConnect($this);
         $p->checkCommissions();
@@ -227,7 +227,7 @@ class Partner extends Model
      * @return array
      * @throws GuzzleException
      */
-    public function getRemoteCommissions() : array
+    public function getRemoteCommissions(): array
     {
         try
         {
@@ -246,7 +246,7 @@ class Partner extends Model
      * @return object
      * @throws GuzzleException
      */
-    public function getRemoteCommission(int $id) : object
+    public function getRemoteCommission(int $id): object
     {
         try
         {
@@ -256,6 +256,6 @@ class Partner extends Model
         {
             info("Could not retrieve invoice: " . $e->getMessage());
         }
-        return (object) [];
+        return (object)[];
     }
 }

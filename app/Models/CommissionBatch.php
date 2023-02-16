@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class CommissionBatch extends Model
 {
     protected $guarded = ['id'];
-    public $dates = ['paid_on'];
+    public $casts = ['paid_on' => 'datetime'];
 
     /**
      * A batch has many commissions.

@@ -55,9 +55,14 @@ class Quote extends Model
 {
     use SoftDeletes, HasLogTrait;
 
-    protected    $guarded = ['id'];
-    protected    $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];
-    public array $tracked = [
+    protected       $guarded = ['id'];
+    protected $casts   = [
+        'sent_on'          => 'datetime',
+        'expires_on'       => 'datetime',
+        'contract_expires' => 'datetime',
+        'activated_on'     => 'datetime'
+    ];
+    public array    $tracked = [
         'name'             => "Quote Name",
         'status'           => "Status",
         'archived'         => "Archived State",

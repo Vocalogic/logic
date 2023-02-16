@@ -77,15 +77,15 @@ class Account extends Model
 {
     use HasLogTrait;
 
-    protected $guarded = ['id'];
-    public    $dates   = ['next_bill'];
-    public    $casts   = [
+    protected $guarded    = ['id'];
+    public    $casts      = [
         'payment_method'    => PaymentMethod::class,
-        'merchant_metadata' => 'json'
+        'merchant_metadata' => 'json',
+        'next_bill'         => 'datetime'
     ];
-
-    public $attributes = [
-      'mrr', 'account_balance'
+    public    $attributes = [
+        'mrr',
+        'account_balance'
     ];
 
     /**
