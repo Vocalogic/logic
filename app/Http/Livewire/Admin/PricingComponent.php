@@ -124,7 +124,6 @@ class PricingComponent extends Component
      */
     private function fromMSRP(): void
     {
-
         if ($this->variance <= 0) $this->sellingPrice = $this->item->msrp;
         $baseVariance = $this->item->msrp * ($this->variance / 100);
         $this->sellingPrice = $this->item->msrp - $baseVariance;
@@ -142,6 +141,7 @@ class PricingComponent extends Component
      */
     private function determineProfit(): void
     {
+        if ($this->sellingPrice == 0) return;
         $cost = $this->item->type == 'products' ? $this->item->ex_capex : $this->item->ex_opex;
         $diff = $this->sellingPrice - $cost;
         $this->profitAmount = $diff;
