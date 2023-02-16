@@ -30,15 +30,6 @@ class LeadController extends Controller
     }
 
     /**
-     * Show create form for new lead.
-     * @return View
-     */
-    public function create(): View
-    {
-        return view('admin.leads.create')->with('lead', new Lead);
-    }
-
-    /**
      * Show Lead
      * @param Lead    $lead
      * @param Request $request

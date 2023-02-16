@@ -96,7 +96,7 @@ class QBOInvoice extends QBOCore
             $line->SalesItemLineDetail->Qty = $item->qty;
             $line->SalesItemLineDetail->UnitPrice = moneyFormat($item->price, false);
             $line->Description = $nameFormatted;
-            $line->Amount = moneyFormat(bcmul($item->qty * $item->price,1), false);
+            $line->Amount = moneyFormat((int) bcmul($item->qty * $item->price,1), false);
             // Finally add it to our array.
             $lines[] = $line;
         }

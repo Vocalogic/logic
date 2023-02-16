@@ -9,17 +9,17 @@ class QuoteIteratorComponent extends LwTableComponent
 {
     /**
      * Define text array headers for our table.
-     * @var array|string[]
+     * @var array
      */
     public array $headers = [
-        '#'      => ['id'],
+        '#'       => ['id'],
         'Name'    => ['name'],
-        'Age' => ['age|computed'],
-        'MRR' => ['mrr|computed'],
-        'NRC'  => ['nrc|computed'],
-        'Term'     => ['term'],
-        'Value'     => ['totalValue|computed'],
-        'Actions'    => []
+        'Age'     => ['age|computed'],
+        'MRR'     => ['mrr|computed'],
+        'NRC'     => ['nrc|computed'],
+        'Term'    => ['term'],
+        'Value'   => ['totalValue|computed'],
+        'Actions' => []
     ];
 
     /**

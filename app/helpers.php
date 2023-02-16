@@ -231,7 +231,7 @@ if (!function_exists('setting'))
         } catch (Exception $e)
         {
             info("Failure to send email: " . $e->getMessage());
-            _log(user(), "Failure to send email: " . $e->getMessage(), LogSeverity::Error);
+            _log(user(), "Failure to send email: " . $e->getMessage(), null, null, LogSeverity::Error);
         }
         return null;
     }
@@ -643,7 +643,7 @@ if (!function_exists('setting'))
         $value = onlyNumbers($value);
         if (!$value) return 0;
         $value = $value * 100;
-        return bcmul($value,1);
+        return (int) bcmul($value,1);
     }
 
     /**

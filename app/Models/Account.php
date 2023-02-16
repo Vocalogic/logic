@@ -200,15 +200,6 @@ class Account extends Model
     }
 
     /**
-     * An account has one provisioning order for a pbx.
-     * @return HasOne
-     */
-    public function provisioning(): HasOne
-    {
-        return $this->hasOne(Provisioning::class);
-    }
-
-    /**
      * An account can be tied to another partner.
      * @return BelongsTo
      */
@@ -305,7 +296,7 @@ class Account extends Model
             if ($item->frequency && $item->frequency != BillFrequency::Monthly) continue;
             $total += ($item->price * $item->qty) + $item->addonTotal;
         }
-        return bcmul($total, 1);
+        return (int) bcmul($total, 1);
     }
 
     /**

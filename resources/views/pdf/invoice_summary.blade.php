@@ -123,6 +123,7 @@
 
     .table {
         border-collapse: collapse;
+        border-spacing: 15px;
         font-size: 12px;
         font-family: 'Nunito', sans-serif;
     }
@@ -131,8 +132,16 @@
         background-color: #34404f;
         color: #fff;
         font-family: 'Nunito-Bold', sans-serif;
-
     }
+
+    .table td {
+        padding: 10px 0;
+    }
+
+    .table td:last-child{
+        padding-right: 5px;
+    }
+
 
     .table tr:nth-child(even) {
         background-color: #f1f1f1;

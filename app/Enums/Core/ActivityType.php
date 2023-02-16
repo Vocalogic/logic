@@ -5,16 +5,12 @@ namespace App\Enums\Core;
 use App\Models\Account;
 use App\Models\AccountItem;
 use App\Models\Activity;
-use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Order;
-use App\Models\Provisioning;
 use App\Models\Quote;
 use App\Models\Transaction;
-use App\Operations\Integrations\Chat\Chat;
 use ErrorException;
-use Throwable;
 
 enum ActivityType: string
 {
@@ -22,7 +18,6 @@ enum ActivityType: string
     case Lead = "LEAD";
     case Account = "ACCOUNT";
     case Order = "ORDER";
-    case Provisioning = "PROV";
     case LeadQuote = "LEAD_QUOTE";
     case AccountQuote = "ACCOUNT_QUOTE";
     case Invoice = 'INVOICE';
@@ -45,7 +40,6 @@ enum ActivityType: string
             self::Order => "order",
             self::LeadQuote => "quote for a lead",
             self::AccountQuote => "quote for an account",
-            self::Provisioning => "provisioning order",
             self::Invoice => "made a payment on invoice",
             self::InvoiceSend => "sent invoice",
             self::NewTransaction => "paid",
@@ -67,7 +61,6 @@ enum ActivityType: string
             self::Lead => Lead::find($id),
             self::Account => Account::find($id),
             self::Order => Order::find($id),
-            self::Provisioning => Provisioning::find($id),
             self::LeadQuote, self::AccountQuote => Quote::find($id),
             self::Invoice, self::InvoiceSend, self::PastDueNotification => Invoice::find($id),
             self::NewTransaction => Transaction::find($id),
@@ -91,7 +84,6 @@ enum ActivityType: string
                 self::Lead => sprintf("/admin/leads/%d", $id),
                 self::Account => sprintf("/admin/accounts/%d", $id),
                 self::Order => sprintf("/admin/orders/%d", $id),
-                self::Provisioning => sprintf("/admin/provisionings/%d", $id),
                 self::LeadQuote, self::AccountQuote => sprintf("/admin/quotes/%d", $id),
                 self::Invoice, self::PastDueNotification, self::InvoiceSend => sprintf("/admin/invoices/%d", $id),
                 self::NewTransaction => sprintf("/admin/transactions/%d", $id),

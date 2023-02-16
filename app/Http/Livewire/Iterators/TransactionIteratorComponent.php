@@ -9,7 +9,7 @@ class TransactionIteratorComponent extends LwTableComponent
 {
     /**
      * Define text array headers for our table.
-     * @var array|string[]
+     * @var array
      */
     public array $headers = [
         'ID'      => ['id'],

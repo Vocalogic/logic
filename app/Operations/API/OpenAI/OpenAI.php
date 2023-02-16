@@ -76,7 +76,8 @@ class OpenAI
             'marketing' => sprintf("Create a product marketing description, formatted in html, for the following product: '%s' limited to %d paragraphs.",
                 $item->name, $sentences),
             'features' => sprintf("Create a list of %d features without using numbers when defining each feature, separated by a carriage return, for the following product: '%s'",
-                $sentences, $item->name)
+                $sentences, $item->name),
+            default => ''
         };
         return $this->getResponse($query);
     }

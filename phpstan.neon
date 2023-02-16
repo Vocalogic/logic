@@ -15,6 +15,7 @@ parameters:
         - '#Redirector#'
         - '#Access to an undefined property object::#'
         - '#Using nullsafe property access#'
+        - '#bcmul#'
 
     excludePaths:
         - ./*/*/FileToBeExcluded.php

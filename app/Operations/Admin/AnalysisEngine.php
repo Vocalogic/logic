@@ -312,7 +312,6 @@ class AnalysisEngine
         }
         elseif ($invoice->account->agent->agent_comm_spiff > 0 && !$invoice->account->spiffed)
         {
-            if ($invoice->account->spiffed) return 0;
             $amount = $total * $invoice->account->agent->agent_comm_spiff;
         }
         return $amount;
