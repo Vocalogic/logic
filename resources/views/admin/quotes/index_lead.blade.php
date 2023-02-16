@@ -50,8 +50,7 @@
 
                 <a class="btn btn-primary mt-3 mb-2 live" data-title="Create Quote for {{$lead->company}}" href="/admin/quotes/create?lead_id={{$lead->id}}"><i
                         class="fa fa-plus"></i> New Quote</a>
-
-                @include('admin.quotes.list', ['quotes' => $lead->quotes()->where('archived', false)->get()])
+                @livewire('iterators.quote-iterator-component', ['lead' => $lead])
             @endif
         </div>
     </div>

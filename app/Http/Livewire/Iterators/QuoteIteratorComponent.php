@@ -3,10 +3,12 @@
 namespace App\Http\Livewire\Iterators;
 
 use App\Http\Livewire\Admin\LwTableComponent;
+use App\Models\Lead;
 use App\Models\Quote;
 
 class QuoteIteratorComponent extends LwTableComponent
 {
+    public Lead $lead;
     /**
      * Define text array headers for our table.
      * @var array
@@ -40,6 +42,10 @@ class QuoteIteratorComponent extends LwTableComponent
      */
     public function preFilters($collection): mixed
     {
+        if (isset($this->lead) && $this->lead->id)
+        {
+            $collection = $collection->where('lead_id', $this->lead->id);
+        }
         return $collection->where('archived', false);
     }
 
