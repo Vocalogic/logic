@@ -131,6 +131,7 @@ class AccountItem extends Model
         }
         if ($count == 0) return 0; // Don't divide by 0. (Not sure how we would but..)
         $average = (int)bcmul($totalCost / $count, 1);
+        if ($average == 0) return 0; // Don't divide by zero again.
         $diff = (($this->price - $average) / $average) * 100;
         return ['perc' => (int)bcmul($diff, 1), 'average' => $average];
     }
