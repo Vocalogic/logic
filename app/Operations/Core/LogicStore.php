@@ -48,7 +48,7 @@ class LogicStore
     public function get(string $key): mixed
     {
         if (!$this->exists($key)) throw new LogicException("$key does not exist in storage. Use the init() method.");
-        return $this->storage->get($key);
+        return $this->storage->get($key)->value;
     }
 
     /**
@@ -62,8 +62,8 @@ class LogicStore
     public function store(string $key, mixed $value): void
     {
         if (!$this->exists($key)) throw new LogicException("$key does not exist in storage. Use the init() method.");
-        $this->storage->mapWithKeys(function ($item, $keyTarget) use ($value, $key) {
-            if ($key == $keyTarget)
+        $this->storage->map(function ($item) use ($value, $key) {
+            if ($item->key == $key)
             {
                 $item->value = $value;
             }

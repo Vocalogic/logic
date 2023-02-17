@@ -6,6 +6,7 @@ use App\Enums\Core\IntegrationRegistry;
 use App\Exceptions\LogicException;
 use App\Models\Integration;
 use App\Operations\API\APICore;
+use App\Operations\Core\LogicStore;
 use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
@@ -17,14 +18,14 @@ class  QBOCore extends APICore
 {
     const REFRESH_TOKEN = 'QBO_RTOKEN';
     const ACCESS_TOKEN  = 'QBO_ATOKEN';
-    const MINOR_VERSION = 65;
 
     public PaymentClient       $qclient;
     public OAuth2Authenticator $authenticator;
     public string              $mode;
     public string              $scope = "com.intuit.quickbooks.accounting";
     public ?string             $cid;
-    public object $config;
+    public object              $config;
+    public LogicStore          $ls;
 
     /**
      * Build and setup keys
@@ -43,11 +44,14 @@ class  QBOCore extends APICore
             'redirect_uri'  => $this->generateRedirect(),       // Where does QBO redirect when authorized?
             'environment'   => $mode
         ]);
-        if (!cache(self::ACCESS_TOKEN) && cache(SELF::REFRESH_TOKEN))
+        $this->ls = new LogicStore();
+        if (!$this->ls->exists(self::ACCESS_TOKEN))
         {
-            // If we don't have an access token anymore but do have a refresh
-            // token, then use the refresh token to get a new access token.
-            $this->refreshAccessToken();
+            $this->ls->init(self::ACCESS_TOKEN, '', "Quickbooks Online Access Token");
+        }
+        if (!$this->ls->exists(self::REFRESH_TOKEN))
+        {
+            $this->ls->init(self::REFRESH_TOKEN, '', "Quickbooks Online Refresh Token");
         }
     }
 
@@ -103,15 +107,8 @@ class  QBOCore extends APICore
         {
             //Get the keys
             $data = json_decode($res->getBody());
-            cache([
-                self::REFRESH_TOKEN => $data->refresh_token,
-            ], Carbon::now()->addSeconds(8726400));
-            cache([
-                self::ACCESS_TOKEN => $data->access_token,
-            ], Carbon::now()->addSeconds(3600));
-            //info("Refresh: " . $data->refresh_token);
-            //info("Access: " . $data->access_token);
-            // Set the company id from the request
+            $this->ls->store(self::REFRESH_TOKEN, $data->refresh_token);
+            $this->ls->store(self::ACCESS_TOKEN, $data->access_token);
             $i = Integration::where('ident', 'qbo')->first();
             $data = $i->unpacked;
             $data->qbo_cid = $realmId;
@@ -124,21 +121,33 @@ class  QBOCore extends APICore
      * @param string $endpoint
      * @param string $method
      * @param array  $params
+     * @param bool   $retry
      * @return mixed
-     * @throws GuzzleException|LogicException
+     * @throws GuzzleException
+     * @throws LogicException
      */
-    public function qsend(string $endpoint, string $method = 'get', array $params = []) : mixed
+    public function qsend(string $endpoint, string $method = 'get', array $params = [], bool $retry = true): mixed
     {
-        //   $params['minorversion'] = self::MINOR_VERSION;
         $this->setHeaders([
-            'Authorization' => 'Bearer ' . cache(SELF::ACCESS_TOKEN),
+            'Authorization' => 'Bearer ' . $this->ls->get(self::ACCESS_TOKEN),
             'Content-Type'  => 'application/json',
             'Accept'        => 'application/json',
         ]);
         $base = $this->mode == 'sandbox'
             ? "https://sandbox-quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/"
             : "https://quickbooks.api.intuit.com/v3/company/{$this->config->qbo_cid}/";
-        return $this->send($base . $endpoint, $method, $params);
+        try
+        {
+            return $this->send($base . $endpoint, $method, $params);
+        } catch (LogicException) // Possible the access token expired.
+        {
+            if ($this->responseCode == 401 && $retry)
+            {
+                info("Error Querying QBO, Attempting to refresh access token.");
+                $this->refreshAccessToken();
+                return $this->qsend($endpoint, $method, $params, false); // Try once more.
+            }
+        }
     }
 
     /**
@@ -148,24 +157,17 @@ class  QBOCore extends APICore
      */
     private function refreshAccessToken(): void
     {
-        $req = $this->authenticator->createRequestToRefresh(cache(self::REFRESH_TOKEN));
+        $req = $this->authenticator->createRequestToRefresh($this->ls->get(self::REFRESH_TOKEN));
         $res = $this->qclient->send($req);
         $data = json_decode($res->getBody());
         if (!isset($data->refresh_token))
         {
             // Something went wrong clear out everything.
-            info("No Refresh Token found in response. Here's what we have. -- " . print_r($data, true));
-            Cache::forget(self::REFRESH_TOKEN);
-            Cache::forget(self::ACCESS_TOKEN);
             $link = "<a href='" . setting('brand.url') . "/oa/qbo/authorize'>click to reauthorize</a>";
             throw new LogicException("Unable to get token from Quickbooks via Refresh Request. Reauthorize QBO: " . $link);
         }
-        cache([
-            self::REFRESH_TOKEN => $data->refresh_token,
-        ], Carbon::now()->addSeconds(8726400));
-        cache([
-            self::ACCESS_TOKEN => $data->access_token ?? '',
-        ], Carbon::now()->addSeconds(3600));
+        $this->ls->store(self::REFRESH_TOKEN, $data->refresh_token);
+        $this->ls->store(Self::ACCESS_TOKEN, $data->access_token ?? '');
     }
 
     /**
