@@ -5,6 +5,7 @@ namespace App\Operations\Core;
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
 use App\Enums\Core\InvoiceStatus;
+use App\Enums\Core\LogSeverity;
 use App\Enums\Core\PaymentMethod;
 use App\Models\Account;
 use App\Models\Invoice;
@@ -137,7 +138,7 @@ class BillingEngine
                 'price'        => $item->price,
                 'qty'          => $item->qty
             ]);
-            _log($ii, "Added {$item->item->name} to Invoice");
+            _log($ii, "Added {$item->item->name} to Invoice", null, null, LogSeverity::Debug);
 
             // If addons are listed for this service item, we include them below
             if ($item->addons()->count())
@@ -153,7 +154,7 @@ class BillingEngine
                         'price'        => $addon->price,
                         'qty'          => $addon->qty
                     ]);
-                    _log($ii, "Added {$item->item->name} from Addon to Invoice");
+                    _log($ii, "Added {$item->item->name} from Addon to Invoice", null, null, LogSeverity::Debug);
                 }
             }
 
@@ -183,10 +184,8 @@ class BillingEngine
             $invoice->createOrder();
         }
         $total = "$" . moneyFormat($invoice->total);
-        _log($invoice, "Monthly Invoice Total Final: $total");
+        _log($invoice, "Monthly Invoice Total Final: $total", null, null, LogSeverity::Debug);
         sysact(ActivityType::Account, $account->id,
             "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
     }
-
-
 }

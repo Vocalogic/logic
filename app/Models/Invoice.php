@@ -720,6 +720,7 @@ class Invoice extends Model
             $this->update(['last_notice_sent' => now()]);
             sysact(ActivityType::PastDueNotification, $this->id,
                 "sent a past due notification to {$this->account->name} for ");
+            _log($this, "Past Due Notification Sent");
             return;
         }
         $target = (int)setting('invoices.pastdue'); // Send every X days
@@ -730,6 +731,7 @@ class Invoice extends Model
             $this->update(['last_notice_sent' => now()]);
             sysact(ActivityType::PastDueNotification, $this->id,
                 "sent a past due notification to {$this->account->name} for ");
+            _log($this, "Another Past Due Notification Sent");
         }
     }
 
