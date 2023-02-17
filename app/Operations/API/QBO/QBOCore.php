@@ -2,15 +2,12 @@
 
 namespace App\Operations\API\QBO;
 
-use App\Enums\Core\IntegrationRegistry;
 use App\Exceptions\LogicException;
 use App\Models\Integration;
 use App\Operations\API\APICore;
 use App\Operations\Core\LogicStore;
-use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use QuickBooksOnline\Payments\OAuth\OAuth2Authenticator;
 use QuickBooksOnline\Payments\PaymentClient;
 
@@ -45,14 +42,9 @@ class  QBOCore extends APICore
             'environment'   => $mode
         ]);
         $this->ls = new LogicStore();
-        if (!$this->ls->exists(self::ACCESS_TOKEN))
-        {
-            $this->ls->init(self::ACCESS_TOKEN, '', "Quickbooks Online Access Token");
-        }
-        if (!$this->ls->exists(self::REFRESH_TOKEN))
-        {
-            $this->ls->init(self::REFRESH_TOKEN, '', "Quickbooks Online Refresh Token");
-        }
+        $this->ls->init(self::ACCESS_TOKEN, '', "Quickbooks Online Access Token");
+        $this->ls->init(self::REFRESH_TOKEN, '', "Quickbooks Online Refresh Token");
+
     }
 
     /**

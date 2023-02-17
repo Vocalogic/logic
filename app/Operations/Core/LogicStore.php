@@ -81,11 +81,24 @@ class LogicStore
      */
     public function init(string $key, mixed $value, string $description): void
     {
-        $this->storage->push([
-            'key'         => $key,
-            'value'       => $value,
-            'description' => $description
-        ]);
+        if ($this->exists($key)) // create object in store if it doesn't exist
+        {
+            $this->storage->push([
+                'key'         => $key,
+                'value'       => $value,
+                'description' => $description
+            ]);
+        }
+        else
+        {
+            // Update description.
+            $this->storage->map(function ($item) use ($description, $key) {
+                if ($item->key == $key)
+                {
+                    $item->description = $description;
+                }
+            });
+        }
         $path = storage_path() . "/" . $this->storageFile;
         File::put($path, $this->storage->toJson());
     }
