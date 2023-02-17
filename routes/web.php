@@ -549,6 +549,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
     // Logs page
     Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
+    Route::get('logs/{model}/{id}/extended', [LogsController::class, 'extendedView']);
 
 });
 

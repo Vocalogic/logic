@@ -33,3 +33,5 @@ mix.styles([
 ], 'public/css/all.css');
 
 mix.js('resources/js/cart.js', 'public/js');
+
+mix.css('resources/css/logic.css', 'public/assets/css/logic.css');
