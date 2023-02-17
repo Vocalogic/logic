@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Iterators;
 
 use App\Http\Livewire\Admin\LwTableComponent;
 use App\Models\AppLog;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class LogIteratorComponent extends LwTableComponent
@@ -41,6 +42,12 @@ class LogIteratorComponent extends LwTableComponent
     public array $filter;
 
     /**
+     * The model that was passed through from the controller.
+     * @var Model
+     */
+    public Model $modelEntity;
+
+    /**
      * initialization
      */
     public function mount()
@@ -49,11 +56,15 @@ class LogIteratorComponent extends LwTableComponent
     }
 
     /**
-     * By default we only want active accounts being shown.
+     * Filter by dates if found.
      * @param $collection
+     * @return mixed
      */
     public function preFilters($collection): mixed
     {
+        $collection = $collection->where('type', $this->modelEntity::class);
+        $collection = $collection->where('type_id', $this->modelEntity->id);
+
         if (!empty($this->filter['start_date']))
         {
             $collection = $collection->whereDate('created_at', '>=', Carbon::createFromFormat('m/d/Y', $this->filter['start_date']));

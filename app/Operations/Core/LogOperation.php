@@ -200,16 +200,15 @@ class LogOperation
     }
 
     /**
-     * loads model by given model slug
-     * @param  string  $model
-     * @param  int  $id
+     * Loads model by given model slug, returns null if not found.
+     * @param string $model
+     * @param int    $id
      * @return Model|null
      */
     public function loadModel(string $model, int $id): Model|null
     {
         $model = ucfirst($model);
         $class = "\\App\\Models\\$model";
-
         try
         {
             $entity = $class::find($id);
@@ -217,10 +216,16 @@ class LogOperation
         {
             return null;
         }
-
         return $entity;
     }
 
+    /**
+     * Attempt to get the model's logs, otherwise return
+     * and empty collection.
+     * @param string $model
+     * @param int    $id
+     * @return Collection
+     */
     public function getModelLogs(string $model, int $id): Collection
     {
         $entity = $this->loadModel($model, $id);

@@ -60,7 +60,7 @@
             </div>
         </div>
         <div class="col-10">
-            @livewire('iterators.log-iterator-component')
+            @livewire('iterators.log-iterator-component', ['modelEntity' => $entity])
         </div>
     </div>
 @endsection
