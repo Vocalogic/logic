@@ -27,6 +27,7 @@ storage/framework/sessions/*
 storage/app/*
 storage/pdf/*
 storage/*.key
+storage/logic_storage.json
 Modules/*
 modules_statuses.json
 app/.phpdoc
