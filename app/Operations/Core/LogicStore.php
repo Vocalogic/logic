@@ -81,7 +81,7 @@ class LogicStore
      */
     public function init(string $key, mixed $value, string $description): void
     {
-        if ($this->exists($key)) // create object in store if it doesn't exist
+        if (!$this->exists($key)) // create object in store if it doesn't exist
         {
             $this->storage->push([
                 'key'         => $key,
