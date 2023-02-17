@@ -12,6 +12,7 @@ use App\Models\Invoice;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Support\Str;
 
 class BillingEngine
 {
@@ -47,16 +48,16 @@ class BillingEngine
                 info("Invoice #$invoice->id is past due. Sending to Notification routine.");
                 $invoice->sendPastDueNotification(); // Method will handle checks.
                 // #147 - Check Suspension and Termination Notices
-                if (now()->diffInDays($invoice->due_on) > (int) setting('invoices.terminationDays'))
+                if (now()->diffInDays($invoice->due_on) > (int)setting('invoices.terminationDays'))
                 {
                     $invoice->sendTerminationNotice();
                     continue; // don't send suspension again. (or try to)
                 }
-                if (now()->diffInDays($invoice->due_on) > (int) setting('invoices.suspensionDays'))
+                if (now()->diffInDays($invoice->due_on) > (int)setting('invoices.suspensionDays'))
                 {
                     $invoice->sendSuspensionNotice();
                 }
-                $lateFeeTarget = $invoice->due_on->addDays((int) setting('invoices.lateFeeDays'));
+                $lateFeeTarget = $invoice->due_on->addDays((int)setting('invoices.lateFeeDays'));
                 if (!$invoice->account->impose_late_fee) continue; // only if this account has late fees enabled.
                 if (now() >= $lateFeeTarget)
                 {
@@ -74,11 +75,12 @@ class BillingEngine
     {
         foreach (Transaction::where('method', PaymentMethod::CreditCard->value)->where('fee', '=', 0)->get() as $trans)
         {
-            try {
+            try
+            {
                 $trans->updateFee();
             } catch (Exception $e)
             {
-                info("Unable to sync transaction $trans->id - ".  $e->getMessage());
+                info("Unable to sync transaction $trans->id - " . $e->getMessage());
             }
         }
     }
@@ -90,7 +92,7 @@ class BillingEngine
      * @param bool    $createOrder
      * @return void
      */
-    static public function generateMonthlyInvoice(Account $account, bool $createOrder = false) : void
+    static public function generateMonthlyInvoice(Account $account, bool $createOrder = false): void
     {
         $account->update(['next_bill' => now()->addMonth()->setDay($account->bills_on ?? 1)]);
         if ($account->items->count() == 0) return; // Do nothing if there are no service items
@@ -168,6 +170,10 @@ class BillingEngine
                 else
                 {
                     $item->update(['remaining' => $newRemain]);
+                    $freq = $item->frequency ?: BillFrequency::Monthly; // Default is monthly if not set here.
+                    $type = $freq->getHuman();
+                    $word = Str::plural('payments', $newRemain);
+                    $ii->update(['description' => $ii->description . " ($newRemain $type $word remaining)"]);
                 }
             }
         }
