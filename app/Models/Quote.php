@@ -651,7 +651,7 @@ class Quote extends Model
         $content = setting('quotes.msa');
         $models = [$this];
         $s = new STemplate(ident: $content, models: $models);
-        return _markdown($s->contentBody);
+        return $s->contentBody;
     }
 
     /**

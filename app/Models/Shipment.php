@@ -64,7 +64,6 @@ class Shipment extends Model
      * Return a streamed PDF.
      * @param bool $save
      * @return mixed
-     * @throws NexusException
      */
     public function pdf(bool $save = false): mixed
     {

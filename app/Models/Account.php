@@ -836,7 +836,6 @@ class Account extends Model
      * Return a streamed PDF.
      * @param bool $save
      * @return mixed
-     * @throws NexusException
      */
     public function statement(bool $save = false): mixed
     {
