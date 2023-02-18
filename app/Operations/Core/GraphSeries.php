@@ -6,6 +6,7 @@ use App\Enums\Core\CommKey;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\MetricType;
 use App\Models\Account;
+use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\Metric;
 use Carbon\Carbon;
@@ -18,26 +19,26 @@ class GraphSeries
     public Request    $request;
     public MetricType $type;
     // Series Calculation Requests
-    public int      $days       = 0;                                                                                                                       // Specify Time in Days
-    public int      $weeks      = 0;                                                                                                                       // Specify time in weeks
-    public int      $months     = 0;                                                                                                                       // Specify time in months
-    public string   $tally;                                                                                                                                // Tally sum, average or min
-    public string   $seriesType;                                                                                                                           // Series Type is which method to use below
-    public Carbon   $start;                                                                                                                                // Start date
-    public Carbon   $end;                                                                                                                                  // End Date
-    public ?Account $account;                                                                                                                              // Associated Account if needed.
-    public array    $blocks     = [];                                                                                                                      // Blocks of time for week/months
-    public array    $addMetrics = [];                                                                                                                      // Additional Metric Series
-    public array    $colors     = [];                                                                                                                      // Color Indexes
-    public bool     $diff       = false;                                                                                                                   // Diffferential not total?
-    public array    $series     = [];                                                                                                                      // Series Data Storage
-    public array    $options    = [];                                                                                                                      // Base Object Construction
-    public ?string  $detail;                                                                                                                               // Define Detail match if necessary.
+    public int      $days       = 0;                                                                                                                                                   // Specify Time in Days
+    public int      $weeks      = 0;                                                                                                                                                   // Specify time in weeks
+    public int      $months     = 0;                                                                                                                                                   // Specify time in months
+    public string   $tally;                                                                                                                                                            // Tally sum, average or min
+    public string   $seriesType;                                                                                                                                                       // Series Type is which method to use below
+    public Carbon   $start;                                                                                                                                                            // Start date
+    public Carbon   $end;                                                                                                                                                              // End Date
+    public ?Account $account;                                                                                                                                                          // Associated Account if needed.
+    public array    $blocks     = [];                                                                                                                                                  // Blocks of time for week/months
+    public array    $addMetrics = [];                                                                                                                                                  // Additional Metric Series
+    public array    $colors     = [];                                                                                                                                                  // Color Indexes
+    public bool     $diff       = false;                                                                                                                                               // Diffferential not total?
+    public array    $series     = [];                                                                                                                                                  // Series Data Storage
+    public array    $options    = [];                                                                                                                                                  // Base Object Construction
+    public ?string  $detail;                                                                                                                                                           // Define Detail match if necessary.
 
     public int    $chartHeight = 300;                                                                               // Chart Definitions
     public bool   $showToolBar = false;
-    public string $yAxis       = 'Y';
-    public string $xAxis       = 'X';
+    public string $yAxis       = '';
+    public string $xAxis       = '';
     public array  $labels      = [];
 
     /**
@@ -81,9 +82,13 @@ class GraphSeries
                 $this->addMetrics[] = MetricType::tryFrom($met);
             }
         }
-
-        $this->colors = ['#2d4da6', '#2d94a6', '#35a15b', '#35a15b', '#35a15b'];
-
+        $this->colors = [
+            'var(--chart-color1)',
+            'var(--chart-color2)',
+            'var(--chart-color3)',
+            'var(--chart-color4)',
+            'var(--chart-color5)'
+        ];
     }
 
     /**
@@ -283,13 +288,10 @@ class GraphSeries
             elseif ($invoice->status == InvoiceStatus::SENT) $openNotPD++;
             elseif ($invoice->status == InvoiceStatus::PARTIAL) $partial++;
         }
-
-
         $pastDuePerc = $total > 0 ? round($pastDue / $total * 100) : 0;
         $openPerc = $total > 0 ? round($openNotPD / $total * 100) : 0;
         $partPerc = $total > 0 ? round($partial / $total * 100) : 0;
         $draftPerc = $total > 0 ? round($draft / $total * 100) : 0;
-
         $this->labels = ['Outstanding', 'Draft', 'Past Due', 'Partial Payment'];
         $this->series = [$openPerc, $draftPerc, $pastDuePerc, $partPerc];
         return $this->series;
@@ -305,11 +307,17 @@ class GraphSeries
     {
         // We should take the account_id, and months to determine how far to go back.
         // We will use _metrics to figure out historical MRR.
+        $this->options['stroke'] = (object)[
+            'width'     => [5, 7, 5],
+            'curve'     => 'straight',
+            'dashArray' => [0, 8, 5]
+        ];
         $account = Account::find($this->request->account);
         if (cache(CommKey::AccountMRRCache->value))
         {
             $data = cache(CommKey::AccountMRRCache->value);
-            if (isset($data[$account->id])) {
+            if (isset($data[$account->id]))
+            {
                 $this->series = $data[$account->id];
                 return $this->series;
             }
@@ -323,7 +331,7 @@ class GraphSeries
             $end = now()->subMonths($month)->endOfMonth();
             $mrr = 0;
             $day = $start->copy();
-            while(true)
+            while (true)
             {
                 $mrrMetric = _metric($day, $account, MetricType::AccountMRR);
                 $mrrMetric = $mrrMetric->first();
@@ -359,14 +367,15 @@ class GraphSeries
             'name'  => 'MRR',
             'data'  => $mrrPlots,
             'color' => $this->colors[0],
-            'type'  => 'line'
+            'type'  => 'area'
         ];
         $this->series[] = [
             'name'  => 'Total Invoiced',
             'data'  => $invoicePlots,
             'color' => $this->colors[3],
-            'type'  => 'area'
+            'type'  => 'line'
         ];
+
 
         $cacheValue = cache(CommKey::AccountMRRCache->value);
         if (!$cacheValue) $cacheValue = [];
@@ -375,6 +384,125 @@ class GraphSeries
         return $this->series;
     }
 
+    /**
+     * Get a timeseries graph of what each product and service has been
+     * sold for over the company history.
+     * @return array
+     */
+    public function getBillItemPriceChart(): array
+    {
+        $item = BillItem::find($this->request->item);
+        $soldPlots = [];
+        foreach(Invoice::all() as $invoice)
+        {
+            foreach($invoice->items as $ii)
+            {
+                if ($ii->bill_item_id == $item->id)
+                {
+                    $soldPlots[] = [
+                        'x' => $ii->created_at->getTimestampMs(),
+                        'y' => moneyFormat($ii->price, false)
+                    ];
+                }
+            }
+        }
+        $this->yAxis = "$item->name";
+        $this->series[] = [
+            'name' => $item->name,
+            'data' => $soldPlots,
+            'color' => $this->colors[0],
+            'type' => 'area'
+        ];
+        // Override the yaxis
+        $this->options['yaxis'] = (object)[
+                'title' => (object)[
+                    'text' => $this->yAxis
+                ]
+            ];
+        return $this->series;
+    }
+
+
+
+    /**
+     * Get Account Rank in MRR.
+     * @return array
+     */
+    public function getAccountRankMRR(): array
+    {
+        $totalMrr = 0;
+        $thisAccount = Account::find($this->request->account);
+        foreach (Account::where('active', true)->get() as $account)
+        {
+            $totalMrr += $account->mrr;
+        }
+        // How does this account compare?
+        $mrr = $thisAccount->mrr;
+        $percOfTotal = round(($mrr / $totalMrr) * 100);
+        $this->options = [
+            'chart'       => (object)[
+                'height' => 350,
+                'type'   => 'radialBar',
+            ],
+            'plotOptions' => (object)[
+                'radialBar' => (object)[
+                    'hollow' => (object)[
+                        'size' => '70%'
+                    ]
+                ]
+            ],
+        ];
+        $rank = $this->account->rank;
+        $this->labels[] = "#$rank in Global MRR";
+        $this->series[] = $percOfTotal;
+        return $this->series;
+    }
+
+
+    /**
+     * Get Account Rank in Total Invoiced Amount
+     * @return array
+     */
+    public function getAccountRankTotal(): array
+    {
+        $total = 0;
+        $ttlBlock = [];
+        $thisAccount = Account::find($this->request->account);
+        foreach (Account::where('active', true)->get() as $account)
+        {
+            $ttlBlock[$account->id] = 0;
+            foreach($account->invoices as $invoice)
+            {
+                $ttlBlock[$account->id] += $invoice->total;
+                $total += $invoice->total;
+            }
+
+        }
+        // How does this account compare?
+        $accTotal = 0;
+        foreach ($thisAccount->invoices as $invoice)
+        {
+            $accTotal += $invoice->total;
+        }
+        $percOfTotal = round(($accTotal / $total) * 100);
+        $this->options = [
+            'chart'       => (object)[
+                'height' => 350,
+                'type'   => 'radialBar',
+            ],
+            'plotOptions' => (object)[
+                'radialBar' => (object)[
+                    'hollow' => (object)[
+                        'size' => '70%'
+                    ]
+                ]
+            ],
+        ];
+        $rank = $this->account->rankTotal;
+        $this->labels[] = "#$rank in Invoiced Total";
+        $this->series[] = $percOfTotal;
+        return $this->series;
+    }
 
     /**
      * Set chart structures
@@ -386,7 +514,6 @@ class GraphSeries
         {
             $this->chartHeight = 50;
             $this->options = [
-
                 'chart'  => (object)[
                     'type'      => 'line',
                     'height'    => $this->chartHeight,
@@ -442,8 +569,7 @@ class GraphSeries
         }
 
 
-        $this->xAxis = '';
-        $this->yAxis = $this->type->getSeriesName();
+        $this->yAxis = $this->yAxis ?: $this->type->getSeriesName();
         $this->options = [
 
             'chart'      => (object)[
@@ -458,7 +584,7 @@ class GraphSeries
                 'text' => 'Loading..'
             ],
             'dataLabels' => (object)[
-                'enabled' => false
+                'enabled' => true
             ],
             'yaxis'      => (object)[
                 'title' => (object)[

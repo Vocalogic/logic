@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class BillItemMeta extends Model
 {
+    use HasLogTrait;
+
     public $table = 'bill_item_meta';
     protected $guarded = ['id'];
 
