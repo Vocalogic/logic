@@ -43,6 +43,72 @@
                     </div>
                 </div>
 
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="lchart" id="ttlRank"
+                             data-title="Account Percentage Total Invoiced"
+                             data-height="300"
+                             data-url="/admin/graph/MRR_ACCOUNT?fn=getAccountRankTotal&account={{$account->id}}&seriesType=radialBar&months=4"
+                             data-type="radialBar"
+                             data-y="Total Invoiced"
+                             data-disable-toolbar="true"
+                             data-wait="Getting Account Ranking...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+
+
+                    <div class="card mt-3 mb-3 p-3 border-dark">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar rounded-circle no-thumbnail bg-light"><i class="fa fa-calendar fa-lg"></i></div>
+                            <div class="flex-fill ms-3 text-truncate">
+                                <div class="small">Generally Pays In</div>
+                                <span class="h5 mb-0">{{$account->paysIn}} days</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    @if($account->account_balance)
+                        <div class="card mt-3 mb-3 p-3 border-dark">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar rounded-circle no-thumbnail bg-light"><i class="fa fa-dollar fa-lg"></i></div>
+                                <div class="flex-fill ms-3 text-truncate">
+                                    <div class="small">Outstanding Balance</div>
+                                    <span class="h5 mb-0">${{moneyFormat($account->account_balance)}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($account->parent)
+                        <div class="card mt-3 mb-3 p-3 border-warning">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar rounded-circle no-thumbnail bg-light"><i class="fa fa-building-o fa-lg"></i></div>
+                                <div class="flex-fill ms-3 text-truncate">
+                                    <div class="small">Parent Account</div>
+                                    <span class="h6 mb-0"><a href="/admin/accounts/{{$account->parent->id}}">{{$account->parent->name}}</a></span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($account->account_credit)
+                        <div class="card mb-3 p-3 border-dark">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar rounded-circle no-thumbnail bg-light"><i class="fa fa-exclamation fa-lg"></i></div>
+                                <div class="flex-fill ms-3 text-truncate">
+                                    <div class="small">Credit Balance</div>
+                                    <span class="h5 mb-0">${{number_format(abs($account->account_credit),2)}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+
 
             </div>
         </div>

@@ -383,23 +383,18 @@ class GraphSeries
         return $this->series;
     }
 
+    /**
+     * Get Account Rank in MRR.
+     * @return array
+     */
     public function getAccountRankMRR(): array
     {
         $totalMrr = 0;
-        $count = 0;
-        $mrrBlock = [];
         $thisAccount = Account::find($this->request->account);
-
         foreach (Account::where('active', true)->get() as $account)
         {
             $totalMrr += $account->mrr;
-            $count++;
-            $mrrBlock[$account->id] = $account->mrr;
         }
-        // Sort Accounts to Get Ranking
-        asort($mrrBlock);
-        // Get Average MRR
-        $avg = (int)bcmul($totalMrr / $count, 1);
         // How does this account compare?
         $mrr = $thisAccount->mrr;
         $percOfTotal = round(($mrr / $totalMrr) * 100);
@@ -416,10 +411,56 @@ class GraphSeries
                 ]
             ],
         ];
-        $this->labels[] = "Percentage Global MRR";
+        $rank = $this->account->rank;
+        $this->labels[] = "#$rank in Global MRR";
         $this->series[] = $percOfTotal;
         return $this->series;
+    }
 
+
+    /**
+     * Get Account Rank in Total Invoiced Amount
+     * @return array
+     */
+    public function getAccountRankTotal(): array
+    {
+        $total = 0;
+        $ttlBlock = [];
+        $thisAccount = Account::find($this->request->account);
+        foreach (Account::where('active', true)->get() as $account)
+        {
+            $ttlBlock[$account->id] = 0;
+            foreach($account->invoices as $invoice)
+            {
+                $ttlBlock[$account->id] += $invoice->total;
+                $total += $invoice->total;
+            }
+
+        }
+        // How does this account compare?
+        $accTotal = 0;
+        foreach ($thisAccount->invoices as $invoice)
+        {
+            $accTotal += $invoice->total;
+        }
+        $percOfTotal = round(($accTotal / $total) * 100);
+        $this->options = [
+            'chart'       => (object)[
+                'height' => 350,
+                'type'   => 'radialBar',
+            ],
+            'plotOptions' => (object)[
+                'radialBar' => (object)[
+                    'hollow' => (object)[
+                        'size' => '70%'
+                    ]
+                ]
+            ],
+        ];
+        $rank = $this->account->rankTotal;
+        $this->labels[] = "#$rank in Invoiced Total";
+        $this->series[] = $percOfTotal;
+        return $this->series;
     }
 
 

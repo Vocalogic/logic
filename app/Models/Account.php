@@ -313,6 +313,83 @@ class Account extends Model
     }
 
     /**
+     * Get MRR Rank for Account
+     * @return int
+     */
+    public function getRankAttribute() : int
+    {
+        $mrrBlock = [];
+        foreach (self::where('active', true)->get() as $account)
+        {
+            $mrrBlock[$account->id] = $account->mrr;
+        }
+        asort($mrrBlock);
+        $rankCount = sizeOf($mrrBlock);
+        $rank = 0;
+        foreach($mrrBlock as $key => $value)
+        {
+            if ($key == $this->id)
+            {
+                $rank = $rankCount;
+            }
+            $rankCount--;
+        }
+        return $rank;
+    }
+
+    /**
+     * Get MRR Rank for Account
+     * @return int
+     */
+    public function getRankTotalAttribute() : int
+    {
+        $ttlBlock = [];
+        foreach (self::where('active', true)->get() as $account)
+        {
+            $ttlBlock[$account->id] = 0;
+            foreach ($account->invoices as $invoice)
+            {
+                $ttlBlock[$account->id] += $invoice->total;
+            }
+
+        }
+        asort($ttlBlock);
+        $rankCount = sizeOf($ttlBlock);
+        $rank = 0;
+        foreach($ttlBlock as $key => $value)
+        {
+            if ($key == $this->id)
+            {
+                $rank = $rankCount;
+            }
+            $rankCount--;
+        }
+        return $rank;
+    }
+
+    /**
+     * Average days that it takes for an account to pay an invoice.
+     * @return int
+     */
+    public function getPaysInAttribute(): int
+    {
+        $total = 0;
+        $diff = 0;
+        foreach ($this->invoices as $invoice)
+        {
+            if($invoice->paid_on)
+            {
+                $diff += $invoice->paid_on->diffInDays($invoice->created_at);
+                $total++;
+            }
+        }
+        if ($total == 0) return 0;
+        return (int) bcmul($diff / $total,1);
+    }
+
+
+
+    /**
      * Get a list of contracted quotes.
      * @return array
      */
@@ -848,6 +925,8 @@ class Account extends Model
         }
         else return storage_path() . "/" . $pdf->saveFromData($data);
     }
+
+
 
     /**
      * Get a list of PBX users. Used to pull stats and graphs
