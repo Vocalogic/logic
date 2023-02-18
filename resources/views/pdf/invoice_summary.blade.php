@@ -395,7 +395,7 @@
         @if(setting('quotes.showDiscount') != 'None' && $invoice->discount > 0)
             <tr style="background: #393e44; color: #fff;">
                 <td>&nbsp;</td>
-                <td align="right"><span class="bold" style="font-size:14px;">Total Discount:</span></td>
+                <td align="right"><span class="bold" style="font-size:14px;">Discounts:</span></td>
                 <td>&nbsp;</td>
                 <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
                 </td>
