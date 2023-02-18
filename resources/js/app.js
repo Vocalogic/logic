@@ -1,6 +1,7 @@
 require('./bootstrap');
 import * as Ladda from 'ladda';
 import ApexCharts from 'apexcharts'
+import Swal from 'sweetalert2'
 
 $(document).ready(function () {
     $.ajaxSetup({

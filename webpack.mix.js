@@ -25,12 +25,15 @@ mix.js([
     'resources/js/places.js',
     'node_modules/ladda/js/ladda.js',
     'node_modules/x-editable/dist/bootstrap3-editable/js/bootstrap-editable.min.js',
-    'node_modules/apexcharts/dist/apexcharts.min.js'
+    'node_modules/apexcharts/dist/apexcharts.min.js',
+    'node_modules/sweetalert2/dist/sweetalert2.min.js'
+
 ], 'public/js/app.js');
 
 mix.styles([
     'node_modules/ladda/dist/ladda-themeless.min.css',
-    'node_modules/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css'
+    'node_modules/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css',
+    'node_modules/sweetalert2/dist/sweetalert2.min.css'
 ], 'public/css/all.css');
 
 mix.js('resources/js/cart.js', 'public/js');
