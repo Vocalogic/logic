@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => "$item->name Shop Settings", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/marketing"])
+@extends('layouts.admin', ['title' => "$item->name Shop Settings", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/marketing", 'log' => $item->logLink])
 
 @section('pre')
     <div class="row align-items-center">
@@ -18,5 +18,4 @@
             @include('admin.bill_items.shop.fields')
         </div>
     </div>
-
 @endsection

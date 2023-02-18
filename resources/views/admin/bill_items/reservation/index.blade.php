@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => "$item->name Reservations", 'crumbs' => $crumbs])
+@extends('layouts.admin', ['title' => "$item->name Reservations", 'crumbs' => $crumbs, 'log' => $item->logLink])
 
 @section('pre')
     <div class="row align-items-center">

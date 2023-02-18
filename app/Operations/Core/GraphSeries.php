@@ -6,6 +6,7 @@ use App\Enums\Core\CommKey;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\MetricType;
 use App\Models\Account;
+use App\Models\BillItem;
 use App\Models\Invoice;
 use App\Models\Metric;
 use Carbon\Carbon;
@@ -36,8 +37,8 @@ class GraphSeries
 
     public int    $chartHeight = 300;                                                                               // Chart Definitions
     public bool   $showToolBar = false;
-    public string $yAxis       = 'Y';
-    public string $xAxis       = 'X';
+    public string $yAxis       = '';
+    public string $xAxis       = '';
     public array  $labels      = [];
 
     /**
@@ -384,6 +385,46 @@ class GraphSeries
     }
 
     /**
+     * Get a timeseries graph of what each product and service has been
+     * sold for over the company history.
+     * @return array
+     */
+    public function getBillItemPriceChart(): array
+    {
+        $item = BillItem::find($this->request->item);
+        $soldPlots = [];
+        foreach(Invoice::all() as $invoice)
+        {
+            foreach($invoice->items as $ii)
+            {
+                if ($ii->bill_item_id == $item->id)
+                {
+                    $soldPlots[] = [
+                        'x' => $ii->created_at->getTimestampMs(),
+                        'y' => moneyFormat($ii->price, false)
+                    ];
+                }
+            }
+        }
+        $this->yAxis = "$item->name";
+        $this->series[] = [
+            'name' => $item->name,
+            'data' => $soldPlots,
+            'color' => $this->colors[0],
+            'type' => 'area'
+        ];
+        // Override the yaxis
+        $this->options['yaxis'] = (object)[
+                'title' => (object)[
+                    'text' => $this->yAxis
+                ]
+            ];
+        return $this->series;
+    }
+
+
+
+    /**
      * Get Account Rank in MRR.
      * @return array
      */
@@ -463,7 +504,6 @@ class GraphSeries
         return $this->series;
     }
 
-
     /**
      * Set chart structures
      * @return void
@@ -529,8 +569,7 @@ class GraphSeries
         }
 
 
-        $this->xAxis = '';
-        $this->yAxis = $this->type->getSeriesName();
+        $this->yAxis = $this->yAxis ?: $this->type->getSeriesName();
         $this->options = [
 
             'chart'      => (object)[
