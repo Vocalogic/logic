@@ -18,21 +18,21 @@ class GraphSeries
     public Request    $request;
     public MetricType $type;
     // Series Calculation Requests
-    public int      $days       = 0;                                                                                                                       // Specify Time in Days
-    public int      $weeks      = 0;                                                                                                                       // Specify time in weeks
-    public int      $months     = 0;                                                                                                                       // Specify time in months
-    public string   $tally;                                                                                                                                // Tally sum, average or min
-    public string   $seriesType;                                                                                                                           // Series Type is which method to use below
-    public Carbon   $start;                                                                                                                                // Start date
-    public Carbon   $end;                                                                                                                                  // End Date
-    public ?Account $account;                                                                                                                              // Associated Account if needed.
-    public array    $blocks     = [];                                                                                                                      // Blocks of time for week/months
-    public array    $addMetrics = [];                                                                                                                      // Additional Metric Series
-    public array    $colors     = [];                                                                                                                      // Color Indexes
-    public bool     $diff       = false;                                                                                                                   // Diffferential not total?
-    public array    $series     = [];                                                                                                                      // Series Data Storage
-    public array    $options    = [];                                                                                                                      // Base Object Construction
-    public ?string  $detail;                                                                                                                               // Define Detail match if necessary.
+    public int      $days       = 0;                                                                                                                           // Specify Time in Days
+    public int      $weeks      = 0;                                                                                                                           // Specify time in weeks
+    public int      $months     = 0;                                                                                                                           // Specify time in months
+    public string   $tally;                                                                                                                                    // Tally sum, average or min
+    public string   $seriesType;                                                                                                                               // Series Type is which method to use below
+    public Carbon   $start;                                                                                                                                    // Start date
+    public Carbon   $end;                                                                                                                                      // End Date
+    public ?Account $account;                                                                                                                                  // Associated Account if needed.
+    public array    $blocks     = [];                                                                                                                          // Blocks of time for week/months
+    public array    $addMetrics = [];                                                                                                                          // Additional Metric Series
+    public array    $colors     = [];                                                                                                                          // Color Indexes
+    public bool     $diff       = false;                                                                                                                       // Diffferential not total?
+    public array    $series     = [];                                                                                                                          // Series Data Storage
+    public array    $options    = [];                                                                                                                          // Base Object Construction
+    public ?string  $detail;                                                                                                                                   // Define Detail match if necessary.
 
     public int    $chartHeight = 300;                                                                               // Chart Definitions
     public bool   $showToolBar = false;
@@ -81,9 +81,13 @@ class GraphSeries
                 $this->addMetrics[] = MetricType::tryFrom($met);
             }
         }
-
-        $this->colors = ['#2d4da6', '#2d94a6', '#35a15b', '#35a15b', '#35a15b'];
-
+        $this->colors = [
+            'var(--chart-color1)',
+            'var(--chart-color2)',
+            'var(--chart-color3)',
+            'var(--chart-color4)',
+            'var(--chart-color5)'
+        ];
     }
 
     /**
@@ -305,11 +309,17 @@ class GraphSeries
     {
         // We should take the account_id, and months to determine how far to go back.
         // We will use _metrics to figure out historical MRR.
+        $this->options['stroke'] = (object) [
+            'width'     => [5, 7, 5],
+            'curve'     => 'straight',
+            'dashArray' => [0, 8, 5]
+        ];
         $account = Account::find($this->request->account);
         if (cache(CommKey::AccountMRRCache->value))
         {
             $data = cache(CommKey::AccountMRRCache->value);
-            if (isset($data[$account->id])) {
+            if (isset($data[$account->id]))
+            {
                 $this->series = $data[$account->id];
                 return $this->series;
             }
@@ -323,7 +333,7 @@ class GraphSeries
             $end = now()->subMonths($month)->endOfMonth();
             $mrr = 0;
             $day = $start->copy();
-            while(true)
+            while (true)
             {
                 $mrrMetric = _metric($day, $account, MetricType::AccountMRR);
                 $mrrMetric = $mrrMetric->first();
@@ -359,14 +369,16 @@ class GraphSeries
             'name'  => 'MRR',
             'data'  => $mrrPlots,
             'color' => $this->colors[0],
-            'type'  => 'line'
+            'type'  => 'area'
         ];
         $this->series[] = [
             'name'  => 'Total Invoiced',
             'data'  => $invoicePlots,
             'color' => $this->colors[3],
-            'type'  => 'area'
+            'type'  => 'line'
         ];
+
+
 
         $cacheValue = cache(CommKey::AccountMRRCache->value);
         if (!$cacheValue) $cacheValue = [];
