@@ -18,21 +18,21 @@ class GraphSeries
     public Request    $request;
     public MetricType $type;
     // Series Calculation Requests
-    public int      $days       = 0;                                                                                                                           // Specify Time in Days
-    public int      $weeks      = 0;                                                                                                                           // Specify time in weeks
-    public int      $months     = 0;                                                                                                                           // Specify time in months
-    public string   $tally;                                                                                                                                    // Tally sum, average or min
-    public string   $seriesType;                                                                                                                               // Series Type is which method to use below
-    public Carbon   $start;                                                                                                                                    // Start date
-    public Carbon   $end;                                                                                                                                      // End Date
-    public ?Account $account;                                                                                                                                  // Associated Account if needed.
-    public array    $blocks     = [];                                                                                                                          // Blocks of time for week/months
-    public array    $addMetrics = [];                                                                                                                          // Additional Metric Series
-    public array    $colors     = [];                                                                                                                          // Color Indexes
-    public bool     $diff       = false;                                                                                                                       // Diffferential not total?
-    public array    $series     = [];                                                                                                                          // Series Data Storage
-    public array    $options    = [];                                                                                                                          // Base Object Construction
-    public ?string  $detail;                                                                                                                                   // Define Detail match if necessary.
+    public int      $days       = 0;                                                                                                                                                   // Specify Time in Days
+    public int      $weeks      = 0;                                                                                                                                                   // Specify time in weeks
+    public int      $months     = 0;                                                                                                                                                   // Specify time in months
+    public string   $tally;                                                                                                                                                            // Tally sum, average or min
+    public string   $seriesType;                                                                                                                                                       // Series Type is which method to use below
+    public Carbon   $start;                                                                                                                                                            // Start date
+    public Carbon   $end;                                                                                                                                                              // End Date
+    public ?Account $account;                                                                                                                                                          // Associated Account if needed.
+    public array    $blocks     = [];                                                                                                                                                  // Blocks of time for week/months
+    public array    $addMetrics = [];                                                                                                                                                  // Additional Metric Series
+    public array    $colors     = [];                                                                                                                                                  // Color Indexes
+    public bool     $diff       = false;                                                                                                                                               // Diffferential not total?
+    public array    $series     = [];                                                                                                                                                  // Series Data Storage
+    public array    $options    = [];                                                                                                                                                  // Base Object Construction
+    public ?string  $detail;                                                                                                                                                           // Define Detail match if necessary.
 
     public int    $chartHeight = 300;                                                                               // Chart Definitions
     public bool   $showToolBar = false;
@@ -287,13 +287,10 @@ class GraphSeries
             elseif ($invoice->status == InvoiceStatus::SENT) $openNotPD++;
             elseif ($invoice->status == InvoiceStatus::PARTIAL) $partial++;
         }
-
-
         $pastDuePerc = $total > 0 ? round($pastDue / $total * 100) : 0;
         $openPerc = $total > 0 ? round($openNotPD / $total * 100) : 0;
         $partPerc = $total > 0 ? round($partial / $total * 100) : 0;
         $draftPerc = $total > 0 ? round($draft / $total * 100) : 0;
-
         $this->labels = ['Outstanding', 'Draft', 'Past Due', 'Partial Payment'];
         $this->series = [$openPerc, $draftPerc, $pastDuePerc, $partPerc];
         return $this->series;
@@ -309,7 +306,7 @@ class GraphSeries
     {
         // We should take the account_id, and months to determine how far to go back.
         // We will use _metrics to figure out historical MRR.
-        $this->options['stroke'] = (object) [
+        $this->options['stroke'] = (object)[
             'width'     => [5, 7, 5],
             'curve'     => 'straight',
             'dashArray' => [0, 8, 5]
@@ -379,12 +376,50 @@ class GraphSeries
         ];
 
 
-
         $cacheValue = cache(CommKey::AccountMRRCache->value);
         if (!$cacheValue) $cacheValue = [];
         $cacheValue[$account->id] = $this->series;
         cache([CommKey::AccountMRRCache->value => $cacheValue], CommKey::AccountMRRCache->getLifeTime());
         return $this->series;
+    }
+
+    public function getAccountRankMRR(): array
+    {
+        $totalMrr = 0;
+        $count = 0;
+        $mrrBlock = [];
+        $thisAccount = Account::find($this->request->account);
+
+        foreach (Account::where('active', true)->get() as $account)
+        {
+            $totalMrr += $account->mrr;
+            $count++;
+            $mrrBlock[$account->id] = $account->mrr;
+        }
+        // Sort Accounts to Get Ranking
+        asort($mrrBlock);
+        // Get Average MRR
+        $avg = (int)bcmul($totalMrr / $count, 1);
+        // How does this account compare?
+        $mrr = $thisAccount->mrr;
+        $percOfTotal = round(($mrr / $totalMrr) * 100);
+        $this->options = [
+            'chart'       => (object)[
+                'height' => 350,
+                'type'   => 'radialBar',
+            ],
+            'plotOptions' => (object)[
+                'radialBar' => (object)[
+                    'hollow' => (object)[
+                        'size' => '70%'
+                    ]
+                ]
+            ],
+        ];
+        $this->labels[] = "Percentage Global MRR";
+        $this->series[] = $percOfTotal;
+        return $this->series;
+
     }
 
 
@@ -398,7 +433,6 @@ class GraphSeries
         {
             $this->chartHeight = 50;
             $this->options = [
-
                 'chart'  => (object)[
                     'type'      => 'line',
                     'height'    => $this->chartHeight,
@@ -470,7 +504,7 @@ class GraphSeries
                 'text' => 'Loading..'
             ],
             'dataLabels' => (object)[
-                'enabled' => false
+                'enabled' => true
             ],
             'yaxis'      => (object)[
                 'title' => (object)[

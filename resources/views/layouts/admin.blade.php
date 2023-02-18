@@ -370,8 +370,6 @@
 <script src="/assets/bundles/jquerysteps.bundle.js"></script>
 <script src="/assets/bundles/dataTables.bundle.js"></script>
 <script src="/assets/bundles/sweetalert2.bundle.js"></script>
-<script src="/assets/js/jquery.signaturepad.min.js"></script>
-<script src="/assets/bundles/apexcharts.bundle.js"></script>
 <script src="/assets/bundles/fullcalendar.bundle.js"></script>
 <script src="/assets/js/tinymce/tinymce.min.js"></script>
 

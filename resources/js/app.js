@@ -1,5 +1,6 @@
 require('./bootstrap');
 import * as Ladda from 'ladda';
+import ApexCharts from 'apexcharts'
 
 $(document).ready(function () {
     $.ajaxSetup({
@@ -131,7 +132,6 @@ $(document).ready(function () {
             let Toast = Swal.mixin({
                 toast: true,
                 position: 'bottom-right',
-                animation: true,
                 width: '400px',
                 showConfirmButton: false,
                 timer: 4000,
@@ -379,7 +379,6 @@ $(document).ready(function () {
             showConfirmButton: false,
             timer: 4000,
             width: '400px',
-            animation: true,
             timerProgressBar: true
         });
         Toast.fire({
@@ -398,7 +397,6 @@ $(document).ready(function () {
             toast: true,
             position: 'middle',
             width: '400px',
-            animation: true,
             showConfirmButton: false,
             timer: 4000,
             timerProgressBar: true
