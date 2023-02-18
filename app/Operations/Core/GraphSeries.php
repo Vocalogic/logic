@@ -367,7 +367,7 @@ class GraphSeries
             'name'  => 'MRR',
             'data'  => $mrrPlots,
             'color' => $this->colors[0],
-            'type'  => 'area'
+            'type'  => 'line'
         ];
         $this->series[] = [
             'name'  => 'Total Invoiced',
