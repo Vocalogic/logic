@@ -90,6 +90,18 @@ class Account extends Model
     ];
 
     /**
+     * Eager Load Account Information
+     * @var string[]
+     */
+    public $with = [
+        'invoices',
+        'invoices.items',
+        'invoices.transactions',
+        'items',
+        'items.addons',
+    ];
+
+    /**
      * When showing the log entries for an account, we want to
      * add the item logs as well.
      * @var array|string[]
