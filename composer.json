@@ -32,6 +32,7 @@
         "vlchris/payments-sdk": "dev-master"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.8",
         "fakerphp/faker": "^1.9.1",
         "laravel/dusk": "^7.1",
         "laravel/sail": "^1.18",
