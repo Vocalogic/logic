@@ -131,6 +131,11 @@ enum CommKey: string
     case GlobalSettings = 'global_settings';
 
     /**
+     * Cache all files and invalidate when a new file has been uploaded or removed.
+     */
+    case GlobalFiles = 'global_files';
+
+    /**
      * All cache keys should have their lifetimes defined below. If no specific definition is defined
      * then a default of one hour expiry will be provided.
      * @return Carbon

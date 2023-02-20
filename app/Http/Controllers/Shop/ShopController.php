@@ -48,7 +48,7 @@ class ShopController extends Controller
      */
     public function showCategory(string $catslug): View
     {
-        $cat = BillCategory::where('slug', $catslug)->first();
+        $cat = BillCategory::with(['tagCategories', 'tagCategories.tags', 'items'])->where('slug', $catslug)->first();
         if (!$cat) abort(404);
 
 

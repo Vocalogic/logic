@@ -127,7 +127,14 @@ if (!function_exists('setting'))
     function _file(?int $id, bool $asStream = false, bool $forcedDownload = true): mixed
     {
         if (!$id) return null;
-        $file = LOFile::find($id);
+        $cached = cache(CommKey::GlobalFiles->value);
+        if (!$cached)
+        {
+            $cached = LOFile::all();
+            cache([CommKey::GlobalFiles->value => $cached], CommKey::GlobalFiles->getLifeTime());
+        }
+
+        $file = $cached->keyBy('id')->get($id);
         if (!$file) return null;
         // Do we need to have auth?
         if (auth()->guest() && $file->auth_required) abort(401);
