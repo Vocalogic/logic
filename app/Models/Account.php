@@ -865,7 +865,7 @@ class Account extends Model
             ->join('bill_items', 'bill_items.id', '=', 'account_items.bill_item_id')
             ->orderBy('bill_items.bill_category_id')
             ->where('account_items.account_id', $this->id)
-            ->with('item')
+            ->with(['item', 'item.addons', 'item.meta', 'addons', 'account.overrides'])
             ->get();
         $currCategory = 0;
         $i = [];

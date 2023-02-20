@@ -186,7 +186,7 @@ class AnalysisEngine
             $serviceOpex += $monthsFromStart * ($service->item->ex_opex * $service->qty);
 
             $serviceTotal += $monthsFromStart * ($service->price * $service->qty);
-            foreach ($account->invoices as $invoice)
+            foreach ($account->invoices()->with('items')->get() as $invoice)
             {
                 foreach ($invoice->items as $item)
                 {

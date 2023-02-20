@@ -222,7 +222,7 @@ class AccountItem extends Model
      */
     public function iterateMeta(bool $onlyCustomer = false): ?string
     {
-        if (!$this->item->meta()->count()) return null;
+        if (!$this->item->meta->count()) return null;
         $data = null;
         foreach ($this->item->meta as $meta)
         {

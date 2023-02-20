@@ -12,7 +12,7 @@
 
         <div class="col-lg-10 col-xs-12">
             <div class="row">
-                @if($account->items()->count() == 0)
+                @if($account->items->count() == 0)
 
                     <div class="card">
                         <div class="card-body text-center p-5">
@@ -55,14 +55,14 @@
                                                         {{$item->item->name}}
                                                     </strong>
                                                 </a>
-                                                @if($item->item->addons()->count())
+                                                @if($item->item->addons->count())
                                                     <a data-bs-toggle='tooltip' class="live"
                                                        data-title="Manage Service Addons" title='Manage Service Addons'
                                                        href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons">
                                                         <i class="fa fa-database"></i>
                                                     </a>
                                                 @endif
-                                                @if($item->item->meta()->count())
+                                                @if($item->item->meta->count())
                                                     <a class="live"
                                                        data-bs-toggle="tooltip"
                                                        data-title="Update Requirements"
@@ -77,12 +77,12 @@
                                                     <br/>
                                                     <small class="text-primary">{!! nl2br($item->notes) !!}</small>
                                                 @endif
-                                                @if($item->item->meta()->count())
+                                                @if($item->item->meta->count())
                                                     <br/>
                                                     {!! $item->iterateMeta() !!}
                                                 @endif
 
-                                                @if($item->addons()->count())
+                                                @if($item->addons->count())
                                                     <br/>
                                                     @foreach($item->addons as $addon)
                                                         <small class="text-muted">&nbsp;&nbsp; -
