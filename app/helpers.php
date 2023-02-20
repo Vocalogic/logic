@@ -433,11 +433,18 @@ if (!function_exists('setting'))
      */
     function hasIntegration(IntegrationType $type): bool
     {
+        $registryState = cache(CommKey::GlobalIntegrationRegistry->value);
+        if (!$registryState)
+        {
+            $registryState = Integration::all();
+            cache([CommKey::GlobalIntegrationRegistry->value => $registryState]);
+        }
         foreach (IntegrationRegistry::cases() as $case)
         {
-            $i = Integration::where('ident', $case->value)->first();
+            $i = $registryState->keyBy('ident')->get($case->value);
             if ($i && $i->enabled && $case->getCategory() == $type) return true;
         }
+
         return false;
     }
 

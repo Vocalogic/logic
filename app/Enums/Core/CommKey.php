@@ -117,6 +117,12 @@ enum CommKey: string
      */
     case AccountMRRCache = 'account_mrr_cache';
 
+    /**
+     * Keep a cache of our current integrations. This is because there are many places that
+     * call a hasIntegration for checking and there's no reason to hit the database over
+     * and over again. Cleared on Integration updates.
+     */
+    case GlobalIntegrationRegistry = 'global_integration_registry';
 
     /**
      * All cache keys should have their lifetimes defined below. If no specific definition is defined

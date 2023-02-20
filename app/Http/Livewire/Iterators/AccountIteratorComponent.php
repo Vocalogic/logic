@@ -38,6 +38,7 @@ class AccountIteratorComponent extends LwTableComponent
      */
     public function preFilters($collection): mixed
     {
+        $collection = $collection->with(['invoices', 'invoices.items', 'invoices.transactions', 'items', 'items.addons', 'agent']);
         $collection = $collection->where('id', '>', 1); // Don't show admin account.
         $req = app('request');
         if ($req->show == 'mrr')

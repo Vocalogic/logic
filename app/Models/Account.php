@@ -609,8 +609,9 @@ class Account extends Model
     public function getAccountBalanceAttribute(): float
     {
         $total = 0;
-        foreach ($this->invoices()->where('status', '!=', InvoiceStatus::DRAFT)->get() as $invoice)
+        foreach ($this->invoices as $invoice)
         {
+            if ($invoice->status == InvoiceStatus::DRAFT) continue;
             if ($invoice->balance)
             {
                 $total += $invoice->balance;
