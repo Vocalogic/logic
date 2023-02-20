@@ -208,7 +208,7 @@ class Lead extends Model
     public function getPrimaryMrrAttribute(): float
     {
         if (!$this->hasPreferred) return 0.00;
-        $quote = $this->quotes()->where('preferred', true)->first();
+        $quote = $this->quotes->where('preferred', true)->first();
         return $quote->mrr;
     }
 
@@ -219,7 +219,7 @@ class Lead extends Model
     public function getPrimaryNrcAttribute(): float
     {
         if (!$this->hasPreferred) return 0.00;
-        $quote = $this->quotes()->where('preferred', true)->first();
+        $quote = $this->quotes->where('preferred', true)->first();
         return $quote->nrc;
     }
 

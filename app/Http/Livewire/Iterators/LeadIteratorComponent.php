@@ -40,6 +40,17 @@ class LeadIteratorComponent extends LwTableComponent
     public function preFilters($collection): mixed
     {
         $req = app('request');
+        $collection = $collection->with([
+            'type',
+            'origin',
+            'status',
+            'quotes',
+            'agent',
+            'quotes.items',
+            'quotes.items.addons',
+            'quotes.products',
+            'quotes.services'
+        ]);
         if ($req->status)
         {
             $collection = $collection->where('lead_status_id', $req->status);
