@@ -55,9 +55,12 @@ class LandingController extends Controller
      */
     public function login(): View
     {
+        $desc = setting('shop.info') ?
+            : "Login to view your account, pay invoices and order additional products for your business.";
         seo()
             ->title("Login to " . setting('brand.name'))
-            ->description("Login to view your account, pay invoices and order additional products for your business.");
+            ->image(_file((int)setting('brandImage.dark'))?->url)
+            ->description($desc);
         return view('login');
     }
 
