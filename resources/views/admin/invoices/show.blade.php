@@ -52,7 +52,7 @@
                         </thead>
 
                         <tbody>
-                        @foreach($invoice->items as $item)
+                        @foreach($invoice->items()->with(['item', 'item.category'])->get() as $item)
                             <tr>
                                 @if($item->item)
                                     <td>
@@ -79,7 +79,7 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @if(!$invoice->transactions()->count())
+                        @if(!$invoice->transactions->count())
                         <tr>
                             <td>
                                 <input type="text" class="form-control" name="item">
@@ -143,7 +143,7 @@
         </tr>
         </thead>
         <tbody>
-        @foreach(\App\Models\BillCategory::where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
+        @foreach(\App\Models\BillCategory::with('items')->where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
 
             @foreach($cat->items as $item)
                 <tr>
@@ -151,7 +151,7 @@
                         <a class="wait" data-message="Adding to Invoice.." data-effect="rotateplane" data-anchor=".itemTable"
                             href="/admin/invoices/{{$invoice->id}}/add/{{$item->id}}">
                             [{{$item->code}}] {{$item->name}}</a><br/><small
-                            class="text-muted">{{$item->category->name}}</small></td>
+                            class="text-muted">{{$cat->name}}</small></td>
                     <td>${{moneyFormat($item->nrc)}}</td>
                 </tr>
             @endforeach
