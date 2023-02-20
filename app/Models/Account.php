@@ -28,6 +28,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
 use App\Traits\HasLogTrait;
 
@@ -77,8 +78,8 @@ class Account extends Model
 {
     use HasLogTrait;
 
-    protected $guarded    = ['id'];
-    public    $casts      = [
+    protected $guarded = ['id'];
+    public    $casts   = [
         'payment_method'    => PaymentMethod::class,
         'merchant_metadata' => 'json',
         'next_bill'         => 'datetime'
@@ -263,6 +264,16 @@ class Account extends Model
     }
 
     /**
+     * An account has many activities.
+     * @return HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'refid')->where('type', 'ACCOUNT')
+            ->orderBy('created_at', 'DESC');
+    }
+
+    /**
      * Fire off the welcome email template to the admin.
      * @return void
      */
@@ -296,7 +307,7 @@ class Account extends Model
             if ($item->frequency && $item->frequency != BillFrequency::Monthly) continue;
             $total += ($item->price * $item->qty) + $item->addonTotal;
         }
-        return (int) bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -316,7 +327,7 @@ class Account extends Model
      * Get MRR Rank for Account
      * @return int
      */
-    public function getRankAttribute() : int
+    public function getRankAttribute(): int
     {
         $mrrBlock = [];
         foreach (self::where('active', true)->get() as $account)
@@ -326,7 +337,7 @@ class Account extends Model
         asort($mrrBlock);
         $rankCount = sizeOf($mrrBlock);
         $rank = 0;
-        foreach($mrrBlock as $key => $value)
+        foreach ($mrrBlock as $key => $value)
         {
             if ($key == $this->id)
             {
@@ -341,7 +352,7 @@ class Account extends Model
      * Get MRR Rank for Account
      * @return int
      */
-    public function getRankTotalAttribute() : int
+    public function getRankTotalAttribute(): int
     {
         $ttlBlock = [];
         foreach (self::where('active', true)->get() as $account)
@@ -356,7 +367,7 @@ class Account extends Model
         asort($ttlBlock);
         $rankCount = sizeOf($ttlBlock);
         $rank = 0;
-        foreach($ttlBlock as $key => $value)
+        foreach ($ttlBlock as $key => $value)
         {
             if ($key == $this->id)
             {
@@ -377,16 +388,15 @@ class Account extends Model
         $diff = 0;
         foreach ($this->invoices as $invoice)
         {
-            if($invoice->paid_on)
+            if ($invoice->paid_on)
             {
                 $diff += $invoice->paid_on->diffInDays($invoice->created_at);
                 $total++;
             }
         }
         if ($total == 0) return 0;
-        return (int) bcmul($diff / $total,1);
+        return (int)bcmul($diff / $total, 1);
     }
-
 
 
     /**
@@ -926,7 +936,6 @@ class Account extends Model
         }
         else return storage_path() . "/" . $pdf->saveFromData($data);
     }
-
 
 
     /**

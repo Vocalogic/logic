@@ -59,6 +59,7 @@ class Invoice extends Model
         'due_on'  => 'datetime',
         'paid_on' => 'datetime'
     ];
+
     public array $tracked          = [
         'status'           => "Invoice Status|enum",
         'sent_on'          => "Sent On",

@@ -33,14 +33,14 @@ class WidgetGenerator
     public function invoicedToday(): object
     {
         $total = 0;
-        $invoices = Invoice::where('status', '!=', InvoiceStatus::DRAFT->value)
+        $invoices = Invoice::with(['items', 'transactions'])->where('status', '!=', InvoiceStatus::DRAFT->value)
             ->whereDate('created_at', now()->format("Y-m-d"))->get();
         foreach ($invoices as $invoice)
         {
             $total += $invoice->total;
         }
         // Difference from the day before.
-        $pasts = Invoice::where('status', '!=', InvoiceStatus::DRAFT->value)
+        $pasts = Invoice::with(['items', 'transactions'])->where('status', '!=', InvoiceStatus::DRAFT->value)
             ->whereDate('created_at', now()->subDay()->format("Y-m-d"))->get();
         $pastTotal = 0;
         foreach ($pasts as $past)
@@ -64,7 +64,7 @@ class WidgetGenerator
      */
     public function outstandingInvoices(): object
     {
-        $invoices = Invoice::whereIn('status', [InvoiceStatus::SENT->value, InvoiceStatus::PARTIAL->value])->get();
+        $invoices = Invoice::with(['items', 'transactions'])->whereIn('status', [InvoiceStatus::SENT->value, InvoiceStatus::PARTIAL->value])->get();
         $total = 0;
         foreach ($invoices as $invoice)
         {
@@ -116,17 +116,17 @@ class WidgetGenerator
     {
         $total = 0;
         $grand = 0;
-        foreach (Account::where('active', true)->get() as $account)
+        foreach (Account::with(['items', 'items.addons'])->where('active', true)->get() as $account)
         {
             $grand += $account->mrr;
         }
-        $accounts = Account::whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->get();
+        $accounts = Account::with(['items', 'items.addons'])->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->get();
         foreach ($accounts as $account)
         {
             $total += $account->mrr;
         }
         // Difference from the day before.
-        $pasts = Account::whereBetween('created_at',
+        $pasts = Account::with(['items', 'items.addons'])->whereBetween('created_at',
             [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])->get();
         $pastTotal = 0;
         foreach ($pasts as $past)
@@ -175,13 +175,13 @@ class WidgetGenerator
     public function quotedAmount(): object
     {
         $total = 0;
-        $quotes = Quote::whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->get();
+        $quotes = Quote::with(['items', 'services', 'products', 'items.addons', 'services.addons', 'products.addons'])->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])->get();
         foreach ($quotes as $quote)
         {
             $total += $quote->total;
         }
         // Difference from the day before.
-        $pasts = Quote::whereBetween('created_at',
+        $pasts = Quote::with(['items', 'services', 'products', 'items.addons', 'services.addons', 'products.addons'])->whereBetween('created_at',
             [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])->get();
         $pastTotal = 0;
         foreach ($pasts as $past)

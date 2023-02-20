@@ -126,6 +126,11 @@ enum CommKey: string
     case GlobalIntegrationRegistry = 'global_integration_registry';
 
     /**
+     * Cache all settings, and invalidate when a setting has been changed.
+     */
+    case GlobalSettings = 'global_settings';
+
+    /**
      * All cache keys should have their lifetimes defined below. If no specific definition is defined
      * then a default of one hour expiry will be provided.
      * @return Carbon

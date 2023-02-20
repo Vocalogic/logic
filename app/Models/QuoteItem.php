@@ -98,7 +98,7 @@ class QuoteItem extends Model
      */
     public function getAddonSummaryAttribute(): string
     {
-        if ($this->addons()->count() == 0) return '';
+        if ($this->addons->count() == 0) return '';
         $data = [];
         foreach ($this->addons as $addon)
         {

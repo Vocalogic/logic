@@ -54,7 +54,13 @@ if (!function_exists('setting'))
         bool $asSelectable = false,
         bool $fromValues = false
     ): string|array|null {
-        $setting = Setting::where('ident', $ident)->first();
+        $settings = cache(CommKey::GlobalSettings->value);
+        if (!$settings)
+        {
+            $settings = Setting::all();
+            cache([CommKey::GlobalSettings->value => $settings], CommKey::GlobalSettings->getLifeTime());
+        }
+        $setting = $settings->keyBy('ident')->get($ident);
         if (!$setting && !$value) return null;
         if (!$setting && $value)
         {
@@ -67,6 +73,7 @@ if (!function_exists('setting'))
                 'help'     => "Dynamic Setting",
                 'category' => 'Dynamic'
             ]);
+            CommKey::GlobalSettings->clear();
         }
         if ($asSelectable)
         {
