@@ -42,6 +42,16 @@ class QuoteIteratorComponent extends LwTableComponent
      */
     public function preFilters($collection): mixed
     {
+        $collection = $collection->with([
+            'lead',
+            'account',
+            'items',
+            'services',
+            'products',
+            'items.item',
+            'services.item',
+            'products.item'
+        ]);
         if (isset($this->lead) && $this->lead->id)
         {
             $collection = $collection->where('lead_id', $this->lead->id);

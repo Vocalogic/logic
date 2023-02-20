@@ -150,11 +150,11 @@ class QuoteItem extends Model
     {
         if ($this->item->type == 'services')
         {
-            $count = $this->quote->services()->count();
+            $count = $this->quote->services->count();
         }
         else
         {
-            $count = $this->quote->products()->count();
+            $count = $this->quote->products->count();
         }
         if ($count <= 1) return false; // only on there can't move anywhere.
         if ($this->ord == $count) return false;
@@ -170,11 +170,11 @@ class QuoteItem extends Model
     {
         if ($this->item->type == 'services')
         {
-            $count = $this->quote->services()->count();
+            $count = $this->quote->services->count();
         }
         else
         {
-            $count = $this->quote->products()->count();
+            $count = $this->quote->products->count();
         }
         if ($count <= 1) return false;     // only one there can't move anywhere.
         if ($this->ord == 1) return false; // at the top already.
