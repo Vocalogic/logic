@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Models\Invoice::whereIn('status', [\App\Enums\Core\InvoiceStatus::DRAFT->value])->get() as $invoice)
+    @foreach(\App\Models\Invoice::with(['account','items', 'transactions'])->whereIn('status', [\App\Enums\Core\InvoiceStatus::DRAFT->value])->get() as $invoice)
         <tr>
             <td>
                 <a href="/admin/invoices/{{$invoice->id}}"><span class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span></a>
