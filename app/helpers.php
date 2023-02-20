@@ -437,7 +437,7 @@ if (!function_exists('setting'))
         if (!$registryState)
         {
             $registryState = Integration::all();
-            cache([CommKey::GlobalIntegrationRegistry->value => $registryState]);
+            cache([CommKey::GlobalIntegrationRegistry->value => $registryState], CommKey::GlobalIntegrationRegistry->getLifeTime());
         }
         foreach (IntegrationRegistry::cases() as $case)
         {

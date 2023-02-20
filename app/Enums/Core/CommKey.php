@@ -3,6 +3,7 @@
 namespace App\Enums\Core;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * This enumeration will control all of the session and cache key systems that are used for the
@@ -139,5 +140,14 @@ enum CommKey: string
             self::AccountMRRCache => now()->addDay(),
             default => now()->addHour()
         };
+    }
+
+    /**
+     * This is used to clear the cache for a given key.
+     * @return void
+     */
+    public function clear(): void
+    {
+        Cache::forget($this->value);
     }
 }
