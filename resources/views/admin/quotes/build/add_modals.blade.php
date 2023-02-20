@@ -16,14 +16,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach(\App\Models\BillCategory::where('type', \App\Enums\Core\BillItemType::SERVICE)->get() as $cat)
+                    @foreach(\App\Models\BillCategory::with('items')->where('type', \App\Enums\Core\BillItemType::SERVICE)->get() as $cat)
 
                         @foreach($cat->items as $item)
                             <tr>
                                 <td>
                                     <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">
                                         [{{$item->code}}] {{$item->name}}</a><br/><small
-                                        class="text-muted">{{$item->category->name}}</small>
+                                        class="text-muted">{{$cat->name}}</small>
                                 </td>
                                 <td>${{moneyFormat($item->mrc)}}</td>
                             </tr>
@@ -54,14 +54,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @foreach(\App\Models\BillCategory::where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
+                    @foreach(\App\Models\BillCategory::with('items')->where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
                         @foreach($cat->items as $item)
                             <tr>
                                 <td>
                                     <a href="/admin/quotes/{{$quote->id}}/add/{{$item->id}}">
                                         [{{$item->code}}] {{$item->name}}
                                     </a><br/><small class="text-muted">
-                                        {{$item->category->name}}
+                                        {{$cat->name}}
                                     </small>
                                 </td>
                                 <td>${{moneyFormat($item->nrc)}}</td>

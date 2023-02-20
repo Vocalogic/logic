@@ -40,6 +40,7 @@ class QuoteItem extends Model
         'finance_charge' => "Finance Charge Assessed"
     ];
 
+
     /**
      * Items belong to a quote.
      * @return BelongsTo

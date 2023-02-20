@@ -83,7 +83,7 @@
     </div>
 
     <div class="col-lg-3">
-        @if($quote->items()->count())
+        @if($quote->items->count())
             <div class="mb-2 rightpanel">
                 <a class="btn btn-{{bm()}}primary confirm w-100 mt-3" href="/admin/quotes/{{$quote->id}}/send"
                    data-message="Are you sure you want to send this quote? This will also mark this quote as 'presentable' and will be available for review in the contact's discovery page."
