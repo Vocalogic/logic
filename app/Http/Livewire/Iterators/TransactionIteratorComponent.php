@@ -33,4 +33,23 @@ class TransactionIteratorComponent extends LwTableComponent
      */
     public string $model = Transaction::class;
 
+    /**
+     * Eager load all the relationships we will need for this table.
+     * @param $collection
+     * @return mixed
+     */
+    public function preFilters($collection): mixed
+    {
+        return $collection->with([
+            'invoice',
+            'account.invoices',
+            'account.invoices.items',
+            'account.invoices.transactions',
+            'invoice.items',
+            'account',
+            'account.items',
+            'account.items.addons'
+        ]);
+    }
+
 }
