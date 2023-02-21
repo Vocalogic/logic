@@ -11,6 +11,8 @@ class EmailSeeder extends Seeder
     const CAT_FINANCE = 1;  // Quotes, Invoices, any Billing related emails
     const CAT_LEADS   = 2;  // Leads/Discovery/Updates,etc
     const CAT_ACCOUNT = 3;  // Account Information
+    const CAT_SALES   = 4;  // Sales/Affiliate Emails
+
 
     /**
      * Run the database seeds.
@@ -48,10 +50,6 @@ class EmailSeeder extends Seeder
             'When a MSA has been signed.',
             'Your {setting.brand-name} Signed Agreement Copy');
 
-
-        $this->buildEmail('lead.discovery', self::CAT_LEADS, 'Discovery Request',
-            'Sent to lead to obtain information for creating a quote.',
-            'Hey {lead.first}, We need some information from you!', 'SimpleLead');
 
         $this->buildEmail('account.welcome', self::CAT_ACCOUNT, 'Welcome Email', 'Sent when a lead becomes an account',
             'Welcome to {setting.brand-name}!');
@@ -146,6 +144,11 @@ class EmailSeeder extends Seeder
         $this->buildEmail('agent.batchPaid', self::CAT_FINANCE, 'Agent Commission Batch Paid',
             'Email sent when a payment has been sent to the sales agent.',
             'Payment Sent for Commission Batch #{commissionBatch.id}');
+
+        $this->buildEmail('sales.staleLead', self::CAT_SALES, 'Stale Lead',
+            'Sent to sales agents when a lead has gone stale',
+            '[{lead.company}] Lead has gone stale, Please Update');
+
 
         EmailTemplate::placeholders();
 

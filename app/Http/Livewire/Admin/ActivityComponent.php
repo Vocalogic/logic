@@ -147,7 +147,7 @@ class ActivityComponent extends Component
             $act->save();
             if ($this->mode == 'LEAD')
             {
-                $this->lead->touch();
+                $this->lead->update(['stale_notification_sent' => null]);
             }
             if ($this->mode == 'ORDER')
             {

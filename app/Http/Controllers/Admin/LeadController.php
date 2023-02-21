@@ -56,6 +56,7 @@ class LeadController extends Controller
     public function update(Lead $lead, Request $request): RedirectResponse
     {
         $old = $lead->replicate();
+        $lead->update(['stale_notification_sent' => null]);
         if ($request->forecast_date)
         {
             $request->merge(['forecast_date' => Carbon::parse($request->forecast_date)]);
@@ -174,6 +175,7 @@ class LeadController extends Controller
             $disc->update(['value' => $request->value]);
             _log($disc, "Discovery Question Updated", $old);
         }
+        $lead->update(['stale_notification_sent' => null]);
         return ['success' => true];
     }
 
@@ -290,7 +292,7 @@ class LeadController extends Controller
     public function saveDiscovery(Lead $lead, Request $request): RedirectResponse
     {
         $old = $lead->replicate();
-        $lead->update(['discovery' => $request->discovery]);
+        $lead->update(['discovery' => $request->discovery, 'stale_notification_sent' => null]);
         _log($lead, "Discovery Information Updated", $old);
         return redirect()->back()->with('message', 'Discovery information saved.');
     }
@@ -315,6 +317,7 @@ class LeadController extends Controller
     {
         $old = $lead->replicate();
         $lead->setStatus($request->lead_status_id);
+        $lead->update(['stale_notification_sent' => null]);
         _log($lead, "Status Changed", $old);
         return redirect()->back()->with('message', "Lead Status Updated");
     }
@@ -326,7 +329,7 @@ class LeadController extends Controller
      */
     public function activate(Lead $lead): array
     {
-        $lead->update(['active' => 1, 'lead_status_id' => 1]);
+        $lead->update(['active' => 1, 'lead_status_id' => 1, 'stale_notification_sent' => null]);
         sysact(ActivityType::Lead, $lead->id, "reactivated lead ");
         _log($lead, "Lead was reactivated.");
         return ['callback' => "reload"];
