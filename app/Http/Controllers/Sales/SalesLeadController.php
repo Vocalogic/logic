@@ -89,14 +89,15 @@ class SalesLeadController extends Controller
             'email'   => 'required'
         ]);
         $lead->update([
-            'company' => $request->company,
-            'contact' => $request->contact,
-            'email'   => $request->email,
-            'phone'   => $request->phone,
-            'address' => $request->address,
-            'city'    => $request->city,
-            'state'   => $request->state,
-            'zip'     => $request->zip
+            'company'                 => $request->company,
+            'contact'                 => $request->contact,
+            'email'                   => $request->email,
+            'phone'                   => $request->phone,
+            'address'                 => $request->address,
+            'city'                    => $request->city,
+            'state'                   => $request->state,
+            'zip'                     => $request->zip,
+            'stale_notification_sent' => null
 
         ]);
         sysact(ActivityType::Lead, $lead->id, "updated lead ");
@@ -121,10 +122,11 @@ class SalesLeadController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function saveQuestions(Lead $lead, Request $request) : RedirectResponse
+    public function saveQuestions(Lead $lead, Request $request): RedirectResponse
     {
         if (!$lead->active) abort(404);
         if ($lead->agent_id != user()->id) abort(401);
+        $lead->update(['stale_notification_sent' => null]);
         foreach ($request->all() as $key => $val)
         {
             if (str_contains($key, "d_"))

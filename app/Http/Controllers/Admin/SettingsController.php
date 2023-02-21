@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Core\CommKey;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
@@ -51,6 +52,7 @@ class SettingsController extends Controller
                 $setting->update(['value' => $file->id]);
             }
         }
+        CommKey::GlobalSettings->clear();
         return redirect()->back()->withMessage("Settings updated successfully.");
     }
 }
