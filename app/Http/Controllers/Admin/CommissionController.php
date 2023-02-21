@@ -19,21 +19,31 @@ class CommissionController extends Controller
      */
     public function index(Request $request): View
     {
+        $with = [
+            'account',
+            'invoice',
+            'invoice.items',
+            'invoice.account',
+            'invoice.account.items',
+            'invoice.account.agent',
+            'invoice.account.affiliate'
+        ];
         if ($request->status)
         {
-            $commissions = Commission::where('status', CommissionStatus::from($request->status))->get();
+            $commissions = Commission::with($with)
+                ->where('status', CommissionStatus::from($request->status))->get();
         }
         elseif ($request->byUser)
         {
-            $commissions = Commission::where('user_id', $request->byUser)->get();
+            $commissions = Commission::with($with)->where('user_id', $request->byUser)->get();
         }
-        elseif($request->byAffiliate)
+        elseif ($request->byAffiliate)
         {
-            $commissions = Commission::where('affiliate_id', $request->byAffiliate)->get();
+            $commissions = Commission::with($with)->where('affiliate_id', $request->byAffiliate)->get();
         }
         else
         {
-            $commissions = Commission::where('status', '!=', CommissionStatus::Paid)->get();
+            $commissions = Commission::with($with)->where('status', '!=', CommissionStatus::Paid)->get();
         }
 
         foreach ($commissions as $comm)
@@ -68,7 +78,7 @@ class CommissionController extends Controller
             throw new LogicException("You must include a reason why you are changing the amount.");
         }
         $commission->update([
-            'amount'    => convertMoney($request->amount),
+            'amount' => convertMoney($request->amount),
             'edit_note' => $request->edit_note
         ]);
         if ($request->commission_batch_id)
