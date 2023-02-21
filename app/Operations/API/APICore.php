@@ -15,6 +15,8 @@ abstract class APICore
     public int    $connectionTimeout = 10;
     public array  $headers           = [];
     public array  $auth              = [];
+    public int $responseCode = 0;
+
     public Client $client;
 
     /**
@@ -42,6 +44,8 @@ abstract class APICore
     {
         $this->auth = $auth;
     }
+
+
 
     /**
      * Send command to NS API
@@ -93,13 +97,13 @@ abstract class APICore
             };
         } catch (ClientException|RequestException $e)
         {
+            $this->responseCode = $e->getResponse()->getStatusCode();
             info($e->getMessage());
             info(sprintf("Debug Log Failure: %s - File: %s, Line %d", $e->getResponse()->getBody(), $e->getFile(),
                 $e->getLine()));
             info("Body: ". $e->getResponse()->getBody());
             throw new LogicException($e->getResponse()->getBody());
         }
-
         return json_decode($response->getBody()->getContents());
     }
 

@@ -1,3 +1,7 @@
+<div class="mb-2" style="text-align: right;">
+    <a href="{{ request()->url() }}/extended">Extended View</a>
+</div>
+
 <div class="card">
     <div class="card-body d-flex align-items-start p-0">
         <ul class="nav nav-pills custom-horizontal me-2" role="tablist">
@@ -25,7 +29,5 @@
                 @endif
             @endforeach
         </div>
-
-
     </div>
 </div>

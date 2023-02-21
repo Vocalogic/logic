@@ -5,22 +5,24 @@ namespace App\Models;
 use App\Structs\STemplate;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use League\CommonMark\CommonMarkConverter;
 
 /**
  * @property mixed $body
+ * @property mixed $name
  */
 class Term extends Model
 {
     protected $guarded = ['id'];
 
     /**
-     * A term belongs to a lead type
-     * @return BelongsTo
+     * A TOS can be assigned to many bill items.
+     * @return HasMany
      */
-    public function type(): BelongsTo
+    public function items(): HasMany
     {
-        return $this->belongsTo(LeadType::class, 'lead_type_id');
+        return $this->hasMany(BillItem::class, 'tos_id');
     }
 
     /**

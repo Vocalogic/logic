@@ -25,15 +25,6 @@ class BillItemCategoryController extends Controller
         return view('admin.bill_categories.index')->with('type', $type);
     }
 
-    /**
-     * Show Create Form
-     * @param string $type
-     * @return View
-     */
-    public function create(string $type): View
-    {
-        return view('admin.bill_categories.create')->with('type', $type)->with('cat', new BillCategory);
-    }
 
     /**
      * Show Edit Form
@@ -67,6 +58,7 @@ class BillItemCategoryController extends Controller
             'slug'        => Str::slug($request->shop_name),
             'shop_offer'  => $request->shop_offer
         ]);
+        _log($cat, "Category '{$request->name}' has been created.");
         if ($request->hasFile('shop_offer_image_id'))
         {
             $lo = new LoFileHandler();

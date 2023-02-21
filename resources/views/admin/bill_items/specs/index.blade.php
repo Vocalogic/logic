@@ -1,4 +1,8 @@
-@extends('layouts.admin', ['title' => "$item->name Definitions", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/product-specifications"])
+@extends('layouts.admin', ['title' => "$item->name Definitions",
+    'crumbs' => $crumbs,
+    'docs' => "https://logic.readme.io/docs/product-specifications",
+    'log' => $item->logLink
+])
 
 @section('pre')
     <div class="row align-items-center">
@@ -16,6 +20,19 @@
         </div>
         <div class="col-xl-10">
             @include('admin.bill_items.specs.fields')
+
+            <div class="card mt-3">
+                <div class="lchart" id="itemHistorical"
+                     data-title="Item Selling Price over Company History"
+                     data-height="300"
+                     data-url="/admin/graph/MRR_ACCOUNT?fn=getBillItemPriceChart&item={{$item->id}}&seriesType=radialBar&months=4"
+                     data-xtype="datetime"
+                     data-type="area"
+                     data-y="Price Sold History"
+                     data-disable-toolbar="true"
+                     data-wait="Getting Item Pricing Historical...">
+                </div>
+            </div>
         </div>
     </div>
 

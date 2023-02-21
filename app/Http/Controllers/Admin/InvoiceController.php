@@ -49,8 +49,9 @@ class InvoiceController extends Controller
      */
     public function addCustomItem(Invoice $invoice, Request $request): RedirectResponse
     {
+        $old = clone $invoice;
         $request->validate(['item' => 'required', 'price' => 'required|numeric']);
-        $invoice->items()->create([
+        $item = $invoice->items()->create([
             'bill_item_id' => 0,
             'code'         => '',
             'name'         => $request->item,
@@ -58,7 +59,10 @@ class InvoiceController extends Controller
             'price'        => convertMoney($request->price),
             'qty'          => $request->qty
         ]);
+        _log($item, "Custom Item Created ($request->item - $".$request->price.")");
         $invoice->calculateTax();
+        $invoice->refresh();
+        _log($invoice, "Invoice Updated", $old);
         return redirect()->back();
     }
 
@@ -70,7 +74,8 @@ class InvoiceController extends Controller
      */
     public function addItem(Invoice $invoice, BillItem $item): RedirectResponse
     {
-        $invoice->items()->create([
+        $old = clone $invoice;
+        $ii = $invoice->items()->create([
             'bill_item_id' => $item->id,
             'code'         => $item->code,
             'name'         => $item->name,
@@ -79,6 +84,9 @@ class InvoiceController extends Controller
             'qty'          => 1
         ]);
         $invoice->calculateTax();
+        $invoice->refresh();
+        _log($ii, $item->name . " added for $" . moneyFormat($ii->price));
+        _log($invoice, "Invoice Updated", $old);
         return redirect()->back();
     }
 
@@ -90,6 +98,7 @@ class InvoiceController extends Controller
      */
     public function remItem(Invoice $invoice, InvoiceItem $item): array
     {
+        _log($invoice, $item->name . " removed from Invoice");
         $item->delete();
         $invoice->calculateTax();
         session()->flash('message', $item->name . " removed from Invoice");
@@ -115,6 +124,7 @@ class InvoiceController extends Controller
     {
         $invoice->send();
         session()->flash('message', "Invoice Sent Successfully");
+        _log($invoice, "Invoice sent to customer");
         return ['callback' => 'reload'];
     }
 
@@ -137,6 +147,7 @@ class InvoiceController extends Controller
     public function destroy(Invoice $invoice): array
     {
         $account = $invoice->account;
+        _log($account, "Invoice #$invoice->id Deleted ($".moneyFormat($invoice->total).")");
         $invoice->items()->delete();
         $invoice->delete();
         return ['callback' => "redirect:/admin/accounts/$account->id?active=invoices"];
@@ -160,16 +171,17 @@ class InvoiceController extends Controller
      */
     public function dueUpdate(Invoice $invoice, Request $request): RedirectResponse
     {
+        $old = clone $invoice;
         try
         {
             $due = Carbon::parse($request->due_on);
             $invoice->update(['due_on' => $due]);
-            return redirect()->back()->with('message', "Due date updated successfully.");
+            _log($invoice, "Invoice Updated", $old);
         } catch (\Exception $e)
         {
             throw new \LogicException("Unable to set due date - " . $e->getMessage());
         }
-        return redirect()->back();
+        return redirect()->back()->with('message', "Due date updated successfully.");
     }
 
     /**
@@ -180,6 +192,7 @@ class InvoiceController extends Controller
      */
     public function authPayment(Invoice $invoice, Request $request): RedirectResponse
     {
+        $old = clone $invoice;
         $amount = convertMoney($request->amount); // Remove commas for amount
         if (!$request->pmethod)
         {
@@ -208,6 +221,8 @@ class InvoiceController extends Controller
             session()->flash('error', "Unable to process payment: " . $e->getMessage());
             return redirect()->back();
         }
+        $invoice->refresh();
+        _log($invoice, "Invoice Payment Applied", $old);
         session()->flash('message',
             "A payment of $" . moneyFormat($amount) . " was applied to Invoice #$invoice->id.");
         return redirect()->to("/admin/accounts/{$invoice->account->id}/invoices");
@@ -233,6 +248,8 @@ class InvoiceController extends Controller
      */
     public function updateInvoiceItem(Invoice $invoice, InvoiceItem $item, Request $request): RedirectResponse
     {
+        $old = clone $item;
+        $oldInvoice = clone $invoice;
         $request->validate([
             'price' => 'required|numeric',
             'qty'   => 'required|numeric'
@@ -251,6 +268,10 @@ class InvoiceController extends Controller
             $item->update(['name' => $request->name]);
         }
         $invoice->calculateTax();
+        $invoice->refresh();
+        $item->refresh();
+        _log($item, "Invoice Item Updated", $old);
+        _log($invoice, "Invoice Updated", $oldInvoice);
         return redirect()->back();
     }
 
@@ -272,7 +293,9 @@ class InvoiceController extends Controller
      */
     public function settingsUpdate(Invoice $invoice, Request $request): RedirectResponse
     {
+        $old = clone $invoice;
         $invoice->update($request->all());
+        _log($invoice, "Invoice Updated", $old);
         return redirect()->back()->with('message', "Settings updated successfully.");
     }
 }

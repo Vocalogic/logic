@@ -95,7 +95,7 @@ class QBOEstimate extends QBOCore
             $line->SalesItemLineDetail->Qty = $item->qty;
             $line->SalesItemLineDetail->UnitPrice = moneyFormat($item->price, false);
             $line->Description = $nameFormatted;
-            $line->Amount = moneyFormat(bcmul($item->qty * $item->price, 1), false);
+            $line->Amount = moneyFormat((int) bcmul($item->qty * $item->price, 1), false);
             // Finally add it to our array.
             $lines[] = $line;
         }
@@ -113,12 +113,12 @@ class QBOEstimate extends QBOCore
 
     /**
      * Removes an estimate from qbo.
-     * @param string $id
+     * @param int $id
      * @return void
      * @throws GuzzleException
      * @throws LogicException
      */
-    public function delete(string $id): void
+    public function delete(int $id): void
     {
         $qboEstimate = $this->find($id);
         if (!$qboEstimate) return;

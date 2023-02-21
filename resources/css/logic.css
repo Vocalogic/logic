@@ -83,3 +83,7 @@
     border: 1px solid rgba(25, 26, 28, 0.2);
     border-radius: .3rem;
 }
+
+.datepicker > .datepicker-days {
+    display: block !important;
+}

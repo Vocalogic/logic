@@ -28,8 +28,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Activity extends Model
 {
     protected $guarded = ['id'];
-    protected $dates   = ['event'];
-    public    $casts   = ['type' => ActivityType::class, 'verb' => ActivityType::class];
+    public    $casts   = ['type' => ActivityType::class, 'verb' => ActivityType::class, 'event' => 'datetime'];
 
 
     /**

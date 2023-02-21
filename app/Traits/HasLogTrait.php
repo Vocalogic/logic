@@ -37,18 +37,27 @@ trait HasLogTrait
      */
     public function getLogs(): Collection
     {
-
         $logs = $this->logs()->orderBy('created_at', 'desc')->get();
         if (isset($this->logRelationships))
         {
-            foreach($this->logRelationships as $relationship)
+            foreach ($this->logRelationships as $relationship)
             {
-                foreach ($this->{$relationship} as $item)
+                if (is_iterable($this->{$relationship})) // for hasMany and others
                 {
-                    $logs = $logs->concat($item->logs()->get());
+                    foreach ($this->{$relationship} as $item)
+                    {
+                        $logs = $logs->concat($item->logs()->get());
+                    }
+                }
+                else // for BelongsTo - not an array.
+                {
+                    if ($this->{$relationship}) // make sure not empty
+                    {
+                        $logs = $logs->concat($this->{$relationship}->logs()->get());
+                    }
                 }
             }
         }
-        return $logs;
+        return $logs->sortByDesc('created_at');
     }
 }

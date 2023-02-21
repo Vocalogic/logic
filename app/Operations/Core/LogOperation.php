@@ -6,6 +6,7 @@ use App\Enums\Core\LogSeverity;
 use App\Models\Account;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\AppLog;
+use Illuminate\Support\Collection;
 
 /**
  * Service class that handles log entries
@@ -162,16 +163,21 @@ class LogOperation
                     $m = explode("|", $desc);
                     if ($m[1] == 'money') // If we need to convert an int into money.
                     {
-                        $oldValue = moneyFormat($old->{$key});
-                        $newValue = moneyFormat($model->{$key});
+                        $oldValue = "$" . moneyFormat($old->{$key});
+                        $newValue = "$" . moneyFormat($model->{$key});
                     }
                     elseif ($m[1] == 'bool') // If we need to convert a boolean into yes/no.
                     {
 
-                        $oldValue = (bool) $old->{$key};
+                        $oldValue = (bool)$old->{$key};
                         $oldValue = $oldValue ? "Yes" : "No";
-                        $newValue = (bool) $model->{$key};
+                        $newValue = (bool)$model->{$key};
                         $newValue = $newValue ? "Yes" : "No";
+                    }
+                    elseif ($m[1] == 'enum')
+                    {
+                        $oldValue = $old->{$key}->value;
+                        $newValue = $model->{$key}->value;
                     }
                     else // If this is a relationship
                     {
@@ -186,9 +192,43 @@ class LogOperation
                     $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $oldValue, $newValue);
                     continue;
                 }
-                $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $old->{$key} ?:"Empty", $model->{$key}?:"Empty");
+                $changes[] = sprintf("%s changed from <b>%s</b> to <b>%s</b>", $desc, $old->{$key} ?: "Empty",
+                    $model->{$key} ?: "Empty");
             }
         }
         return implode(", ", $changes);
+    }
+
+    /**
+     * Loads model by given model slug, returns null if not found.
+     * @param string $model
+     * @param int    $id
+     * @return Model|null
+     */
+    public function loadModel(string $model, int $id): Model|null
+    {
+        $model = ucfirst($model);
+        $class = "\\App\\Models\\$model";
+        try
+        {
+            $entity = $class::find($id);
+        } catch (Throwable)
+        {
+            return null;
+        }
+        return $entity;
+    }
+
+    /**
+     * Attempt to get the model's logs, otherwise return
+     * and empty collection.
+     * @param string $model
+     * @param int    $id
+     * @return Collection
+     */
+    public function getModelLogs(string $model, int $id): Collection
+    {
+        $entity = $this->loadModel($model, $id);
+        return $entity !== null ? $entity->getLogs() : collect();
     }
 }

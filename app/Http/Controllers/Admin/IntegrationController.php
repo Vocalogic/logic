@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Core\CommKey;
 use App\Enums\Core\IntegrationRegistry;
 use App\Http\Controllers\Controller;
 use App\Models\Integration;
@@ -41,6 +42,7 @@ class IntegrationController extends Controller
         }
         $integration = Integration::where('ident', $i->value)->first();
         $integration->update(['enabled' => true]);
+        CommKey::GlobalIntegrationRegistry->clear();
         return ['callback' => "redirect:/admin/integrations/$int"];
     }
 
@@ -55,6 +57,7 @@ class IntegrationController extends Controller
         if (!$i) return ['callback' => 'reload'];
         $integration = Integration::where('ident', $i->value)->first();
         $integration->update(['enabled' => false]);
+        CommKey::GlobalIntegrationRegistry->clear();
         return ['callback' => 'redirect:/admin/integrations'];
     }
 
@@ -83,6 +86,7 @@ class IntegrationController extends Controller
         if (!$i) abort(404);
         $integration = Integration::where('ident', $i->value)->first();
         $integration->pack($request);
+        CommKey::GlobalIntegrationRegistry->clear();
         return redirect()->to("/admin/integrations");
     }
 

@@ -17,7 +17,6 @@ class MakePDF
     public PDF    $pdf;
     public string $paperSize   = "A4";
     public string $orientation = 'portrait';
-    public bool   $warnings    = false;
     public string $name        = "PDF";
 
     /**
@@ -70,17 +69,6 @@ class MakePDF
     }
 
     /**
-     * Override Warnings
-     * @param $warnings
-     * @return $this
-     */
-    public function setWarnings($warnings): MakePDF
-    {
-        $this->warnings = $warnings;
-        return $this;
-    }
-
-    /**
      * Stream to the browser from html loaded.
      * This is used for dynamically rendered content.
      * @param $data
@@ -92,7 +80,6 @@ class MakePDF
         {
             return $this->pdf->loadHTML($data)
                 ->setPaper($this->paperSize, $this->orientation)
-                ->setWarnings($this->warnings)
                 ->stream($this->name);
         } catch (Exception $e)
         {
@@ -118,7 +105,6 @@ class MakePDF
         if (file_exists($path)) @unlink($path); // Remove PDF in case it already exists.
         $this->pdf->loadHTML($data)
             ->setPaper($this->paperSize, $this->orientation)
-            ->setWarnings($this->warnings)
             ->save($path);
         return $short;
     }

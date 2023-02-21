@@ -186,7 +186,7 @@ class AnalysisEngine
             $serviceOpex += $monthsFromStart * ($service->item->ex_opex * $service->qty);
 
             $serviceTotal += $monthsFromStart * ($service->price * $service->qty);
-            foreach ($account->invoices as $invoice)
+            foreach ($account->invoices()->with('items')->get() as $invoice)
             {
                 foreach ($invoice->items as $item)
                 {
@@ -312,7 +312,6 @@ class AnalysisEngine
         }
         elseif ($invoice->account->agent->agent_comm_spiff > 0 && !$invoice->account->spiffed)
         {
-            if ($invoice->account->spiffed) return 0;
             $amount = $total * $invoice->account->agent->agent_comm_spiff;
         }
         return $amount;

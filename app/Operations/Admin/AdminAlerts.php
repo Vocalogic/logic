@@ -26,6 +26,7 @@ class AdminAlerts extends AlertEngine
     {
         $alerts = [];
         // Initial Install
+        $accounts = Account::with(['invoices', 'activities'])->where('active', true)->get();
 
         if (setting('account.2fa_method') == 'SMS' && !user()->phone)
         {
@@ -37,10 +38,9 @@ class AdminAlerts extends AlertEngine
         }
 
 
-        foreach (Account::where('active', true)->get() as $account)
+        foreach ($accounts as $account)
         {
-            $last = Activity::where('refid', $account->id)->where('type', 'ACCOUNT')->orderBy('created_at', 'DESC')
-                ->first();
+            $last = $account->activities->first();
             if (!$last) continue;
             $time = (int)setting('account.reminder');
             if (!$time) continue;
@@ -55,7 +55,7 @@ class AdminAlerts extends AlertEngine
             }
         }
 
-        foreach (Account::where('declined', true)->get() as $account)
+        foreach ($accounts->where('declined', true)->all() as $account)
         {
             $alerts[] = (object)[
                 'type'        => AlertType::Danger,
@@ -70,38 +70,36 @@ class AdminAlerts extends AlertEngine
         // Invoice Check
         $drafts = [];
         $draftHeaders = ['#', 'Account', 'Created', 'Total'];
-        if (Invoice::whereIn('status', [InvoiceStatus::DRAFT])->count() > 0)
-        {
-            $invoices = Invoice::whereIn('status', [InvoiceStatus::DRAFT])->get();
-            $count = $invoices->count();
-            $total = 0;
-            foreach ($invoices as $invoice)
-            {
-                $total += $invoice->total;
-                $drafts[] = [
-                    "<a href='/admin/invoices/$invoice->id'><span class='badge bg-primary'>#$invoice->id</span></a>",
-                    "<a href='/admin/accounts/{$invoice->account->id}'>{$invoice->account->name}</a>",
-                    $invoice->created_at->format("m/d/y"),
-                    "$" . moneyFormat($invoice->total)
-                ];
-            }
-            $desc = sprintf("There are currently %d draft invoices totaling ($%s) that have not been sent to the customer.",
-                $count,
-                moneyFormat($total));
-            if (count($drafts))
-            {
-                $alerts[] = $this->widgetAlert(AlertType::Info, "Draft Invoices", $count, $desc, '2187794',
-                    $draftHeaders, $drafts);
-            }
 
+        $invoices = Invoice::with(['items', 'account', 'transactions'])->whereIn('status', [InvoiceStatus::DRAFT])->get();
+        $count = $invoices->count();
+        $total = 0;
+        foreach ($invoices as $invoice)
+        {
+            $total += $invoice->total;
+            $drafts[] = [
+                "<a href='/admin/invoices/$invoice->id'><span class='badge bg-primary'>#$invoice->id</span></a>",
+                "<a href='/admin/accounts/{$invoice->account->id}'>{$invoice->account->name}</a>",
+                $invoice->created_at->format("m/d/y"),
+                "$" . moneyFormat($invoice->total)
+            ];
         }
+        $desc = sprintf("There are currently %d draft invoices totaling ($%s) that have not been sent to the customer.",
+            $count,
+            moneyFormat($total));
+        if (count($drafts))
+        {
+            $alerts[] = $this->widgetAlert(AlertType::Info, "Draft Invoices", $count, $desc, '2187794',
+                $draftHeaders, $drafts);
+        }
+
 
         // Past Due Invoices
         $pastDue = [];
         $pastDueHeaders = ['#', 'Account', "Balance", "Days"];
         if (Invoice::whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])->count() > 0)
         {
-            $invoices = Invoice::whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])->get();
+            $invoices = Invoice::with(['items', 'account', 'transactions'])->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])->get();
             $amount = 0;
             $count = 0;
             foreach ($invoices as $invoice)

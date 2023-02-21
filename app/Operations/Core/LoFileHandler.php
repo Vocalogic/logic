@@ -3,6 +3,7 @@
 namespace App\Operations\Core;
 
 use App\Enums\Core\AccountFileType;
+use App\Enums\Core\CommKey;
 use App\Enums\Core\LogSeverity;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
@@ -61,9 +62,10 @@ class LoFileHandler
             Storage::disk(self::DISK)->put($finalLocation, base64_decode($baseData));
         } catch (Exception $e)
         {
-            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", null, null, LogSeverity::Error);
             return null;
         }
+        CommKey::GlobalFiles->clear();
         return (new LOFile)->create([
             'hash'          => uniqid(),
             'filename'      => $name,
@@ -114,9 +116,10 @@ class LoFileHandler
             Storage::disk(self::DISK)->putFileAs($location, $request->file($key), $real);
         } catch (Exception $e)
         {
-            _log(user(), "Unable to create file (" . $e->getMessage() . ")", LogSeverity::Error);
+            _log(user(), "Unable to create file (" . $e->getMessage() . ")", null, null, LogSeverity::Error);
             return null;
         }
+        CommKey::GlobalFiles->clear();
         return (new LOFile)->create([
             'hash'          => uniqid(),
             'filename'      => $name,
@@ -140,6 +143,7 @@ class LoFileHandler
     public function unlock(LOFile $file): void
     {
         $file->update(['auth_required' => 0]);
+        CommKey::GlobalFiles->clear();
     }
 
     /**
@@ -154,6 +158,7 @@ class LoFileHandler
         $file = LOFile::find($file_id);
         if (!$file) return null;
         $based = base64_encode(file_get_contents(_file($file->id)->internal));
+        CommKey::GlobalFiles->clear();
         return $this->create($file->filename, FileType::from($file->type), $newRef, $based, $file->mime_type);
     }
 
@@ -166,6 +171,7 @@ class LoFileHandler
     public function setCategory(LOFile $file, FileCategory $category): void
     {
         $file->update(['file_category_id' => $category->id]);
+        CommKey::GlobalFiles->clear();
     }
 
     /**
@@ -185,6 +191,7 @@ class LoFileHandler
             info("Could not delete from filesystem. This is probably just an orphaned file.");
         }
         $file->delete();
+        CommKey::GlobalFiles->clear();
     }
 
 }

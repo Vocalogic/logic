@@ -4,7 +4,7 @@
         "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
         "Invoice #$invoice->id"
     ],
-    'log' => $invoice->logs()->exists() ? $invoice->logLink : null
+    'log' => $invoice->logLink
 ])
 
 @section('pre')
@@ -52,7 +52,7 @@
                         </thead>
 
                         <tbody>
-                        @foreach($invoice->items as $item)
+                        @foreach($invoice->items()->with(['item', 'item.category'])->get() as $item)
                             <tr>
                                 @if($item->item)
                                     <td>
@@ -79,14 +79,14 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @if(!$invoice->transactions()->count())
+                        @if(!$invoice->transactions->count())
                         <tr>
                             <td>
                                 <input type="text" class="form-control" name="item">
                             </td>
                             <td><input type="text" class="form-control" name="price"></td>
                             <td><input type="text" class="form-control" name="qty" value="1"></td>
-                            <td><input type="submit" name="add" value="+" class="btn btn-primary">
+                            <td><button type="submit" name="add" class="btn btn-primary ladda" data-effect="zoom-out">+</button>
                             </td>
                         </tr>
                         @endif
@@ -135,7 +135,7 @@
 </div>
 
 <x-modal name="products" title="Add Invoice Item">
-    <table class="table datatable">
+    <table class="table datatable itemTable">
         <thead>
         <tr>
             <th>Item</th>
@@ -143,14 +143,15 @@
         </tr>
         </thead>
         <tbody>
-        @foreach(\App\Models\BillCategory::where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
+        @foreach(\App\Models\BillCategory::with('items')->where('type', \App\Enums\Core\BillItemType::PRODUCT)->get() as $cat)
 
             @foreach($cat->items as $item)
                 <tr>
                     <td>
-                        <a href="/admin/invoices/{{$invoice->id}}/add/{{$item->id}}">[{{$item->code}}
-                            ] {{$item->name}}</a><br/><small
-                            class="text-muted">{{$item->category->name}}</small></td>
+                        <a class="wait" data-message="Adding to Invoice.." data-effect="rotateplane" data-anchor=".itemTable"
+                            href="/admin/invoices/{{$invoice->id}}/add/{{$item->id}}">
+                            [{{$item->code}}] {{$item->name}}</a><br/><small
+                            class="text-muted">{{$cat->name}}</small></td>
                     <td>${{moneyFormat($item->nrc)}}</td>
                 </tr>
             @endforeach

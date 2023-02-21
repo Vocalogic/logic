@@ -10,9 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * @property mixed        $allowed_type
- * @property mixed        $allowed_qty
- * @property mixed        $allowed_overage
  * @property mixed        $id
  * @property mixed        $addons
  * @property mixed        $price
@@ -42,6 +39,7 @@ class QuoteItem extends Model
         'payments'       => "Number of Payments Required",
         'finance_charge' => "Finance Charge Assessed"
     ];
+
 
     /**
      * Items belong to a quote.
@@ -101,7 +99,7 @@ class QuoteItem extends Model
      */
     public function getAddonSummaryAttribute(): string
     {
-        if ($this->addons()->count() == 0) return '';
+        if ($this->addons->count() == 0) return '';
         $data = [];
         foreach ($this->addons as $addon)
         {
@@ -120,19 +118,7 @@ class QuoteItem extends Model
         return $this->item->msrp - $this->price;
     }
 
-    /**
-     * Get a text representation of the qty allowed.
-     * @return string
-     */
-    public function getAllowanceAttribute(): string
-    {
-        return sprintf("%s Allowed: %d (Overage Rate: $%s p/%s)",
-            $this->allowed_type->getHuman(),
-            $this->allowed_qty,
-            number_format($this->allowed_overage, 3),
-            $this->allowed_type->getShort()
-        );
-    }
+
 
     /**
      * When adding a quote item what order should we assign it?
@@ -165,11 +151,11 @@ class QuoteItem extends Model
     {
         if ($this->item->type == 'services')
         {
-            $count = $this->quote->services()->count();
+            $count = $this->quote->services->count();
         }
         else
         {
-            $count = $this->quote->products()->count();
+            $count = $this->quote->products->count();
         }
         if ($count <= 1) return false; // only on there can't move anywhere.
         if ($this->ord == $count) return false;
@@ -185,11 +171,11 @@ class QuoteItem extends Model
     {
         if ($this->item->type == 'services')
         {
-            $count = $this->quote->services()->count();
+            $count = $this->quote->services->count();
         }
         else
         {
-            $count = $this->quote->products()->count();
+            $count = $this->quote->products->count();
         }
         if ($count <= 1) return false;     // only one there can't move anywhere.
         if ($this->ord == 1) return false; // at the top already.

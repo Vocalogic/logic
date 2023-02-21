@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => "$item->name Data Tracking", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/data-requirements"])
+@extends('layouts.admin', ['title' => "$item->name Data Tracking", 'crumbs' => $crumbs, 'docs' => "https://logic.readme.io/docs/data-requirements", 'log' => $item->logLink])
 
 @section('pre')
     <div class="row align-items-center">

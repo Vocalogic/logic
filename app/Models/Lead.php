@@ -33,13 +33,14 @@ use LogicException;
  * @property mixed $status
  * @property mixed $finance_customer_id
  * @property mixed $taxable
+ * @property mixed $created_at
  */
 class Lead extends Model
 {
     use HasLogTrait;
 
     protected    $guarded = ['id'];
-    public       $dates   = ['forecast_date'];
+    public       $casts   = ['forecast_date' => 'datetime'];
     public array $tracked = [
         'company'            => "Company Name",
         'contact'            => "Primary Contact",
@@ -153,6 +154,15 @@ class Lead extends Model
     }
 
     /**
+     * Get the age of the lead in days.
+     * @return int
+     */
+    public function getAgeAttribute(): int
+    {
+        return $this->created_at->diffInDays();
+    }
+
+    /**
      * Get rating definitions
      * @return string
      */
@@ -198,7 +208,7 @@ class Lead extends Model
     public function getPrimaryMrrAttribute(): float
     {
         if (!$this->hasPreferred) return 0.00;
-        $quote = $this->quotes()->where('preferred', true)->first();
+        $quote = $this->quotes->where('preferred', true)->first();
         return $quote->mrr;
     }
 
@@ -209,7 +219,7 @@ class Lead extends Model
     public function getPrimaryNrcAttribute(): float
     {
         if (!$this->hasPreferred) return 0.00;
-        $quote = $this->quotes()->where('preferred', true)->first();
+        $quote = $this->quotes->where('preferred', true)->first();
         return $quote->nrc;
     }
 

@@ -17,8 +17,10 @@
         "postcss": "^8.1.14"
     },
     "dependencies": {
+        "apexcharts": "^3.37.0",
         "autoprefixer": "10.4.5",
         "ladda": "^2.0.3",
+        "sweetalert2": "^11.7.2",
         "x-editable": "^1.5.1"
     }
 }

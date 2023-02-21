@@ -48,15 +48,21 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property mixed        $status
  * @property mixed        $tax
  * @property mixed        $finance_quote_id
+ * @property mixed        $created_at
  *
  */
 class Quote extends Model
 {
     use SoftDeletes, HasLogTrait;
 
-    protected    $guarded = ['id'];
-    protected    $dates   = ['sent_on', 'expires_on', 'contract_expires', 'activated_on'];
-    public array $tracked = [
+    protected       $guarded = ['id'];
+    protected $casts   = [
+        'sent_on'          => 'datetime',
+        'expires_on'       => 'datetime',
+        'contract_expires' => 'datetime',
+        'activated_on'     => 'datetime'
+    ];
+    public array    $tracked = [
         'name'             => "Quote Name",
         'status'           => "Status",
         'archived'         => "Archived State",
@@ -151,6 +157,15 @@ class Quote extends Model
     }
 
     /**
+     * Get Total Value Attribute
+     * @return float
+     */
+    public function getTotalValueAttribute(): float
+    {
+        return $this->analysis->profit;
+    }
+
+    /**
      * Get number of items to invoice that don't have financing./
      * @return int
      */
@@ -183,7 +198,7 @@ class Quote extends Model
             if (!$product->frequency || !$product->payments) continue; // Only count financed
             $total += $product->frequency->splitTotal($product->qty * $product->price, $product->payments);
         }
-        return bcmul($total, 1);
+        return (int) bcmul($total, 1);
     }
 
     /**
@@ -208,7 +223,7 @@ class Quote extends Model
             if ($product->frequency && $product->payments) continue; // Don't count financed
             $total += ($product->price * $product->qty) + $product->addonTotal;
         }
-        return bcmul($total, 1);
+        return (int) bcmul($total, 1);
     }
 
     /**
@@ -236,6 +251,15 @@ class Quote extends Model
     public function getAnalysisAttribute(): object
     {
         return AnalysisEngine::byQuote($this);
+    }
+
+    /**
+     * Get how old this quote is
+     * @return int
+     */
+    public function getAgeAttribute(): int
+    {
+        return $this->created_at->diffInDays();
     }
 
     /**
@@ -627,7 +651,7 @@ class Quote extends Model
         $content = setting('quotes.msa');
         $models = [$this];
         $s = new STemplate(ident: $content, models: $models);
-        return _markdown($s->contentBody);
+        return $s->contentBody;
     }
 
     /**

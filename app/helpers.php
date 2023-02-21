@@ -54,7 +54,13 @@ if (!function_exists('setting'))
         bool $asSelectable = false,
         bool $fromValues = false
     ): string|array|null {
-        $setting = Setting::where('ident', $ident)->first();
+        $settings = cache(CommKey::GlobalSettings->value);
+        if (!$settings)
+        {
+            $settings = Setting::all();
+            cache([CommKey::GlobalSettings->value => $settings], CommKey::GlobalSettings->getLifeTime());
+        }
+        $setting = $settings->keyBy('ident')->get($ident);
         if (!$setting && !$value) return null;
         if (!$setting && $value)
         {
@@ -67,6 +73,7 @@ if (!function_exists('setting'))
                 'help'     => "Dynamic Setting",
                 'category' => 'Dynamic'
             ]);
+            CommKey::GlobalSettings->clear();
         }
         if ($asSelectable)
         {
@@ -120,7 +127,14 @@ if (!function_exists('setting'))
     function _file(?int $id, bool $asStream = false, bool $forcedDownload = true): mixed
     {
         if (!$id) return null;
-        $file = LOFile::find($id);
+        $cached = cache(CommKey::GlobalFiles->value);
+        if (!$cached)
+        {
+            $cached = LOFile::all();
+            cache([CommKey::GlobalFiles->value => $cached], CommKey::GlobalFiles->getLifeTime());
+        }
+
+        $file = $cached->keyBy('id')->get($id);
         if (!$file) return null;
         // Do we need to have auth?
         if (auth()->guest() && $file->auth_required) abort(401);
@@ -231,7 +245,7 @@ if (!function_exists('setting'))
         } catch (Exception $e)
         {
             info("Failure to send email: " . $e->getMessage());
-            _log(user(), "Failure to send email: " . $e->getMessage(), LogSeverity::Error);
+            _log(user(), "Failure to send email: " . $e->getMessage(), null, null, LogSeverity::Error);
         }
         return null;
     }
@@ -433,11 +447,18 @@ if (!function_exists('setting'))
      */
     function hasIntegration(IntegrationType $type): bool
     {
+        $registryState = cache(CommKey::GlobalIntegrationRegistry->value);
+        if (!$registryState)
+        {
+            $registryState = Integration::all();
+            cache([CommKey::GlobalIntegrationRegistry->value => $registryState], CommKey::GlobalIntegrationRegistry->getLifeTime());
+        }
         foreach (IntegrationRegistry::cases() as $case)
         {
-            $i = Integration::where('ident', $case->value)->first();
+            $i = $registryState->keyBy('ident')->get($case->value);
             if ($i && $i->enabled && $case->getCategory() == $type) return true;
         }
+
         return false;
     }
 
@@ -643,7 +664,7 @@ if (!function_exists('setting'))
         $value = onlyNumbers($value);
         if (!$value) return 0;
         $value = $value * 100;
-        return bcmul($value,1);
+        return (int) bcmul($value,1);
     }
 
     /**

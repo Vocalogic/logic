@@ -3,7 +3,7 @@
     "/admin/accounts/$account->id" => $account->name,
     'Services'
 
-]])
+], 'log' => $account->logLink])
 @section('content')
     <div class="row">
         <div class="col-xs-12 col-lg-2">
@@ -12,7 +12,7 @@
 
         <div class="col-lg-10 col-xs-12">
             <div class="row">
-                @if($account->items()->count() == 0)
+                @if($account->items->count() == 0)
 
                     <div class="card">
                         <div class="card-body text-center p-5">
@@ -55,14 +55,14 @@
                                                         {{$item->item->name}}
                                                     </strong>
                                                 </a>
-                                                @if($item->item->addons()->count())
+                                                @if($item->item->addons->count())
                                                     <a data-bs-toggle='tooltip' class="live"
                                                        data-title="Manage Service Addons" title='Manage Service Addons'
                                                        href="/admin/accounts/{{$account->id}}/items/{{$item->id}}/addons">
                                                         <i class="fa fa-database"></i>
                                                     </a>
                                                 @endif
-                                                @if($item->item->meta()->count())
+                                                @if($item->item->meta->count())
                                                     <a class="live"
                                                        data-bs-toggle="tooltip"
                                                        data-title="Update Requirements"
@@ -77,12 +77,12 @@
                                                     <br/>
                                                     <small class="text-primary">{!! nl2br($item->notes) !!}</small>
                                                 @endif
-                                                @if($item->item->meta()->count())
+                                                @if($item->item->meta->count())
                                                     <br/>
                                                     {!! $item->iterateMeta() !!}
                                                 @endif
 
-                                                @if($item->addons()->count())
+                                                @if($item->addons->count())
                                                     <br/>
                                                     @foreach($item->addons as $addon)
                                                         <small class="text-muted">&nbsp;&nbsp; -
@@ -98,8 +98,13 @@
                                                         <br/>
                                                     @endforeach
                                                 @endif
+
+                                                @if($item->remaining > 0)
+                                                <span class="badge bg-primary"><i class="fa fa-clock-o"></i> {{$item->remaining}} payments left</span>
+                                                @endif
+
                                             </td>
-                                            <td>${{moneyFormat($item->price)}}</td>
+                                           <td>${{moneyFormat($item->price)}} <br/>{!! $item->variationDetail !!}</td>
                                             <td>{{$item->qty}}</td>
                                             <td><b>${{moneyFormat(($item->price * $item->qty) + $item->addonTotal)}}</b></td>
                                         </tr>

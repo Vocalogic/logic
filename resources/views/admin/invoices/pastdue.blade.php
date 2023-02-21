@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Models\Invoice::whereIn('status', [\App\Enums\Core\InvoiceStatus::PARTIAL, \App\Enums\Core\InvoiceStatus::SENT])->get() as $invoice)
+    @foreach(\App\Models\Invoice::with(['account', 'items', 'transactions'])->whereIn('status', [\App\Enums\Core\InvoiceStatus::PARTIAL->value, \App\Enums\Core\InvoiceStatus::SENT->value])->get() as $invoice)
         @if(!$invoice->isPastDue)
             @continue
         @endif

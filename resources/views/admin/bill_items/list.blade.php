@@ -34,12 +34,7 @@
                             <span class="text-secondary small">{{$item->name}}</span>
                         </a>
                     @endif
-                        @if($item->children()->count())
-                            <a href="#" data-bs-toggle="popover" data-bs-html="true"
-                               data-bs-title="{{$item->name}} Variations"
-                               data-bs-content="{!! $item->variantExport !!}"><span
-                                    class="badge bg-{{bm()}}primary">+{{$item->children()->count()}}</span></a>
-                        @endif
+
                 </td>
 
 
@@ -56,6 +51,13 @@
                         @endif
                         @if($item->reservation_mode)
                             <badge class="badge bg-{{bm()}}danger">Reserve Advertised</badge>
+                        @endif
+
+                        @if($item->children()->count())
+                            <a href="#" data-bs-toggle="popover" data-bs-html="true"
+                               data-bs-title="{{$item->name}} Variations"
+                               data-bs-content="{!! $item->variantExport !!}"><span
+                                    class="badge bg-{{bm()}}primary">+{{$item->children->count()}} {{\Illuminate\Support\Str::plural('variation', $item->children->count())}}</span></a>
                         @endif
 
                     </td>

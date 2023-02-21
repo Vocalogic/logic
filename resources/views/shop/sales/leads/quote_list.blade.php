@@ -20,7 +20,7 @@
     </tr>
     </thead>
     <tbody>
-        @foreach($lead->quotes()->where('archived', false)->get() as $quote)
+        @foreach($lead->quotes()->with('items', 'products', 'services')->where('archived', false)->get() as $quote)
 
             <tr {{$quote->presentable ? "class='bg-light-success'" : null}}>
                 <td>

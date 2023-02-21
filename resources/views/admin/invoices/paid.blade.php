@@ -10,7 +10,7 @@
     </tr>
     </thead>
     <tbody>
-    @foreach(\App\Models\Invoice::whereIn('status', [\App\Enums\Core\InvoiceStatus::PAID->value])->get() as $invoice)
+    @foreach(\App\Models\Invoice::with(['account','items', 'transactions'])->whereIn('status', [\App\Enums\Core\InvoiceStatus::PAID->value])->get() as $invoice)
         <tr>
             <td>
                 <a href="/admin/invoices/{{$invoice->id}}">

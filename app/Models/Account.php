@@ -18,6 +18,7 @@ use App\Operations\Admin\AnalysisEngine;
 use App\Operations\API\NS\CDR;
 use App\Operations\API\NS\Domain;
 use App\Operations\API\NS\NSUser;
+use App\Operations\Core\BillingEngine;
 use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
 use Exception;
@@ -27,7 +28,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Str;
+use App\Traits\HasLogTrait;
 
 /**
  * @property mixed         $admin
@@ -73,12 +76,37 @@ use Illuminate\Support\Str;
  */
 class Account extends Model
 {
+    use HasLogTrait;
+
     protected $guarded = ['id'];
-    public    $dates   = ['next_bill'];
     public    $casts   = [
         'payment_method'    => PaymentMethod::class,
-        'merchant_metadata' => 'json'
+        'merchant_metadata' => 'json',
+        'next_bill'         => 'datetime'
     ];
+    public    $appends = [
+        'mrr',
+        'account_balance'
+    ];
+
+    /**
+     * Eager Load Account Information
+     * @var string[]
+     */
+    public $with = [
+        'invoices',
+        'invoices.items',
+        'invoices.transactions',
+        'items',
+        'items.addons',
+    ];
+
+    /**
+     * When showing the log entries for an account, we want to
+     * add the item logs as well.
+     * @var array|string[]
+     */
+    public array $logRelationships = ['items'];
 
     /**
      * Define our array of tracked changes. This will be used for the
@@ -102,7 +130,9 @@ class Account extends Model
         'is_commissionable'     => "Commissionable Mode|bool",
         'taxable'               => "Customer Tax Mode",
         'account_credit'        => "Account Credit Balance",
-        'account_credit_reason' => "Reason for Credit"
+        'account_credit_reason' => "Reason for Credit",
+        'impose_late_fee'       => "Late Fee Assessment|bool",
+        'late_fee_percentage'   => "Late Fee Percentage"
     ];
 
     public function users(): HasMany
@@ -183,15 +213,6 @@ class Account extends Model
     }
 
     /**
-     * An account has one provisioning order for a pbx.
-     * @return HasOne
-     */
-    public function provisioning(): HasOne
-    {
-        return $this->hasOne(Provisioning::class);
-    }
-
-    /**
      * An account can be tied to another partner.
      * @return BelongsTo
      */
@@ -255,6 +276,16 @@ class Account extends Model
     }
 
     /**
+     * An account has many activities.
+     * @return HasMany
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(Activity::class, 'refid')->where('type', 'ACCOUNT')
+            ->orderBy('created_at', 'DESC');
+    }
+
+    /**
      * Fire off the welcome email template to the admin.
      * @return void
      */
@@ -288,7 +319,7 @@ class Account extends Model
             if ($item->frequency && $item->frequency != BillFrequency::Monthly) continue;
             $total += ($item->price * $item->qty) + $item->addonTotal;
         }
-        return bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -303,6 +334,82 @@ class Account extends Model
         }
         return false;
     }
+
+    /**
+     * Get MRR Rank for Account
+     * @return int
+     */
+    public function getRankAttribute(): int
+    {
+        $mrrBlock = [];
+        foreach (self::where('active', true)->get() as $account)
+        {
+            $mrrBlock[$account->id] = $account->mrr;
+        }
+        asort($mrrBlock);
+        $rankCount = sizeOf($mrrBlock);
+        $rank = 0;
+        foreach ($mrrBlock as $key => $value)
+        {
+            if ($key == $this->id)
+            {
+                $rank = $rankCount;
+            }
+            $rankCount--;
+        }
+        return $rank;
+    }
+
+    /**
+     * Get MRR Rank for Account
+     * @return int
+     */
+    public function getRankTotalAttribute(): int
+    {
+        $ttlBlock = [];
+        foreach (self::where('active', true)->get() as $account)
+        {
+            $ttlBlock[$account->id] = 0;
+            foreach ($account->invoices as $invoice)
+            {
+                $ttlBlock[$account->id] += $invoice->total;
+            }
+
+        }
+        asort($ttlBlock);
+        $rankCount = sizeOf($ttlBlock);
+        $rank = 0;
+        foreach ($ttlBlock as $key => $value)
+        {
+            if ($key == $this->id)
+            {
+                $rank = $rankCount;
+            }
+            $rankCount--;
+        }
+        return $rank;
+    }
+
+    /**
+     * Average days that it takes for an account to pay an invoice.
+     * @return int
+     */
+    public function getPaysInAttribute(): int
+    {
+        $total = 0;
+        $diff = 0;
+        foreach ($this->invoices as $invoice)
+        {
+            if ($invoice->paid_on)
+            {
+                $diff += $invoice->paid_on->diffInDays($invoice->created_at);
+                $total++;
+            }
+        }
+        if ($total == 0) return 0;
+        return (int)bcmul($diff / $total, 1);
+    }
+
 
     /**
      * Get a list of contracted quotes.
@@ -524,8 +631,9 @@ class Account extends Model
     public function getAccountBalanceAttribute(): float
     {
         $total = 0;
-        foreach ($this->invoices()->where('status', '!=', InvoiceStatus::DRAFT)->get() as $invoice)
+        foreach ($this->invoices as $invoice)
         {
+            if ($invoice->status == InvoiceStatus::DRAFT) continue;
             if ($invoice->balance)
             {
                 $total += $invoice->balance;
@@ -741,98 +849,7 @@ class Account extends Model
      */
     public function generateMonthlyInvoice(bool $createOrder = false): void
     {
-        $this->update(['next_bill' => now()->addMonth()->setDay($this->bills_on ?? 1)]);
-        if ($this->items->count() == 0) return; // Do nothing if there are no service items
-        $invoice = $this->invoices()->create([
-            'due_on'    => now()->addDays($this->net_terms),
-            'status'    => InvoiceStatus::DRAFT,
-            'recurring' => true
-        ]);
-        foreach ($this->items as $item)
-        {
-            if (!$item->item) continue; // Service was deleted.
-            if (!$item->frequency) $item->frequency = BillFrequency::Monthly;
-            if ($item->frequency != BillFrequency::Monthly)
-            {
-                // This isn't billed monthly; we should check next_bill. If not time yet, skip this.
-                if ($item->next_bill_date && $item->next_bill_date > now()) continue;
-            }
-            if ($item->frequency == BillFrequency::Monthly && $item->next_bill_date)
-            {
-                $item->update(['next_bill_date' => null]); // ex. If someone changes from quarterly to monthly
-            }
-            // Next check should be if this service is temporary (such as a product that has been financed)
-            $notes = $item->notes ? " ($item->notes)" : null;
-            // A next bill date is assigned (if monthly it should never have that.) Just in case it got set
-            // we will set Monthly to 1, so basically it won't hurt anything.
-            if ($item->frequency != BillFrequency::Monthly)
-            {
-                // Line up new date with next invoice service day.
-                $newDate = now()->addMonths($item->frequency->getMonths())->setDay($this->bills_on);
-                $notes .= sprintf("Service billed %s (Next Billing Date: %s)",
-                    $item->frequency->getHuman(), $newDate->format("m/d/y"));
-                $item->update(['next_bill_date' => $newDate]);
-            }
-
-            if ($item->item->meta()->count())
-            {
-                $notes .= "<br>" . $item->iterateMeta(true);
-            }
-
-            $invoice->items()->create([
-                'bill_item_id' => $item->bill_item_id,
-                'code'         => $item->item->code,
-                'name'         => $item->item->name,
-                'description'  => $item->description . $notes,
-                'price'        => $item->price,
-                'qty'          => $item->qty
-            ]);
-
-            // If addons are listed for this service item, we include them below
-            if ($item->addons()->count())
-            {
-                foreach ($item->addons as $addon)
-                {
-                    $note = $addon->notes ? " - " . $addon->notes : null;
-                    $invoice->items()->create([
-                        'bill_item_id' => $item->bill_item_id,
-                        'code'         => $item->item->code,
-                        'name'         => $item->item->name . " - $addon->name",
-                        'description'  => "Addon: $addon->name $note",
-                        'price'        => $addon->price,
-                        'qty'          => $addon->qty
-                    ]);
-                }
-            }
-
-            if ($item->remaining && $item->remaining > 0)
-            {
-                $newRemain = $item->remaining - 1;
-                if ($newRemain <= 0)
-                {
-                    $item->delete();
-                } // We're done with this it's paid off.
-                else
-                {
-                    $item->update(['remaining' => $newRemain]);
-                }
-            }
-        }
-        $invoice->refresh();
-        // After all this, if we have no items.. then delete ourselves.
-        if ($invoice->items()->count() == 0)
-        {
-            $invoice->delete();
-            return;
-        }
-        $invoice->send();
-        if ($createOrder)
-        {
-            $invoice->createOrder();
-        }
-        $total = "$" . moneyFormat($invoice->total);
-        sysact(ActivityType::Account, $this->id,
-            "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
+        BillingEngine::generateMonthlyInvoice($this, $createOrder);
     }
 
     /**
@@ -860,7 +877,7 @@ class Account extends Model
             ->join('bill_items', 'bill_items.id', '=', 'account_items.bill_item_id')
             ->orderBy('bill_items.bill_category_id')
             ->where('account_items.account_id', $this->id)
-            ->with('item')
+            ->with(['item', 'item.addons', 'item.meta', 'addons', 'account.overrides'])
             ->get();
         $currCategory = 0;
         $i = [];
@@ -919,7 +936,6 @@ class Account extends Model
      * Return a streamed PDF.
      * @param bool $save
      * @return mixed
-     * @throws NexusException
      */
     public function statement(bool $save = false): mixed
     {
@@ -932,6 +948,7 @@ class Account extends Model
         }
         else return storage_path() . "/" . $pdf->saveFromData($data);
     }
+
 
     /**
      * Get a list of PBX users. Used to pull stats and graphs

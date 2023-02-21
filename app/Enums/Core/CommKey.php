@@ -3,6 +3,7 @@
 namespace App\Enums\Core;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * This enumeration will control all of the session and cache key systems that are used for the
@@ -117,6 +118,22 @@ enum CommKey: string
      */
     case AccountMRRCache = 'account_mrr_cache';
 
+    /**
+     * Keep a cache of our current integrations. This is because there are many places that
+     * call a hasIntegration for checking and there's no reason to hit the database over
+     * and over again. Cleared on Integration updates.
+     */
+    case GlobalIntegrationRegistry = 'global_integration_registry';
+
+    /**
+     * Cache all settings, and invalidate when a setting has been changed.
+     */
+    case GlobalSettings = 'global_settings';
+
+    /**
+     * Cache all files and invalidate when a new file has been uploaded or removed.
+     */
+    case GlobalFiles = 'global_files';
 
     /**
      * All cache keys should have their lifetimes defined below. If no specific definition is defined
@@ -133,5 +150,14 @@ enum CommKey: string
             self::AccountMRRCache => now()->addDay(),
             default => now()->addHour()
         };
+    }
+
+    /**
+     * This is used to clear the cache for a given key.
+     * @return void
+     */
+    public function clear(): void
+    {
+        Cache::forget($this->value);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -9,10 +10,23 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed $invoice
  * @property mixed $item
  * @property mixed $price
+ * @property mixed $code
+ * @property mixed $name
+ * @property mixed $bill_item_id
+ * @property mixed $globalDifference
  */
 class InvoiceItem extends Model
 {
+    use HasLogTrait;
     protected $guarded = ['id'];
+
+    public array $tracked = [
+        'code'        => "Item Code",
+        'name'        => "Item Name",
+        'description' => "Item Description",
+        'qty'         => "Quantity",
+        'price'       => "Price|money"
+    ];
 
     /**
      * An item belongs to an invoice
@@ -32,8 +46,29 @@ class InvoiceItem extends Model
         return $this->belongsTo(BillItem::class, 'bill_item_id');
     }
 
+
     /**
-     * Take the item's price and compare it with another bill item
+     * Get the percentage difference and average cost.
+     * @return int[]
+     */
+    public function getGlobalDifferenceAttribute(): array
+    {
+        $count = 0; // We want to include qty with this too as it is important.
+        $totalCost = 0;
+        foreach (self::where('bill_item_id', $this->bill_item_id)->get() as $item)
+        {
+            $count += $item->qty;
+            $totalCost += (int)bcmul($item->qty * $item->price, 1);
+        }
+        if ($count == 0) return ['perc' => 0, 'average' => 0]; // Don't divide by 0. (Not sure how we would but..)
+        $average = (int)bcmul($totalCost / $count, 1);
+        if ($average == 0) return ['perc' => 0, 'average' => 0]; // Don't divide by zero again.
+        $diff = (($this->price - $average) / $average) * 100;
+        return ['perc' => (int)bcmul($diff, 1), 'average' => $average];
+    }
+
+    /**
+     * Take the invoice item's price and compare it with another bill item
      * and return the percentage of increase or decrease along with
      * a tooltip that says what the average price sold for this customer
      * has been.
@@ -42,39 +77,16 @@ class InvoiceItem extends Model
     public function getVariationDetailAttribute(): ?string
     {
         if (!$this->item) return null; // We aren't comparing raw data, just anything with a billitem.
-        $total = 0;
-        $count = 0;
-        foreach ($this->invoice->account->invoices as $oldInvoice)
-        {
-            if ($oldInvoice->id == $this->invoice->id) continue; // visually cleaner this way.
-            foreach ($oldInvoice->items as $item)
-            {
-                if ($item->item && $item->item->id == $this->item->id)
-                {
-                    $total += $item->price;
-                    $count++;
-                }
-            }
-        }
-        if ($count == 0) return null; // First time billing this item - no info needed.
-        $average = $total / $count;
-        if ($average == 0) return null;  // $0 average - no info.
-        $less = $this->price < $average; // Is our current price lower than the average?
+        $diff = $this->globalDifference;
+        $diffPerc = $diff['perc'];
+        $average = $diff['average'];
+        $less = $diffPerc < 0;
         $text = sprintf("Average Price: $%s", moneyFormat($average));
         $icon = $less ? "chevron-down" : "chevron-up"; // Set visual icon
         $color = $less ? "warning" : "success";        // Set color
-        $pm = $less ? "-" : "+";                       // Set plus/minus indicator
-        if ($less)
-        {
-            $perc = 100 - round(($this->price / $average) * 100);
-        }
-        else
-        {
-            $perc = round(($this->price / $average) * 100) - 100;
-        }
-        if ($perc == 0) return null;
-        return "<span class='small' data-bs-toggle='tooltip' data-bs-placement='top' title='$text'>
-            <i class='fa fa-$icon text-$color'>{$pm}{$perc}%</span>";
+        if ($diffPerc == 0) return null;
+        return "<span class='small fs-7 text-$color' data-bs-toggle='tooltip' data-bs-placement='top' title='$text'>
+            <i class='fa fa-$icon text-$color'></i>{$diffPerc}%</span>";
     }
 
     /**
@@ -86,7 +98,7 @@ class InvoiceItem extends Model
     {
         $catalogPrice = $this->getCatalogPrice();
         $diff = $this->price / $catalogPrice;
-        return (int) (100 - round($diff * 100));
+        return (int)(100 - round($diff * 100));
     }
 
     /**

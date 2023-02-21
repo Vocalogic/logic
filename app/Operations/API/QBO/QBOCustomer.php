@@ -57,9 +57,10 @@ class QBOCustomer extends QBOCore
         $customer = $this->find($id);
         if (!$customer) return;
         $customer->Active = false;
-        try {
-            $this->qsend("customer", 'post', (array) $customer);
-        } catch(Exception|GuzzleException $e)
+        try
+        {
+            $this->qsend("customer", 'post', (array)$customer);
+        } catch (Exception|GuzzleException $e)
         {
             info("Customer could not be deactivated: " . $e->getMessage());
         }
@@ -140,7 +141,7 @@ class QBOCustomer extends QBOCore
                 'Line4'                  => sprintf("%s, %s %s", $account->city, $account->state, $account->postcode),
                 'Country'                => $account->country
             ],
-            'Taxable'            => $account->taxable
+            'Taxable'            => $account->taxable ? 'true' : 'false'
         ];
         if (isset($token))
         {
@@ -227,7 +228,7 @@ class QBOCustomer extends QBOCore
                 'Line4'                  => sprintf("%s, %s %s", $lead->city, $lead->state, $lead->zip),
                 'Country'                => 'US'
             ],
-            'Taxable'            => $lead->taxable
+            'Taxable'            => $lead->taxable ? 'true' : 'false'
         ];
         if (isset($token))
         {

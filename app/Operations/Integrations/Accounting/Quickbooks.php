@@ -20,6 +20,7 @@ use App\Operations\API\QBO\QBOPayment;
 use App\Operations\API\QBO\QBOService;
 use App\Operations\Integrations\BaseIntegration;
 use App\Operations\Integrations\Integration;
+use Exception;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
 
@@ -173,8 +174,7 @@ class Quickbooks extends BaseIntegration implements Integration
      * If a lead was lost then we need to remove this account from quickbooks.
      * @param Lead $lead
      * @return void
-     * @throws GuzzleException
-     * @throws LogicException
+     * @throws LogicException|Exception
      */
     public function removeLead(Lead $lead): void
     {

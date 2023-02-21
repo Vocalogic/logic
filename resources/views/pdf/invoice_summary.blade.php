@@ -123,6 +123,7 @@
 
     .table {
         border-collapse: collapse;
+        border-spacing: 15px;
         font-size: 12px;
         font-family: 'Nunito', sans-serif;
     }
@@ -131,8 +132,16 @@
         background-color: #34404f;
         color: #fff;
         font-family: 'Nunito-Bold', sans-serif;
-
     }
+
+    .table td {
+        padding: 10px 0;
+    }
+
+    .table td:last-child{
+        padding-right: 5px;
+    }
+
 
     .table tr:nth-child(even) {
         background-color: #f1f1f1;
@@ -326,7 +335,7 @@
                     <td style="font-size: 12px;">{{$invoice->account->name}}
                         <br/>
                         {{$invoice->account->phone}}<br/>
-                        {{$invoice->account->admin->email}}
+                        {{$invoice->account->admin?->email}}
                     </td>
                 </table>
             </div>
@@ -386,7 +395,7 @@
         @if(setting('quotes.showDiscount') != 'None' && $invoice->discount > 0)
             <tr style="background: #393e44; color: #fff;">
                 <td>&nbsp;</td>
-                <td align="right"><span class="bold" style="font-size:14px;">Total Discount:</span></td>
+                <td align="right"><span class="bold" style="font-size:14px;">Discounts:</span></td>
                 <td>&nbsp;</td>
                 <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
                 </td>
@@ -450,7 +459,7 @@
 
 <div class='footer'>
     {{setting('brand.name')}} Invoice #{{$invoice->id}} - Generated
-    for {{$invoice->account->admin->name}}
+    for {{$invoice->account->admin?->name}}
     with {{$invoice->account->name}}
     <span class='pagenum'></span>
 </div>

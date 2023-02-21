@@ -2,7 +2,6 @@
 
 namespace App\Structs;
 
-use App\Exceptions\NexusException;
 use App\Jobs\DispatchEmail;
 use App\Models\Brand;
 use App\Models\EmailTemplate;
@@ -91,7 +90,6 @@ class STemplate
 
     /**
      * Load the content based on the target user's brand.
-     * @throws NexusException
      */
     private function loadContent(): void
     {

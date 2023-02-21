@@ -29,7 +29,7 @@
 
                     @if($item->remaining)
                         <span class="badge bg-primary">
-                                {{$item->remaining}} billing cycles left
+                                {{$item->remaining}} payments left
                             </span>
                     @endif
                     @if($item->terminate_on)
