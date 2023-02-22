@@ -34,8 +34,11 @@
 
 @section('content')
 
+
 <div class="row">
-    <div class="col-lg-9 col-xs-12">
+    <div class="offset-1 col-lg-9 col-xs-12">
+        @include('admin.invoices.actions')
+
         <div class="card ribbon-box border">
             <div class="card-body">
                 <div class="ribbon-two ribbon-two-{{$invoice->status->getColor()}}"><span>{{$invoice->status}}</span></div>
@@ -131,11 +134,21 @@
         @if($invoice->transactions()->count())
             @include('admin.invoices.trans')
         @endif
+
+        @if($invoice->status == \App\Enums\Core\InvoiceStatus::SENT)
+            <div class="col-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fa fa-info-circle"></i> This invoice is currently due on <strong>{{$invoice->due_on->format("m/d/y")}}</strong>.
+                        <a class="live text-primary"
+                           data-title="Change Due Date"
+                           href="/admin/invoices/{{$invoice->id}}/due">Change due date?</a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
-    <div class="col-lg-3 col-xs-12">
-        @include('admin.invoices.actions')
-    </div>
 
 </div>
 
