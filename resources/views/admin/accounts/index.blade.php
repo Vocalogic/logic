@@ -47,7 +47,7 @@
                         </li>
                     </ul>
             </div>
-            <a class="btn btn-{{bm()}}secondary live w-100 btn-block mt-3" href="/admin/accounts/import/csv"
+            <a class="btn btn-outline-secondary live w-100 btn-block mt-3" href="/admin/accounts/import/csv"
                data-title="Import Accounts into Logic">
                 <i class="fa fa-recycle"></i> Import Accounts
             </a>

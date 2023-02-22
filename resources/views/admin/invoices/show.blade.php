@@ -60,6 +60,7 @@
                                         <a class="live" data-title="{{$item->name}}"
                                            href="/admin/invoices/{{$invoice->id}}/item/{{$item->id}}">
                                             <strong>[{{$item->item->code}}] {{$item->item->name}}</strong></a>
+
                                         <br/>
                                         <small
                                             class="text-muted">{!! $item->description ?: $item->item->description !!}</small>
@@ -69,6 +70,9 @@
                                     <td>
                                         <a class="live" data-title="{{$item->name}}"
                                            href="/admin/invoices/{{$invoice->id}}/item/{{$item->id}}"><strong>{{$item->name}}</strong></a>
+                                        @if(preg_match("/late fee/i", $item->name))
+                                            <span data-bs-toggle='tooltip' title="Automatic late fee assessed" class="pull-right badge badge-outline-danger"><i class="fa fa-warning"></i> late fee</span>
+                                        @endif
                                         <br/>
                                         <small class="text-muted">{{$item->description}}</small>
                                     </td>

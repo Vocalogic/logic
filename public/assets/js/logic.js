@@ -203,19 +203,6 @@ $(document).ready(function () {
         });
     });
 
-    // Lead Rating
-    if ($('.rate').length) {
-        let that = $('.rate');
-        let url = that.attr('data-url');
-        $('.rate').barrating('show', {
-            theme: 'bars-square',
-            showValues: true,
-            showSelectedRating: false,
-            onSelect: function (value, text) {
-                send(url, 'POST', {value: value});
-            }
-        });
-    }
 
     // Fancybox
     if ($('.fancybox').length) {
@@ -276,42 +263,7 @@ $(document).ready(function () {
 
 
 
-    // X-Editable
-    if ($('.xedit').length) {
 
-        $.fn.editable.defaults.mode = 'inline';
-        $.fn.editableform.buttons =
-            '<button type="submit" class="btn btn-primary btn-sm editable-submit">' +
-            '<i class="fa fa-fw fa-check"></i>' +
-            '</button>' +
-            '<button type="button" class="btn btn-warning btn-sm editable-cancel">' +
-            '<i class="fa fa-fw fa-times"></i>' +
-            '</button>';
-        $('.xedit').each(function (e) {
-            let that = $(this);
-            let type = $(this).attr('data-type') ? $(this).attr('data-type') : 'text';
-            let pk = $(this).attr('data-id');
-            let field = $(this).attr('data-field');
-            let title = $(this).attr('data-title');
-            let url = $(this).attr('data-url');
-            let source = $(this).attr('data-source');
-            let after = $(this).attr('data-after');
-            $(this).editable({
-                type: type,
-                pk: pk,
-                name: field,
-                title: title,
-                url: url,
-                emptytext: 'Click to Edit',
-                source: source,
-                success: function () {
-                    if (after) {
-                        eval(after);
-                    }
-                }
-            });
-        });
-    }
 
     /**
      * AJAX Method with default handlers
@@ -562,5 +514,10 @@ $(document).ready(function () {
     Livewire.on('openSearch', () => {
         $(".search-result").addClass("show");
     });
+
+    Livewire.on('closeSearch', () => {
+        $(".search-result").removeClass("show").addClass("hide");
+    });
+
 
 });

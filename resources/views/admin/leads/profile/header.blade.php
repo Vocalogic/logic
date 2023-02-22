@@ -2,7 +2,7 @@
     <div class="card-body border-bottom">
         <div class="d-flex align-items-md-start align-items-center flex-column flex-md-row">
             @if(app('request')->edit || !$lead->logo_id)
-                <form method="POST" action="/admin/leads/{{$lead->id}}/logo" enctype="multipart/form-data">
+                <form method="POST" action="/admin/leads/{{$lead->id}}/logo" enctype="multipart/form-data" class="w-25">
                     @csrf
                     @method('POST')
                     <input type="file" name="logo" class="drop"

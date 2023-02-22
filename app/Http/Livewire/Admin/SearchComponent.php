@@ -24,13 +24,22 @@ class SearchComponent extends Component
      * recent actions.
      * @return void
      */
-    private function getRecentActions() : void
+    private function getRecentActions(): void
     {
         $recents = session(CommKey::AdminSearchSession->value);
         if (!$recents) $recents = [];
         $this->recentActions = $recents;
     }
 
+    /**
+     * Disable search when pressing esc.
+     * @return void
+     */
+    public function disableSearch(): void
+    {
+        $this->query = '';
+        $this->emit('closeSearch');
+    }
 
     /**
      * Render Search Component
@@ -38,9 +47,17 @@ class SearchComponent extends Component
      */
     public function render(): View
     {
-        $this->emit('openSearch');
-        $this->getRecentActions();
-        $this->search();
+        if ($this->query)
+        {
+            $this->emit('openSearch');
+            $this->getRecentActions();
+            $this->search();
+        }
+        else
+        {
+            $this->recentActions = [];
+            $this->results = [];
+        }
         return view('admin.partials.core.search');
     }
 
@@ -78,7 +95,7 @@ class SearchComponent extends Component
      * Perform Search Aggregator
      * @return void
      */
-    public function search() : void
+    public function search(): void
     {
         if (!$this->query)
         {
@@ -124,10 +141,9 @@ class SearchComponent extends Component
         }
 
         // Search Product Catalog
-        foreach(BillItem::where(function($q)
-        {
-           $q->where('name', 'like', "%$this->query%");
-           $q->orWhere('description', 'like', "%$this->query%");
+        foreach (BillItem::where(function ($q) {
+            $q->where('name', 'like', "%$this->query%");
+            $q->orWhere('description', 'like', "%$this->query%");
         })->get() as $item)
         {
             $this->results[] = (object)[
