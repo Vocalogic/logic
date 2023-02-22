@@ -17,7 +17,8 @@
                                 @endphp
                                 {!! Form::select("a_$meta->id_$idx", $odata, $item->getMetaFor($meta, $idx), ['class' => 'form-control']) !!}
                             @elseif($meta->answer_type == 'input')
-                                <input type="text" name="a_{{$meta->id}}_{{$idx}}" value="{{$item->getMetaFor($meta, $idx)}}"
+                                <input type="text" name="a_{{$meta->id}}_{{$idx}}"
+                                       value="{{$item->getMetaFor($meta, $idx)}}"
                                        class="form-control">
                             @else
                                 <textarea name="a_{{$meta->id}}_{{$idx}}" style="height:100px;"
@@ -27,7 +28,6 @@
                             <span class="helper-text">{{$meta->description}}</span>
                         </div>
                     </div>
-
 
                 @endforeach
 
@@ -57,7 +57,9 @@
         @endforeach
     </div>
     <div class="row mt-3">
-        <input type="submit" class="btn btn-{{bm()}}primary wait" data-anchor=".require" value="Update Requirements">
+        <button type="submit" value="Save" class="btn btn-primary pull-right ladda" data-style="expand-left">
+            <i class="fa fa-save"></i> Save Requirements
+        </button>
     </div>
 
 </form>

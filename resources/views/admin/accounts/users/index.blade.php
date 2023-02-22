@@ -13,7 +13,7 @@
         <div class="col-lg-10 col-xs-12">
 
 
-            <table class="table table-sm">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th>Name</th>

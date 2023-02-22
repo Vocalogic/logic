@@ -7,20 +7,12 @@
             <div class="row mt-2">
                 @props(['opts' => \App\Models\Tag::selectable($cat)])
                 <div class="col-lg-6">
-                    <div class="row mt-3">
-                        <div class="col-lg-4">
-                            <label class="form-label">Select Tag</label>
-                        </div>
-                        <div class="col-lg-8">
-                            <fieldset class="form-icon-group left-icon position-relative">
-                                {!! Form::select('tag', \App\Models\Tag::selectable($cat), null, ['class' => 'form-control']) !!}
-                                <div class="form-icon position-absolute">
-                                    <i class="fa fa-pencil"></i>
-                                </div>
-                            </fieldset>
-                            <span class="helper-text">Select a tag to add to item.</span>
-                        </div>
-                    </div>
+
+                    @props(['selectable' => \App\Models\Tag::selectable($cat)])
+                    <x-form-select name="tag" icon="edit" label="Select Tag" :options="$selectable">
+                        Select a tag to add to item.
+                    </x-form-select>
+
                     <button type="submit" class="btn btn-primary ladda pull-right mt-3" data-style="zoom-out">
                         <i class="fa fa-save"></i> Apply Tag
                     </button>

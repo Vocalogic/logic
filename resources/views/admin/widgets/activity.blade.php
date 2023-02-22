@@ -11,7 +11,7 @@
                     @if(!$guest)
                         <a href="#" wire:click="toggleCalendar" class="px-3"><i class="fa fa-calendar"></i></a>
                     @endif
-                    <button class="btn btn-{{bm()}}primary float-end postButton" wire:click="save"><i
+                    <button class="btn btn-primary float-end btn-sm postButton" wire:click="save"><i
                             class="fa fa-plus"></i> Post
                         Update
                     </button>

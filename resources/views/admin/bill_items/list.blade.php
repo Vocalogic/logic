@@ -38,35 +38,38 @@
                 </td>
 
 
-                    <td>{{$item->description}}</a>
-                        <br/>
+                    <td>
+                        <div>{{$item->description}}</div>
+                        <div class="mt-2">
+
                         @if($item->is_shipped)
-                            <badge class="badge bg-{{bm()}}warning">Item is Shipped</badge>
+                            <span class="badge rounded-pill badge-outline-warning">Item is Shipped</span>
                         @endif
                         @if($item->shop_show)
                             <a target="_blank" href="/shop/{{$item->category->slug}}/{{$item->slug}}">
-                                <badge class="badge bg-{{bm()}}info"><i class="fa fa-arrow-right"></i> View in Shop
-                                </badge>
+                                <span class="badge rounded-pill badge-outline-info"><i class="fa fa-arrow-right"></i> View in Shop
+                                </span>
                             </a>
                         @endif
                         @if($item->reservation_mode)
-                            <badge class="badge bg-{{bm()}}danger">Reserve Advertised</badge>
+                            <span class="badge rounded-pill badge-outline-danger">Reserve Advertised</span>
                         @endif
 
                         @if($item->children()->count())
                             <a href="#" data-bs-toggle="popover" data-bs-html="true"
                                data-bs-title="{{$item->name}} Variations"
                                data-bs-content="{!! $item->variantExport !!}"><span
-                                    class="badge bg-{{bm()}}primary">+{{$item->children->count()}} {{\Illuminate\Support\Str::plural('variation', $item->children->count())}}</span></a>
+                                    class="badge rounded-pill badge-outline-primary">+{{$item->children->count()}} {{\Illuminate\Support\Str::plural('variation', $item->children->count())}}</span></a>
                         @endif
+                        </div>
 
                     </td>
                     <td>
                         ${{moneyFormat($item->type == \App\Enums\Core\BillItemType::PRODUCT->value ? $item->nrc : $item->mrc)}}
                         @if($item->margin > 0)
-                            <span class="badge bg-{{bm()}}success">{{$item->margin}}%</span>
+                            <span class="badge badge-outline-success">{{$item->margin}}%</span>
                         @else
-                            <span class="badge bg-{{bm()}}danger">{{$item->margin}}%</span>
+                            <span class="badge badge-outline-danger">{{$item->margin}}%</span>
                         @endif
                     </td>
             </tr>

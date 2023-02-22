@@ -84,7 +84,7 @@
 
     <div class="row mt-2">
         <div class="col-12">
-            <input type="submit" name="save" class="btn btn-{{bm()}}primary" value="Create/Assign Shipment">
+            <button type="submit" name="save" class="btn btn-primary ladda" data-style="expand-left"><i class="fa fa-save"></i> Create/Assign Shipment</button>
         </div>
     </div>
 

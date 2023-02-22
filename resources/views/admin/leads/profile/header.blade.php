@@ -14,7 +14,7 @@
 
                 </form>
             @else
-                <img height=100 src="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}} " alt=""
+                <img src="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}} " alt="" style="max-height:100px; max-width:200px;"
                      class="rounded-4">
             @endif
             <div class="media-body ms-md-5 m-0 mt-4 mt-md-0 text-md-start text-center">

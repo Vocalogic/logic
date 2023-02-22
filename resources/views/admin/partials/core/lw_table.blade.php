@@ -3,18 +3,18 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-12 d-flex">
-                    <fieldset class="form-icon-group left-icon position-relative">
+                <div class="col-lg-12">
+
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></span>
                         <input class="form-control" wire:model="search" placeholder="Search...">
-                        <div class="form-icon position-absolute">
-                            <i class="fa fa-search"></i>
-                        </div>
-                    </fieldset>
+                    </div>
+
 
                 </div>
 
                 <div class="col-lg-12">
-                    <table class="table align-middle table-striped table-sm">
+                    <table class="table align-middle table-striped">
                         <thead>
                         <tr>
                             @foreach($headers as $header => $data)

@@ -83,11 +83,11 @@ class GraphSeries
             }
         }
         $this->colors = [
-            'var(--chart-color1)',
-            'var(--chart-color2)',
-            'var(--chart-color3)',
-            'var(--chart-color4)',
-            'var(--chart-color5)'
+            'var(--vz-primary)',
+            'var(--vz-success)',
+            'var(--vz-info)',
+            'var(--vz-warning)',
+            'var(--vz-danger)'
         ];
     }
 
@@ -372,7 +372,7 @@ class GraphSeries
         $this->series[] = [
             'name'  => 'Total Invoiced',
             'data'  => $invoicePlots,
-            'color' => $this->colors[3],
+            'color' => $this->colors[1],
             'type'  => 'line'
         ];
 
@@ -444,6 +444,7 @@ class GraphSeries
                 'height' => 350,
                 'type'   => 'radialBar',
             ],
+            'colors' => [$this->colors[0]],
             'plotOptions' => (object)[
                 'radialBar' => (object)[
                     'hollow' => (object)[
@@ -490,6 +491,7 @@ class GraphSeries
                 'height' => 350,
                 'type'   => 'radialBar',
             ],
+            'colors' => [$this->colors[0]],
             'plotOptions' => (object)[
                 'radialBar' => (object)[
                     'hollow' => (object)[
@@ -535,7 +537,7 @@ class GraphSeries
                 'stroke' => (object)[
                     'width'  => 3,
                     'curve'  => 'smooth',
-                    'colors' => ['var(--chart-color1)']
+                    'colors' => ['var(--vz-primary)']
                 ],
                 'fill'   => (object)[
                     'type'     => 'gradient',

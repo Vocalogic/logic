@@ -36,8 +36,9 @@
 
 <div class="row">
     <div class="col-lg-9 col-xs-12">
-        <div class="card border-{{$invoice->status->getColor()}}">
+        <div class="card ribbon-box border">
             <div class="card-body">
+                <div class="ribbon-two ribbon-two-{{$invoice->status->getColor()}}"><span>{{$invoice->status}}</span></div>
                 <form method="POST" action="/admin/invoices/{{$invoice->id}}/add">
                     @method('POST')
                     @csrf
@@ -82,9 +83,9 @@
                         @if(!$invoice->transactions->count())
                         <tr>
                             <td>
-                                <input type="text" class="form-control" name="item">
+                                <input type="text" class="form-control" name="item" placeholder="Enter new custom invoice item..">
                             </td>
-                            <td><input type="text" class="form-control" name="price"></td>
+                            <td><input type="text" class="form-control" name="price" placeholder="Enter Price"></td>
                             <td><input type="text" class="form-control" name="qty" value="1"></td>
                             <td><button type="submit" name="add" class="btn btn-primary ladda" data-effect="zoom-out">+</button>
                             </td>
@@ -217,9 +218,8 @@
             </div>
 
             <div class="col-lg-12 mt-3 text-center">
-                <input type="submit" name="submit" class="btn btn-primary wait"
-                       data-anchor=".paymentForm"
-                       value="Authorize/Post Transaction">
+                <button type="submit" name="submit" class="btn btn-primary ladda" data-style="expand-left">
+                    <i class="fa fa-credit-card"></i> Authorize/Post Transaction</button>
             </div>
 
         </div>

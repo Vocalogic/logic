@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'My Team'])
+@extends('layouts.admin', ['title' => 'My Team', 'crumbs' => ['My Team']])
 
 
 @section('pre')
@@ -14,14 +14,19 @@
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-sm-12 col-md-2">
+            <a class="btn btn-primary mt-3 w-100" href="#newUser" data-bs-toggle="modal">
+                <i class="fa fa-plus"></i> Add Team Member
+            </a>
+        </div>
+        <div class="col-xs-12 col-md-10">
             <div class="card">
                 <div class="card-body">
                     @if(env('DEMO_MODE'))
                         <div class="alert alert-primary">Team management is disabled in demo mode.</div>
                     @else
 
-                        <table class="table table-striped table-sm datatable">
+                        <table class="table table-striped datatable">
                             <thead>
                             <tr>
                                 <th>Name</th>
@@ -48,9 +53,7 @@
                     @endif
                 </div>
             </div>
-            <a class="btn btn-primary mt-3" href="#newUser" data-bs-toggle="modal">
-                <i class="fa fa-plus"></i> Add Team Member
-            </a>
+
         </div>
     </div>
 

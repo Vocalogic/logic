@@ -1,6 +1,6 @@
 <div>
     @if($locked)
-        <div class="alert alert-info">Pricing Helper is currently disabled. <a href="#" wire:click="unlock">Click here</a> to
+        <div class="alert alert-primary alert-outline" role="alert">Pricing Helper is currently disabled. <a href="#" wire:click="unlock">Click here</a> to
             unlock and override pricing based on recommended metrics.
         </div>
     @else

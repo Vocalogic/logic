@@ -1,7 +1,7 @@
 <div class="row">
     @if($invoice->balance > 0)
         <div class="col-6 mb-3">
-            <div class="card">
+            <div class="card border border-success">
                 <div class="card-body text-center">
                     <a href="#paymentModal" data-bs-toggle="modal"><i class="fa fa-dollar fa-2x"></i>
                         <div class="mb-0">Payment</div>

@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => setting('brand.name') . " Dashboard"])
+@extends('layouts.admin', ['title' => setting('brand.name') . " Dashboard", 'crumbs' => []])
 
 @section('content')
 

@@ -2,16 +2,6 @@
      "Cash Flow",
 ]])
 
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Cash Flow Breakdown</h1>
-            <small class="text-muted">Look at contracted vs non-contracted revenue vs forecasted</small>
-        </div>
-    </div> <!-- .row end -->
-
-@endsection
-
 @section('content')
     <div class="row">
         <div class="col-lg-12 mt-2">
@@ -44,47 +34,47 @@
                             <tr>
                                 <td>Contracted Revenue</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->contracted,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->contracted,2)}}</td>
                                 @endforeach
                             </tr>
                             <tr>
                                 <td>Uncontracted Revenue</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->uncontracted,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->uncontracted,2)}}</td>
                                 @endforeach
                             </tr>
 
                             <tr>
                                 <td>Forecasted Contracted</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->f_contracted,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->f_contracted,2)}}</td>
                                 @endforeach
                             </tr>
                             <tr>
                                 <td>Forecasted Uncontracted</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->f_uncontracted,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->f_uncontracted,2)}}</td>
                                 @endforeach
                             </tr>
 
                             <tr>
                                 <td>Opex</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->opex,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->opex,2)}}</td>
                                 @endforeach
                             </tr>
 
                             <tr>
                                 <td>Forecasted Opex</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->fopex,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->fopex,2)}}</td>
                                 @endforeach
                             </tr>
 
                             <tr>
                                 <td>Forecasted Capex</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->fcapex,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->fcapex,2)}}</td>
                                 @endforeach
                             </tr>
                             <tr>
@@ -95,7 +85,7 @@
                             <tr>
                                 <td>Actual Revenue</td>
                                 @foreach(range(1,12) as $r)
-                                    <td class="bg-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->actual,2)}}</td>
+                                    <td class="table-{{$data1[$r]->color}}">{{moneyFormat($data1[$r]->actual,2)}}</td>
                                 @endforeach
                             </tr>
 
@@ -134,47 +124,47 @@
                         <tr>
                             <td>Contracted Revenue</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->contracted,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->contracted,2)}}</td>
                             @endforeach
                         </tr>
                         <tr>
                             <td>Uncontracted Revenue</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->uncontracted,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->uncontracted,2)}}</td>
                             @endforeach
                         </tr>
 
                         <tr>
                             <td>Forecasted Contracted</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->f_contracted,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->f_contracted,2)}}</td>
                             @endforeach
                         </tr>
                         <tr>
                             <td>Forecasted Uncontracted</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->f_uncontracted,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->f_uncontracted,2)}}</td>
                             @endforeach
                         </tr>
 
                         <tr>
                             <td>Opex</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->opex,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->opex,2)}}</td>
                             @endforeach
                         </tr>
 
                         <tr>
                             <td>Forecasted Opex</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->fopex,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->fopex,2)}}</td>
                             @endforeach
                         </tr>
 
                         <tr>
                             <td>Forecasted Capex</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->fcapex,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->fcapex,2)}}</td>
                             @endforeach
                         </tr>
                         <tr>
@@ -185,7 +175,7 @@
                         <tr>
                             <td>Actual Revenue</td>
                             @foreach(range(1,12) as $r)
-                                <td class="bg-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->actual,2)}}</td>
+                                <td class="table-{{$data2[$r]->color}}">{{moneyFormat($data2[$r]->actual,2)}}</td>
                             @endforeach
                         </tr>
 

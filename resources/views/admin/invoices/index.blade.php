@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'Invoice Management'])
+@extends('layouts.admin', ['title' => 'Invoice Management', 'crumbs' => ["Invoices"]])
 
 
 @section('pre')

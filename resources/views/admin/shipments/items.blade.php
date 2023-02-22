@@ -18,7 +18,7 @@
             </p>
         </div>
     </div>
-    <table class="table custom-table">
+    <table class="table">
         <thead>
         <tr>
             <th>Product</th>
@@ -52,7 +52,7 @@
 
 
     <div class="modal fade" id="oneModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-vertical modal-dialog-scrollable">
+        <div class="modal-dialog modal-xl modal-dialog-scrollable">
             <div class="modal-content">
 
                 <div class="px-xl-4 modal-header">

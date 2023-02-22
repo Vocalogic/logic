@@ -1,20 +1,12 @@
-@extends('layouts.admin', ['title' => 'Hardware/Product Vendors'])
-
-
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Hardware/Product Vendors</h1>
-            <small class="text-muted">For shipping/hardware orders, create your vendors here.</small>
-        </div>
-
-    </div> <!-- .row end -->
-
-@endsection
+@extends('layouts.admin', ['title' => 'Hardware/Product Vendors', 'crumbs' => ['Vendors']])
 
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-xs-12 col-md-2">
+            <a class="btn btn-primary w-100" href="#newVendor" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add Vendor</a>
+        </div>
+
+        <div class="col-md-10 col-xs-12">
             <div class="card">
                 <div class="card-body">
 
@@ -40,7 +32,6 @@
                         @endforeach
                         </tbody>
                     </table>
-                    <a class="btn btn-primary mt-3" href="#newVendor" data-bs-toggle="modal"><i class="fa fa-plus"></i> Add Vendor</a>
 
                 </div>
 

@@ -1,4 +1,4 @@
-<div class="card border-{{$invoice->isPastDue ? 'danger' : 'dark'}}">
+<div class="card border card-border-{{$invoice->isPastDue ? 'danger' : 'primary'}}">
     <div class="card-body">
         <div class="d-flex">
             <h6 class="flex-grow-1">Invoice #{{$invoice->id}}</h6>

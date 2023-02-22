@@ -1,23 +1,8 @@
-@extends('layouts.admin', ['title' => 'TOS Manager'])
-
-
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Terms of Service Manager</h1>
-            <small class="text-muted">Manage your Terms of Service for different types of accounts</small>
-        </div>
-
-    </div> <!-- .row end -->
-
-@endsection
-
+@extends('layouts.admin', ['title' => 'TOS Manager', 'crumbs' => []])
 @section('content')
     <div class="row">
-
-        <div class="col-lg-2 col-xs-12 mt-2">
-
-            <a class="btn btn-primary w-100 btn-block mt-3" href="/admin/terms/create"><i class="fa fa-plus"></i> New Terms
+        <div class="col-lg-2 col-xs-12">
+            <a class="btn btn-primary w-100 btn-block" href="/admin/terms/create"><i class="fa fa-plus"></i> New Terms
             </a>
         </div>
         <div class="col-lg-10 col-xs-12">

@@ -1,5 +1,5 @@
 .helper-text {
-    font-size: 12px;
+    font-size: 10px;
     position: relative;
     display: block;
     min-height: 18px;
@@ -11,6 +11,16 @@
     left: 0;
     opacity: 1;
 }
+
+.avatar
+{
+    max-width: 40px;
+}
+
+.dropify-wrapper .dropify-message span.file-icon {
+    font-size: 12px;
+}
+
 
 
 .tooltipevent{

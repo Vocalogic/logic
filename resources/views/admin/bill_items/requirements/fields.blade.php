@@ -18,40 +18,47 @@
            href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/meta">
             <i class="fa fa-plus"></i> Add new Requirement
         </a>
-        <table class="table table-sm table-striped mt-3">
-            <thead>
-            <tr>
-                <th>Item Requirement</th>
-                <th>Required for Sale</th>
-                <th>Options</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($item->meta as $meta)
-                <tr>
-                    <td><a class="live" data-title="Update Requirement"
-                           href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/meta/{{$meta->id}}">
-                            <i class="fa fa-edit"></i></a>
-                        {{$meta->item}}
-                        <br><small class="text-muted">{{$meta->description}}</small>
-                    </td>
-                    <td>{{$meta->required_sale ? "Yes" : "No"}}</td>
-                    <td>{{$meta->opts}}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-body">
 
-        @if($item->type == 'products')
-            <a class="mt-2 btn btn-primary pull-right" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
-                <i class="fa fa-save"></i> Save and Continue
-            </a>
-        @else
-            <a class="mt-2 btn btn-primary pull-right" href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variation">
-                <i class="fa fa-save"></i> Save and Continue
-            </a>
-        @endif
+                <table class="table table-striped mt-3">
+                    <thead>
+                    <tr>
+                        <th>Item Requirement</th>
+                        <th>Required for Sale</th>
+                        <th>Options</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($item->meta as $meta)
+                        <tr>
+                            <td><a class="live" data-title="Update Requirement"
+                                   href="/admin/category/{{$item->category->id}}/items/{{$item->id}}/meta/{{$meta->id}}">
+                                    <i class="fa fa-edit"></i></a>
+                                {{$meta->item}}
+                                <br><small class="text-muted">{{$meta->description}}</small>
+                            </td>
+                            <td>{{$meta->required_sale ? "Yes" : "No"}}</td>
+                            <td>{{$meta->opts}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
 
+                @if($item->type == 'products')
+                    <a class="mt-2 btn btn-primary pull-right"
+                       href="/admin/category/{{$cat->id}}/items/{{$item->id}}/reservation">
+                        <i class="fa fa-save"></i> Save and Continue
+                    </a>
+                @else
+                    <a class="mt-2 btn btn-primary pull-right"
+                       href="/admin/category/{{$cat->id}}/items/{{$item->id}}/variation">
+                        <i class="fa fa-save"></i> Save and Continue
+                    </a>
+                @endif
+
+            </div>
+        </div>
     </div>
 
 

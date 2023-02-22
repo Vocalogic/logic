@@ -27,7 +27,11 @@
                     </div>
                 @else
                     <div class="col-lg-8">
-                        <table class="table table-striped table-sm mt-3">
+                        <div class="card">
+                            <div class="card-body">
+
+
+                        <table class="table table-striped">
                             <thead>
                             <tr>
                                 <th>Service</th>
@@ -111,7 +115,7 @@
                                     @endif
                                 @endforeach
                             @endforeach
-                            <tr>
+                            <tr class="table-primary">
                                 <td colspan="4" style="text-align:right">
                                     <strong class="text-primary">Monthly Total: </strong>${{moneyFormat($account->mrr)}}
                                 </td>
@@ -133,6 +137,8 @@
                             @endif
                             </tbody>
                         </table>
+                            </div>
+                        </div>
                         <a href="#recurringModal" data-bs-toggle="modal" data-backdrop="false"
                            class="btn btn-primary"><i class="fa fa-plus"></i> add service</a>
                     </div>

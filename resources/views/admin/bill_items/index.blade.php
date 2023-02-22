@@ -11,20 +11,10 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <div class="input-group">
-                <a class="btn btn-outline-primary live" data-title="Add {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}" href="/admin/category/{{$cat->id}}/items/create"
-                   type="button"><i class="fa fa-plus"></i> New {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}
-                </a>
-                <a class="btn btn-outline-info" href="/admin/market"
-                   type="button"><i class="fa fa-refresh"></i> Import From Catalog Market
-                </a>
-                <input type="text" class="form-control" placeholder="Search...">
-                <button class="btn btn-secondary" type="button">Search</button>
-            </div>
-        </div>
-
         <div class="col-lg-3">
+            <a class="btn btn-primary live w-100" data-title="Add {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}" href="/admin/category/{{$cat->id}}/items/create"
+               type="button"><i class="fa fa-plus"></i> New {{ucfirst(\Illuminate\Support\Str::singular($cat->type))}}
+            </a>
             @include('admin.bill_items.subnav')
         </div>
 

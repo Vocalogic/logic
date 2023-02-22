@@ -1,6 +1,6 @@
 @extends('layouts.admin', ['title' => $account->name, 'crumbs' => [
     '/admin/accounts' => "Accounts",
-    $account->name,
+    "/admin/accounts/$account->id" => $account->name,
     'Overview'
 
 ], 'log' => $account->logLink])
@@ -74,7 +74,7 @@
                     @if($account->payment_method == \App\Enums\Core\PaymentMethod::CreditCard && !$account->merchant_payment_token)
                         <div class="card mt-3 mb-3 p-3 border-danger">
                             <div class="d-flex align-items-center">
-                                <div class="avatar rounded-circle no-thumbnail bg-danger"><i
+                                <div class="avatar rounded-circle no-thumbnail"><i
                                         class="fa fa-credit-card text-danger fa-lg"></i></div>
                                 <div class="flex-fill ms-3 text-truncate">
                                     <div class="small">Payment Method (Credit Card)</div>
@@ -87,7 +87,7 @@
                     @if($account->declined)
                         <div class="card mt-3 mb-3 p-3 border-danger">
                             <div class="d-flex align-items-center">
-                                <div class="avatar rounded-circle no-thumbnail bg-danger"><i
+                                <div class="avatar rounded-circle no-thumbnail"><i
                                         class="fa fa-credit-card text-danger fa-lg"></i></div>
                                 <div class="flex-fill ms-3 text-truncate">
                                     <div class="small">Account in Declined State</div>

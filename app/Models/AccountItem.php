@@ -42,7 +42,7 @@ class AccountItem extends Model
         'meta'            => "Meta",
         'qty'             => "Quantity",
         'quote'           => "Quote",
-        'price'           => "Price",
+        'price'           => "Price|money",
     ];
 
     /**

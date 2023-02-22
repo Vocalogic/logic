@@ -43,7 +43,7 @@
                     </a>
                     @endif
 
-                    <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                    <button type="submit" class="btn btn-primary ladda float-end" data-style="slide-left">
                         <i class="fa fa-save"></i> Save Affiliate
                     </button>
                 </form>

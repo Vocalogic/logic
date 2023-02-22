@@ -2,21 +2,16 @@
      "Coupon Management",
 ]])
 
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Manage Coupons</h1>
-            <small class="text-muted">Manage Coupons that Customers can apply at checkout</small>
-        </div>
-    </div> <!-- .row end -->
-
-@endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-xs-12 col-md-2">
+            <a href="/admin/coupons/create" class="btn btn-primary w-100"><i class="fa fa-plus"></i> Create Coupon</a>
+
+        </div>
+        <div class="col-xs-12 col-md-10">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-sm mt-2">
+                    <table class="table datatable">
                         <thead>
                         <tr>
                             <th>Code</th>
@@ -40,7 +35,6 @@
                     </table>
                 </div>
             </div>
-            <a href="/admin/coupons/create" class="btn btn-primary mt-3"><i class="fa fa-plus"></i> Create Coupon</a>
         </div>
     </div>
 @endsection

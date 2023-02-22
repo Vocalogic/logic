@@ -13,17 +13,12 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-12">
-            <div class="input-group">
-                <a class="btn btn-outline-primary" data-bs-toggle="modal" href="#newCategory"
-                   type="button"><i class="fa fa-plus"></i> New {{ucfirst($type)}} Category
-                </a>
-                <input type="text" class="form-control" placeholder="Search...">
-                <button class="btn btn-secondary" type="button">Search</button>
-            </div>
+        <div class="col-xs-12 col-md-2">
+            <a class="btn btn-primary w-100" data-bs-toggle="modal" href="#newCategory"
+               type="button"><i class="fa fa-plus"></i> New {{ucfirst($type)}} Category
+            </a>
         </div>
-
-        <div class="col-lg-12">
+        <div class="col-xs-12 col-md-10">
             @include('admin.bill_categories.list')
         </div>
     </div>

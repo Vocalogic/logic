@@ -5,12 +5,14 @@
                 <label class="form-label">{{$label}}</label>
             </div>
             <div class="col-lg-8">
-                <fieldset class="form-icon-group left-icon position-relative">
+
+
+                <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping"><i class="fa fa-{{$icon}}"></i></span>
                     <input type="{{$type}}" class="form-control" name="{{$name}}" placeholder="{{$placeholder}}" value="{{$value}}">
-                    <div class="form-icon position-absolute">
-                        <i class="fa fa-{{$icon}}"></i>
-                    </div>
-                </fieldset>
+                </div>
+
+
                 <span class="helper-text">{!! $slot !!}</span>
             </div>
         </div>
@@ -22,3 +24,4 @@
         </div>
     @endif
 </div>
+
