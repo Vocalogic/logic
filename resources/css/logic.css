@@ -28,3 +28,8 @@
 .datepicker > .datepicker-days {
     display: block !important;
 }
+
+.dropify-wrapper .dropify-message span.file-icon {
+    font-size: 16px;
+    color: #000;
+}

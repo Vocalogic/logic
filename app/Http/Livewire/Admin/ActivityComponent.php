@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Enums\Core\CommKey;
 use App\Enums\Files\FileType;
 use App\Models\Account;
 use App\Models\Activity;
@@ -257,6 +258,7 @@ class ActivityComponent extends Component
             ]
         );
         _log($lo, 'Photo has been uploaded');
+        CommKey::GlobalFiles->clear();
         return $lo->id;
     }
 

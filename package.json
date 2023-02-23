@@ -50,6 +50,7 @@
         "dragula": "^3.7.3",
         "dropify": "^0.2.2",
         "echarts": "^5.2.2",
+        "fancybox": "^3.0.1",
         "feather-icons": "^4.28.0",
         "fg-emoji-picker": "^1.0.1",
         "filepond": "^4.30.3",

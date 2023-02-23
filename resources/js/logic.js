@@ -1,5 +1,7 @@
 require('./bootstrap');
 import $ from 'jquery';
+window.$ = window.jQuery = require('jquery');
+
 import axios from 'axios';
 import * as Ladda from 'ladda';
 import ApexCharts from 'apexcharts'
@@ -28,6 +30,8 @@ import { Calendar } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import 'fancybox';
+
 
 $(document).ready(function () {
     $.ajaxSetup({

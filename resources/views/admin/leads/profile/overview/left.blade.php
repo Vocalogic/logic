@@ -81,53 +81,34 @@
 
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-6">
 
-
-        <div class="card mb-3">
-            <div class="card-body">
-                <h6 class="card-title mb-3">Probability of Closing</h6>
-                <h3 class="text-center">{{$lead->ratingHuman}}</h3>
-                {!! Form::select('rating', [1 => 1, 2 => 2,3 => 3,4 => 4,5 => 5], $lead->rating, ['class' => 'rate', 'data-url' => "/admin/leads/$lead->id/rating"]) !!}
-
+<div class="d-flex justify-content-between">
+    <div class="card">
+        <div class="card-body d-flex align-items-center">
+            <div class="avatar rounded-circle no-thumbnail bg-light">
+                <img class="img-fluid" src="/icons/1728946.png"></div>
+            <div class="flex-fill ms-3 text-truncate">
+                <div class="small text-uppercase">Potential MRR</div>
+                <div><span class="h6 mb-0 fw-bold">${{moneyFormat($lead->primaryMrr,2)}}</span> </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-6">
 
-            <div class="col">
-                <div class="card">
-                    <div class="card-body d-flex align-items-center">
-                        <div class="avatar rounded-circle no-thumbnail bg-light">
-                            <img class="img-fluid" src="/icons/1728946.png"></div>
-                        <div class="flex-fill ms-3 text-truncate">
-                            <div class="small text-uppercase">Potential MRR</div>
-                            <div><span class="h6 mb-0 fw-bold">${{moneyFormat($lead->primaryMrr,2)}}</span> </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        <div class="col">
-            <div class="card">
-                <div class="card-body d-flex align-items-center">
-                    <div class="avatar rounded-circle no-thumbnail bg-light">
-                        <img class="img-fluid" src="/icons/4395998.png"></div>
-                    <div class="flex-fill ms-3 text-truncate">
-                        <div class="small text-uppercase">Forecast Closing</div>
-                        <div><span class="h6 mb-0 fw-bold">{{$lead->forecast_date ? $lead->forecast_date->format("M d, Y"): "Not Forecasted"}}</span> </div>
-                    </div>
-                </div>
+    <div class="card">
+        <div class="card-body d-flex align-items-center">
+            <div class="avatar rounded-circle no-thumbnail bg-light">
+                <img class="img-fluid" src="/icons/4395998.png"></div>
+            <div class="flex-fill ms-3 text-truncate">
+                <div class="small text-uppercase">Forecast Closing</div>
+                <div><span class="h6 mb-0 fw-bold">{{$lead->forecast_date ? $lead->forecast_date->format("M d, Y"): "Not Forecasted"}}</span> </div>
             </div>
         </div>
-
-
-
     </div>
+
 
 </div>
+
 
 <div class="card mt-3">
     <div class="card-header">

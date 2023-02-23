@@ -27,9 +27,8 @@ mix.webpackConfig({
  |
  */
 
-
+// Logic Cart Assets
 mix.js('resources/js/cart.js', 'public/js');
-
 mix.css('resources/css/logic.css', 'public/assets/css/logic.css');
 
 
@@ -62,12 +61,7 @@ var third_party_assets = {
         },
 
         { "name": "dom-autoscroller", "assets": ["./node_modules/dom-autoscroller/dist/dom-autoscroller.min.js"] },
-        {
-            "name": "dragula",
-            "assets": ["./node_modules/dragula/dist/dragula.min.js",
-                "./node_modules/dragula/dist/dragula.min.css"
-            ]
-        },
+
         {
             "name": "choices.js",
             "assets": ["./node_modules/choices.js/public/assets/scripts/choices.min.js",
@@ -76,40 +70,9 @@ var third_party_assets = {
         },
         { "name": "cleave.js", "assets": ["./node_modules/cleave.js/dist/cleave.min.js"] },
         { "name": "apexcharts", "assets": ["./node_modules/apexcharts/dist/apexcharts.min.js"] },
-        // { "name": "bootstrap", "assets": ["./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"] },
         { "name": "chart.js", "assets": ["./node_modules/chart.js/dist/chart.min.js"] },
-        { "name": "fg-emoji-picker", "assets": ["./node_modules/fg-emoji-picker/fgEmojiPicker.js"] },
 
-        {
-            "name": "filepond-plugin-file-encode",
-            "assets": ["./node_modules/filepond-plugin-file-encode/dist/filepond-plugin-file-encode.min.js", ]
-        },
-        {
-            "name": "filepond-plugin-file-validate-size",
-            "assets": ["./node_modules/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.min.js", ]
-        },
-        {
-            "name": "filepond-plugin-image-exif-orientation",
-            "assets": ["./node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js", ]
-        },
-        {
-            "name": "filepond-plugin-image-exif-orientation",
-            "assets": ["./node_modules/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.min.js", ]
-        },
-        {
-            "name": "filepond-plugin-image-preview",
-            "assets": [
-                "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.js",
-                "./node_modules/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css",
-            ]
-        },
-        {
-            "name": "filepond",
-            "assets": [
-                "./node_modules/filepond/dist/filepond.min.js",
-                "./node_modules/filepond/dist/filepond.min.css",
-            ]
-        },
+
 
         { "name": "echarts", "assets": ["./node_modules/echarts/dist/echarts.min.js"] },
 
@@ -138,7 +101,6 @@ var third_party_assets = {
                 "./node_modules/card/dist/card.css"
             ]
         },
-        { "name": "gmaps", "assets": ["./node_modules/gmaps/gmaps.min.js"] },
 
         { "name": "isotope-layout", "assets": ["./node_modules/isotope-layout/dist/isotope.pkgd.min.js"] },
 
@@ -158,43 +120,11 @@ var third_party_assets = {
         { "name": "masonry-layout", "assets": ["./node_modules/masonry-layout/dist/masonry.pkgd.min.js"] },
         { "name": "particles.js", "assets": ["./node_modules/particles.js/particles.js"] },
 
-        {
-            "name": "prismjs",
-            "assets": [
-                "./node_modules/prismjs/prism.js",
-                "./node_modules/prismjs/themes/prism.css",
-                "./node_modules/prismjs/plugins/toolbar/prism-toolbar.min.css",
 
-            ]
-        },
-
-        { "name": "list.pagination.js", "assets": ["./node_modules/list.pagination.js/dist/list.pagination.min.js"] },
-
-        { "name": "list.js", "assets": ["./node_modules/list.js/dist/list.min.js"] },
-        {
-            "name": "multi.js",
-            "assets": [
-                "./node_modules/multi.js/dist/multi.min.js",
-                "./node_modules/multi.js/dist/multi.min.css",
-            ]
-        },
 
         { "name": "moment", "assets": ["./node_modules/moment/min/moment.min.js"] },
-        {
-            "name": "nouislider",
-            "assets": ["./node_modules/nouislider/dist/nouislider.min.js",
-                "./node_modules/nouislider/dist/nouislider.min.css"
-            ]
-        },
-        {
-            "name": "quill",
-            "assets": [
-                "./node_modules/quill/dist/quill.core.css",
-                "./node_modules/quill/dist/quill.bubble.css",
-                "./node_modules/quill/dist/quill.snow.css",
-                "./node_modules/quill/dist/quill.min.js"
-            ]
-        },
+
+
         { "name": "rater-js", "assets": ["./node_modules/rater-js/index.js"] },
 
         {
@@ -206,13 +136,8 @@ var third_party_assets = {
         },
 
 
-        { "name": "simplebar", "assets": ["./node_modules/simplebar/dist/simplebar.min.js"] },
-        {
-            "name": "sweetalert2",
-            "assets": ["./node_modules/sweetalert2/dist/sweetalert2.min.js",
-                "./node_modules/sweetalert2/dist/sweetalert2.min.css"
-            ]
-        },
+        { "name": "simplebar", "assets": ["./node_modules/simplebar/dist/simplebar.min.js", "./node_modules/simplebar/dist/simplebar.css"] },
+
         {
             "name": "swiper",
             "assets": ["./node_modules/swiper/swiper-bundle.min.js",
@@ -221,9 +146,8 @@ var third_party_assets = {
         },
 
         { "name": "feather-icons", "assets": ["./node_modules/feather-icons/dist/feather.min.js"] },
-        { "name": "wnumb", "assets": ["./node_modules/wnumb/wNumb.min.js"] },
         { "name": "node-waves", "assets": ["./node_modules/node-waves/dist/waves.min.js"] },
-        { "name": "sortablejs", "assets": ["./node_modules/sortablejs/Sortable.min.js"] }
+
     ]
 };
 
@@ -255,9 +179,7 @@ lodash(third_party_assets).forEach(function(assets, type) {
     }
 });
 
-// mix.copyDirectory("./node_modules/tinymce", folder.dist_assets + "/libs/tinymce");
 mix.copyDirectory("./node_modules/leaflet/dist/images", folder.dist_assets + "/libs/leaflet/images");
-// mix.copyDirectory("./node_modules/bootstrap-editable/img", folder.dist_assets + "/libs/img");
 
 // copy all fonts
 var out = folder.dist_assets + "fonts";
@@ -291,17 +213,24 @@ mix.js([
     'node_modules/sweetalert2/dist/sweetalert2.min.js',
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/dropify/dist/js/dropify.js',
-    'node_modules/fullcalendar/main.min.js'
+    'node_modules/fullcalendar/main.min.js',
+    'node_modules/fancybox/dist/js/jquery.fancybox.js'
 ], 'public/js/logic.js');
 
 mix.styles([
-    'resources/css/logic.css',
     'node_modules/ladda/dist/ladda-themeless.min.css',
     'node_modules/sweetalert2/dist/sweetalert2.min.css',
     'node_modules/font-awesome/css/font-awesome.min.css',
     'node_modules/dropify/dist/css/dropify.css',
-    'node_modules/fullcalendar/main.min.css'
+    'node_modules/fullcalendar/main.min.css',
+    'node_modules/fancybox/dist/css/jquery.fancybox.css'
 ], 'public/css/all.css');
+
+// Final Style Overrides (mix after all.css)
+mix.styles([
+    'resources/css/logic.css',
+
+], 'public/css/logic.css');
 
 
 

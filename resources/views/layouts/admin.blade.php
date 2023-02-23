@@ -23,6 +23,7 @@
     <!-- custom Css-->
     <link href="{{mix('assets/css/custom.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{mix('css/all.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{mix('css/logic.css')}}" rel="stylesheet" type="text/css"/>
 
     @livewireStyles
 
