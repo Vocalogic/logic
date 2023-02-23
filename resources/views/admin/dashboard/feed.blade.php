@@ -9,7 +9,7 @@
             </div>
         </div>
         <div class="card-body p-0">
-            <div data-simplebar style="max-height: 664px;" class="p-3">
+            <div data-simplebar style="max-height: 964px;" class="p-3">
 
 
                 <div class="acitivity-timeline acitivity-main">

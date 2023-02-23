@@ -32,7 +32,7 @@
 
 
                         <table class="table table-striped">
-                            <thead>
+                            <thead class="table-light">
                             <tr>
                                 <th>Service</th>
                                 <th>Price</th>
@@ -50,7 +50,7 @@
                                 </tr>
                                 @foreach($group->items as $item)
                                     @if($item->item)
-                                        <tr class="tr-border">
+                                        <tr class="border-start border-start-dashed">
                                             <td>
                                                 <a data-title="Edit {{$item->item->name}}" class="live"
                                                    href="/admin/accounts/{{$account->id}}/services/{{$item->id}}"
@@ -154,7 +154,7 @@
 
 
     <x-modal name="recurringModal" size="xl" title="Add Monthly Service">
-        <table class="table datatable">
+        <table class="table table-striped datatable">
             <thead>
             <tr>
                 <th>Item</th>

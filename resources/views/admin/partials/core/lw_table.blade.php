@@ -13,9 +13,9 @@
 
                 </div>
 
-                <div class="col-lg-12">
+                <div class="col-lg-12 mt-1">
                     <table class="table align-middle table-striped">
-                        <thead>
+                        <thead class="table-light">
                         <tr>
                             @foreach($headers as $header => $data)
                                 <th>
