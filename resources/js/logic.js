@@ -5,7 +5,7 @@ window.$ = window.jQuery = require('jquery');
 import axios from 'axios';
 import * as Ladda from 'ladda';
 import ApexCharts from 'apexcharts'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2/dist/sweetalert2.min.js';
 import 'datatables.net';
 import 'datatables.net-dt/css/jquery.dataTables.css';
 import tinymce from 'tinymce/tinymce';

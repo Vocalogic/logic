@@ -503,7 +503,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('leads/{lead}', [LeadController::class, 'show']);
     Route::post('leads/{lead}/close', [LeadController::class, 'close']);
     Route::post('leads/{lead}/discovery', [LeadController::class, 'saveDiscovery']);
-
+    Route::get('leads/{lead}/discovery/{discovery}', [LeadController::class, 'editDiscovery']);
+    Route::post('leads/{lead}/discovery/{discovery}', [LeadController::class, 'updateDiscovery']);
     Route::get('leads/{lead}/partner', [LeadController::class, 'partnerModal']);
     Route::post('leads/{lead}/partner', [LeadController::class, 'setPartner']);
 
@@ -512,7 +513,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('leads/{lead}/tns/{tn}', [LeadController::class, 'delTn']);
     Route::post('leads/{lead}/live', [LeadController::class, 'live']);
     Route::post('leads/{lead}/logo', [LeadController::class, 'uploadLogo']);
-    Route::post('leads/{lead}/disc', [LeadController::class, 'updateDiscovery']);
 
     Route::get('leads/{lead}/reopen', [LeadController::class, 'activate']);
     Route::get('leads/import/csv', [LeadController::class, 'importModal']);

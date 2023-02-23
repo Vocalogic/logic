@@ -29,7 +29,6 @@ mix.webpackConfig({
 
 // Logic Cart Assets
 mix.js('resources/js/cart.js', 'public/js');
-mix.css('resources/css/logic.css', 'public/assets/css/logic.css');
 
 
 
@@ -138,6 +137,7 @@ var third_party_assets = {
 
         { "name": "simplebar", "assets": ["./node_modules/simplebar/dist/simplebar.min.js", "./node_modules/simplebar/dist/simplebar.css"] },
 
+
         {
             "name": "swiper",
             "assets": ["./node_modules/swiper/swiper-bundle.min.js",
@@ -210,26 +210,25 @@ mix.js([
     'node_modules/ladda/js/ladda.js',
     'node_modules/datatables.net/js/jquery.dataTables.min.js',
     'node_modules/apexcharts/dist/apexcharts.min.js',
-    'node_modules/sweetalert2/dist/sweetalert2.min.js',
     'node_modules/tinymce/tinymce.min.js',
     'node_modules/dropify/dist/js/dropify.js',
     'node_modules/fullcalendar/main.min.js',
-    'node_modules/fancybox/dist/js/jquery.fancybox.js'
+    'node_modules/fancybox/dist/js/jquery.fancybox.js',
+    'node_modules/sweetalert2/dist/sweetalert2.min.js'
 ], 'public/js/logic.js');
 
 mix.styles([
     'node_modules/ladda/dist/ladda-themeless.min.css',
-    'node_modules/sweetalert2/dist/sweetalert2.min.css',
     'node_modules/font-awesome/css/font-awesome.min.css',
     'node_modules/dropify/dist/css/dropify.css',
     'node_modules/fullcalendar/main.min.css',
-    'node_modules/fancybox/dist/css/jquery.fancybox.css'
+    'node_modules/fancybox/dist/css/jquery.fancybox.css',
+    'node_modules/sweetalert2/dist/sweetalert2.min.css'
 ], 'public/css/all.css');
 
 // Final Style Overrides (mix after all.css)
 mix.styles([
     'resources/css/logic.css',
-
 ], 'public/css/logic.css');
 
 

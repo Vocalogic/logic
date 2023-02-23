@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Logic is a VOIP CRM and Process Management Tool provided by Vocalogic">
-    <meta name="keyword" content="Vocalogic, Logic, vCRM">
+    <meta name="description" content="Logic is an open-source ecommerce and billing management platform.">
+    <meta name="keyword" content="laravel, open source, ecommerce, billing management platform, free">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{$title ?? "Title"}}</title>
     @if(setting('brandImage.icon'))
@@ -19,11 +19,9 @@
     <!-- Icons Css -->
     <link href="{{mix('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css"/>
     <!-- App Css-->
-    <link href="{{mix('assets/css/app.min.css')}}" rel="stylesheet" type="text/css"/>
-    <!-- custom Css-->
-    <link href="{{mix('assets/css/custom.min.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{mix('css/all.css')}}" rel="stylesheet" type="text/css"/>
     <link href="{{mix('css/logic.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{mix('assets/css/app.min.css')}}" rel="stylesheet" type="text/css"/>
 
     @livewireStyles
 
@@ -40,12 +38,12 @@
                 <div class="d-flex">
                     <!-- LOGO -->
                     <div class="navbar-brand-box horizontal-logo">
-                        <a href="index.html" class="logo logo-dark">
+                        <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="assets/images/logo-sm.png" alt="" height="22">
+                            <img src="/assets/images/logo-sm.png" alt="" height="22">
                         </span>
                             <span class="logo-lg">
-                            <img src="assets/images/logo-dark.png" alt="" height="17">
+                            <img src="/assets/images/logo-dark.png" alt="" height="17">
                         </span>
                         </a>
 

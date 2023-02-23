@@ -7,7 +7,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-floating">
-                        <textarea name="discovery" class="form-control" style="height: 100px;">{!! $lead->discovery !!}</textarea>
+                        <textarea name="discovery" class="form-control"
+                                  style="height: 100px;">{!! $lead->discovery !!}</textarea>
                         <label>Enter Discovery Information</label>
                         <span class="helper-text">Enter information about this lead.</span>
                     </div>
@@ -34,31 +35,15 @@
             <tbody>
             @foreach(\App\Models\Discovery::where('lead_type_id', $lead->lead_type_id)->get() as $d)
                 <tr>
-
                     <td>{{$d->question}}</td>
                     <td>
-                        @if($d->type == 'Small Text')
-                            <a class="xedit"
-                               data-pk="{{$d->id}}"
-                               data-url="/admin/leads/{{$lead->id}}/disc"
-                               data-title="{{$d->question}}"
-                               data-field="d_{{$d->id}}">{{$lead->getDiscoveryAnswer($d)}}</a>
-                        @elseif($d->type == 'Large Text')
-                            <a class="xedit"
-                               data-pk="{{$d->id}}"
-                               data-type="textarea"
-                               data-url="/admin/leads/{{$lead->id}}/disc"
-                               data-title="{{$d->question}}"
-                               data-field="d_{{$d->id}}">{{$lead->getDiscoveryAnswer($d)}}</a>
-                        @else
-                            <a class="xedit"
-                               data-pk="{{$d->id}}"
-                               data-url="/admin/leads/{{$lead->id}}/disc"
-                               data-type='select'
-                               data-source="{{json_encode($d->selectable)}}"
-                               data-title="{{$d->question}}"
-                               data-field="d_{{$d->id}}">{{$lead->getDiscoveryAnswer($d)}}</a>
-                        @endif
+                        <a class="live text-info" data-title="{{$d->question}}" href="/admin/leads/{{$lead->id}}/discovery/{{$d->id}}">
+                            @if($lead->getDiscoveryAnswer($d))
+                                {{$lead->getDiscoveryAnswer($d)}}
+                            @else
+                                No Answer
+                            @endif
+                        </a>
                     </td>
                 </tr>
             @endforeach
@@ -70,7 +55,7 @@
                                              href="{{$lead->discovery_link}}">
                 {{$lead->discovery_link}}</a>
             @if($lead->contact && $lead->email)
-                <br/><a href="/admin/leads/{{$lead->id}}/discovery/send" class="confirm pt-2"
+                <br/><a href="/admin/leads/{{$lead->id}}/discovery/send" class="text-primary confirm pt-2"
                         data-message="Are you sure you want to send a discovery request to {{$lead->contact}} at {{$lead->email}}?"
                         data-method="GET"
                         data-confirm="Send Request">
@@ -89,7 +74,7 @@
                 <img class="img-fluid" src="/icons/1728946.png"></div>
             <div class="flex-fill ms-3 text-truncate">
                 <div class="small text-uppercase">Potential MRR</div>
-                <div><span class="h6 mb-0 fw-bold">${{moneyFormat($lead->primaryMrr,2)}}</span> </div>
+                <div><span class="h6 mb-0 fw-bold">${{moneyFormat($lead->primaryMrr,2)}}</span></div>
             </div>
         </div>
     </div>
@@ -101,7 +86,9 @@
                 <img class="img-fluid" src="/icons/4395998.png"></div>
             <div class="flex-fill ms-3 text-truncate">
                 <div class="small text-uppercase">Forecast Closing</div>
-                <div><span class="h6 mb-0 fw-bold">{{$lead->forecast_date ? $lead->forecast_date->format("M d, Y"): "Not Forecasted"}}</span> </div>
+                <div><span
+                        class="h6 mb-0 fw-bold">{{$lead->forecast_date ? $lead->forecast_date->format("M d, Y"): "Not Forecasted"}}</span>
+                </div>
             </div>
         </div>
     </div>

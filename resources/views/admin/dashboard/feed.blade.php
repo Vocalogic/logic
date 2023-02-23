@@ -31,7 +31,7 @@
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="mb-1">{!! $act->summary !!}</h6>
                                 <p class="text-muted mb-1">{!! $act->post !!}</p>
-                                <small class="mb-0 text-muted">{{$act->created_at->format("m/d/y h:ia")}}</small>
+                                <small class="mb-0 text-muted pull-right">{{$act->created_at->format("m/d/y h:ia")}}</small>
                             </div>
                         </div>
                     @endforeach

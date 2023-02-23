@@ -7,6 +7,7 @@ use App\Enums\Core\LogSeverity;
 use App\Enums\Files\FileType;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
+use App\Models\Discovery;
 use App\Models\Lead;
 use App\Models\Partner;
 use App\Models\User;
@@ -152,32 +153,6 @@ class LeadController extends Controller
         return redirect()->to("/admin/leads/$lead->id");
     }
 
-    /**
-     * Update Discovery for leads
-     * @param Lead    $lead
-     * @param Request $request
-     * @return array
-     */
-    public function updateDiscovery(Lead $lead, Request $request): array
-    {
-        $disc = $lead->discoveries()->where('discovery_id', $request->pk)->first();
-        if (!$disc)
-        {
-            $disc = $lead->discoveries()->create([
-                'discovery_id' => $request->pk,
-                'value'        => $request->value
-            ]);
-            _log($disc, "Discovery Question Answered");
-        }
-        else
-        {
-            $old = $disc->replicate();
-            $disc->update(['value' => $request->value]);
-            _log($disc, "Discovery Question Updated", $old);
-        }
-        $lead->update(['stale_notification_sent' => null]);
-        return ['success' => true];
-    }
 
     /**
      * Store Rating
@@ -282,6 +257,46 @@ class LeadController extends Controller
         $lead->submitToPartner($partner);
         return redirect()->back()->with('message', "Lead Accepted by Partner");
     }
+
+    /**
+     * Show edit modal for a discovery question.
+     * @param Lead      $lead
+     * @param Discovery $discovery
+     * @return View
+     */
+    public function editDiscovery(Lead $lead, Discovery $discovery): View
+    {
+        return view('admin.leads.discovery_modal', ['lead' => $lead, 'discovery' => $discovery]);
+    }
+
+    /**
+     * Update Discovery for leads
+     * @param Lead      $lead
+     * @param Discovery $discovery
+     * @param Request   $request
+     * @return RedirectResponse
+     */
+    public function updateDiscovery(Lead $lead, Discovery $discovery, Request $request): RedirectResponse
+    {
+        $disc = $lead->discoveries()->where('discovery_id', $discovery->id)->first();
+        if (!$disc)
+        {
+            $disc = $lead->discoveries()->create([
+                'discovery_id' => $discovery->id,
+                'value'        => $request->value
+            ]);
+            _log($disc, "Discovery Question Answered");
+        }
+        else
+        {
+            $old = $disc->replicate();
+            $disc->update(['value' => $request->value]);
+            _log($disc, "Discovery Question Updated", $old);
+        }
+        $lead->update(['stale_notification_sent' => null]);
+        return redirect()->back()->with('message', "Discovery Answer Updated");
+    }
+
 
     /**
      * Save Discovery Information

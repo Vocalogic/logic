@@ -3,6 +3,7 @@
     position: relative;
     display: block;
     min-height: 18px;
+    margin-top: 5px;
 }
 
 .helper-text::after {

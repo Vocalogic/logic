@@ -57,7 +57,7 @@
     <div wire:poll="updates">
         <div class="card">
             <div class="card-body">
-                <div data-simplebar style="max-height: 650px;">
+                <div data-simplebar style="max-height: 850px;">
                     <div class="acitivity-timeline acitivity-main">
                         @foreach($activities as $act)
                             <div class="acitivity-item d-flex mt-3">
@@ -83,8 +83,6 @@
 
                                     </h6>
                                     <p class="text-muted mb-1">{!! nl2br($act->post) !!}</p>
-                                    <small class="mb-0 text-muted">{{$act->created_at->diffForHumans()}}</small>
-
                                     @if($act->image_id)
                                         <div class="mt-2">
                                             <a class="fancybox img-fluid" rel="ligthbox"
@@ -95,6 +93,9 @@
                                             </a>
                                         </div>
                                     @endif
+                                    <small class="mb-0 text-muted pull-right">{{$act->created_at->diffForHumans()}}</small>
+
+
                                 </div>
                             </div>
                         @endforeach
