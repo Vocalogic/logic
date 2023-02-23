@@ -32,7 +32,7 @@
                         <div class="card-body">
                             <ul class="nav nav-tabs " role="tablist">
                                 @foreach(\App\Models\FileCategory::orderBy('name')->get() as $cat)
-                                    <li class="nav-item {{$loop->first ? "active" : null}}">
+                                    <li class="nav-item {{$loop->first ? "active show" : null}}">
                                         <a class="nav-link" href="#c{{$cat->id}}" data-bs-toggle="tab"
                                            data-bs-target="#c{{$cat->id}}"
                                            role="tab">

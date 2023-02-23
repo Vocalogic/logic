@@ -37,8 +37,9 @@
                         <a class="live" data-title="Add Product Pricing" href="/admin/accounts/{{$account->id}}/pricing/product/add">
                             <i class="fa fa-plus"></i>
                         </a>
-                        @include('admin.accounts.pricing.list', ['service' => false])
                     </h6>
+                    @include('admin.accounts.pricing.list', ['service' => false])
+
                 </div>
             </div>
 

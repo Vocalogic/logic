@@ -106,7 +106,7 @@ class Account extends Model
      * add the item logs as well.
      * @var array|string[]
      */
-    public array $logRelationships = ['items'];
+    public array $logRelationships = ['items', 'pricings'];
 
     /**
      * Define our array of tracked changes. This will be used for the

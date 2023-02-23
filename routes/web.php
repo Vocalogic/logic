@@ -181,8 +181,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('accounts/{account}/pricing/{type}/add', [AccountController::class, 'pricingModal']);
     Route::get('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingApply']);
     Route::delete('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingRemove']);
-
-    Route::post('accounts/{account}/pricing/{item}/live', [AccountController::class, 'pricingUpdate']);
+    Route::get('accounts/{account}/pricing/update/{item}', [AccountController::class, 'pricingUpdateModal']);
+    Route::post('accounts/{account}/pricing/update/{item}', [AccountController::class, 'pricingUpdateSave']);
     Route::get('accounts/{account}/files', [AccountController::class, 'files']);
 
     Route::get('accounts/{account}/statement', [AccountController::class, 'statement']);
