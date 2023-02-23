@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'My Partners'])
+@extends('layouts.admin', ['title' => 'My Partners', 'crumbs' => ['My Partners']])
 
 
 @section('pre')

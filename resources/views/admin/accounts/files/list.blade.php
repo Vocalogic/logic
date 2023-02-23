@@ -2,7 +2,7 @@
 
     <div class="card mt-3">
         <div class="card-body text-center">
-            <img src="/assets/images/no-data.svg" class="w120" alt="No Data">
+            <img src="/assets/images/no-data.svg" class="img-fluid w-25" alt="No Data">
             <div class="mt-4 mb-3">
                 <span class="text-muted">No files found. Click "Upload File" to upload a file in this category.</span>
             </div>

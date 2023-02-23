@@ -30,10 +30,10 @@
                             class="fa fa-upload"></i> Upload File</a>
                     <div class="card">
                         <div class="card-body">
-                            <ul class="nav nav-tabs menu-list list-unstyled mb-0 border-0" role="tablist">
+                            <ul class="nav nav-tabs " role="tablist">
                                 @foreach(\App\Models\FileCategory::orderBy('name')->get() as $cat)
                                     <li class="nav-item {{$loop->first ? "active" : null}}">
-                                        <a class="nav-link" href="#" data-bs-toggle="tab"
+                                        <a class="nav-link" href="#c{{$cat->id}}" data-bs-toggle="tab"
                                            data-bs-target="#c{{$cat->id}}"
                                            role="tab">
                                             <span>{{$cat->name}}</span>
@@ -90,7 +90,7 @@
                     </div>
                     <input type="file" name="uploaded" class="drop"/>
                     <button type="submit" class="btn btn-primary mt-3 ladda pull-right" data-style="zoom-out">
-                           <i class="fa fa-file-o"></i> Upload File
+                        <i class="fa fa-file-o"></i> Upload File
                     </button>
                 </form>
             </x-modal>
