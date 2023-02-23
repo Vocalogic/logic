@@ -79,7 +79,7 @@
                                                 <br/><small class="text-muted fs-7">{{$item->description}}</small>
                                                 @if($item->notes)
                                                     <br/>
-                                                    <small class="text-primary">{!! nl2br($item->notes) !!}</small>
+                                                    <small class="text-info">{!! nl2br($item->notes) !!}</small>
                                                 @endif
                                                 @if($item->item->meta->count())
                                                     <br/>

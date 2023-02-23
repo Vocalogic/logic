@@ -67,13 +67,6 @@ var third_party_assets = {
                 "./node_modules/choices.js/public/assets/styles/choices.min.css"
             ]
         },
-        { "name": "cleave.js", "assets": ["./node_modules/cleave.js/dist/cleave.min.js"] },
-        { "name": "apexcharts", "assets": ["./node_modules/apexcharts/dist/apexcharts.min.js"] },
-        { "name": "chart.js", "assets": ["./node_modules/chart.js/dist/chart.min.js"] },
-
-
-
-        { "name": "echarts", "assets": ["./node_modules/echarts/dist/echarts.min.js"] },
 
         {
             "name": "fullcalendar",
