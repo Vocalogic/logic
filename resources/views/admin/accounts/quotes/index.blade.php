@@ -32,7 +32,7 @@
                 </div>
             </div>
 
-            <a class="btn btn-primary live" data-title="Create Quote for {{$account->name}}"
+            <a class="btn btn-primary live mt-4" data-title="Create Quote for {{$account->name}}"
                href="/admin/quotes/create?account_id={{$account->id}}">
                 <i class="fa fa-plus"></i> new quote
             </a>
