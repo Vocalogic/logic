@@ -5,7 +5,7 @@
     @method('POST')
     @csrf
     @if($discovery->type == 'Small Text')
-        <x-form-input name="value" label="{{$discovery->question}}" icon="question"/>
+        <x-form-input name="value" label="{{$discovery->question}}" icon="question" value="{{$lead->getDiscoveryAnswer($discovery)}}"/>
     @endif
 
     <div class="row">

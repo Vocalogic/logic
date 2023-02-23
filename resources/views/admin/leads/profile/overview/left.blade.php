@@ -1,6 +1,6 @@
 <div class="card mb-3">
     <div class="card-body">
-        <h6 class="card-title mb-3">Discovery</h6>
+        <h6 class="mb-3">Discovery</h6>
         <form method="POST" action="/admin/leads/{{$lead->id}}/discovery">
             @csrf
             @method('POST')
@@ -12,7 +12,7 @@
                         <label>Enter Discovery Information</label>
                         <span class="helper-text">Enter information about this lead.</span>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 ladda pull-right" data-style="zoom-out">
+                    <button type="submit" class="btn btn-primary btn-sm mt-3 ladda pull-right" data-style="expand-left">
                         <i class="fa fa-edit"></i> Update Discovery
                     </button>
                 </div>
@@ -23,7 +23,7 @@
 
 <div class="card mb-3">
     <div class="card-body">
-        <h6 class="card-title mb-3">Questionnaire</h6>
+        <h6 class="mb-3">Questionnaire</h6>
         <p class="card-text text-muted">Below is a list of discovery items to help ensure your customer is prepared.</p>
         <table class="table">
             <thead>

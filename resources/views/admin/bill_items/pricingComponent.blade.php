@@ -28,7 +28,7 @@
                         </div>
 
                         <div class="col-lg-12">
-                            <input type="submit" class="btn btn-{{bm()}}primary w-100 mt-3" wire:click="apply"
+                            <input type="submit" class="btn btn-primary w-100 mt-3" wire:click="apply"
                                    value="Apply Pricing">
                         </div>
 
@@ -47,26 +47,26 @@
                             <div class="list-group my-2">
                                 <label class="list-group-item d-flex align-items-center">
                                     <span class="flex-grow-1">Selling Price</span>
-                                    <span class="badge bg-light text-muted">${{moneyFormat($sellingPrice)}}</span>
+                                    <span class="badge bg-light">${{moneyFormat($sellingPrice)}}</span>
                                 </label>
                                 <label class="list-group-item d-flex align-items-center">
                                     <span class="flex-grow-1">Min Allowed Price</span>
-                                    <span class="badge bg-light text-muted">${{moneyFormat($minAllowed)}}</span>
+                                    <span class="badge bg-light">${{moneyFormat($minAllowed)}}</span>
                                 </label>
                                 <label class="list-group-item d-flex align-items-center">
                                     <span class="flex-grow-1">Max Allowed Price</span>
-                                    <span class="badge bg-light text-muted">${{moneyFormat($maxAllowed)}}</span>
+                                    <span class="badge bg-light">${{moneyFormat($maxAllowed)}}</span>
                                 </label>
 
                                 <label class="list-group-item d-flex align-items-center">
                                     <span class="flex-grow-1">Profit Amount</span>
-                                    <span class="badge bg-light text-muted">${{moneyFormat($profitAmount)}}</span>
+                                    <span class="badge bg-light">${{moneyFormat($profitAmount)}}</span>
                                 </label>
 
                                 <label class="list-group-item d-flex align-items-center">
                                     <span class="flex-grow-1">Margin Percentage</span>
                                     <span
-                                        class="badge bg-light text-muted">{{number_format($profitPercentage,2)}}%</span>
+                                        class="badge bg-light">{{number_format($profitPercentage,2)}}%</span>
                                 </label>
 
                             </div>

@@ -249,9 +249,8 @@ $(document).ready(function () {
                 modal.find('.modal-dialog').addClass(size);
                 modal.find('.modal-title').text(title);
                 modal.find('.modal-body').html(data);
-                let options = {backdrop: false, keyboard: true};
-                console.log("Trying to find " + target);
-                var myModal = bootstrap.Modal.getOrCreateInstance(target, options)
+                let options = {backdrop: true, keyboard: true};
+                let myModal = bootstrap.Modal.getOrCreateInstance(target, options)
                 myModal.show();
                 Ladda.bind('button[type=submit]');
 

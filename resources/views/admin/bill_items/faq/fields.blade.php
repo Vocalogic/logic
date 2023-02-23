@@ -46,11 +46,12 @@
                     </tbody>
                 </table>
 
-                <a class="btn btn-primary mt-3 pull-right"
-                   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/requirements">
-                    <i class="fa fa-save"></i> Save and Continue</a>
+
 
             </div>
         </div>
+        <a class="btn btn-primary mt-3 pull-right"
+           href="/admin/category/{{$cat->id}}/items/{{$item->id}}/requirements">
+            <i class="fa fa-save"></i> Save and Continue</a>
     </div>
 </div>
