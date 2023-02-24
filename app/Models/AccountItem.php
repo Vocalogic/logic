@@ -126,6 +126,7 @@ class AccountItem extends Model
         $totalCost = 0;
         foreach (self::where('bill_item_id', $this->bill_item_id)->get() as $item)
         {
+            if (!$item->price) continue; // Don't factor in free services
             $count += $item->qty;
             $totalCost += (int)bcmul($item->qty * $item->price, 1);
         }
