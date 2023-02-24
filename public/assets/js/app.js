@@ -826,57 +826,6 @@ File: Main Js File
 
 
 
-
-	function initComponents() {
-		// tooltip
-		var tooltipTriggerList = [].slice.call(
-			document.querySelectorAll('[data-bs-toggle="tooltip"]')
-		);
-		tooltipTriggerList.map(function (tooltipTriggerEl) {
-			return new bootstrap.Tooltip(tooltipTriggerEl);
-		});
-
-		// popover
-		var popoverTriggerList = [].slice.call(
-			document.querySelectorAll('[data-bs-toggle="popover"]')
-		);
-		popoverTriggerList.map(function (popoverTriggerEl) {
-			return new bootstrap.Popover(popoverTriggerEl);
-		});
-	}
-
-	// Counter Number
-	function counter() {
-		var counter = document.querySelectorAll(".counter-value");
-		var speed = 250; // The lower the slower
-		counter &&
-			Array.from(counter).forEach(function (counter_value) {
-				function updateCount() {
-					var target = +counter_value.getAttribute("data-target");
-					var count = +counter_value.innerText;
-					var inc = target / speed;
-					if (inc < 1) {
-						inc = 1;
-					}
-					// Check if target is reached
-					if (count < target) {
-						// Add inc to count and output in counter_value
-						counter_value.innerText = (count + inc).toFixed(0);
-						// Call function every ms
-						setTimeout(updateCount, 1);
-					} else {
-						counter_value.innerText = numberWithCommas(target);
-					}
-					numberWithCommas(counter_value.innerText);
-				}
-				updateCount();
-			});
-
-		function numberWithCommas(x) {
-			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		}
-	}
-
 	function updateHorizontalMenus() {
 		document.getElementById("two-column-menu").innerHTML = "";
 		if(document.querySelector(".navbar-menu")){
@@ -1625,9 +1574,7 @@ File: Main Js File
 		initFullScreen();
 		initModeSetting();
 		windowLoadContent();
-		counter();
 		initLeftMenuCollapse();
-		initComponents();
 		resetLayout();
 		pluginData();
 		isCollapseMenu();
