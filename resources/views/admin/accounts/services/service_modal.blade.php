@@ -23,7 +23,7 @@
                             {{$item->frequency->getHuman()}} Billing (Bills:
                             {{$item->next_bill_date
                                 ? $item->next_bill_date->format("m/d/y")
-                                : $account->next_bill->format("m/d/y")}})
+                                : $account->next_bill?->format("m/d/y")}})
                         </span>
                     @endif
 
