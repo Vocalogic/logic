@@ -359,7 +359,7 @@ class AccountController extends Controller
      */
     public function editItem(Account $account, AccountItem $item): View
     {
-        return view('admin.accounts.services.service_modal')->with('item', $item);
+        return view('admin.accounts.services.service_modal')->with(['account' => $account, 'item' => $item]);
     }
 
     /**
