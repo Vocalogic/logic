@@ -242,7 +242,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('discovery', [DiscoveryController::class, 'index']);
 
     Route::post('discovery/create/{type}', [DiscoveryController::class, 'store']);
-    Route::post('discovery/{discovery}/live', [DiscoveryController::class, 'live']);
+    Route::get('discovery/{discovery}', [DiscoveryController::class, 'show']);
+    Route::put('discovery/{discovery}', [DiscoveryController::class, 'update']);
     Route::delete('discovery/{discovery}', [DiscoveryController::class, 'destroy']);
 
 

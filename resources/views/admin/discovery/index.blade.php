@@ -30,28 +30,19 @@
                             @foreach($type->questions as $question)
                                 <tr>
                                     <td>
-                                        <a class="xedit" data-pk="{{$question->id}}" data-url="/admin/discovery/{{$question->id}}/live"
-                                           data-title="Enter Question" data-field="question">
-                                            {{$question->question}}</a> <a class="confirm" data-message="Are you sure you want to delete this question?"
+                                        <a class="live" data-title="Edit Question" href="/admin/discovery/{{$question->id}}">
+                                            {{$question->question}}
+                                        </a>
+                                        <a class="confirm" data-message="Are you sure you want to delete this question?"
                                                                            data-method="DELETE" href="/admin/discovery/{{$question->id}}"><i class="fa fa-trash"></i>
                                         </a>
                                             <br/>
-                                        <small class="text-muted">
-                                            <a class="xedit" data-pk="{{$question->id}}" data-url="/admin/discovery/{{$question->id}}/live"
-                                               data-title="Enter Help" data-type='textarea' data-field="help">{{$question->help ?: "Add Help"}}</a>
-                                        </small>
+                                        <small class="text-muted">{{$question->help ?: "Add Help"}}</small>
                                     </td>
-                                    <td>
-                                        <a class="xedit" data-pk="{{$question->id}}" data-url="/admin/discovery/{{$question->id}}/live"
-                                           data-title="Select Type" data-type="select" data-source="['Small Text', 'Large Text', 'Dropdown']" data-field="type">
-                                            {{$question->type}}</a>
-
-                                    </td>
+                                    <td>{{$question->type}}</td>
                                     <td>
                                         @if($question->type == 'Dropdown')
-                                            <a class="xedit" data-pk="{{$question->id}}" data-url="/admin/discovery/{{$question->id}}/live"
-                                               data-title="Enter Options" data-field="opts">
-                                                {{$question->opts}}</a>
+                                            {{$question->opts}}
                                         @endif
                                         &nbsp;
                                     </td>
@@ -68,7 +59,7 @@
                                                 <option value="Dropdown">Dropdown</option>
                                             </select>
                                         </td>
-                                        <td><input type="submit" class="btn btn-primary" value="Add"></td>
+                                        <td><button type="submit" class="btn btn-primary ladda" data-style="expand-left"><i class="fa fa-plus"></i> Add</button></td>
                                     </tr>
                                 </form>
                             </tbody>

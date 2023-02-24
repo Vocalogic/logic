@@ -12,12 +12,13 @@ class FormSelect extends Component
     public array $options;
     public bool $float = false;
     public ?string $icon;
+    public bool $valuesAsKeys = false;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct(string $name, string $label, ?string $selected = null, ?array $options = [], ?bool $float = false, ?string $icon = null)
+    public function __construct(string $name, string $label, ?string $selected = null, ?array $options = [], ?bool $float = false, ?string $icon = null, $valuesAsKeys = false)
     {
         $this->name = $name;
         $this->label = $label;
@@ -25,6 +26,7 @@ class FormSelect extends Component
         $this->options = $options;
         $this->float = $float;
         $this->icon = $icon;
+        $this->valuesAsKeys = $valuesAsKeys;
 
     }
 

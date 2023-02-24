@@ -7,6 +7,13 @@
     @if($discovery->type == 'Small Text')
         <x-form-input name="value" label="{{$discovery->question}}" icon="question" value="{{$lead->getDiscoveryAnswer($discovery)}}"/>
     @endif
+    @if($discovery->type == 'Large Text')
+        <x-form-input type='textarea' name="value" label="{{$discovery->question}}" icon="question" value="{{$lead->getDiscoveryAnswer($discovery)}}"/>
+    @endif
+    @if($discovery->type == 'Dropdown')
+        @props(['opts' => explode(",", $discovery->opts)])
+        <x-form-select valuesAsKeys="true" name="value" label="{{$discovery->question}}" icon="question" selected="{{$lead->getDiscoveryAnswer($discovery)}}" :options="$opts"/>
+    @endif
 
     <div class="row">
         <div class="col-lg-12">
