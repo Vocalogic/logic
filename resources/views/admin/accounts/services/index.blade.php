@@ -52,7 +52,7 @@
                                     @if($item->item)
                                         <tr class="border-start border-start-dashed">
                                             <td>
-                                                <a data-title="Edit {{$item->item->name}}" class="live"
+                                                <a data-title="Edit {{$item->item->name}}" class="live text-primary"
                                                    href="/admin/accounts/{{$account->id}}/services/{{$item->id}}"
                                                    data-title="{{$item->item->name}}">
                                                     <strong>[{{$item->item->code}}]
