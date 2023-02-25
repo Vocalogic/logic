@@ -103,9 +103,10 @@
                                                     @endforeach
                                                 @endif
 
-                                                @if($item->remaining > 0)
-                                                <span class="badge bg-primary"><i class="fa fa-clock-o"></i> {{$item->remaining}} payments left</span>
-                                                @endif
+
+                                            <div class="pull-right">
+                                               @include('admin.accounts.services.badges', ['item' => $item])
+                                            </div>
 
                                             </td>
                                            <td>${{moneyFormat($item->price)}} <br/>{!! $item->variationDetail !!}</td>
@@ -143,7 +144,7 @@
                            class="btn btn-primary"><i class="fa fa-plus"></i> add service</a>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block">
-                        @include('admin.accounts.services.bill_date')
+                        @include('admin.accounts.services.actions')
                     </div>
                 @endif
             </div>

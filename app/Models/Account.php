@@ -286,6 +286,15 @@ class Account extends Model
     }
 
     /**
+     * An account can have many recurring billing profiles.
+     * @return HasMany
+     */
+    public function recurringProfiles(): HasMany
+    {
+        return $this->hasMany(RecurringProfile::class);
+    }
+
+    /**
      * Fire off the welcome email template to the admin.
      * @return void
      */
@@ -688,7 +697,6 @@ class Account extends Model
         return $this->invoices()->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])->get();
     }
 
-
     /**
      * Get a list of alerts for an account and severity
      * @return array
@@ -720,19 +728,7 @@ class Account extends Model
         }
 
 
-        // Check for PBX and PBX Items
-        /*
-        if ($this->hasPBXServices() && !$this->pbx_domain)
-        {
-            $alerts[] = (object)[
-                'type'        => 'warning',
-                'title'       => "No PBX Allocated",
-                'description' => "You currently have services assigned to this customer that relate to a PBX but no PBX found.",
-                'action'      => "Create/Assign PBX",
-                'url'         => "#/admin/accounts/$this->id/pbx/assign" // use # for a livemodal renderer.
-            ];
-        }
-        */
+
         // No bill date set.
         if (!$this->next_bill)
         {
@@ -763,35 +759,6 @@ class Account extends Model
                 'url'         => "/admin/accounts/$this->id?active=invoices"
             ];
         }
-
-        // PBX Seat Alert
-        /*
-        if ($this->getActualExtensionCount() != $this->getSoldExtensionCount())
-        {
-            if (!$this->pbx_domain)
-            {
-                $alerts[] = (object)[
-                    'type'        => 'warning',
-                    'title'       => "Seats Sold but no PBX Found",
-                    'description' => sprintf("You are currently billing %d seats but no PBX found.",
-                        $this->getSoldExtensionCount()),
-                    'action'      => "Assign PBX",
-                    'url'         => "#/admin/accounts/$this->id/pbx/assign" // use # for a livemodal renderer.
-                ];
-            }
-            else
-            {
-                $alerts[] = (object)[
-                    'type'        => 'warning',
-                    'title'       => "Seat Sold vs. Actual Mismatch",
-                    'description' => sprintf("You are currently billing %d seats total, but %d found in use.",
-                        $this->getSoldExtensionCount(), $this->getActualExtensionCount()),
-                    'action'      => "Review PBX",
-                    'url'         => "/admin/accounts/$this->id?active=pbx"
-                ];
-            }
-        }
-        */
 
         // Draft Invoices
         if ($this->invoices()->where('status', InvoiceStatus::DRAFT)->count())
@@ -844,12 +811,13 @@ class Account extends Model
     /**
      * This method will create an invoice based on the service items, and
      * updates the next bill date.
-     * @param bool $createOrder
+     * @param bool                  $createOrder
+     * @param RecurringProfile|null $profile
      * @return void
      */
-    public function generateMonthlyInvoice(bool $createOrder = false): void
+    public function generateMonthlyInvoice(bool $createOrder = false, RecurringProfile $profile = null): void
     {
-        BillingEngine::generateMonthlyInvoice($this, $createOrder);
+        BillingEngine::generateMonthlyInvoice($this, $createOrder, $profile);
     }
 
     /**
