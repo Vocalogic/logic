@@ -21,7 +21,11 @@
             <tbody>
             @foreach($account->recurringProfiles as $profile)
                 <tr>
-                    <td><a class="live" data-title="{{$profile->name}}" href="/admin/accounts/{{$account->id}}/profiles/{{$profile->id}}">{{$profile->name}}</a></td>
+                    <td><a class="live" data-title="{{$profile->name}}" href="/admin/accounts/{{$account->id}}/profiles/{{$profile->id}}">{{$profile->name}}</a>
+                    @if($profile->auto_bill)
+                        <span class="badge badge-outline-success">autobill</span>
+                        @endif
+                    </td>
                     <td>{{$profile->next_bill ? $profile->next_bill->format("m/d/y") : "Not Set"}}</td>
                 </tr>
                 @endforeach

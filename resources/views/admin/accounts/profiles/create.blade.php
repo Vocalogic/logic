@@ -14,13 +14,17 @@
             Enter a purchase order number if required
         </x-form-input>
         @props(['next_bill' => $profile->next_bill ? $profile->next_bill->format("Y-m-d") : null])
-        <x-form-input type="date" name="next_bill" label="Next Bill Date" icon="calendar" :value="$next_bill">
+        <x-form-input type="date" name="next_bill" label="Next Bill Date" icon="calendar-o" :value="$next_bill">
             Select the date when this recurring profile should run next
         </x-form-input>
 
-        <x-form-input name="bills_on" label="Bills on Day" icon="bag-shopping" value="{{$profile->bills_on}}">
+        <x-form-input name="bills_on" label="Bills on Day" icon="calendar-o" value="{{$profile->bills_on}}">
             What day of the month should this bill?
         </x-form-input>
+        @props(['auto' => [0 => 'No', 1 => 'Yes']])
+        <x-form-select name="auto_bill" label="Auto-Process via Auto-Bill?" :options="$auto" icon="credit-card" selected="{{$profile->auto_bill}}">
+            Should this recurring profile automatically process on due date?
+        </x-form-select>
 
         <div class="row mt-3">
             <div class="col-lg-12">
@@ -32,7 +36,7 @@
                         Remove Billing Profile
                     </a>
             @endif
-                <button class="btn btn-primary ladda pull-right" data-style="expand-left">
+                <button type="submit" class="btn btn-primary ladda pull-right" data-style="expand-left">
                     <i class="fa fa-save"></i> Save Profile
                 </button>
             </div>
