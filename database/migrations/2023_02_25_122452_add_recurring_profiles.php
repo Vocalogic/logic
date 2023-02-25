@@ -18,6 +18,7 @@ return new class extends Migration {
             $t->string('po')->nullable();
             $t->timestamp('next_bill')->nullable();
             $t->integer('bills_on')->nullable();
+            $t->boolean('auto_bill')->nullable()->default(false);
         });
 
         Schema::table('account_items', function ($t) {

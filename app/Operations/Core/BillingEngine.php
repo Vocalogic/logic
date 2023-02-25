@@ -114,7 +114,6 @@ class BillingEngine
             $title = "Monthly Invoice";
             $po = $account->po;
             _log($account, "Monthly Invoice Generated");
-
         }
         $invoice = $account->invoices()->create([
             'due_on'    => now()->addDays($account->net_terms),

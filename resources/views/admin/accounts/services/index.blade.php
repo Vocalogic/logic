@@ -143,7 +143,7 @@
                            class="btn btn-primary"><i class="fa fa-plus"></i> add service</a>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block">
-                        @include('admin.accounts.services.bill_date')
+                        @include('admin.accounts.services.actions')
                     </div>
                 @endif
             </div>
