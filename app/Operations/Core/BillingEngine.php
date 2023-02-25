@@ -9,6 +9,7 @@ use App\Enums\Core\LogSeverity;
 use App\Enums\Core\PaymentMethod;
 use App\Models\Account;
 use App\Models\Invoice;
+use App\Models\RecurringProfile;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
@@ -88,21 +89,46 @@ class BillingEngine
 
     /**
      * This will generate a monthly invoice for an account.
-     * @param Account $account
-     * @param bool    $createOrder
+     * @param Account               $account
+     * @param bool                  $createOrder
+     * @param RecurringProfile|null $profile
      * @return void
      */
-    static public function generateMonthlyInvoice(Account $account, bool $createOrder = false): void
-    {
-        $account->update(['next_bill' => now()->addMonth()->setDay($account->bills_on ?? 1)]);
+    static public function generateMonthlyInvoice(
+        Account $account,
+        bool $createOrder = false,
+        RecurringProfile $profile = null
+    ): void {
+
         if ($account->items->count() == 0) return; // Do nothing if there are no service items
+        if ($profile)
+        {
+            $profile->update(['next_bill' => now()->addMonths()->setDay($profile->bills_on ?? 1)]);
+            $title = $profile->name;
+            $po = $profile->po;
+            _log($profile, "Recurring Profile #$profile->id Invoice Generated");
+        }
+        else
+        {
+            $account->update(['next_bill' => now()->addMonth()->setDay($account->bills_on ?? 1)]);
+            $title = "Monthly Invoice";
+            $po = $account->po;
+            _log($account, "Monthly Invoice Generated");
+
+        }
         $invoice = $account->invoices()->create([
             'due_on'    => now()->addDays($account->net_terms),
             'status'    => InvoiceStatus::DRAFT,
+            'title'     => $title,
+            'po'        => $po,
             'recurring' => true
         ]);
-        _log($invoice, "Monthly Invoice Generated");
-        foreach ($account->items as $item)
+
+        $items = $profile
+            ? $account->items()->where('recurring_profile_id', $profile->id)->get()
+            : $account->items()->whereNull('recurring_profile_id')->get();
+
+        foreach ($items as $item)
         {
             if (!$item->item) continue; // Service was deleted.
             if (!$item->frequency) $item->frequency = BillFrequency::Monthly;

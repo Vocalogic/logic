@@ -64,6 +64,15 @@ class AccountItem extends Model
     }
 
     /**
+     * An item can be part of a recurring profile.
+     * @return BelongsTo
+     */
+    public function recurringProfile(): BelongsTo
+    {
+        return $this->belongsTo(RecurringProfile::class);
+    }
+
+    /**
      * A service item that was sold via a quote.
      * @return BelongsTo
      */
