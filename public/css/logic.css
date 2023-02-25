@@ -1,1 +1,41 @@
-.helper-text{font-size:10px;position:relative;display:block;min-height:18px;margin-top:5px}.helper-text::after{position:absolute;top:0;left:0;opacity:1}.avatar{max-width:40px;max-height:40px}.search-result::-webkit-scrollbar{display:none}.search-result{-ms-overflow-style:none;scrollbar-width:none}.datepicker>.datepicker-days{display:block!important}.dropify-wrapper .dropify-message span.file-icon{font-size:16px;color:#000}
+.helper-text {
+    font-size: 10px;
+    position: relative;
+    display: block;
+    min-height: 18px;
+    margin-top: 5px;
+}
+
+.helper-text::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+.avatar {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.search-result::-webkit-scrollbar {
+    display: none;
+}
+
+.search-result {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.datepicker > .datepicker-days {
+    display: block !important;
+}
+
+.dropify-wrapper .dropify-message span.file-icon {
+    font-size: 16px;
+    color: #000;
+}
+
+.popover {
+    max-width: 100%; 
+}

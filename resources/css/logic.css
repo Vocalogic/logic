@@ -35,3 +35,7 @@
     font-size: 16px;
     color: #000;
 }
+
+.popover {
+    max-width: 100%; 
+}
