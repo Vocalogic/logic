@@ -25,9 +25,9 @@ return new class extends Migration {
             $t->integer('recurring_profile_id')->nullable();
         });
 
-        Schema::table('invoices', function($t)
-        {
-           $t->string('title')->nullable(); // For recurring profile name
+        Schema::table('invoices', function ($t) {
+            $t->string('title')->nullable(); // For recurring profile name
+            $t->integer('recurring_profile_id')->nullable();
         });
     }
 
@@ -41,8 +41,7 @@ return new class extends Migration {
             $t->dropColumn('recurring_profile_id');
         });
 
-        Schema::table('invoices', function($t)
-        {
+        Schema::table('invoices', function ($t) {
             $t->dropColumn('title');
         });
     }

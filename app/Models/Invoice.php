@@ -128,6 +128,15 @@ class Invoice extends Model
     }
 
     /**
+     * An invoice can be generated from a recurring profile
+     * @return BelongsTo
+     */
+    public function recurringProfile(): BelongsTo
+    {
+        return $this->belongsTo(RecurringProfile::class);
+    }
+
+    /**
      * Get subtotal for invoice.
      * @return int
      */
@@ -165,6 +174,8 @@ class Invoice extends Model
     {
         return sprintf("%s/shop/account/invoices/%d", setting('brand.url'), $this->id);
     }
+
+
 
 
     /**

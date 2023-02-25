@@ -18,7 +18,22 @@
                     <th>Bills On</th>
                 </tr>
             </thead>
+            <tbody>
+            @foreach($account->recurringProfiles as $profile)
+                <tr>
+                    <td><a class="live" data-title="{{$profile->name}}" href="/admin/accounts/{{$account->id}}/profiles/{{$profile->id}}">{{$profile->name}}</a></td>
+                    <td>{{$profile->next_bill ? $profile->next_bill->format("m/d/y") : "Not Set"}}</td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
+
+    </div>
+
+    <div class="col-lg-12 mt-3">
+        <a class="live btn btn-sm btn-primary" data-title="Create new Recurring Profile" href="/admin/accounts/{{$account->id}}/profiles/create">
+            <i class="fa fa-plus"></i> New Recurring Profile
+        </a>
 
     </div>
 

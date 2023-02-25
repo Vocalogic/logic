@@ -28,10 +28,18 @@ class BillingEngine
     {
         foreach (Account::whereNotNull('next_bill')->where('active', true)->get() as $account)
         {
-            if ($account->next_bill <= Carbon::now())
+            if ($account->next_bill <= now())
             {
                 info("$account->name needs a new invoice. Starting Logic Invoice Generation Routine.. ");
                 $account->generateMonthlyInvoice();
+            }
+            foreach ($account->recurringProfiles as $profile)
+            {
+                if ($profile->next_bill <= now())
+                {
+                    info("$account->name has a recurring profile (#$profile->id) that needs a new invoice.");
+                    $account->generateMonthlyInvoice(false, $profile);
+                }
             }
         }
     }
@@ -116,11 +124,12 @@ class BillingEngine
             _log($account, "Monthly Invoice Generated");
         }
         $invoice = $account->invoices()->create([
-            'due_on'    => now()->addDays($account->net_terms),
-            'status'    => InvoiceStatus::DRAFT,
-            'title'     => $title,
-            'po'        => $po,
-            'recurring' => true
+            'due_on'               => now()->addDays($account->net_terms),
+            'status'               => InvoiceStatus::DRAFT,
+            'title'                => $title,
+            'po'                   => $po,
+            'recurring'            => true,
+            'recurring_profile_id' => $profile ? $profile->id : 0
         ]);
 
         $items = $profile

@@ -1,5 +1,5 @@
 @extends('layouts.admin', [
-    'title' => "Invoice #$invoice->id",
+    'title' => "Invoice #$invoice->id for {$invoice->account->name}",
     'crumbs' => [
         "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
         "Invoice #$invoice->id"
@@ -14,18 +14,7 @@
                 <a href="/admin/accounts/{{$invoice->account_id}}">{{$invoice->account->name}}</a>
                 ({{$invoice->status}})
             </h1>
-            <small class="text-muted">
-                Total: <b>${{moneyFormat($invoice->total)}}</b> | Balance: <b>${{moneyFormat($invoice->balance)}}</b>
-                    | Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
-                                         href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
-                    </a>
-                @if($invoice->account->agent)
-                    | Agent: <b>{{$invoice->account->agent->name}}</b>
-                @endif
-                @if($invoice->account->affiliate)
-                    | Affiliate: <b>{{$invoice->account->affiliate->name}}</b>
-                @endif
-            </small>
+
         </div>
 
     </div> <!-- .row end -->
@@ -124,6 +113,23 @@
                             <td style="text-align:right;"><strong>Balance:</strong></td>
                             <td>${{moneyFormat($invoice->balance)}}</td>
                         </tr>
+                        @if($invoice->po || $invoice->recurringProfile)
+                        <tr>
+                            <td colspan="4">
+                                <small class="text-muted">
+                                   @if($invoice->po)
+                                    Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
+                                                         href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
+                                    </a>
+                                   @endif
+                                    @if($invoice->recurringProfile)
+                                        | Billed from Recurring Profile <span class="text-info"> {{$invoice->recurringProfile->name}}</span>
+                                    @endif
+
+                                </small>
+                            </td>
+                        </tr>
+                        @endif
 
 
                         </tbody>

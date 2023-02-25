@@ -387,7 +387,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('accounts/{account}/updateACH', [AccountController::class, 'achModal']);
     Route::post('accounts/{account}/updateACH', [AccountController::class, 'saveACH']);
 
-
+    Route::get('accounts/{account}/profiles/create', [AccountController::class, 'createProfile']);
+    Route::post('accounts/{account}/profiles', [AccountController::class, 'storeProfile']);
+    Route::get('accounts/{account}/profiles/{profile}', [AccountController::class, 'showProfile']);
+    Route::put('accounts/{account}/profiles/{profile}', [AccountController::class, 'updateProfile']);
+    Route::delete('accounts/{account}/profiles/{profile}', [AccountController::class, 'destroyProfile']);
 
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
 
