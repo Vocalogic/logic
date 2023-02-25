@@ -24,6 +24,14 @@
 
         <div class="row mt-3">
             <div class="col-lg-12">
+                @if($profile->id)
+                    <a href="/admin/accounts/{{$account->id}}/profiles/{{$profile->id}}"
+                       class="confirm text-danger"
+                       data-method="DELETE"
+                       data-message="Deleting this recurring profile will remove any services assigned to it.">
+                        Remove Billing Profile
+                    </a>
+            @endif
                 <button class="btn btn-primary ladda pull-right" data-style="expand-left">
                     <i class="fa fa-save"></i> Save Profile
                 </button>
