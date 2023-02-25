@@ -115,6 +115,8 @@ class BillingEngine
             $title = $profile->name;
             $po = $profile->po;
             _log($profile, "Recurring Profile #$profile->id Invoice Generated");
+            // If someone created a recurring profile but never assigned items, don't create an empty invoice.
+            if ($account->items()->where('recurring_profile_id', $profile->id)->count() == 0) return;
         }
         else
         {
@@ -123,6 +125,7 @@ class BillingEngine
             $po = $account->po;
             _log($account, "Monthly Invoice Generated");
         }
+
         $invoice = $account->invoices()->create([
             'due_on'               => now()->addDays($account->net_terms),
             'status'               => InvoiceStatus::DRAFT,
