@@ -85,6 +85,10 @@ class SettingSeeder extends Seeder
         // Invoice Setup
         $this->buildSetting('invoices.net', 'Default Net Terms', 'number', 30, 'Invoice',
             'Enter your default net terms of when invoices should be due', '0|30');
+        $this->buildSetting('commissions.min', 'Minimum Commissionable Batch Amount', 'number', 100, 'Invoice',
+            'Enter the minimum amount of a commission batch from invoices before sending to Agents', "0|10000");
+
+
         $this->buildSetting('invoices.pastdue', 'Number of Days to Send Past Due Notice', 'number', 7, 'Invoice',
             'Enter the number of days between sending a past due invoice notification.', '0|30');
         $this->buildSetting('invoices.suspensionDays', 'Number of Days Past Due before Suspension', 'number', 45, 'Invoice',
