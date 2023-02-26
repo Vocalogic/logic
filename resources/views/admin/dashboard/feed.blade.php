@@ -10,28 +10,19 @@
         </div>
         <div class="card-body p-0">
             <div data-simplebar style="max-height: 964px;" class="p-3">
-
-
                 <div class="acitivity-timeline acitivity-main">
-
                     @foreach($activities as $act)
-
                         <div class="acitivity-item d-flex mb-3">
-                            @if($act->user_id)
-                                <div class="flex-shrink-0 avatar-xs acitivity-avatar mr-3">
-                                    <img class="img-fluid rounded-circle" src="{{$act->user->avatar}}" alt="">
+                            <div class="flex-shrink-0 avatar-xs">
+                                <div class="avatar-title bg-light text-success rounded-circle">
+                                    <i class="{{$act->type->getIcon()}}"></i>
                                 </div>
-                                @else
-                                <div class="flex-shrink-0 avatar-xs acitivity-avatar mr-3">
-                                    <img class="img-fluid rounded-circle" src="/assets/images/vlavatar.png" alt="">
-                                </div>
-                            @endif
-
-
+                            </div>
                             <div class="flex-grow-1 ms-3">
                                 <h6 class="mb-1">{!! $act->summary !!}</h6>
                                 <p class="text-muted mb-1">{!! $act->post !!}</p>
-                                <small class="mb-0 text-muted pull-right">{{$act->created_at->format("m/d/y h:ia")}}</small>
+                                <small
+                                    class="mb-0 text-muted pull-right">{{$act->created_at->format("m/d/y h:ia")}}</small>
                             </div>
                         </div>
                     @endforeach
@@ -39,6 +30,4 @@
             </div>
         </div>
     </div>
-
-
 </div>

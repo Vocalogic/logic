@@ -16,7 +16,7 @@
 
                     <div class="card">
                         <div class="card-body text-center p-5">
-                            <img src="/icons/7486768.png" class="w120" alt="No Data">
+                            <img src="/icons/7486768.png" class="w-25" alt="No Data">
                             <div class="mt-4 mb-3">
                                 <span class="text-muted">No Monthly Services Found</span>
                             </div>

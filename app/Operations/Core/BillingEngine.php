@@ -229,6 +229,7 @@ class BillingEngine
         $total = "$" . moneyFormat($invoice->total);
         _log($invoice, "Monthly Invoice Total Final: $total", null, null, LogSeverity::Debug);
         sysact(ActivityType::Account, $account->id,
-            "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
+            "created monthly recurring invoice for",
+        "<a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total)");
     }
 }
