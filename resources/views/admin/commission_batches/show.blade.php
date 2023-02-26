@@ -2,7 +2,14 @@
     You can edit the items on an existing batch or set the payment status by putting in a date here.
     If you disable a commission from this batch, it will go back to being 'Not Batched'.
 </p>
-<form method="POST" action="/admin/finance/commission_batches/{{$batch->id}}">
+@if(moneyFormat($batch->total) < (int) setting('commissions.min'))
+    <div class="alert alert-warning alert-dismissible alert-label-icon rounded-label fade show mb-3" role="alert">
+        <i class="ri-alert-line label-icon"></i><strong>Minimum Amount not Met</strong>
+        This commission total has not met the minimum amount of <strong>${{number_format(setting('commissions.min'),2)}}</strong> to
+        be sent.
+    </div>
+@endif
+    <form method="POST" action="/admin/finance/commission_batches/{{$batch->id}}">
     @csrf
     @method('PUT')
         <div class="row">
@@ -13,7 +20,6 @@
                     <span class="helper-text">Leave blank if not paid</span>
                 </div>
             </div>
-
 
             <div class="col-lg-6">
                 <div class="form-floating">
@@ -30,9 +36,6 @@
             <h5>Commission Payable Total: <b class="text-primary">${{moneyFormat($batch->total)}}</b></h5>
         </div>
     </div>
-
-
-
 
     <table class="table table-sm mt-3">
         <thead>
@@ -72,5 +75,7 @@
         </tbody>
     </table>
 
-    <input type="submit" class="btn btn-{{bm()}}primary btn-block w-100 mt-3" value="Save Batch">
+    <button type="submit" class="btn btn-primary ladda pull-right mt-3">
+        <i class="fa fa-save"></i> Save Batch
+    </button>
 </form>
