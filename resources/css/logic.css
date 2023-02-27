@@ -84,3 +84,10 @@
     border-top-color:#888888;
     bottom:-5px;
 }
+.dataTables_wrapper .dataTables_length select {
+    color: var(--vz-dark);
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    color: var(--vz-dark);
+}
