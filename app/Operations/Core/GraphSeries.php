@@ -130,7 +130,7 @@ class GraphSeries
         {
             $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $type, false, $this->detail);
             $data = $this->getTotalFromMetrics($entries);
-            if ($type->isMoney()) $data = moneyFormat($data, false);
+            if ($type->isMoney()) $data = sprintf("%.2f", moneyFormat($data, false));
             $plots[] = (object)[
                 'x' => $block->getTimestampMs(),
                 'y' => $data
@@ -154,7 +154,7 @@ class GraphSeries
                     $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $metric, $this->diff,
                         $this->detail);
                     $data = $this->getTotalFromMetrics($entries);
-                    if ($type->isMoney()) $data = moneyFormat($data, false);
+                    if ($type->isMoney()) $data = sprintf("%.2f", moneyFormat($data, false));
                     $plots[] = (object)[
                         'x' => $block->getTimestampMs(),
                         'y' => $data
