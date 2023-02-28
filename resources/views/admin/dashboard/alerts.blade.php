@@ -1,4 +1,4 @@
-<div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2 row-cols-1 mb-4 row-deck">
+<div class="row  row-deck">
     @foreach($alerts as $alert)
         @if(isset($alert->instance) && !$alert->instance)
             <div class="col">

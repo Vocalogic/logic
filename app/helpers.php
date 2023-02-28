@@ -345,7 +345,7 @@ if (!function_exists('setting'))
 
         // Get differential.
         $starting = Metric::whereDate('stamp', '>=', $start->copy()->subDay()->startOfDay())
-            ->whereDate('stamp', "<=", $start->copy()->subDay()->endOfDay())
+            ->whereDate('stamp', "<=", $end->copy()->subDay()->endOfDay())
             ->where('metric', $type->value)->first();
         $val = 0;
         if ($starting && $starting->value) $val = $starting->value;
