@@ -140,7 +140,7 @@ class GraphSeries
             'name'  => $type->getSeriesName(),
             'data'  => $plots,
             'color' => $this->colors[$colorIndex],
-            'type'  => $this->request->s0 ?: 'line'
+            'type'  => $this->request->s0 ?: 'area'
         ];
 
         if ($this->addMetrics)
@@ -165,7 +165,7 @@ class GraphSeries
                     'name'  => $metric->getSeriesName(),
                     'data'  => $plots,
                     'color' => $this->colors[$colorIndex],
-                    'type'  => $this->request->{$stype} ?: 'line'
+                    'type'  => $this->request->{$stype} ?: 'area'
                 ];
             } // fe metric type
         }
