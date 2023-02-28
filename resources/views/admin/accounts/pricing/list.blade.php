@@ -22,17 +22,13 @@
                 </td>
                 <td>${{moneyFormat($item->item->mrc)}}</td>
                 <td>
-                    $<a class="xedit" data-pk="{{$item->id}}"
-                        data-url="/admin/accounts/{{$account->id}}/pricing/{{$item->id}}/live"
-                        data-title="Update Price" data-field="price">
+                    $<a class="live" data-title="Update Pricing" href="/admin/accounts/{{$account->id}}/pricing/update/{{$item->id}}">
                         {{moneyFormat($item->price)}}
                     </a>
                 </td>
                 @if($account->children()->count())
                     <td>
-                        $ <a class="xedit" data-pk="{{$item->id}}"
-                             data-url="/admin/accounts/{{$account->id}}/pricing/{{$item->id}}/live"
-                             data-title="Update Sub Account Pricing" data-field="price_children">
+                        $<a class="live"  data-title="Update Pricing" href="/admin/accounts/{{$account->id}}/pricing/update/{{$item->id}}/">
                             {{moneyFormat($item->price_children)}}
                         </a>
                     </td>
@@ -52,17 +48,13 @@
                 </td>
                 <td>${{moneyFormat($item->item->nrc)}}</td>
                 <td>
-                    $ <a class="xedit" data-pk="{{$item->id}}"
-                         data-url="/admin/accounts/{{$account->id}}/pricing/{{$item->id}}/live"
-                         data-title="Update Price" data-field="price">
+                    $<a class="live" data-title="Update Pricing" href="/admin/accounts/{{$account->id}}/pricing/update/{{$item->id}}">
                         {{moneyFormat($item->price)}}
                     </a>
                 </td>
                 @if($account->children()->count())
                     <td>
-                        $ <a class="xedit" data-pk="{{$item->id}}"
-                             data-url="/admin/accounts/{{$account->id}}/pricing/{{$item->id}}/live"
-                             data-title="Update Sub Account Pricing" data-field="price_children">
+                        $<a class="live" data-title="Update Pricing" href="/admin/accounts/{{$account->id}}/pricing/update/{{$item->id}}/">
                             {{moneyFormat($item->price_children)}}
                         </a>
                     </td>

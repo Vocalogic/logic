@@ -14,29 +14,32 @@
     <td>${{moneyFormat($obj->account_balance,2)}}</td>
     <td>{{$obj->next_bill ? $obj->next_bill->format("m/d/y") : "Not Set"}}</td>
     <td>
+        <div class="d-flex flex-wrap gap-1">
         @if($obj->declined)
-            <span class="badge bg-danger"><i class="fa fa-exclamation"></i> declined</span>
+            <span class="badge badge-outline-danger"><i class="fa fa-exclamation"></i> declined</span>
         @endif
         @if (hasIntegration(\App\Enums\Core\IntegrationType::Finance) && !$obj->finance_customer_id)
-            <span class="badge bg-danger" data-bs-toggle="tooltip" title="Accounting Integration Error"><i
+            <span class="badge badge-outline-danger" data-bs-toggle="tooltip" title="Accounting Integration Error"><i
                     class="fa fa-exclamation-circle"></i></span>
         @endif
         @if($obj->auto_bill)
-            <span class="badge bg-success" data-bs-toggle="tooltip" title="Auto-Pay Enabled">
+            <span class="badge badge-outline-success" data-bs-toggle="tooltip" title="Auto-Pay Enabled">
                                 <i class="fa fa-dollar"></i>
                             </span>
         @endif
         @if($obj->payment_method == \App\Enums\Core\PaymentMethod::CreditCard && !$obj->merchant_payment_token)
-            <span class="badge bg-warning" data-bs-toggle="tooltip" title="No credit card on file">
+            <span class="badge badge-outline-warning" data-bs-toggle="tooltip" title="No credit card on file">
                                 <i class="fa fa-credit-card"></i>
                             </span>
         @endif
 
         @if($obj->partner)
             <a href="/admin/partners/{{$obj->partner->id}}">
-                                <span class="badge bg-info" data-bs-toggle="tooltip"
+                                <span class="badge badge-outline-info" data-bs-toggle="tooltip"
                                       title="Partner: {{$obj->partner->name}}"><i class="fa fa-compass"></i></span>
             </a>
         @endif
+        </div>
     </td>
+
 </tr>

@@ -21,6 +21,7 @@ public/sitemap.xml
 public_html/storage
 public_html/hot
 storage/logs/*
+storage/framework/cache/*.php
 storage/framework/cache/data/*
 storage/framework/views/*
 storage/framework/sessions/*

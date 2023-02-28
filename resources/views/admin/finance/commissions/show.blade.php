@@ -38,7 +38,7 @@
 
     <div class="row mt-3">
         <div class="col-lg-12">
-            <input type="submit" class="btn btn-{{bm()}}primary w-100 btn-block" value="Save Commission">
+            <button type="submit" class="btn btn-primary pull-right ladda" data-style="expand-left"><i class="fa fa-save"></i> Save Commission</button>
         </div>
     </div>
 </form>

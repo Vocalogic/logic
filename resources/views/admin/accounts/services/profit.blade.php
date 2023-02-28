@@ -1,11 +1,11 @@
 <div class="card mb-3 mt-2">
 
     <div class="card-body">
-        <h6 class="card-title m-0">Remaining Profit Analysis</h6>
+        <h5>Remaining Profit Analysis</h5>
         <p class="card-text mt-2">The following will show your profit margin and estimated remaining
             revenue based on contracted and uncontracted revenue per service.
         </p>
-        <span class="h2 d-block mb-3 text-primary text-center">${{moneyFormat($account->analysis->remaining)}}</span>
+        <span class="h2 d-block mb-3 text-info text-center">${{moneyFormat($account->analysis->remaining)}}</span>
 
         <div class="table-responsive">
             <table class="table table-sm table-nowrap mb-0">

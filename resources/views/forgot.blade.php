@@ -1,32 +1,6 @@
 @extends('layouts.installer', ['title' => "Reset your " . setting('brand.name') . " Password"])
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center">
-            <div style="max-width: 25rem;">
-                <div class="mb-4">
-                    <img width="300" src="{{_file(setting('brandImage.light'))?->relative}}" alt="{{setting('brand.name')}}">
-
-                </div>
-                <div class="mb-5">
-                    <h4 class="color-900">Reset Your {{setting('brand.name')}} Password</h4>
-                </div>
-                <!-- List Checked -->
-                <ul class="list-unstyled mb-5">
-                    <li class="mb-4">
-                        <span class="d-block mb-1 fs-4 fw-light">Get Started</span>
-                        <span class="color-600">Manage your invoices, orders and services. </span>
-                    </li>
-                    <li>
-
-                        <span class="color-600">{{setting('shop.info')}}</span>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-
-        <div class="col-lg-6 d-flex justify-content-center align-items-center">
 
             <div class="card shadow-sm w-100 p-4 p-md-5" style="max-width: 32rem;">
 
@@ -69,6 +43,6 @@
         </div>
 
 
-    </div>
+
 
 @endsection

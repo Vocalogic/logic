@@ -181,8 +181,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('accounts/{account}/pricing/{type}/add', [AccountController::class, 'pricingModal']);
     Route::get('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingApply']);
     Route::delete('accounts/{account}/pricing/{item}', [AccountController::class, 'pricingRemove']);
-
-    Route::post('accounts/{account}/pricing/{item}/live', [AccountController::class, 'pricingUpdate']);
+    Route::get('accounts/{account}/pricing/update/{item}', [AccountController::class, 'pricingUpdateModal']);
+    Route::post('accounts/{account}/pricing/update/{item}', [AccountController::class, 'pricingUpdateSave']);
     Route::get('accounts/{account}/files', [AccountController::class, 'files']);
 
     Route::get('accounts/{account}/statement', [AccountController::class, 'statement']);
@@ -242,7 +242,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('discovery', [DiscoveryController::class, 'index']);
 
     Route::post('discovery/create/{type}', [DiscoveryController::class, 'store']);
-    Route::post('discovery/{discovery}/live', [DiscoveryController::class, 'live']);
+    Route::get('discovery/{discovery}', [DiscoveryController::class, 'show']);
+    Route::put('discovery/{discovery}', [DiscoveryController::class, 'update']);
     Route::delete('discovery/{discovery}', [DiscoveryController::class, 'destroy']);
 
 
@@ -386,7 +387,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('accounts/{account}/updateACH', [AccountController::class, 'achModal']);
     Route::post('accounts/{account}/updateACH', [AccountController::class, 'saveACH']);
 
-
+    Route::get('accounts/{account}/profiles/create', [AccountController::class, 'createProfile']);
+    Route::post('accounts/{account}/profiles', [AccountController::class, 'storeProfile']);
+    Route::get('accounts/{account}/profiles/{profile}', [AccountController::class, 'showProfile']);
+    Route::put('accounts/{account}/profiles/{profile}', [AccountController::class, 'updateProfile']);
+    Route::delete('accounts/{account}/profiles/{profile}', [AccountController::class, 'destroyProfile']);
 
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
 
@@ -503,7 +508,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('leads/{lead}', [LeadController::class, 'show']);
     Route::post('leads/{lead}/close', [LeadController::class, 'close']);
     Route::post('leads/{lead}/discovery', [LeadController::class, 'saveDiscovery']);
-
+    Route::get('leads/{lead}/discovery/{discovery}', [LeadController::class, 'editDiscovery']);
+    Route::post('leads/{lead}/discovery/{discovery}', [LeadController::class, 'updateDiscovery']);
     Route::get('leads/{lead}/partner', [LeadController::class, 'partnerModal']);
     Route::post('leads/{lead}/partner', [LeadController::class, 'setPartner']);
 
@@ -512,7 +518,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('leads/{lead}/tns/{tn}', [LeadController::class, 'delTn']);
     Route::post('leads/{lead}/live', [LeadController::class, 'live']);
     Route::post('leads/{lead}/logo', [LeadController::class, 'uploadLogo']);
-    Route::post('leads/{lead}/disc', [LeadController::class, 'updateDiscovery']);
 
     Route::get('leads/{lead}/reopen', [LeadController::class, 'activate']);
     Route::get('leads/import/csv', [LeadController::class, 'importModal']);

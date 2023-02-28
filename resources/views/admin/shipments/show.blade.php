@@ -1,5 +1,5 @@
 @extends('layouts.admin', ['title' => "Shipment Order $", 'crumbs' => [
-     '/admin/hardware_orders' => "Hardware Orders",
+     '/admin/shipments' => "Shipments",
      "Shipment #$shipment->id"
 
 ]])

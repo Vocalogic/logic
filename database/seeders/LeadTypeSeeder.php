@@ -21,10 +21,6 @@ class LeadTypeSeeder extends Seeder
                 'name' => "Phone Service"
             ]);
             $type->refresh();
-            $type->term()->create([
-                'name' => "Phone Service Terms",
-                'body' => view('template_holders.tos')->render()
-            ]);
         }
     }
 }

@@ -43,8 +43,8 @@ class AutoBill
             if (!$invoice->due_on) continue;                                     // Why would this not be set?
             if ($invoice->due_on->startOfDay() > now()->startOfDay()) continue; // Not due yet.
 
-            // We got a live one!
-            if (!$invoice->account->auto_bill)
+            // We got a live one! Check autobill for default recurring and does not have recurring profile assigned.
+            if (!$invoice->account->auto_bill && !$invoice->recurringProfile)
             {
                 info("Invoice #$invoice->id is past/due but auto-bill is not enabled. Skipping..");
                 continue;
@@ -70,6 +70,11 @@ class AutoBill
             if (!$invoice->account->payment_method->canAutoBill()) // Method can't be auto processed.
             {
                 info("Invoice #$invoice->id should be processed but the payment method selected has no auto-billing capabilities.");
+                continue;
+            }
+            if ($invoice->recurringProfile && !$invoice->recurringProfile->auto_bill)
+            {
+                info("Invoice #$invoice->id has recurring profile and is set to not auto-bill.");
                 continue;
             }
 

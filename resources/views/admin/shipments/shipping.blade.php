@@ -50,9 +50,9 @@
                         <textarea class="form-control" name="ship_notes" rows="30">{{$shipment->ship_notes}}</textarea>
                         <label>Notes to Vendor/Shipping:</label>
                     </div>
-                    <input type="submit" class="btn btn-{{bm()}}primary" value="Update Shipping Info">
+                    <button type="submit" class="btn btn-primary ladda" data-style="expand-left"><i class="fa fa-edit"></i> Update Shipping Info</button>
 
-                    <a class="btn btn-{{bm()}}danger confirm pull-right"
+                    <a class="btn btn-outline-danger confirm pull-right"
                        data-message="Are you sure you want to cancel this hardware order?"
                        data-method="DELETE"
                        href="/admin/shipments/{{$shipment->id}}">

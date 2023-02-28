@@ -8,8 +8,10 @@
         </x-form-input>
 
         <div class="offset-4 col-lg-8 mt-3">
-            <input type="submit" name="submit" value="Save" class="btn btn-primary wait w-100"
-                   data-anchor=".dueForm">
+            <button type="submit" name="submit" value="Save" class="btn btn-primary ladda w-100" data-style="expand-left">
+                <i class="fa fa-save"></i> Update Due Date
+            </button>
+
         </div>
     </div>
 </form>

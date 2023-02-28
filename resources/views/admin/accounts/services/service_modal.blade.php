@@ -3,56 +3,6 @@
         @method("PUT")
         @csrf
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="d-flex justify-content-evenly">
-                    @if($item->quote)
-                        <a href="/admin/quotes/{{$item->quote->id}}">
-                            <span class="badge bg-info">Sold via quote #{{$item->quote->id}}</span>
-                        </a>
-                    @endif
-
-                    @if($item->quote && $item->quote->contract_expires)
-                        <span class="badge bg-primary">
-                            contracted until {{$item->quote->contract_expires->format('m/d/y')}}
-                        </span>
-                    @endif
-
-                    @if($item->frequency != \App\Enums\Core\BillFrequency::Monthly && $item->frequency)
-                        <span class="badge bg-info">
-                            {{$item->frequency->getHuman()}} Billing (Bills:
-                            {{$item->next_bill_date
-                                ? $item->next_bill_date->format("m/d/y")
-                                : $account->next_bill->format("m/d/y")}})
-                        </span>
-                    @endif
-
-                    @if($item->remaining)
-                        <span class="badge bg-primary">
-                                {{$item->remaining}} payments left
-                            </span>
-                    @endif
-                    @if($item->terminate_on)
-                        <span class="badge bg-danger">
-                                Terminating on {{$item->terminate_on->format("m/d/y")}} - {{$item->terminate_reason}}
-                            </span>
-                    @endif
-                    @if($item->suspend_on)
-                        <span class="badge bg-warning">
-                                Suspending on {{$item->suspend_on->format("m/d/y")}} - {{$item->suspend_reason}}
-                            </span>
-                    @endif
-
-                    @if($item->requested_termination_date)
-                        <span class="badge bg-warning">Customer Requested Termination on
-                                {{$item->requested_termination_date->format("m/d/y")}} - {{$item->requested_termination_reason}}
-                            </span>
-                    @endif
-
-                </div>
-            </div>
-        </div>
-
 
         <ul class="nav nav-tabs tab-card" role="tablist">
             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#nav-pricing"
@@ -106,6 +56,16 @@
                         </div>
                     </div>
                 </div>
+
+                @if($account->recurringProfiles->count())
+                <div class="row mt-2">
+                    @props(['profiles' => \App\Models\RecurringProfile::getSelectable($account)])
+                    <x-form-select name="recurring_profile_id" selected="{{$item->recurring_profile_id}}" :options="$profiles" label="Assign Billing Profile" icon="clock-o">
+                        If you wish this item to be billed separately, select a profile below.
+                    </x-form-select>
+                </div>
+                @endif
+
             </div>
 
 

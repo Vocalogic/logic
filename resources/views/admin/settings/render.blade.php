@@ -46,7 +46,7 @@
             @endforeach
             <div class="row mb-3">
                 <div class="col-lg-4">
-                    <input type="submit" name="submit" class="btn w-100 btn-primary btn-rounded wait" value="Save">
+                    <button type="submit" name="submit" class="btn w-100 btn-primary btn-rounded ladda" data-effect="zoom-out"><i class="fa fa-save"></i> Save</button>
                 </div>
             </div>
         </form>

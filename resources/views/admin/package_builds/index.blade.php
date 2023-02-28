@@ -15,7 +15,7 @@
         <div class="col-lg-10">
             <div class="card">
                 <div class="card-body">
-                    <table class="table table-sm">
+                    <table class="table table-striped">
                         <thead>
                         <tr>
                             <th>Package</th>

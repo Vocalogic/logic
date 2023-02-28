@@ -1,6 +1,6 @@
 <div class="card mt-3">
     <div class="card-body">
-        <table class="table table-striped table-sm small">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th>#</th>
@@ -16,7 +16,7 @@
             <tbody>
             @foreach(\App\Models\Shipment::where('active', true)->get() as $shipment)
                 <tr>
-                    <td><a href="/admin/shipments/{{$shipment->id}}"><span class="badge bg-{{bm()}}primary">#{{$shipment->id}}</span></td>
+                    <td><a href="/admin/shipments/{{$shipment->id}}"><span class="badge badge-outline-primary">#{{$shipment->id}}</span></td>
                     <td><a href="/admin/orders/{{$shipment->order->id}}">#{{$shipment->order->id}}</td>
                     <td><a href="/admin/accounts/{{$shipment->order->account->id}}">{{$shipment->order->account->name}}</a></td>
                     <td>{{$shipment->status->value}}</td>

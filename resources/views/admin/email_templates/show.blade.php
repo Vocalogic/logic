@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'Email Templates', 'crumbs' => [
+@extends('layouts.admin', ['title' => $template->name, 'crumbs' => [
      "/admin/email_templates" => "Email Templates",
      $template->name
 ]])
@@ -14,7 +14,7 @@
 @endsection
 @section('content')
     <div class="row">
-        <div class="col-lg-8">
+        <div class="offset-2 col-lg-8 mt-3">
             <div class="card">
                 <div class="card-body">
                     <form method="post" action="/admin/email_templates/{{$template->id}}">

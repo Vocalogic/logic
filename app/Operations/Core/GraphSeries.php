@@ -83,11 +83,11 @@ class GraphSeries
             }
         }
         $this->colors = [
-            'var(--chart-color1)',
-            'var(--chart-color2)',
-            'var(--chart-color3)',
-            'var(--chart-color4)',
-            'var(--chart-color5)'
+            'var(--vz-primary)',
+            'var(--vz-success)',
+            'var(--vz-info)',
+            'var(--vz-warning)',
+            'var(--vz-danger)'
         ];
     }
 
@@ -130,7 +130,7 @@ class GraphSeries
         {
             $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $type, false, $this->detail);
             $data = $this->getTotalFromMetrics($entries);
-            if ($type->isMoney()) $data = moneyFormat($data, false);
+            if ($type->isMoney()) $data = sprintf("%.2f", moneyFormat($data, false));
             $plots[] = (object)[
                 'x' => $block->getTimestampMs(),
                 'y' => $data
@@ -140,7 +140,7 @@ class GraphSeries
             'name'  => $type->getSeriesName(),
             'data'  => $plots,
             'color' => $this->colors[$colorIndex],
-            'type'  => $this->request->s0 ?: 'line'
+            'type'  => $this->request->s0 ?: 'area'
         ];
 
         if ($this->addMetrics)
@@ -154,7 +154,7 @@ class GraphSeries
                     $entries = _metrics($block, $this->getEndPeriod($block), $this->account, $metric, $this->diff,
                         $this->detail);
                     $data = $this->getTotalFromMetrics($entries);
-                    if ($type->isMoney()) $data = moneyFormat($data, false);
+                    if ($type->isMoney()) $data = sprintf("%.2f", moneyFormat($data, false));
                     $plots[] = (object)[
                         'x' => $block->getTimestampMs(),
                         'y' => $data
@@ -165,7 +165,7 @@ class GraphSeries
                     'name'  => $metric->getSeriesName(),
                     'data'  => $plots,
                     'color' => $this->colors[$colorIndex],
-                    'type'  => $this->request->{$stype} ?: 'line'
+                    'type'  => $this->request->{$stype} ?: 'area'
                 ];
             } // fe metric type
         }
@@ -313,16 +313,6 @@ class GraphSeries
             'dashArray' => [0, 8, 5]
         ];
         $account = Account::find($this->request->account);
-        if (cache(CommKey::AccountMRRCache->value))
-        {
-            $data = cache(CommKey::AccountMRRCache->value);
-            if (isset($data[$account->id]))
-            {
-                $this->series = $data[$account->id];
-                return $this->series;
-            }
-        }
-
         $mrrPlots = [];
         $invoicePlots = [];
         foreach (range(0, $this->request->months ?? 6) as $month)
@@ -350,7 +340,6 @@ class GraphSeries
             {
                 $mTotal += $invoice->total;
             }
-
             // We have mrr and total.. add dataplot
             $mrrPlots[] = (object)[
                 'x' => $start->getTimestampMs(),
@@ -362,7 +351,6 @@ class GraphSeries
                 'y' => moneyFormat($mTotal, false)
             ];
         }
-
         $this->series[] = [
             'name'  => 'MRR',
             'data'  => $mrrPlots,
@@ -372,15 +360,9 @@ class GraphSeries
         $this->series[] = [
             'name'  => 'Total Invoiced',
             'data'  => $invoicePlots,
-            'color' => $this->colors[3],
+            'color' => $this->colors[1],
             'type'  => 'line'
         ];
-
-
-        $cacheValue = cache(CommKey::AccountMRRCache->value);
-        if (!$cacheValue) $cacheValue = [];
-        $cacheValue[$account->id] = $this->series;
-        cache([CommKey::AccountMRRCache->value => $cacheValue], CommKey::AccountMRRCache->getLifeTime());
         return $this->series;
     }
 
@@ -424,6 +406,7 @@ class GraphSeries
 
 
 
+
     /**
      * Get Account Rank in MRR.
      * @return array
@@ -444,6 +427,7 @@ class GraphSeries
                 'height' => 350,
                 'type'   => 'radialBar',
             ],
+            'colors' => [$this->colors[0]],
             'plotOptions' => (object)[
                 'radialBar' => (object)[
                     'hollow' => (object)[
@@ -490,6 +474,7 @@ class GraphSeries
                 'height' => 350,
                 'type'   => 'radialBar',
             ],
+            'colors' => [$this->colors[0]],
             'plotOptions' => (object)[
                 'radialBar' => (object)[
                     'hollow' => (object)[
@@ -535,7 +520,7 @@ class GraphSeries
                 'stroke' => (object)[
                     'width'  => 3,
                     'curve'  => 'smooth',
-                    'colors' => ['var(--chart-color1)']
+                    'colors' => ['var(--vz-primary)']
                 ],
                 'fill'   => (object)[
                     'type'     => 'gradient',

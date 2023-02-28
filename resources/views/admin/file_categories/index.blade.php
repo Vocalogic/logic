@@ -2,18 +2,13 @@
      "Lead Types",
 ]])
 
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">File Categories</h1>
-            <small class="text-muted">Select the folders for each customer for uploading files.</small>
-        </div>
-    </div> <!-- .row end -->
-
-@endsection
 @section('content')
     <div class="row">
-        <div class="offset-lg-3 col-lg-6 col-xs-12">
+        <div class="col-xs-12 col-md-2">
+            <a class="btn w-100 btn-primary" href="/admin/file_categories/create"><i class="fa fa-plus"></i> New Category</a>
+
+        </div>
+        <div class="col-lg-10 col-xs-12">
             <div class="card">
                 <div class="card-body">
                     <h6 class="card-title">File Categories</h6>
@@ -42,7 +37,6 @@
                         </tbody>
                     </table>
 
-                    <a class="btn btn-primary" href="/admin/file_categories/create"><i class="fa fa-plus"></i> new file category</a>
                 </div>
             </div>
 

@@ -49,6 +49,27 @@ enum ActivityType: string
     }
 
     /**
+     * Generate an icon for each event type.
+     * @return string
+     */
+    public function getIcon(): string
+    {
+        return match ($this)
+        {
+            self::Lead => "text-info ri-building-4-line",
+            self::Invoice => "text-success ri-funds-line",
+            self::InvoiceSend => "text-success ri-coins-line",
+            self::Account => "text-info ri-community-line",
+            self::LeadQuote => "text-success ri-coin-line",
+            self::AccountQuote => "text-success ri-community-line",
+            self::NewTransaction => "text-success ri-currency-fill",
+            self::PastDueNotification => "text-danger ri-calendar-event-line",
+            self::RequestedTermination => "text-danger ri-calendar-2-fill",
+            default => 'ri-chat-2-line'
+        };
+    }
+
+    /**
      * Get the model referenced by this activitiy
      * @param ActivityType $type
      * @param int          $id

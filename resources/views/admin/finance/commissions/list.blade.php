@@ -1,4 +1,4 @@
-<table class="table table-sm table-striped">
+<table class="table table-striped">
     <thead>
     <tr>
         <th>#</th>
@@ -28,7 +28,7 @@
             <td>{{$c->status->getHuman()}}
                 @if($c->status == \App\Enums\Core\CommissionStatus::Scheduled)
                     <br/><span
-                        class="badge bg-{{bm()}}info">{{$c->scheduled_on->format("m/d/y")}}</span>
+                        class="badge bg-info">{{$c->scheduled_on->format("m/d/y")}}</span>
                 @endif
                 @if($c->edit_note)
                     <br/><small class="text-muted"><i class="fa fa-edit"></i> {{$c->edit_note}}</small>

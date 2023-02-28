@@ -2,19 +2,10 @@
      "Affiliates",
 ]])
 
-@section('pre')
-    <div class="row align-items-center">
-        <div class="col-auto">
-            <h1 class="fs-5 color-900 mt-1 mb-0">Affiliates</h1>
-            <small class="text-muted">Create affiliates that use Coupon Codes for Sales Tracking</small>
-        </div>
-    </div> <!-- .row end -->
-
-@endsection
 @section('content')
     <div class="row">
         <div class="col-xs-12 col-md-2">
-            <a class="live btn btn-primary" href="/admin/affiliates/create"
+            <a class="live btn btn-primary w-100" href="/admin/affiliates/create"
                data-title="Add New Affiliate">
                 <i class="fa fa-plus"></i> Add Affiliate
             </a>

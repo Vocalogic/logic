@@ -180,7 +180,7 @@
             </div>
 
             <div class="title">
-                <h4>Account Summary</h4>
+                <h4>Invoice #{{$invoice->id}}</h4>
             </div>
         </div>
 
@@ -211,8 +211,8 @@
                     </tr>
 
                     <tr>
-                        <td align="right"><strong>Invoice Number</strong></td>
-                        <td>#{{$invoice->id}}</td>
+                        <td align="right"><strong>Description</strong></td>
+                        <td>{{$invoice->title}}</td>
                     </tr>
 
                     <tr>
@@ -395,7 +395,7 @@
         @if(setting('quotes.showDiscount') != 'None' && $invoice->discount > 0)
             <tr style="background: #393e44; color: #fff;">
                 <td>&nbsp;</td>
-                <td align="right"><span class="bold" style="font-size:14px;">Discounts:</span></td>
+                <td align="right"><span class="bold" style="font-size:14px;">Savings:</span></td>
                 <td>&nbsp;</td>
                 <td><span class="bold" style="font-size:14px;">${{moneyFormat($invoice->discount)}}</span>
                 </td>

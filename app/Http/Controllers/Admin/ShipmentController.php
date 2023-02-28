@@ -29,7 +29,6 @@ class ShipmentController extends Controller
     }
 
 
-
     /**
      * Show Harware Order
      * @param Shipment $shipment
@@ -43,7 +42,7 @@ class ShipmentController extends Controller
     /**
      * Update shipping information.
      * @param Shipment $shipment
-     * @param Request       $request
+     * @param Request  $request
      * @return RedirectResponse
      */
     public function update(Shipment $shipment, Request $request): RedirectResponse
@@ -61,14 +60,16 @@ class ShipmentController extends Controller
     /**
      * Add an item to a hardware order.
      * @param Shipment $shipment
-     * @param BillItem      $item
+     * @param BillItem $item
      * @return RedirectResponse
      */
     public function addItem(Shipment $shipment, BillItem $item): RedirectResponse
     {
         $shipment->items()->create([
             'bill_item_id' => $item->id,
-            'qty'          => 1
+            'qty'          => 1,
+            'price'        => 0,
+            'order_id'     => $shipment->order->id
         ]);
         return redirect()->back();
     }
@@ -106,9 +107,9 @@ class ShipmentController extends Controller
         $shipment->sendToVendor();
         $shipment->update(['status' => ShipmentStatus::Submitted, 'submitted_on' => now()]);
         $shipment->order->logs()->create([
-           'status' => OrderStatus::Shipped,
-           'user_id' => user()->id,
-           'note' => "Order Shipped (awaiting tracking)"
+            'status'  => OrderStatus::Shipped,
+            'user_id' => user()->id,
+            'note'    => "Order Shipped (awaiting tracking)"
         ]);
         $shipment->order()->update(['status' => OrderStatus::Shipped]);
         return ['callback' => 'reload'];
@@ -116,7 +117,7 @@ class ShipmentController extends Controller
 
     /**
      * Remove an item from an order
-     * @param Shipment          $shipment
+     * @param Shipment  $shipment
      * @param OrderItem $item
      * @return RedirectResponse
      */
@@ -129,7 +130,7 @@ class ShipmentController extends Controller
     /**
      * Update tracking and send to customer.
      * @param Shipment $shipment
-     * @param Request       $request
+     * @param Request  $request
      * @return RedirectResponse
      * @throws LogicException
      */
@@ -174,9 +175,9 @@ class ShipmentController extends Controller
     {
         $shipment->update(['active' => false, 'status' => ShipmentStatus::Arrived]);
         $shipment->order->logs()->create([
-            'status' => OrderStatus::Completed,
+            'status'  => OrderStatus::Completed,
             'user_id' => user()->id,
-            'note' => "Order Completed/Closed"
+            'note'    => "Order Completed/Closed"
         ]);
         $shipment->order()->update(['status' => OrderStatus::Completed]);
         return ['callback' => 'redirect:/admin/shipments'];

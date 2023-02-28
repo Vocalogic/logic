@@ -42,7 +42,7 @@ class AccountItem extends Model
         'meta'            => "Meta",
         'qty'             => "Quantity",
         'quote'           => "Quote",
-        'price'           => "Price",
+        'price'           => "Price|money",
     ];
 
     /**
@@ -61,6 +61,15 @@ class AccountItem extends Model
     public function item(): BelongsTo
     {
         return $this->belongsTo(BillItem::class, 'bill_item_id');
+    }
+
+    /**
+     * An item can be part of a recurring profile.
+     * @return BelongsTo
+     */
+    public function recurringProfile(): BelongsTo
+    {
+        return $this->belongsTo(RecurringProfile::class);
     }
 
     /**
@@ -126,6 +135,7 @@ class AccountItem extends Model
         $totalCost = 0;
         foreach (self::where('bill_item_id', $this->bill_item_id)->get() as $item)
         {
+            if (!$item->price) continue; // Don't factor in free services
             $count += $item->qty;
             $totalCost += (int)bcmul($item->qty * $item->price, 1);
         }

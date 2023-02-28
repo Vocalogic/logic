@@ -37,7 +37,10 @@ class NotificationEngine
                 $lead->timestamps = false; // A notification should not be considered an update.
                 $lead->stale_notification_sent = now();
                 $lead->save();
-                sysact(ActivityType::Lead, $lead->id, "sent a stale lead notification to {$lead->agent->name}");
+                $agent = $lead->agent ? $lead->agent->name : "No Agent Assigned";
+                $diff = $this->updated_at->diffInDays();
+                $details = "Notification for $agent, Lead not updated in $diff days";
+                sysact(ActivityType::Lead, $lead->id, "sent a stale lead notification for", $details);
                 _log($lead, "Stale notification sent to agent.");
             }
         }

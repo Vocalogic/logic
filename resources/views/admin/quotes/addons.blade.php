@@ -29,7 +29,7 @@
                 </div>
             @endforeach
             <div class="mt-2">
-                <input type="submit" value="Save" class="btn btn-{{bm()}}primary">
+                <button type="submit" class="btn btn-primary ladda" data-style="expand-left"><i class="fa fa-save"></i> Save Addons</button>
             </div>
         </form>
     </div>

@@ -16,7 +16,7 @@
 
                     <div class="card">
                         <div class="card-body text-center p-5">
-                            <img src="/icons/7486768.png" class="w120" alt="No Data">
+                            <img src="/icons/7486768.png" class="w-25" alt="No Data">
                             <div class="mt-4 mb-3">
                                 <span class="text-muted">No Monthly Services Found</span>
                             </div>
@@ -27,8 +27,12 @@
                     </div>
                 @else
                     <div class="col-lg-8">
-                        <table class="table table-striped table-sm mt-3">
-                            <thead>
+                        <div class="card">
+                            <div class="card-body">
+
+
+                        <table class="table table-striped">
+                            <thead class="table-light">
                             <tr>
                                 <th>Service</th>
                                 <th>Price</th>
@@ -46,9 +50,9 @@
                                 </tr>
                                 @foreach($group->items as $item)
                                     @if($item->item)
-                                        <tr class="tr-border">
+                                        <tr class="border-start border-start-dashed">
                                             <td>
-                                                <a data-title="Edit {{$item->item->name}}" class="live"
+                                                <a data-title="Edit {{$item->item->name}}" class="live link-primary"
                                                    href="/admin/accounts/{{$account->id}}/services/{{$item->id}}"
                                                    data-title="{{$item->item->name}}">
                                                     <strong>[{{$item->item->code}}]
@@ -75,7 +79,7 @@
                                                 <br/><small class="text-muted fs-7">{{$item->description}}</small>
                                                 @if($item->notes)
                                                     <br/>
-                                                    <small class="text-primary">{!! nl2br($item->notes) !!}</small>
+                                                    <small class="text-info">{!! nl2br($item->notes) !!}</small>
                                                 @endif
                                                 @if($item->item->meta->count())
                                                     <br/>
@@ -99,9 +103,10 @@
                                                     @endforeach
                                                 @endif
 
-                                                @if($item->remaining > 0)
-                                                <span class="badge bg-primary"><i class="fa fa-clock-o"></i> {{$item->remaining}} payments left</span>
-                                                @endif
+
+                                            <div class="pull-right">
+                                               @include('admin.accounts.services.badges', ['item' => $item])
+                                            </div>
 
                                             </td>
                                            <td>${{moneyFormat($item->price)}} <br/>{!! $item->variationDetail !!}</td>
@@ -111,7 +116,7 @@
                                     @endif
                                 @endforeach
                             @endforeach
-                            <tr>
+                            <tr class="table-primary">
                                 <td colspan="4" style="text-align:right">
                                     <strong class="text-primary">Monthly Total: </strong>${{moneyFormat($account->mrr)}}
                                 </td>
@@ -133,11 +138,13 @@
                             @endif
                             </tbody>
                         </table>
+                            </div>
+                        </div>
                         <a href="#recurringModal" data-bs-toggle="modal" data-backdrop="false"
                            class="btn btn-primary"><i class="fa fa-plus"></i> add service</a>
                     </div>
                     <div class="col-lg-4 d-none d-lg-block">
-                        @include('admin.accounts.services.bill_date')
+                        @include('admin.accounts.services.actions')
                     </div>
                 @endif
             </div>
@@ -148,7 +155,7 @@
 
 
     <x-modal name="recurringModal" size="xl" title="Add Monthly Service">
-        <table class="table datatable">
+        <table class="table table-striped datatable">
             <thead>
             <tr>
                 <th>Item</th>

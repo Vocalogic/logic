@@ -1,4 +1,4 @@
-<table class="table table-sm datatable">
+<table class="table table-striped datatable">
     <thead>
     <tr>
         <th>#</th>
@@ -14,7 +14,7 @@
         <tr>
             <td>
                 <a href="/admin/invoices/{{$invoice->id}}"><span
-                        class="badge bg-{{bm()}}primary">#{{$invoice->id}}</span></a>
+                        class="badge bg-primary">#{{$invoice->id}}</span></a>
                 @if($invoice->recurring)
                     <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Monthly Invoice">
                         <i class="fa fa-refresh"></i>
@@ -33,7 +33,7 @@
                     <i class="fa fa-edit"></i>
                 </a>
                 @if($invoice->isPastDue)
-                    <span class="badge bg-{{bm()}}danger">past due</span>
+                    <span class="badge badge-outline-danger">past due</span>
                 @endif
             </td>
             <td>${{moneyFormat($invoice->total)}}</td>

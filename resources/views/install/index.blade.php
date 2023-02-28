@@ -1,23 +1,8 @@
 @extends('layouts.installer')
 
 @section('content')
-    <div class="row">
-        <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
 
 
-            <!-- List Checked -->
-
-            <ul class="list-unstyled mb-5">
-                <li class="mb-4">
-                    <span class="d-block mb-1 fs-4 fw-light">Welcome to Logic v{{currentVersion()->version}}</span>
-                    <span class="color-600">We need to get some information to finish your initial Logic setup.</span>
-                </li>
-
-            </ul>
-        </div>
-
-
-        <div class="col-lg-7 d-flex justify-content-center align-items-center">
             <div class="card shadow-sm w-100 p-4 p-md-5" style="max-width: 32rem;">
                 <!-- Form -->
                 <form method="post" action="/install" class="row g-3">
@@ -64,6 +49,5 @@
         </div>
 
 
-    </div>
 
 @endsection

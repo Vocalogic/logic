@@ -27,7 +27,7 @@
                         <i class="fa fa-expand"></i> Generate using AI
                     </a>
                 @endif
-                <table class="table table-sm mt-3">
+                <table class="table table-striped mt-3">
                     <thead>
                     <tr>
                         <th>Question</th>
@@ -46,11 +46,12 @@
                     </tbody>
                 </table>
 
-                <a class="btn btn-primary mt-3 pull-right"
-                   href="/admin/category/{{$cat->id}}/items/{{$item->id}}/requirements">
-                    <i class="fa fa-save"></i> Save and Continue</a>
+
 
             </div>
         </div>
+        <a class="btn btn-primary mt-3 pull-right"
+           href="/admin/category/{{$cat->id}}/items/{{$item->id}}/requirements">
+            <i class="fa fa-save"></i> Save and Continue</a>
     </div>
 </div>

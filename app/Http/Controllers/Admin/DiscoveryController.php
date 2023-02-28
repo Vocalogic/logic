@@ -22,6 +22,34 @@ class DiscoveryController extends Controller
     }
 
     /**
+     * Show edit modal for discovery
+     * @param Discovery $discovery
+     * @return View
+     */
+    public function show(Discovery $discovery): View
+    {
+        return view('admin.discovery.show', ['discovery' => $discovery]);
+    }
+
+    /**
+     * Update discovery question
+     * @param Discovery $discovery
+     * @param Request   $request
+     * @return RedirectResponse
+     */
+    public function update(Discovery $discovery, Request $request): RedirectResponse
+    {
+        $request->validate(['question' => 'required']);
+        $discovery->update([
+            'question'     => $request->question,
+            'type'         => $request->type,
+            'opts'         => $request->opts,
+            'help'         => $request->help
+        ]);
+        return redirect()->to("/admin/discovery")->with('message', 'Discovery Question updated.');
+    }
+
+    /**
      * Create new Question
      * @param LeadType $type
      * @param Request  $request
@@ -29,6 +57,7 @@ class DiscoveryController extends Controller
      */
     public function store(LeadType $type, Request $request): RedirectResponse
     {
+        $request->validate(['question' => 'required']);
         (new Discovery)->create([
             'question'     => $request->question,
             'lead_type_id' => $type->id,
@@ -36,20 +65,10 @@ class DiscoveryController extends Controller
             'opts'         => '',
             'help'         => ''
         ]);
-        return redirect()->to("/admin/discovery");
+        return redirect()->to("/admin/discovery")->with('message', 'Discovery Question added.');
     }
 
-    /**
-     * Update Live X-Editable
-     * @param Discovery $discovery
-     * @param Request   $request
-     * @return bool[]
-     */
-    public function live(Discovery $discovery, Request $request):array
-    {
-        $discovery->update([$request->name => $request->value]);
-        return ['success' => true];
-    }
+
 
     /**
      * Delete a question

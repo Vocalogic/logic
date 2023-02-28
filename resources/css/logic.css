@@ -1,8 +1,9 @@
 .helper-text {
-    font-size: 12px;
+    font-size: 10px;
     position: relative;
     display: block;
     min-height: 18px;
+    margin-top: 5px;
 }
 
 .helper-text::after {
@@ -12,11 +13,39 @@
     opacity: 1;
 }
 
+.avatar {
+    max-width: 40px;
+    max-height: 40px;
+}
 
+.search-result::-webkit-scrollbar {
+    display: none;
+}
+
+.search-result {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.datepicker > .datepicker-days {
+    display: block !important;
+}
+
+.dropify-wrapper .dropify-message span.file-icon {
+    font-size: 16px;
+    color: #000;
+}
+
+.popover {
+    max-width: 100%;
+}
+/*
+    For Full Calendar Popovers
+ */
 .tooltipevent{
     width:200px;/*
     height:100px;*/
-    background:#ccc;
+    background: var(--vz-card-bg);
     position:absolute;
     z-index:10001;
     transform:translate3d(-50%,-100%,0);
@@ -29,12 +58,12 @@
 }
 .tooltipevent div:first-child{
     font-weight:bold;
-    color:White;
-    background-color:#888888;
+    color: whitesmoke;
+    background-color: var(--vz-primary);
     border:solid 1px black;
 }
 .tooltipevent div:last-child{
-    background-color:whitesmoke;
+    background-color: var(--vz-light);
     position:relative;
 }
 .tooltipevent div:last-child::after, .tooltipevent div:last-child::before{
@@ -55,35 +84,10 @@
     border-top-color:#888888;
     bottom:-5px;
 }
-
-.popover {
-    position: absolute;
-    top: 0;
-    left: 0 /* rtl:ignore */;
-    z-index: 1070;
-    display: block;
-    max-width: 500px;
-    font-family: var(--bs-font-sans-serif);
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1.5;
-    text-align: left;
-    text-align: start;
-    text-decoration: none;
-    text-shadow: none;
-    text-transform: none;
-    letter-spacing: normal;
-    word-break: normal;
-    word-spacing: normal;
-    white-space: normal;
-    line-break: auto;
-    font-size: .875rem;
-    word-wrap: break-word;
-    background-clip: padding-box;
-    border: 1px solid rgba(25, 26, 28, 0.2);
-    border-radius: .3rem;
+.dataTables_wrapper .dataTables_length select {
+    color: var(--vz-dark);
 }
 
-.datepicker > .datepicker-days {
-    display: block !important;
+.dataTables_wrapper .dataTables_filter input {
+    color: var(--vz-dark);
 }

@@ -2,7 +2,7 @@
     <div class="card-body border-bottom">
         <div class="d-flex align-items-md-start align-items-center flex-column flex-md-row">
             @if(app('request')->edit || !$lead->logo_id)
-                <form method="POST" action="/admin/leads/{{$lead->id}}/logo" enctype="multipart/form-data">
+                <form method="POST" action="/admin/leads/{{$lead->id}}/logo" enctype="multipart/form-data" class="w-25">
                     @csrf
                     @method('POST')
                     <input type="file" name="logo" class="drop"
@@ -14,7 +14,7 @@
 
                 </form>
             @else
-                <img height=100 src="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}} " alt=""
+                <img src="{{$lead->logo_id ? _file($lead->logo_id)->relative : null}} " alt="" style="max-height:100px; max-width:200px;"
                      class="rounded-4">
             @endif
             <div class="media-body ms-md-5 m-0 mt-4 mt-md-0 text-md-start text-center">
@@ -26,11 +26,11 @@
                 </p>
                 <span class="text-muted">{!! nl2br($lead->description) !!}</span>
                 @if($lead->active)
-                <a class="btn btn-{{bm()}}danger" data-bs-toggle="modal" href="#suspend"><i class="fa fa-close"></i>
+                <a class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" href="#suspend"><i class="fa fa-close"></i>
                     Close/Suspend</a>
                 @endif
                 @if(!$lead->active && $lead->status->is_lost)
-                    <a class="btn btn-{{bm()}}info confirm"
+                    <a class="btn btn-info confirm"
                        data-method="GET"
                        href="/admin/leads/{{$lead->id}}/reopen"
                        data-message="Are you sure you want to reactivate this lead?"><i class="fa fa-openid"></i>
@@ -40,7 +40,7 @@
                     class="d-flex flex-row flex-wrap align-items-center justify-content-center justify-content-md-start mt-3">
                     @if($lead->forecast_date)
 
-                        <div class="card py-2 px-3 me-2 mt-2">
+                        <div class="card border border-info py-2 px-3 me-2 mt-2">
                             <small class="text-muted">Forecasted Conversion</small>
                             <div class="fs-8">{{$lead->forecast_date->format("M d, Y")}}</div>
                         </div>

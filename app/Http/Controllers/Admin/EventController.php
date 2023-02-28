@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\InvoiceStatus;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\AccountItem;
 use App\Models\Activity;
 use App\Models\HardwareOrder;
+use App\Models\Invoice;
 use App\Models\Lead;
 use App\Models\Provisioning;
 use App\Models\Shipment;
@@ -115,6 +117,37 @@ class EventController extends Controller
             ];
         }
         // Termination of services
+
+        // #241 - Get Invoices and Projected Recurring Invoices
+        foreach(Invoice::with(['items', 'account'])
+                    ->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])
+                    ->get() as $invoice)
+        {
+            $events[] = (object)[
+                'title' => "Invoice #{$invoice->id} due",
+                'start' => $invoice->due_on->format("Y-m-d"),
+                'url'   => sprintf("%s/admin/invoices/%d", setting('brand.url'), $invoice->id),
+                'color' => "#3FB84A",
+                'popup' => (object)[
+                    'title'  => $invoice->account->name,
+                    'descri' => "Total: $" . moneyFormat($invoice->total) . "<br/>Balance: $" . moneyFormat($invoice->balance)
+                ],
+            ];
+        }
+
+        foreach(Account::with(['items'])->whereNotNull('next_bill')->get() as $account)
+        {
+            $events[] = (object)[
+                'title' => "Recurring Invoice ($". moneyFormat($account->mrr).")",
+                'start' => $account->next_bill->format("Y-m-d"),
+                'url'   => sprintf("%s/admin/accounts/%d", setting('brand.url'), $account->id),
+                'color' => "#6590FF",
+                'popup' => (object)[
+                    'title'  => $account->name,
+                    'descri' => "New Recurring Invoice for $".moneyFormat($account->mrr) . " will be generated."
+                ],
+            ];
+        }
 
         return $events;
     }

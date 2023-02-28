@@ -1,0 +1,86 @@
+.helper-text {
+    font-size: 10px;
+    position: relative;
+    display: block;
+    min-height: 18px;
+    margin-top: 5px;
+}
+
+.helper-text::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+}
+
+.avatar {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.search-result::-webkit-scrollbar {
+    display: none;
+}
+
+.search-result {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.datepicker > .datepicker-days {
+    display: block !important;
+}
+
+.dropify-wrapper .dropify-message span.file-icon {
+    font-size: 16px;
+    color: #000;
+}
+
+.popover {
+    max-width: 100%;
+}
+/*
+    For Full Calendar Popovers
+ */
+.tooltipevent{
+    width:200px;/*
+    height:100px;*/
+    background: var(--vz-card-bg);
+    position:absolute;
+    z-index:10001;
+    transform:translate3d(-50%,-100%,0);
+    font-size: 0.8rem;
+    box-shadow: 1px 1px 3px 0px #888888;
+    line-height: 1rem;
+}
+.tooltipevent div{
+    padding:10px;
+}
+.tooltipevent div:first-child{
+    font-weight:bold;
+    color: whitesmoke;
+    background-color: var(--vz-primary);
+    border:solid 1px black;
+}
+.tooltipevent div:last-child{
+    background-color: var(--vz-light);
+    position:relative;
+}
+.tooltipevent div:last-child::after, .tooltipevent div:last-child::before{
+    width:0;
+    height:0;
+    border:solid 5px transparent;/*
+    box-shadow: 1px 1px 2px 0px #888888;*/
+    border-bottom:0;
+    border-top-color:whitesmoke;
+    position: absolute;
+    display: block;
+    content: "";
+    bottom:-4px;
+    left:50%;
+    transform:translateX(-50%);
+}
+.tooltipevent div:last-child::before{
+    border-top-color:#888888;
+    bottom:-5px;
+}

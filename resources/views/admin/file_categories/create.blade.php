@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => 'File Categories', 'crumbs' => [
+@extends('layouts.admin', ['title' => $category->name ?: "Create new Category", 'crumbs' => [
      '/admin/file_categories' => "File Categories",
      $category->name ?: "Create new Category"
 ]])

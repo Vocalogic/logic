@@ -9,6 +9,7 @@ use App\Enums\Core\LogSeverity;
 use App\Enums\Core\PaymentMethod;
 use App\Models\Account;
 use App\Models\Invoice;
+use App\Models\RecurringProfile;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Exception;
@@ -27,10 +28,18 @@ class BillingEngine
     {
         foreach (Account::whereNotNull('next_bill')->where('active', true)->get() as $account)
         {
-            if ($account->next_bill <= Carbon::now())
+            if ($account->next_bill <= now())
             {
                 info("$account->name needs a new invoice. Starting Logic Invoice Generation Routine.. ");
                 $account->generateMonthlyInvoice();
+            }
+            foreach ($account->recurringProfiles as $profile)
+            {
+                if ($profile->next_bill <= now())
+                {
+                    info("$account->name has a recurring profile (#$profile->id) that needs a new invoice.");
+                    $account->generateMonthlyInvoice(false, $profile);
+                }
             }
         }
     }
@@ -88,21 +97,49 @@ class BillingEngine
 
     /**
      * This will generate a monthly invoice for an account.
-     * @param Account $account
-     * @param bool    $createOrder
+     * @param Account               $account
+     * @param bool                  $createOrder
+     * @param RecurringProfile|null $profile
      * @return void
      */
-    static public function generateMonthlyInvoice(Account $account, bool $createOrder = false): void
-    {
-        $account->update(['next_bill' => now()->addMonth()->setDay($account->bills_on ?? 1)]);
+    static public function generateMonthlyInvoice(
+        Account $account,
+        bool $createOrder = false,
+        RecurringProfile $profile = null
+    ): void {
+
         if ($account->items->count() == 0) return; // Do nothing if there are no service items
+        if ($profile)
+        {
+            $profile->update(['next_bill' => now()->addMonths()->setDay($profile->bills_on ?? 1)]);
+            $title = $profile->name;
+            $po = $profile->po;
+            _log($profile, "Recurring Profile #$profile->id Invoice Generated");
+            // If someone created a recurring profile but never assigned items, don't create an empty invoice.
+            if ($account->items()->where('recurring_profile_id', $profile->id)->count() == 0) return;
+        }
+        else
+        {
+            $account->update(['next_bill' => now()->addMonth()->setDay($account->bills_on ?? 1)]);
+            $title = "Monthly Invoice";
+            $po = $account->po;
+            _log($account, "Monthly Invoice Generated");
+        }
+
         $invoice = $account->invoices()->create([
-            'due_on'    => now()->addDays($account->net_terms),
-            'status'    => InvoiceStatus::DRAFT,
-            'recurring' => true
+            'due_on'               => now()->addDays($account->net_terms),
+            'status'               => InvoiceStatus::DRAFT,
+            'title'                => $title,
+            'po'                   => $po,
+            'recurring'            => true,
+            'recurring_profile_id' => $profile ? $profile->id : 0
         ]);
-        _log($invoice, "Monthly Invoice Generated");
-        foreach ($account->items as $item)
+
+        $items = $profile
+            ? $account->items()->where('recurring_profile_id', $profile->id)->get()
+            : $account->items()->whereNull('recurring_profile_id')->get();
+
+        foreach ($items as $item)
         {
             if (!$item->item) continue; // Service was deleted.
             if (!$item->frequency) $item->frequency = BillFrequency::Monthly;
@@ -192,6 +229,7 @@ class BillingEngine
         $total = "$" . moneyFormat($invoice->total);
         _log($invoice, "Monthly Invoice Total Final: $total", null, null, LogSeverity::Debug);
         sysact(ActivityType::Account, $account->id,
-            "created monthly recurring <a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total) for");
+            "created monthly recurring invoice for",
+        "<a href='/admin/invoices/$invoice->id'>Invoice #{$invoice->id}</a> ($total)");
     }
 }

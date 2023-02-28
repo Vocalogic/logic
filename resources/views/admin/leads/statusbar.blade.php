@@ -24,7 +24,7 @@
 
 </div>
 
-<a class="btn btn-{{bm()}}secondary live w-100 btn-block mt-2" href="/admin/leads/import/csv"
+<a class="btn btn-outline-secondary live w-100 btn-block mt-2" href="/admin/leads/import/csv"
    data-title="Import Leads into Logic">
     <i class="fa fa-recycle"></i> Import Leads
 </a>

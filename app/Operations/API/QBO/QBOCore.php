@@ -140,6 +140,7 @@ class  QBOCore extends APICore
                 return $this->qsend($endpoint, $method, $params, false); // Try once more.
             }
         }
+        return null;
     }
 
     /**

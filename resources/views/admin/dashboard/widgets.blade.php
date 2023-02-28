@@ -5,8 +5,8 @@
                 $invoice = \App\Operations\Admin\WidgetGenerator::get('invoicedToday');
             @endphp
             <div class="d-flex align-items-center">
-                <div class="avatar rounded-circle no-thumbnail bg-light"><img class="avatar"
-                                                                              src="/icons/{{$invoice->icon}}.png"></div>
+                <div class="rounded-circle no-thumbnail bg-light">
+                    <img class="avatar" src="/icons/{{$invoice->icon}}.png"></div>
                 <div class="flex-fill ms-3 text-truncate">
                     <div class="small text-uppercase">{{$invoice->name}}</div>
                     <div><span class="h6 mb-0 fw-bold">${{moneyFormat($invoice->total)}}</span> <small

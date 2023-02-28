@@ -7,7 +7,7 @@
             <div class="pt-3">
                 <a href="#" wire:click="togglePhoto" class="px-3"><i class="fa fa-camera"></i></a>
                 <a href="#" wire:click="toggleCalendar" class="px-3"><i class="fa fa-calendar"></i></a>
-                <button class="btn btn-{{bm()}}primary float-end" wire:click="save"><i class="fa fa-plus"></i> Post Update</button>
+                <button class="btn btn-primary float-end" wire:click="save"><i class="fa fa-plus"></i> Post Update</button>
             </div>
         </div>
 

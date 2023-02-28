@@ -1,40 +1,33 @@
 <div>
     <div wire:poll.5000ms="loadActivity" class="card">
-        <div class="card-body"><h6 class="card-title">Recent Activity</h6>
-
-            @foreach($activities as $act)
-
-                <div class="timeline-item ti-success ms-2">
-                    <div class="d-flex">
-                        @if($act->user_id)
-                            <img class="avatar sm rounded-circle" src="{{$act->user->avatar}}" alt="">
-                        @endif
-                        <div class="flex-fill ms-3">
-                            <div class="mb-1">
-
-                                @if($act->user_id && $act->user->account->id != 1)
-                                    <span class="badge bg-{{bm()}}info">customer</span>
-                                    @elseif($act->partner)
-                                    <span class="badge bg-{{bm()}}primary">partner</span>
-                                @endif
-                                {!! $act->summary !!}
-                                     <small class="text-muted">{{$act->created_at->diffForHumans()}}</small></div>
-                            @if($act->post)
-                                <div class="card p-3">
-                                    @if(preg_match("/\<|\>/i", $act->post))
-                                        {!! $act->post !!}
-                                    @else
-                                    {!! nl2br($act->post) !!}
-                                    @endif
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                </div> <!-- timeline item end  -->
-
-            @endforeach
-
+        <div class="card-header border-bottom-dashed align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Recent Activity</h4>
+            <div class="flex-shrink-0">
+                <button type="button" class="btn btn-soft-primary btn-sm">
+                    View All Activity
+                </button>
+            </div>
         </div>
-
+        <div class="card-body p-0">
+            <div data-simplebar style="max-height: 964px;" class="p-3">
+                <div class="acitivity-timeline acitivity-main">
+                    @foreach($activities as $act)
+                        <div class="acitivity-item d-flex mb-3">
+                            <div class="flex-shrink-0 avatar-xs">
+                                <div class="avatar-title bg-light text-success rounded-circle">
+                                    <i class="{{$act->type->getIcon()}}"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6 class="mb-1">{!! $act->summary !!}</h6>
+                                <p class="text-muted mb-1">{!! $act->post !!}</p>
+                                <small
+                                    class="mb-0 text-muted pull-right">{{$act->created_at->format("m/d/y h:ia")}}</small>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
     </div>
 </div>

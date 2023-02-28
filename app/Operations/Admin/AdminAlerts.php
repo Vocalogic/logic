@@ -163,7 +163,7 @@ class AdminAlerts extends AlertEngine
         if (count($drafts))
         {
             $count = count($drafts);
-            $desc = "There are $count shipments that are in a draft date.";
+            $desc = "There are $count shipments that are in a draft state.";
             $alerts[] = $this->widgetAlert(AlertType::Info, "Draft Shipments", $count, $desc, '2801874', $draftHeaders,
                 $drafts);
         }

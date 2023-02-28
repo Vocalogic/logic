@@ -15,53 +15,37 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="card">
-                <div class="card-body d-flex align-items-start">
+                <div class="card-body">
 
-                    <ul class="nav nav-pills custom-horizontal me-2" role="tablist">
-                        @foreach(\App\Models\EmailTemplateCategory::orderBy('name')->get() as $cat)
-                        <li class="nav-item"><a class="nav-link {{$cat->name == 'Accounts' ? "active" : null}}" data-bs-toggle="tab" href="#c{{$cat->id}}" role="tab">{{$cat->name}}</a></li>
-                        @endforeach
-                        @foreach(\App\Enums\Core\ModuleRegistry::cases() as $case)
-                            @if($case->isEnabled())
-                                    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#{{$case->value}}" role="tab">{{$case->getName()}}</a></li>
-                                @endif
-                            @endforeach
+                    <div class="row">
+                        <div class="col-md-2">
 
-                    </ul>
 
-                    <div class="tab-content ps-3">
-                        @foreach(\App\Models\EmailTemplateCategory::orderBy('name')->get() as $cat)
-
-                        <div class="tab-pane fade {{$cat->name == 'Accounts' ? "show active" : null}}" id="c{{$cat->id}}" role="tabpanel">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th width="20%">Name</th>
-                                    <th width="40%">Description</th>
-                                    <th width="40%">Subject</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($cat->templates()->whereNull('module')->get() as $template)
-                                    <tr class="{{$template->enabled ?: "bg-light-danger"}}">
-                                        <td><a href="/admin/email_templates/{{$template->id}}">{{$template->name}}</a>
-                                            @if(preg_match("/placeholder/i", $template->body))
-                                                <span class="badge bg-danger">placeholder</span>
-                                            @endif
-                                        </td>
-                                        <td>{{$template->description}}</td>
-                                        <td>{{$template->subject}}</td>
-                                    </tr>
+                            <div class="nav flex-column nav-pills text-center" id="v-pills-tab" role="tablist"
+                                 aria-orientation="vertical">
+                                @foreach(\App\Models\EmailTemplateCategory::orderBy('name')->get() as $cat)
+                                    <a class="nav-link mb-2 {{$loop->first ? "active" : null}}" id="{{$cat->name}}-tab"
+                                       data-bs-toggle="pill" href="#c{{$cat->id}}" role="tab"
+                                       aria-controls="{{$cat->name}}-home" aria-selected="true">{{$cat->name}}</a>
                                 @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        @endforeach
+                                @foreach(\App\Enums\Core\ModuleRegistry::cases() as $case)
+                                    @if($case->isEnabled())
+                                        <a class="nav-link mb-2" id="{{$case->value}}-tab" data-bs-toggle="pill"
+                                           href="#{{$case->value}}" role="tab" aria-controls="{{$case->value}}-home"
+                                           aria-selected="true">{{$case->getHuman()}}</a>
+                                    @endif
+                                @endforeach
 
-                            @foreach(\App\Enums\Core\ModuleRegistry::cases() as $case)
-                                @if($case->isEnabled())
-                                    <div class="tab-pane fade" id="{{$case->value}}" role="tabpanel">
-                                        <table class="table">
+                            </div>
+                        </div>
+                        <div class="col-md-10">
+
+                            <div class="tab-content ps-3">
+                                @foreach(\App\Models\EmailTemplateCategory::orderBy('name')->get() as $cat)
+
+                                    <div class="tab-pane fade {{$cat->name == 'Accounts' ? "show active" : null}}"
+                                         id="c{{$cat->id}}" role="tabpanel">
+                                        <table class="table table-striped">
                                             <thead>
                                             <tr>
                                                 <th width="20%">Name</th>
@@ -70,9 +54,10 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach(\App\Models\EmailTemplate::where('module', $case->value)->get() as $template)
+                                            @foreach($cat->templates()->whereNull('module')->get() as $template)
                                                 <tr class="{{$template->enabled ?: "bg-light-danger"}}">
-                                                    <td><a href="/admin/email_templates/{{$template->id}}">{{$template->name}}</a>
+                                                    <td>
+                                                        <a href="/admin/email_templates/{{$template->id}}">{{$template->name}}</a>
                                                         @if(preg_match("/placeholder/i", $template->body))
                                                             <span class="badge bg-danger">placeholder</span>
                                                         @endif
@@ -84,20 +69,44 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                @endif
-                            @endforeach
+                                @endforeach
 
+                                @foreach(\App\Enums\Core\ModuleRegistry::cases() as $case)
+                                    @if($case->isEnabled())
+                                        <div class="tab-pane fade" id="{{$case->value}}" role="tabpanel">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th width="20%">Name</th>
+                                                    <th width="40%">Description</th>
+                                                    <th width="40%">Subject</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                @foreach(\App\Models\EmailTemplate::where('module', $case->value)->get() as $template)
+                                                    <tr class="{{$template->enabled ?: "bg-light-danger"}}">
+                                                        <td>
+                                                            <a href="/admin/email_templates/{{$template->id}}">{{$template->name}}</a>
+                                                            @if(preg_match("/placeholder/i", $template->body))
+                                                                <span class="badge bg-danger">placeholder</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{$template->description}}</td>
+                                                        <td>{{$template->subject}}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
 
-
+                        </div>
 
 
                     </div>
-
-
-
-
                 </div>
             </div>
         </div>
-    </div>
 @endsection

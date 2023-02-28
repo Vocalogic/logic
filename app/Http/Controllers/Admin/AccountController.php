@@ -20,6 +20,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\LOFile;
 use App\Models\Quote;
+use App\Models\RecurringProfile;
 use App\Models\User;
 use App\Observers\AccountObserver;
 use App\Operations\Core\LoFileHandler;
@@ -120,11 +121,12 @@ class AccountController extends Controller
             $request->merge(['description' => $item->item->description]);
         }
         $item->update([
-            'price'           => convertMoney($request->price),
-            'qty'             => $request->qty,
-            'notes'           => $request->notes,
-            'description'     => $request->description,
-            'frequency'       => $request->frequency
+            'price'                => convertMoney($request->price),
+            'qty'                  => $request->qty,
+            'notes'                => $request->notes,
+            'description'          => $request->description,
+            'frequency'            => $request->frequency,
+            'recurring_profile_id' => $request->recurring_profile_id
         ]);
 
         _log($item, $item->name . " updated.", $old);
@@ -359,7 +361,7 @@ class AccountController extends Controller
      */
     public function editItem(Account $account, AccountItem $item): View
     {
-        return view('admin.accounts.services.service_modal')->with('item', $item);
+        return view('admin.accounts.services.service_modal')->with(['account' => $account, 'item' => $item]);
     }
 
     /**
@@ -850,17 +852,35 @@ class AccountController extends Controller
     }
 
     /**
-     * X-editable updater for pricing.
+     * Show update for special pricing.
+     * @param Account        $account
+     * @param AccountPricing $item
+     * @return View
+     */
+    public function pricingUpdateModal(Account $account, AccountPricing $item): View
+    {
+        return view('admin.accounts.pricing.pricing_modal', ['account' => $account, 'item' => $item]);
+    }
+
+    /**
+     * Update Special Pricing
      * @param Account        $account
      * @param AccountPricing $item
      * @param Request        $request
-     * @return true[]
+     * @return RedirectResponse
      */
-    public function pricingUpdate(Account $account, AccountPricing $item, Request $request): array
+    public function pricingUpdateSave(Account $account, AccountPricing $item, Request $request): RedirectResponse
     {
-        $item->update([$request->name => convertMoney($request->value)]);
-        _log($account, $item->item->name . " special pricing updated.");
-        return ['success' => true];
+        $old = clone $item;
+        $request->validate([
+            'price' => 'required'
+        ]);
+        $item->update([
+            'price'          => convertMoney($request->price),
+            'price_children' => convertMoney($request->price_children)
+        ]);
+        _log($item, "Special Pricing for {$item->item->name} Updated", $old);
+        return redirect()->back()->with('message', "Pricing Updated");
     }
 
     /**
@@ -921,6 +941,83 @@ class AccountController extends Controller
             $count++;
         }
         return redirect()->back()->with('message', $count . " Accounts Imported Successfully");
+    }
+
+    /**
+     * Show create modal for a new billing profile
+     * @param Account $account
+     * @return View
+     */
+    public function createProfile(Account $account): View
+    {
+        return view('admin.accounts.profiles.create', ['account' => $account, 'profile' => new RecurringProfile]);
+    }
+
+
+    /**
+     * Show a recurring profile.
+     * @param Account          $account
+     * @param RecurringProfile $profile
+     * @return View
+     */
+    public function showProfile(Account $account, RecurringProfile $profile): View
+    {
+        return view('admin.accounts.profiles.create', ['account' => $account, 'profile' => $profile]);
+    }
+
+    /**
+     * Store new recurring billing profile
+     * @param Account $account
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function storeProfile(Account $account, Request $request): RedirectResponse
+    {
+        $request->validate(['name' => 'required']);
+        $account->recurringProfiles()->create([
+            'name'      => $request->name,
+            'po'        => $request->po,
+            'next_bill' => $request->next_bill ? Carbon::parse($request->next_bill) : null,
+            'bills_on'  => $request->bills_on,
+            'auto_bill' => (bool)$request->auto_bill
+        ]);
+        _log($account, "New Recurring Profile ($request->name) created.");
+        return redirect()->back()->with('message', $request->name . " Created");
+    }
+
+    /**
+     * Update recurring billing profile.
+     * @param Account          $account
+     * @param RecurringProfile $profile
+     * @param Request          $request
+     * @return RedirectResponse
+     */
+    public function updateProfile(Account $account, RecurringProfile $profile, Request $request): RedirectResponse
+    {
+        $request->validate(['name' => 'required']);
+        $profile->update([
+            'name'      => $request->name,
+            'po'        => $request->po,
+            'next_bill' => $request->next_bill ? Carbon::parse($request->next_bill) : null,
+            'bills_on'  => $request->bills_on,
+            'auto_bill' => (bool)$request->auto_bill
+        ]);
+        _log($account, "Recurring Profile ($request->name) updated.");
+        return redirect()->back()->with('message', $request->name . " Updated");
+    }
+
+    /**
+     * Remove a recurring profile.
+     * @param Account          $account
+     * @param RecurringProfile $profile
+     * @return string[]
+     */
+    public function destroyProfile(Account $account, RecurringProfile $profile): array
+    {
+        $account->items()->where('recurring_profile_id', $profile->id)->delete();
+        $profile->delete();
+        session()->flash('message', "Recurring profile removed");
+        return ['callback' => 'reload'];
     }
 }
 

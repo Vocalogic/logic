@@ -53,7 +53,7 @@ class Invoice extends Model
 
     protected $guarded = ['id'];
 
-    public       $casts            = [
+    public $casts = [
         'status'  => InvoiceStatus::class,
         'sent_on' => 'datetime',
         'due_on'  => 'datetime',
@@ -128,6 +128,15 @@ class Invoice extends Model
     }
 
     /**
+     * An invoice can be generated from a recurring profile
+     * @return BelongsTo
+     */
+    public function recurringProfile(): BelongsTo
+    {
+        return $this->belongsTo(RecurringProfile::class);
+    }
+
+    /**
      * Get subtotal for invoice.
      * @return int
      */
@@ -138,7 +147,7 @@ class Invoice extends Model
         {
             $total += ($item->price * $item->qty);
         }
-        return (int) bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -153,7 +162,7 @@ class Invoice extends Model
             $total += ($item->price * $item->qty);
         }
         $total += $this->tax;
-        return (int) bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -178,7 +187,7 @@ class Invoice extends Model
         {
             $total -= $transaction->amount;
         }
-        return (int) bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -221,7 +230,7 @@ class Invoice extends Model
      */
     public function getLateFeePercentageAttribute(): float
     {
-        return $this->account->late_fee_percentage ?: (float) setting('invoices.lateFeePercentage');
+        return $this->account->late_fee_percentage ?: (float)setting('invoices.lateFeePercentage');
     }
 
     /**
@@ -232,7 +241,7 @@ class Invoice extends Model
     {
         $perc = $this->getLateFeePercentageAttribute();
         if ($perc <= 0) return 0; // avoid divide by zero.
-        return (int) bcmul($this->total * ($perc / 100), 1);
+        return (int)bcmul($this->total * ($perc / 100), 1);
     }
 
     /**
@@ -343,7 +352,7 @@ class Invoice extends Model
                 $total += $item->price * $item->qty;
             }
         }
-        return (int) bcmul($total, 1);
+        return (int)bcmul($total, 1);
     }
 
     /**
@@ -474,7 +483,7 @@ class Invoice extends Model
             $totalCatalog += $item->getCatalogPrice() * $item->qty;
             $totalQuoted += $item->price * $item->qty;
         }
-        return (int) bcmul($totalCatalog - $totalQuoted, 1);
+        return (int)bcmul($totalCatalog - $totalQuoted, 1);
     }
 
     /**
@@ -607,8 +616,8 @@ class Invoice extends Model
         }
         else $this->update(['status' => InvoiceStatus::PARTIAL]);
         sysact(ActivityType::NewTransaction, $transaction->id,
-            "made a payment of $" . moneyFormat($amount) .
-            " to <a href='/admin/invoices/$this->id'>Invoice #$this->id</a> for {$this->account->name} via ");
+            "made a payment of $" . moneyFormat($amount) . " via ",
+            "<a href='/admin/invoices/$this->id'>Invoice #$this->id</a> ({$this->account->name})");
         _log($transaction, "Payment of $" . moneyFormat($amount) . " applied to Invoice #$this->id");
         return $transaction;
     }

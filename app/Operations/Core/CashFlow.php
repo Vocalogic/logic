@@ -329,7 +329,7 @@ class CashFlow
         foreach ($this->mom as $idx => $data)
         {
             $this->breakdown[$count] = $data;
-            $color = Carbon::parse($idx) < now() ? 'light-danger' : 'light-success';
+            $color = Carbon::parse($idx) < now() ? 'danger' : 'success';
             $this->breakdown[$count]->color = $color;
             $count++;
         }

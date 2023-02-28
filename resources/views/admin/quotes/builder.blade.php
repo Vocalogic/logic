@@ -9,12 +9,6 @@
             </div>
         @endif
 
-
-
-        @include('admin.quotes.build.quote_items')
-
-
-
             <div class="row mt-3">
                 <div class="col-lg-2">
                     <div class="card text-center">
@@ -37,15 +31,15 @@
                     </div>
                 </div>
                 @if($quote->discount > 0)
-                <div class="col-lg-2">
-                    <div class="card text-center">
-                        <div class="card-body">
-                            <span class="fs-6">Discounted</span>
-                            <br/>
-                            <b>-${{moneyFormat($quote->discount)}}</b>
+                    <div class="col-lg-2">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <span class="fs-6">Discounted</span>
+                                <br/>
+                                <b>-${{moneyFormat($quote->discount)}}</b>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endif
 
                 <div class="col-lg-2">
@@ -80,21 +74,29 @@
             </div>
 
 
+
+        @include('admin.quotes.build.quote_items')
+
+
+
+
+
+
     </div>
 
     <div class="col-lg-3">
         @if($quote->items->count())
             <div class="mb-2 rightpanel">
-                <a class="btn btn-{{bm()}}primary confirm w-100 mt-3" href="/admin/quotes/{{$quote->id}}/send"
+                <a class="btn btn-primary confirm w-100 mt-3" href="/admin/quotes/{{$quote->id}}/send"
                    data-message="Are you sure you want to send this quote? This will also mark this quote as 'presentable' and will be available for review in the contact's discovery page."
                    data-method="GET"><i class="fa fa-send"></i> Send Quote</a>
-                <a class="btn btn-{{bm()}}info wait w-100 mt-3" data-message="Generating Quote.." data-anchor=".rightpanel"
+                <a class="btn btn-info wait w-100 mt-3" data-message="Generating Quote.." data-anchor=".rightpanel"
                    href="/admin/quotes/{{$quote->id}}/download"><i class="fa fa-download"></i> Download</a>
                 @if(!$quote->presentable)
-                    <a class="btn btn-{{bm()}}danger w-100 mt-3" href="/admin/quotes/{{$quote->id}}/presentable"><i
+                    <a class="btn btn-outline-danger w-100 mt-3" href="/admin/quotes/{{$quote->id}}/presentable"><i
                             class="fa fa-exclamation"></i> Not Presentable</a>
                 @else
-                    <a class="btn btn-{{bm()}}success w-100 mt-3" href="/admin/quotes/{{$quote->id}}/presentable"><i
+                    <a class="btn btn-outline-success w-100 mt-3" href="/admin/quotes/{{$quote->id}}/presentable"><i
                             class="fa fa-check"></i> Presentable</a>
 
                 @endif

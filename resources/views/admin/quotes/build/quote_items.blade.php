@@ -55,7 +55,7 @@
                             <a class="live"
                                data-title="Update Requirements"
                                href="/admin/quotes/{{$quote->id}}/items/{{$service->id}}/meta">
-                                <span class="small">edit requirements</span>
+                                <span class="small text-primary">edit requirements</span>
                             </a>
                         @endif
                         @if($service->addons()->count())
@@ -85,10 +85,10 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4">
+                    <td colspan="5">
                         <div class="card mt-3">
                             <div class="card-body text-center">
-                                <img src="/assets/images/no-data.svg" class="w120" alt="No Data">
+                                <img src="/assets/images/no-data.svg" width="100" alt="No Data">
                                 <div class="mt-4 mb-3">
                                     <span class="text-muted">No Recurring Items Found</span>
 
@@ -198,7 +198,7 @@
                     <td colspan="5">
                         <div class="card mt-3">
                             <div class="card-body text-center">
-                                <img src="/assets/images/no-data.svg" class="w120" alt="No Data">
+                                <img src="/assets/images/no-data.svg" width="100" alt="No Data">
                                 <div class="mt-4 mb-3">
                                     <span class="text-muted">No One-Time Items Found</span>
 

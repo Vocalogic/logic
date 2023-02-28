@@ -126,7 +126,7 @@
 
             <div class="row g-3 mb-4">
                 <div class="col-lg-12">
-                    <button type="submit" class="btn btn-primary ladda pull-right" data-style="zoom-out">
+                    <button type="submit" class="btn btn-sm btn-primary ladda pull-right" data-style="expand-left">
                         <i class='fa fa-save'></i> Save Contact Information
                     </button>
                 </div>
@@ -172,7 +172,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button type="submit" class="btn btn-primary mt-2 ladda pull-right" data-style="zoom-out">
+                        <button type="submit" class="btn btn-primary btn-sm mt-2 ladda pull-right" data-style="expand-left">
                             <i class='fa fa-edit'></i> Update Forecast Information
                         </button>
                     </div>

@@ -1,6 +1,6 @@
 <div class="card mt-2">
 
-    <table class="table align-middle">
+    <table class="table table-striped align-middle">
         <thead>
         <tr>
             <td></td>

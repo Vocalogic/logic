@@ -1,5 +1,5 @@
 @extends('layouts.admin', [
-    'title' => "Invoice #$invoice->id",
+    'title' => "Invoice #$invoice->id for {$invoice->account->name}",
     'crumbs' => [
         "/admin/accounts/{$invoice->account->id}" => $invoice->account->name,
         "Invoice #$invoice->id"
@@ -14,18 +14,7 @@
                 <a href="/admin/accounts/{{$invoice->account_id}}">{{$invoice->account->name}}</a>
                 ({{$invoice->status}})
             </h1>
-            <small class="text-muted">
-                Total: <b>${{moneyFormat($invoice->total)}}</b> | Balance: <b>${{moneyFormat($invoice->balance)}}</b>
-                    | Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
-                                         href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
-                    </a>
-                @if($invoice->account->agent)
-                    | Agent: <b>{{$invoice->account->agent->name}}</b>
-                @endif
-                @if($invoice->account->affiliate)
-                    | Affiliate: <b>{{$invoice->account->affiliate->name}}</b>
-                @endif
-            </small>
+
         </div>
 
     </div> <!-- .row end -->
@@ -34,10 +23,14 @@
 
 @section('content')
 
+
 <div class="row">
-    <div class="col-lg-9 col-xs-12">
-        <div class="card border-{{$invoice->status->getColor()}}">
+    <div class="offset-1 col-lg-9 col-xs-12">
+        @include('admin.invoices.actions')
+
+        <div class="card ribbon-box border">
             <div class="card-body">
+                <div class="ribbon-two ribbon-two-{{$invoice->status->getColor()}}"><span>{{$invoice->status}}</span></div>
                 <form method="POST" action="/admin/invoices/{{$invoice->id}}/add">
                     @method('POST')
                     @csrf
@@ -59,6 +52,7 @@
                                         <a class="live" data-title="{{$item->name}}"
                                            href="/admin/invoices/{{$invoice->id}}/item/{{$item->id}}">
                                             <strong>[{{$item->item->code}}] {{$item->item->name}}</strong></a>
+
                                         <br/>
                                         <small
                                             class="text-muted">{!! $item->description ?: $item->item->description !!}</small>
@@ -68,6 +62,9 @@
                                     <td>
                                         <a class="live" data-title="{{$item->name}}"
                                            href="/admin/invoices/{{$invoice->id}}/item/{{$item->id}}"><strong>{{$item->name}}</strong></a>
+                                        @if(preg_match("/late fee/i", $item->name))
+                                            <span data-bs-toggle='tooltip' title="Automatic late fee assessed" class="pull-right badge badge-outline-danger"><i class="fa fa-warning"></i> late fee</span>
+                                        @endif
                                         <br/>
                                         <small class="text-muted">{{$item->description}}</small>
                                     </td>
@@ -82,9 +79,9 @@
                         @if(!$invoice->transactions->count())
                         <tr>
                             <td>
-                                <input type="text" class="form-control" name="item">
+                                <input type="text" class="form-control" name="item" placeholder="Enter new custom invoice item..">
                             </td>
-                            <td><input type="text" class="form-control" name="price"></td>
+                            <td><input type="text" class="form-control" name="price" placeholder="Enter Price"></td>
                             <td><input type="text" class="form-control" name="qty" value="1"></td>
                             <td><button type="submit" name="add" class="btn btn-primary ladda" data-effect="zoom-out">+</button>
                             </td>
@@ -116,6 +113,23 @@
                             <td style="text-align:right;"><strong>Balance:</strong></td>
                             <td>${{moneyFormat($invoice->balance)}}</td>
                         </tr>
+                        @if($invoice->po || $invoice->recurringProfile)
+                        <tr>
+                            <td colspan="4">
+                                <small class="text-muted">
+                                   @if($invoice->po)
+                                    Purchase Order: <a class="live" data-title="Invoice #{{$invoice->id}} Settings"
+                                                         href="/admin/invoices/{{$invoice->id}}/settings"><b>{{$invoice->po ?: "N/A"}}</b>
+                                    </a>
+                                   @endif
+                                    @if($invoice->recurringProfile)
+                                        | Billed from Recurring Profile <span class="text-info"> {{$invoice->recurringProfile->name}}</span>
+                                    @endif
+
+                                </small>
+                            </td>
+                        </tr>
+                        @endif
 
 
                         </tbody>
@@ -126,11 +140,21 @@
         @if($invoice->transactions()->count())
             @include('admin.invoices.trans')
         @endif
+
+        @if($invoice->status == \App\Enums\Core\InvoiceStatus::SENT)
+            <div class="col-12 mt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <i class="fa fa-info-circle"></i> This invoice is currently due on <strong>{{$invoice->due_on->format("m/d/y")}}</strong>.
+                        <a class="live text-primary"
+                           data-title="Change Due Date"
+                           href="/admin/invoices/{{$invoice->id}}/due">Change due date?</a>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
-    <div class="col-lg-3 col-xs-12">
-        @include('admin.invoices.actions')
-    </div>
 
 </div>
 
@@ -217,9 +241,8 @@
             </div>
 
             <div class="col-lg-12 mt-3 text-center">
-                <input type="submit" name="submit" class="btn btn-primary wait"
-                       data-anchor=".paymentForm"
-                       value="Authorize/Post Transaction">
+                <button type="submit" name="submit" class="btn btn-primary ladda" data-style="expand-left">
+                    <i class="fa fa-credit-card"></i> Authorize/Post Transaction</button>
             </div>
 
         </div>

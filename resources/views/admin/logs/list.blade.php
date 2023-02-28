@@ -1,4 +1,4 @@
-<table class="table table-striped table-sm small datatable">
+<table class="table table-striped datatable">
     <thead>
     <tr>
         <th>Date</th>

@@ -23,31 +23,31 @@
                     <ul class="list-group list-group-custom">
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts">Active</a>
-                            <span class="badge bg-info">
+                            <span class="badge badge-outline-primary">
                                     {{\App\Models\Account::where('active', true)->where('id', '>', 1)->count()}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts?show=mrr">Monthly</a>
-                            <span class="badge bg-info">
+                            <span class="badge badge-outline-primary">
                                 {{\App\Models\Account::whereHas('items')->where('active', true)->where('id', '>', 1)->count()}}
                             </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts?show=nrc">One-Time</a>
-                             <span class="badge bg-info">
+                             <span class="badge badge-outline-primary">
                                  {{\App\Models\Account::doesntHave('items')->where('active', true)->where('id', '>', 1)->count()}}
                              </span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                             <a class="color-600" href="/admin/accounts?show=inactive">Inactive</a>
-                            <span class="badge bg-warning">
+                            <span class="badge badge-outline-warning">
                                 {{\App\Models\Account::where('active', false)->count()}}
                             </span>
                         </li>
                     </ul>
             </div>
-            <a class="btn btn-{{bm()}}secondary live w-100 btn-block mt-3" href="/admin/accounts/import/csv"
+            <a class="btn btn-outline-secondary live w-100 btn-block mt-3" href="/admin/accounts/import/csv"
                data-title="Import Accounts into Logic">
                 <i class="fa fa-recycle"></i> Import Accounts
             </a>

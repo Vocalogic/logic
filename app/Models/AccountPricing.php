@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasLogTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -10,7 +11,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AccountPricing extends Model
 {
-    protected $guarded = ['id'];
+    use HasLogTrait;
+
+    public array $tracked = [
+        'price'          => "Price|money",
+        'price_children' => "Sub-Account Price|money"
+    ];
+    protected    $guarded = ['id'];
 
     /**
      * A pricing entry belongs to an account

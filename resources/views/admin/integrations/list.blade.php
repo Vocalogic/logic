@@ -1,12 +1,8 @@
 <div class="row row-deck">
     @foreach(\App\Models\Integration::byCategory($type) as $int)
         <div class="col-lg-3 col-sm-4 col-xs-6">
-            <div class="card ribbon {{$int->enabled ? "border-success" : "border-danger"}}">
-                @if(!$int->enabled)
-                    <div class="option-12 bg-danger position-absolute text-light"><i class="fa fa-times"></i></div>
-                @else
-                    <div class="option-12 bg-success position-absolute text-light"><i class="fa fa-check"></i></div>
-                @endif
+            <div class="card border {{$int->enabled ? "border-success" : "border-danger"}}">
+
                 <div class="card-body">
                     <img src="{{$int->connect->getLogo()}}" class="img-fluid"
                          alt="{{$int->connect->getName()}}">
