@@ -1,9 +1,9 @@
 <div class="card">
     <div class="card-body">
         <div class="lchart" id="globalMRR"
-             data-title="MRR vs Invoiced this Quarter"
+             data-title="MRR Last 4 Months"
              data-height="300"
-             data-url="/admin/graph/MRR?months=3&with=INVOICED&s0=line&s1=area&tally=max&diff=true"
+             data-url="/admin/graph/MRR?months=4&tally=max&diff=true"
              data-xtype="datetime"
              data-y="Total $"
              data-type="area"

@@ -313,16 +313,6 @@ class GraphSeries
             'dashArray' => [0, 8, 5]
         ];
         $account = Account::find($this->request->account);
-        if (cache(CommKey::AccountMRRCache->value))
-        {
-            $data = cache(CommKey::AccountMRRCache->value);
-            if (isset($data[$account->id]))
-            {
-                $this->series = $data[$account->id];
-                return $this->series;
-            }
-        }
-
         $mrrPlots = [];
         $invoicePlots = [];
         foreach (range(0, $this->request->months ?? 6) as $month)
@@ -350,7 +340,6 @@ class GraphSeries
             {
                 $mTotal += $invoice->total;
             }
-
             // We have mrr and total.. add dataplot
             $mrrPlots[] = (object)[
                 'x' => $start->getTimestampMs(),
@@ -362,7 +351,6 @@ class GraphSeries
                 'y' => moneyFormat($mTotal, false)
             ];
         }
-
         $this->series[] = [
             'name'  => 'MRR',
             'data'  => $mrrPlots,
@@ -375,12 +363,6 @@ class GraphSeries
             'color' => $this->colors[1],
             'type'  => 'line'
         ];
-
-
-        $cacheValue = cache(CommKey::AccountMRRCache->value);
-        if (!$cacheValue) $cacheValue = [];
-        $cacheValue[$account->id] = $this->series;
-        cache([CommKey::AccountMRRCache->value => $cacheValue], CommKey::AccountMRRCache->getLifeTime());
         return $this->series;
     }
 

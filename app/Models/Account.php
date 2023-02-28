@@ -6,6 +6,7 @@ use App\Enums\Core\AccountFileType;
 use App\Enums\Core\ACL;
 use App\Enums\Core\ActivityType;
 use App\Enums\Core\BillFrequency;
+use App\Enums\Core\CommKey;
 use App\Enums\Core\IntegrationType;
 use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\LNPStatus;
@@ -317,7 +318,7 @@ class Account extends Model
     }
 
     /**
-     * Get the current MRR on an account.
+     * Get the current MRR on an account and cache.
      * @return int
      */
     public function getMrrAttribute(): int
