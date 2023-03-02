@@ -35,7 +35,7 @@
     <div class="col-2 mb-3">
         <div class="card">
             <div class="card-body text-center">
-                <a class="wait" data-effect="orbit" href="/admin/invoices/{{$invoice->id}}/download"><i class="fa fa-download fa-2x"></i>
+                <a class="ladda" data-style="zoom-in" href="/admin/invoices/{{$invoice->id}}/download"><i class="fa fa-download fa-2x"></i>
                     <div class="mb-0">Download</div>
                 </a>
             </div>

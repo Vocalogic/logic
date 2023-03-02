@@ -29,6 +29,9 @@ use App\Http\Controllers\Admin\PackageSectionController;
 use App\Http\Controllers\Admin\PackageSectionQuestionController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ProjectCategoryController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ProjectTaskController;
 use App\Http\Controllers\Admin\QuestionLogicController;
 use App\Http\Controllers\Admin\QuestionOptionController;
 use App\Http\Controllers\Admin\QuoteController;
@@ -529,8 +532,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('leads/{lead}/rating', [LeadController::class, 'rating']);
     Route::get('leads/{lead}/discovery/send', [LeadController::class, 'sendDiscovery']);
 
+    Route::get('leads/{lead}/projects', [LeadController::class, 'projects']);
 
-// Quotes from Lead Context
+    // Quotes from Lead Context
     Route::get('leads/{lead}/quotes', [QuoteController::class, 'leadIndex']);
 
     Route::put('quotes/{quote}', [QuoteController::class, 'update']);
@@ -555,6 +559,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     // Logs page
     Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
     Route::get('logs/{model}/{id}/extended', [LogsController::class, 'extendedView']);
+
+    // Project Routes
+    Route::resource('projects', ProjectController::class);
+    Route::resource('projects.categories', ProjectCategoryController::class);
+    Route::resource('projects.tasks', ProjectTaskController::class);
 
 });
 

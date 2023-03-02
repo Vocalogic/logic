@@ -71,7 +71,11 @@ $(document).ready(function () {
         );
     }
 
-    Ladda.bind('button[type=submit]');
+    //Ladda.bind('button[type=submit]');
+    if ($('.ladda').length)
+    {
+        Ladda.bind(document.querySelector('.ladda'));
+    }
 
 
     /**
