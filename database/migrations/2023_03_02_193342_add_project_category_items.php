@@ -17,7 +17,7 @@ return new class extends Migration {
             $t->integer('bill_item_id')->nullable();
             $t->string('code');
             $t->string('name');
-            $t->string('description')->nullable();
+            $t->string('description', 2048)->nullable();
             $t->bigInteger('price');
             $t->double('qty')->nullable()->default(1);
             $t->integer('user_id');    // Who added this

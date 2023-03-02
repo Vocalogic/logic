@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+
+ */
 class ProjectCategoryItem extends Model
 {
     protected $guarded = ['id'];
@@ -44,5 +47,7 @@ class ProjectCategoryItem extends Model
     {
         return $this->belongsTo(Invoice::class);
     }
+
+
 
 }

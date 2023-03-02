@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property mixed $bill_method
+ * @property mixed $static_price
+ * @property mixed $est_hours_min
+ * @property mixed $task_hourly_rate
+ */
 class ProjectTask extends Model
 {
     protected $guarded = ['id'];
@@ -61,5 +67,21 @@ class ProjectTask extends Model
             ->where('refid', $this->id)->first();
         if (!$thread) return 0;
         return $thread->comments()->count();
+    }
+
+    /**
+     * Get the minimum total for the item
+     * @return int
+     */
+    public function getTotalMinAttribute(): int
+    {
+        $total = 0;
+        if ($this->bill_method == 'Mixed' || $this->bill_method == 'Static')
+        {
+            $total += $this->static_price;
+        }
+        if ($this->bill_method == 'Static') return $total;
+        $total += (int) bcmul($this->est_hours_min * $this->task_hourly_rate,1);
+        return $total;
     }
 }

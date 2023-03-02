@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" data-layout-mode="{{currentMode()}}" data-layout="vertical" data-topbar="light" data-sidebar="{{currentMode()}}" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<html lang="en" data-layout-mode="{{currentMode()}}" data-layout="vertical" data-topbar="light"
+      data-sidebar="{{currentMode()}}" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
 
 <head>
     <meta charset="utf-8">
@@ -95,10 +96,6 @@
                     </div>
 
 
-
-
-
-
                     <div class="ms-1 header-item d-none d-sm-flex">
                         <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
                                 data-toggle="fullscreen">
@@ -108,14 +105,15 @@
 
 
                     @if(isset($log))
-                    <div class="ms-1 header-item d-none d-sm-flex">
-                        <a type="button" data-title="Log Viewer"
-                           data-bs-toggle="tooltip" data-bs-placement="left" title="Log Viewer"
-                           class="live btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-size="modal-xl"
-                           href="/admin/logs/{{$log['type']}}/{{$log['id']}}">
-                            <i class='bx bx-customize fs-22'></i>
-                        </a>
-                    </div>
+                        <div class="ms-1 header-item d-none d-sm-flex">
+                            <a type="button" data-title="Log Viewer"
+                               data-bs-toggle="tooltip" data-bs-placement="left" title="Log Viewer"
+                               class="live btn btn-icon btn-topbar btn-ghost-secondary rounded-circle"
+                               data-size="modal-xl"
+                               href="/admin/logs/{{$log['type']}}/{{$log['id']}}">
+                                <i class='bx bx-customize fs-22'></i>
+                            </a>
+                        </div>
                     @endif
 
                     @if(isset($docs))
@@ -143,12 +141,12 @@
 
                     <div class="ms-1 header-item d-none d-sm-flex">
                         <a type="button" href="/mode/toggle"
-                           data-bs-toggle="tooltip" data-bs-placement="left" title="Switch to {{currentMode() == 'dark' ? "light" : "dark"}} mode"
-                                class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
+                           data-bs-toggle="tooltip" data-bs-placement="left"
+                           title="Switch to {{currentMode() == 'dark' ? "light" : "dark"}} mode"
+                           class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle">
                             <i class='bx bx-moon fs-22'></i>
                         </a>
                     </div>
-
 
 
                     <div class="dropdown ms-sm-3 header-item topbar-user">
@@ -158,8 +156,10 @@
                             <img class="rounded-circle header-profile-user" src="{{user()->avatar}}"
                                  alt="Header Avatar">
                             <span class="text-start ms-xl-2">
-                                <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{user()->name}}</span>
-                                <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{user()->account->name}}</span>
+                                <span
+                                    class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{user()->name}}</span>
+                                <span
+                                    class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">{{user()->account->name}}</span>
                             </span>
                         </span>
                         </button>
@@ -241,7 +241,7 @@
                 <div id="two-column-menu">
                 </div>
                 <ul class="navbar-nav" id="navbar-nav">
-                        @include('admin.partials.core.admin_menu')
+                    @include('admin.partials.core.admin_menu')
                 </ul>
             </div>
             <!-- Sidebar -->
@@ -288,7 +288,8 @@
                 </div>
                 <!-- end page title -->
                 @if($errors->any())
-                    <div role="alert" class="alert alert-danger">
+                    <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show mb-xl-0" role="alert">
+                        <i class="ri-error-warning-line label-icon"></i><strong>Error: </strong>
                         @foreach($errors->all() as $error)
                             {!! $error !!}<br/>
                         @endforeach
@@ -297,19 +298,18 @@
 
                 @if (session()->has('message'))
                     <div class="toasted" data-message="{{session('message')}}"
-                         data-title="Operation Successful" data-icon="success"></div>
+                         data-title="Operation Successful" data-icon="success">
+
+                    </div>
                 @endif
 
                 @if (session()->has('error'))
-                    <div role="alert"
-                         class="alert alert-danger">
+                    <div class="alert alert-danger alert-dismissible alert-label-icon rounded-label fade show mb-xl-0" role="alert">
+                        <i class="ri-error-warning-line label-icon"></i><strong>Error: </strong>
                         {!!  session('error') !!}
                     </div>
                 @endif
                 @yield('content')
-
-
-
 
 
             </div>
@@ -353,7 +353,8 @@
     </div>
 </div>
 
-<div class="modal fade" id="liveModal" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="liveModalLabel"
+<div class="modal fade" id="liveModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="liveModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -389,7 +390,6 @@
         </div>
     </div>
 </div>
-
 
 
 <!-- JAVASCRIPT -->

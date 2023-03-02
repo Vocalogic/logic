@@ -40,9 +40,14 @@
     <div class="card-footer bg-transparent border-top-dashed py-2">
         <div class="d-flex align-items-center">
 
-            <div class="flex-shrink-0">
+            <div class="flex-grow-1">
                 <div class="text-muted">
                     <i class="ri-calendar-event-fill me-1 align-bottom"></i> Created: {{$category->created_at->format("M d, Y")}}
+                </div>
+            </div>
+            <div class="flex-shrink-0">
+                <div class="text-muted">
+                    <i class="ri-coin-line me-1 align-bottom"></i> $ {{moneyFormat($category->totalMin)}}
                 </div>
             </div>
 

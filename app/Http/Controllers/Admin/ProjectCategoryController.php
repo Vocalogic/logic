@@ -44,8 +44,9 @@ class ProjectCategoryController extends Controller
     {
         $request->validate(['name' => 'required']);
         $project->categories()->create([
-            'name'        => $request->name,
-            'description' => $request->description
+            'name'                 => $request->name,
+            'description'          => $request->description,
+            'category_hourly_rate' => $project->project_hourly_rate
         ]);
         return redirect()->to("/admin/projects/$project->id")->with('message', "Category Created");
     }

@@ -11,7 +11,6 @@
         </div>
 
         <div class="col-lg-7 col-xs-12">
-
             @include('admin.projects.summary.description')
             @include('admin.projects.summary.categories')
         </div>

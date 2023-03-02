@@ -30,6 +30,7 @@ use App\Http\Controllers\Admin\PackageSectionQuestionController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ProjectCategoryController;
+use App\Http\Controllers\Admin\ProjectCategoryItemController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ProjectTaskController;
 use App\Http\Controllers\Admin\QuestionLogicController;
@@ -315,9 +316,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('category/{cat}/items/{item}/category', [BillItemController::class, 'changeCategory']);
 
 
-
-
-
     Route::get('category/{cat}/items/{item}/addons/create', [BillItemController::class, 'createGroupModal']);
     Route::get('category/{cat}/items/{item}/addons/{addon}/add', [BillItemController::class, 'addOptionModal']);
     Route::get('category/{cat}/items/{item}/addons/{addon}', [BillItemController::class, 'updateGroupModal']);
@@ -397,8 +395,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('accounts/{account}/profiles/{profile}', [AccountController::class, 'destroyProfile']);
 
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
-
-
 
 
     Route::post('accounts/{account}/method/add', [AccountController::class, 'addPaymentMethod']);
@@ -564,6 +560,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::resource('projects', ProjectController::class);
     Route::resource('projects.categories', ProjectCategoryController::class);
     Route::resource('projects.tasks', ProjectTaskController::class);
+    Route::resource('projects.categories.items', ProjectCategoryItemController::class);
+    Route::get('projects/{project}/categories/{category}/items/add/{item}',
+        [ProjectCategoryItemController::class, 'addItem']);
 
 });
 

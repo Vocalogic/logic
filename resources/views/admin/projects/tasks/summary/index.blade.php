@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
-        <h5 class="card-title">Summary of Work
-            <span class="small text-muted">| Details of Work to be Done
+        <h5 class="card-title">{{$task->name}}
+            <span class="small text-muted">| Summary of Work
                 @if(!app('request')->editdesc)
                     <a class="btn btn-primary btn-sm pull-right" href="/admin/projects/{{$project->id}}/tasks/{{$task->id}}?editdesc=true"><i class="fa fa-edit"></i> edit</a>
                 @endif

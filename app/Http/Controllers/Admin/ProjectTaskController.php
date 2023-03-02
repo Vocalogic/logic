@@ -43,10 +43,12 @@ class ProjectTaskController extends Controller
      */
     public function store(Project $project, Request $request): RedirectResponse
     {
+        $request->validate(['name' => 'required']);
         $category = ProjectCategory::find($request->category);
         $task = $category->tasks()->create([
-            'name'       => $request->name,
-            'project_id' => $project->id
+            'name'             => $request->name,
+            'project_id'       => $project->id,
+            'task_hourly_rate' => $category->category_hourly_rate
         ]);
         return redirect()->to("/admin/projects/$project->id/tasks/$task->id");
     }
