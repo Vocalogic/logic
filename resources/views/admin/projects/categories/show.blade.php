@@ -9,6 +9,7 @@
     <div class="row">
         <div class="col-lg-9 col-xs-12">
             @include('admin.projects.categories.tasks')
+            @include('admin.projects.categories.billables.index')
         </div>
         <div class="col-lg-3 col-xs-12">
             @include('admin.projects.categories.settings')

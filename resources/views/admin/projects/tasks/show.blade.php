@@ -19,19 +19,15 @@
                         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active" data-bs-toggle="tab" href="#discuss" role="tab">
-                                    Discussion (5)
+                                    Discussion ({{$task->comments}})
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#attachments" role="tab">
-                                    Attachments (4)
+                                    Attachments
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#billables" role="tab">
-                                    Billable Items (4)
-                                </a>
-                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#time" role="tab">
                                     Time Entries (9 hrs 13 min)
@@ -49,9 +45,7 @@
                         <div class="tab-pane" id="attachments">
 
                         </div>
-                        <div class="tab-pane" id="billables">
-                            @include('admin.projects.tasks.billables.index')
-                        </div>
+
                         <div class="tab-pane" id="time">
 
                         </div>

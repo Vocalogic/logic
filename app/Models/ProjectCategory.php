@@ -28,5 +28,14 @@ class ProjectCategory extends Model
         return $this->hasMany(ProjectTask::class);
     }
 
+    /**
+     * A category has many billable items.
+     * @return HasMany
+     */
+    public function items(): HasMany
+    {
+        return $this->hasMany(ProjectCategoryItem::class, 'project_category_id');
+    }
+
 
 }

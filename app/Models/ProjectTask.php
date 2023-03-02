@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\ProjectStatus;
+use App\Enums\Core\ThreadType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,4 +51,15 @@ class ProjectTask extends Model
         return $this->belongsTo(ProjectTaskEntry::class);
     }
 
+    /**
+     * Get number of comments from a thread on this task.
+     * @return int
+     */
+    public function getCommentsAttribute(): int
+    {
+        $thread = Thread::where('type', ThreadType::getByModel($this::class))
+            ->where('refid', $this->id)->first();
+        if (!$thread) return 0;
+        return $thread->comments()->count();
+    }
 }

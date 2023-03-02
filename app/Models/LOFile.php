@@ -30,4 +30,14 @@ class LOFile extends Model
         return $this->belongsTo(FileCategory::class, 'file_category_id');
     }
 
+    public function getIcon(): string
+    {
+        switch($this->mime_type)
+        {
+            case (bool)str_contains($this->mime_type, "image"): return 'ri-image-2-fill';
+            case (bool)str_contains($this->mime_type, "audio") : return 'ri-file-music-fill';
+            default : return "ri-folders-fill";
+        }
+    }
+
 }
