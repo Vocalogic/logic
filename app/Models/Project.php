@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property mixed $categories
+ * @property mixed $static_price
+ * @property mixed $bill_method
+ */
 class Project extends Model
 {
     protected $guarded = ['id'];
@@ -14,7 +19,9 @@ class Project extends Model
         'sent_on'     => 'datetime',
         'due_on'      => 'datetime',
         'approved_on' => 'datetime',
-        'status'      => ProjectStatus::class
+        'status'      => ProjectStatus::class,
+        'start_date'  => 'datetime',
+        'end_date'    => 'datetime'
     ];
 
     /**
@@ -60,6 +67,59 @@ class Project extends Model
     public function leader(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    /**
+     * Get the total for the category
+     * @return int
+     */
+    public function getTotalMinAttribute(): int
+    {
+        $total = 0;
+        if ($this->bill_method == 'Static')
+        {
+            return $this->static_price;
+        }
+        foreach ($this->categories as $category)
+        {
+            $total += $category->totalMin;
+        }
+        $total += $this->static_price;
+        return $total;
+    }
+
+    /**
+     * Get the max total for the category
+     * @return int
+     */
+    public function getTotalMaxAttribute(): int
+    {
+        $total = 0;
+        if ($this->bill_method == 'Static')
+        {
+            return $this->static_price;
+        }
+        foreach ($this->categories as $category)
+        {
+            $total += $category->totalMax;
+        }
+        $total += $this->static_price;
+        return $total;
+    }
+
+    /**
+     * Get total expense max
+     * @return int
+     */
+    public function getTotalExpenseMaxAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->categories as $category)
+        {
+            $total += $category->totalExpenseMax;
+        }
+        return $total;
     }
 
 }

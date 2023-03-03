@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $static_price
  * @property mixed $est_hours_min
  * @property mixed $task_hourly_rate
+ * @property mixed $est_hours_max
  */
 class ProjectTask extends Model
 {
@@ -82,6 +83,22 @@ class ProjectTask extends Model
         }
         if ($this->bill_method == 'Static') return $total;
         $total += (int) bcmul($this->est_hours_min * $this->task_hourly_rate,1);
+        return $total;
+    }
+
+    /**
+     * Get the maximum total for the item
+     * @return int
+     */
+    public function getTotalMaxAttribute(): int
+    {
+        $total = 0;
+        if ($this->bill_method == 'Mixed' || $this->bill_method == 'Static')
+        {
+            $total += $this->static_price;
+        }
+        if ($this->bill_method == 'Static') return $total;
+        $total += (int) bcmul($this->est_hours_max * $this->task_hourly_rate,1);
         return $total;
     }
 }

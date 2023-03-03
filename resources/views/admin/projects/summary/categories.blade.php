@@ -10,7 +10,7 @@
             </span></h5>
         <div class="row">
             @foreach($project->categories as $category)
-                <div class="col-xxl-6 col-sm-12 project-card">
+                <div class="col-xxl-4 col-lg-6 col-md-6 col-sm-12 project-card">
                     @include('admin.projects.categories.single', ['category' => $category])
                 </div>
             @endforeach

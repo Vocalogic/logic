@@ -21,14 +21,14 @@
                ]])
     <x-form-select icon="dollar" name="bill_method" :options="$method" selected="{{$category->bill_method}}"
                    label="Category Billing Method">
-        How is this project being billed?
+        How is this category being billed?
     </x-form-select>
 
     @if($category->bill_method == 'Static' || $category->bill_method == 'Mixed')
         @if($category->bill_method == 'Static')
             <x-form-input icon="money" name="static_price" label="Category Fixed Price"
                           value="{{moneyFormat($category->static_price)}}">
-                Enter a total project amount to quote for this project.
+                Enter a total project amount to quote for this category.
             </x-form-input>
         @else
             <x-form-input icon="money" name="static_price" label="Category Base Price"

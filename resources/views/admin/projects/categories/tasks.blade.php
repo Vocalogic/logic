@@ -22,7 +22,7 @@
                         <a class="link-info" href="/admin/projects/{{$project->id}}/tasks/{{$task->id}}">#{{$task->id}}</a>
                     </td>
                     <td>{{$task->name}}</td>
-                    <td>Min: {{$task->est_hours_min ?: "Not Set"}} Max: {{$task->est_hours_max ?: "Not Set"}}</td>
+                    <td>{{$task->est_hours_min ?: "Not Set"}} - {{$task->est_hours_max ?: "Not Set"}}</td>
                     <td>{{$task->assigned ? $task->assigned->name : "Unassigned"}}</td>
                     <td>{{$task->status->value}}</td>
                     <td>{{$task->bill_method}}</td>

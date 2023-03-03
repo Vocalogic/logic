@@ -398,10 +398,10 @@
 <script src="/assets/libs/node-waves/node-waves.min.js"></script>
 <script src="/assets/libs/feather-icons/feather-icons.min.js"></script>
 <script src="/assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
-
+<script src='/assets/libs/flatpickr/flatpickr.min.js'></script>
 @livewireScripts
 <!-- App js -->
-<script src="/assets/js/app.js"></script>
+<script src="{{mix('assets/js/app.js')}}"></script>
 <script src="{{mix('js/logic.js')}}"></script>
 
 </body>

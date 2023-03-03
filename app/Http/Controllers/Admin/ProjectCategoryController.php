@@ -43,12 +43,14 @@ class ProjectCategoryController extends Controller
     public function store(Project $project, Request $request): RedirectResponse
     {
         $request->validate(['name' => 'required']);
-        $project->categories()->create([
+        $category = $project->categories()->create([
             'name'                 => $request->name,
             'description'          => $request->description,
-            'category_hourly_rate' => $project->project_hourly_rate
+            'category_hourly_rate' => $project->project_hourly_rate,
+            'bill_method'          => $request->bill_method
         ]);
-        return redirect()->to("/admin/projects/$project->id")->with('message', "Category Created");
+        return redirect()->to("/admin/projects/$project->id/categories/$category->id")
+            ->with('message', "Category Created");
     }
 
     /**
@@ -74,9 +76,26 @@ class ProjectCategoryController extends Controller
             'description'          => $request->description,
             'static_price'         => $request->static_price,
             'bill_method'          => $request->bill_method,
-            'category_hourly_rate' => $request->category_hourly_rate
+            'category_hourly_rate' => $request->category_hourly_rate,
+            'start_date'           => $request->start_date,
+            'end_date'             => $request->end_date
         ]);
         return redirect()->to("/admin/projects/$project->id/categories/$category->id")
             ->with('message', "Category Updated");
+    }
+
+    /**
+     * Delete a category
+     * @param Project         $project
+     * @param ProjectCategory $category
+     * @return string[]
+     */
+    public function destroy(Project $project, ProjectCategory $category): array
+    {
+        session()->flash('message', $category->name . " removed from Project");
+        $category->items()->delete();
+        $category->tasks()->delete();
+        $category->delete();
+        return ['callback' => "redirect:/admin/projects/$project->id"];
     }
 }

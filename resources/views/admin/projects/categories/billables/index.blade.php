@@ -19,6 +19,7 @@
                     <th>Price</th>
                     <th>Qty</th>
                     <th>Total</th>
+                    <th>Bills</th>
                 </tr>
                 </thead>
                 @foreach($category->items as $item)
@@ -37,6 +38,7 @@
                         <td>${{moneyFormat($item->price)}}</td>
                         <td>{{$item->qty}}</td>
                         <td>${{moneyFormat(bcmul($item->price * $item->qty,1))}}</td>
+                        <td>{{$item->bill_type}}</td>
                     </tr>
                 @endforeach
                 <tbody>
@@ -50,6 +52,7 @@
                     <td>
                         <button type="submit" name="add" class="btn btn-primary ladda" data-effect="zoom-out">+</button>
                     </td>
+                    <td>&nbsp;</td>
                 </tr>
                 </tbody>
             </table>

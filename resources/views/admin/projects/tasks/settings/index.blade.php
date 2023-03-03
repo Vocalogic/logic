@@ -54,8 +54,13 @@
 
 
 
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col-lg-12">
+                    <a class="confirm btn btn-sm btn-outline-danger" data-message="Are you sure you want to remove this task?"
+                       href="/admin/projects/{{$project->id}}/tasks/{{$task->id}}"
+                       data-method="DELETE">
+                        <i class="fa fa-trash"></i> Delete Task
+                    </a>
                     <button type="submit" name="save" class="btn btn-primary btn-sm ladda pull-right"
                             data-style="expand-left">
                         <i class="fa fa-save"></i> Save Settings

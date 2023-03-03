@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BillItem;
 use App\Models\Project;
 use App\Models\ProjectCategory;
+use App\Models\ProjectCategoryItem;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,7 +22,42 @@ class ProjectCategoryItemController extends Controller
     public function create(Project $project, ProjectCategory $category): View
     {
         return view('admin.projects.categories.billables.create', ['project' => $project, 'category' => $category]);
+    }
 
+    /**
+     * Show create modal for adding a new product
+     * @param Project             $project
+     * @param ProjectCategory     $category
+     * @param ProjectCategoryItem $item
+     * @return View
+     */
+    public function show(Project $project, ProjectCategory $category, ProjectCategoryItem $item): View
+    {
+        return view('admin.projects.categories.billables.edit',
+            ['project' => $project, 'category' => $category, 'item' => $item]);
+    }
+
+    /**
+     * Update a billable item
+     * @param Project             $project
+     * @param ProjectCategory     $category
+     * @param ProjectCategoryItem $item
+     * @param Request             $request
+     * @return RedirectResponse
+     */
+    public function update(Project $project, ProjectCategory $category, ProjectCategoryItem $item, Request $request): RedirectResponse
+    {
+        $request->validate(['price' => 'required']);
+        $moneyLines = ['price', 'expense'];
+        foreach ($request->all() as $key => $value)
+        {
+            if (in_array($key, $moneyLines))
+            {
+                $request->merge([$key => convertMoney($value)]);
+            }
+        }
+        $item->update($request->all());
+        return redirect()->back()->with('message', "$item->name updated.");
     }
 
     /**
@@ -66,6 +102,20 @@ class ProjectCategoryItemController extends Controller
             'expense'      => 0,
         ]);
         return redirect()->back()->with('message', $item->name . " Added to $category->name");
+    }
+
+    /**
+     * Remove a billable item.
+     * @param Project             $project
+     * @param ProjectCategory     $category
+     * @param ProjectCategoryItem $item
+     * @return string[]
+     */
+    public function destroy(Project $project, ProjectCategory $category, ProjectCategoryItem $item) : array
+    {
+        session()->flash('message', $item->name . " deleted from $category->name");
+        $item->delete();
+        return ['callback' => 'reload'];
     }
 
 }

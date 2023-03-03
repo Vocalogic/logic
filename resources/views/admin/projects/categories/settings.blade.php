@@ -44,8 +44,33 @@
                 @endif
             @endif
 
-            <div class="row">
+            <div class="col-lg-12">
+                <div class="form-floating">
+                    <input type="text" id="duedate-field" class="form-control" data-provider="flatpickr"
+                           placeholder="Due date" required name="start_date"
+                           value="{{$category->start_date?->format("Y-m-d")}}"/>
+                    <label>Starting Date</label>
+                    <span class="helper-text">Enter the start date for this category</span>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-floating">
+                    <input type="text" id="duedate-field" class="form-control" data-provider="flatpickr"
+                           placeholder="Due date" required name="end_date"
+                           value="{{$category->end_date?->format("Y-m-d")}}"/>
+                    <label>Ending Date</label>
+                    <span class="helper-text">Enter the end date for this category</span>
+                </div>
+            </div>
+
+            <div class="row mt-3">
                 <div class="col-lg-12">
+                    <a class="confirm btn btn-sm btn-outline-danger" data-message="Are you sure you want to remove all tasks and items and this category?"
+                       href="/admin/projects/{{$project->id}}/categories/{{$category->id}}"
+                       data-method="DELETE">
+                        <i class="fa fa-trash"></i> Delete Category
+                    </a>
                     <button type="submit" name="save" class="btn btn-primary btn-sm ladda pull-right"
                             data-style="expand-left">
                         <i class="fa fa-save"></i> Save Settings

@@ -50,7 +50,7 @@ class ProjectTaskController extends Controller
             'project_id'       => $project->id,
             'task_hourly_rate' => $category->category_hourly_rate
         ]);
-        return redirect()->to("/admin/projects/$project->id/tasks/$task->id");
+        return redirect()->to("/admin/projects/$project->id/tasks/$task->id?editdesc=true");
     }
 
     /**
@@ -77,6 +77,19 @@ class ProjectTaskController extends Controller
         }
         $task->update($request->all());
         return redirect()->to("/admin/projects/$project->id/tasks/$task->id")->with('message', "Task Updated");
+    }
+
+    /**
+     * Remove a task from the project.
+     * @param Project     $project
+     * @param ProjectTask $task
+     * @return string[]
+     */
+    public function destroy(Project $project, ProjectTask $task): array
+    {
+        $task->delete();
+        session()->flash('message', "Task removed from Project");
+        return ['callback' => "redirect:/admin/projects/$project->id"];
     }
 
 }

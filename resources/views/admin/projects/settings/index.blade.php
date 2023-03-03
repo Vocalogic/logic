@@ -44,14 +44,34 @@
                 @endif
             @endif
 
-                <div class="row">
-                    <div class="col-lg-12">
-                        <button type="submit" name="save" class="btn btn-primary btn-sm ladda pull-right"
-                                data-style="expand-left">
-                            <i class="fa fa-save"></i> Save Settings
-                        </button>
-                    </div>
+            <div class="col-lg-12">
+                <div class="form-floating">
+                    <input type="text" id="duedate-field" class="form-control" data-provider="flatpickr"
+                           placeholder="Due date" required name="start_date"
+                           value="{{$project->start_date?->format("Y-m-d")}}"/>
+                    <label>Starting Date</label>
+                    <span class="helper-text">Enter the start date for this project</span>
                 </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-floating">
+                    <input type="text" id="duedate-field" class="form-control" data-provider="flatpickr"
+                           placeholder="Due date" required name="end_date"
+                           value="{{$project->end_date?->format("Y-m-d")}}"/>
+                    <label>Ending Date</label>
+                    <span class="helper-text">Enter the end date for this project</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <button type="submit" name="save" class="btn btn-primary btn-sm ladda pull-right"
+                            data-style="expand-left">
+                        <i class="fa fa-save"></i> Save Settings
+                    </button>
+                </div>
+            </div>
 
         </form>
 

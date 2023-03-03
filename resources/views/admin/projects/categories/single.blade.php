@@ -3,7 +3,14 @@
         <div class="d-flex flex-column h-100">
             <div class="d-flex">
                 <div class="flex-grow-1">
-                    <p class="text-muted mb-4">Updated {{$category->updated_at->diffForHumans()}}</p>
+                    <p class="text-muted mb-4">Duration:
+
+                        @if($category->start_date && $category->end_date)
+                            <span class="text-info">{{$category->start_date->diffForHumans($category->end_date, true)}}</span>
+                        @else
+                            <span class="text-warning"><i class="fa fa-exclamation"></i> No dates set</span>
+                        @endif
+                    </p>
                 </div>
 
             </div>

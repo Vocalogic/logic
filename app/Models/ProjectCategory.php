@@ -15,7 +15,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProjectCategory extends Model
 {
     protected $guarded = ['id'];
-
+    public $casts = [
+        'start_date'  => 'datetime',
+        'end_date'    => 'datetime'
+    ];
     /**
      * A category belongs to a project
      * @return BelongsTo
@@ -55,9 +58,9 @@ class ProjectCategory extends Model
             $total += $this->static_price;
         }
         if ($this->bill_method == 'Static') return $total;
-        foreach($this->items as $item)
+        foreach ($this->items as $item)
         {
-            $total += (int) bcmul($item->price * $item->qty,1);
+            $total += (int)bcmul($item->price * $item->qty, 1);
         }
         foreach ($this->tasks as $task)
         {
@@ -65,5 +68,50 @@ class ProjectCategory extends Model
         }
         return $total;
     }
+
+    /**
+     * Get the max total for the category
+     * @return int
+     */
+    public function getTotalMaxAttribute(): int
+    {
+        $total = 0;
+        if ($this->bill_method == 'Mixed' || $this->bill_method == 'Static')
+        {
+            $total += $this->static_price;
+        }
+        if ($this->bill_method == 'Static') return $total;
+        foreach ($this->items as $item)
+        {
+            $total += (int)bcmul($item->price * $item->qty, 1);
+        }
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->totalMax;
+        }
+        return $total;
+    }
+
+    /**
+     * Get total expense max
+     * @return int
+     */
+    public function getTotalExpenseMaxAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->items as $item)
+        {
+            if ($item->item && $item->item->ex_capex)
+            {
+                $total += bcmul($item->item->ex_capex * $item->qty, 1);
+            }
+            else
+            {
+                $total += bcmul($item->expense * $item->qty, 1);
+            }
+        }
+        return $total;
+    }
+
 
 }
