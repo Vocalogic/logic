@@ -558,6 +558,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
 
     // Project Routes
     Route::resource('projects', ProjectController::class);
+    Route::get('projects/{project}/download', [ProjectController::class, 'download']);
     Route::resource('projects.categories', ProjectCategoryController::class);
     Route::resource('projects.tasks', ProjectTaskController::class);
     Route::resource('projects.categories.items', ProjectCategoryItemController::class);

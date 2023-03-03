@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\ProjectStatus;
+use App\Operations\Core\MakePDF;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -67,6 +68,23 @@ class Project extends Model
     public function leader(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Return a streamed PDF.
+     * @param bool $save
+     * @return mixed
+     */
+    public function pdf(bool $save = false): mixed
+    {
+        $pdf = new MakePDF();
+        $pdf->setName("Project-$this->id.pdf");
+        $data = view("pdf.projects.project")->with('project', $this)->render();
+        if (!$save)
+        {
+            return $pdf->streamFromData($data);
+        }
+        else return storage_path() . "/" . $pdf->saveFromData($data);
     }
 
 

@@ -16,6 +16,8 @@
 
         <div class="col-lg-3 col-xs-12">
             @include('admin.projects.settings.index')
+
+            <a class="btn btn-outline-info w-100" href="/admin/projects/{{$project->id}}/download"><i class="fa fa-download"></i> Download Project</a>
         </div>
     </div>
 

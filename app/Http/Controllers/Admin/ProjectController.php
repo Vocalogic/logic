@@ -88,4 +88,14 @@ class ProjectController extends Controller
         $project->update($request->all());
         return redirect()->to("/admin/projects/$project->id")->with('message', "Project Updated");
     }
+
+    /**
+     * Download the Project Summary and SOW
+     * @param Project $project
+     * @return mixed
+     */
+    public function download(Project $project): mixed
+    {
+        return $project->pdf();
+    }
 }
