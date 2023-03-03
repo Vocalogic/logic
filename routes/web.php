@@ -395,9 +395,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('accounts/{account}/profiles/{profile}', [AccountController::class, 'destroyProfile']);
 
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
-
-
     Route::post('accounts/{account}/method/add', [AccountController::class, 'addPaymentMethod']);
+
+    Route::get('accounts/{account}/projects', [AccountController::class, 'projects']);
+
 
     // Orders
     Route::get('orders', [OrderController::class, 'index']);
