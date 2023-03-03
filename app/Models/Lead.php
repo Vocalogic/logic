@@ -143,6 +143,14 @@ class Lead extends Model
         return $this->hasMany(Quote::class);
     }
 
+    /**
+     * A lead can have many projects.
+     * @return HasMany
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
 
     /**
      * A lead can have an origin.

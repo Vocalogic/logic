@@ -160,13 +160,14 @@ class Account extends Model
     }
 
     /**
-     * An account is assigned to a provider.
-     * @return BelongsTo
+     * An account can have many projects.
+     * @return HasMany
      */
-    public function provider(): BelongsTo
+    public function projects(): HasMany
     {
-        return $this->belongsTo(Provider::class);
+        return $this->hasMany(Project::class);
     }
+
 
     /**
      * The agent that is primary on the account.

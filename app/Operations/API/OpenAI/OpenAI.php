@@ -4,6 +4,7 @@ namespace App\Operations\API\OpenAI;
 
 use App\Exceptions\LogicException;
 use App\Models\BillItem;
+use App\Models\Project;
 use OpenAI\Laravel\Facades\OpenAI as OpenAIAlias;
 
 /**
@@ -79,6 +80,35 @@ class OpenAI
                 $sentences, $item->name),
             default => ''
         };
+        return $this->getResponse($query);
+    }
+
+    /**
+     * Create a statement of work based on project (beta needs work)
+     * @param Project $project
+     * @return string
+     * @throws LogicException
+     */
+    public function byProject(Project $project)
+    {
+        $query = "Given the following information, create a statement of work, in HTML format, for a project, including dates, action items (categories), and cost. The criteria for this statement of work will be prefixed with ** to delineate each of the different items. ";
+        $criteria = [];
+        $criteria[] = "** Project Estimated Cost: $" . moneyFormat($project->totalMax);
+        $criteria[] = "** Client Name: " . $project->lead ? $project->lead->company : $project->account->name;
+        $criteria[] = "** Projected Start Date: " . $project->start_date;
+        $criteria[] = "** Projected End Date: " . $project->end_date;
+        $criteria[] = "** Description of Work: " . $project->summary;
+        foreach ($project->categories as $category)
+        {
+            $criteria[] = "** Milestone: $category->name includes the following tasks: ";
+            $tasks = [];
+            foreach ($category->tasks as $task)
+            {
+                $tasks[] = $task->name;
+                $criteria[] = implode(", ", $tasks);
+            }
+        }
+        $query .= implode("\n", $criteria);
         return $this->getResponse($query);
     }
 

@@ -58,12 +58,13 @@
                 </div>
 
                 @if($account->recurringProfiles->count())
-                <div class="row mt-2">
-                    @props(['profiles' => \App\Models\RecurringProfile::getSelectable($account)])
-                    <x-form-select name="recurring_profile_id" selected="{{$item->recurring_profile_id}}" :options="$profiles" label="Assign Billing Profile" icon="clock-o">
-                        If you wish this item to be billed separately, select a profile below.
-                    </x-form-select>
-                </div>
+                    <div class="row mt-2">
+                        @props(['profiles' => \App\Models\RecurringProfile::getSelectable($account)])
+                        <x-form-select name="recurring_profile_id" selected="{{$item->recurring_profile_id}}"
+                                       :options="$profiles" label="Assign Billing Profile" icon="clock-o">
+                            If you wish this item to be billed separately, select a profile below.
+                        </x-form-select>
+                    </div>
                 @endif
 
             </div>
@@ -137,21 +138,21 @@
 
                 </div>
             </div>
+        </div>
 
-            <div class="col-lg-12 mt-3">
-                <div class="d-flex justify-content-between">
+        <div class="col-lg-12 mt-3">
+            <div class="d-flex justify-content-between">
 
-                    <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
-                       class="confirm text-danger"
-                       data-method="DELETE"
-                       data-message="Are you sure you want to remove this service?">
-                        <i class="fa fa-trash"></i> Remove Service
-                    </a>
+                <a href="/admin/accounts/{{$item->account->id}}/services/{{$item->id}}"
+                   class="confirm text-danger"
+                   data-method="DELETE"
+                   data-message="Are you sure you want to remove this service?">
+                    <i class="fa fa-trash"></i> Remove Service
+                </a>
 
-                    <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
-                        <i class="fa fa-save"></i> Update Service
-                    </button>
-                </div>
+                <button type="submit" class="btn btn-primary ladda" data-style="zoom-out">
+                    <i class="fa fa-save"></i> Update Service
+                </button>
             </div>
         </div>
     </form>

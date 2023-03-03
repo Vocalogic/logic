@@ -14,6 +14,7 @@ enum FileType: string
     case Slick = 'Slick';
     case Audio = 'Audio';
     case Document = 'Document';
+    case Any = 'Any';
 
     /**
      * Return the storage bucket for where these types of files go.

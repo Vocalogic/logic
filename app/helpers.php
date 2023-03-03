@@ -181,7 +181,8 @@ if (!function_exists('setting'))
             'extension'   => $ext,
             'mime_type'   => $file->mime_type,
             'size'        => $file->filesize,
-            'hash'        => $file->hash
+            'hash'        => $file->hash,
+            'icon'        => $file->getIcon()
         ];
     }
 
@@ -201,11 +202,12 @@ if (!function_exists('setting'))
         ?string $details = null,
         LogSeverity $logSeverity = LogSeverity::Info
     ): void {
-        try {
+        try
+        {
             $service = new LogOperation();
             $service->write($model, $message, $logSeverity, $details, $old);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             logger('Logging error: ' . $e->getMessage() . " " . $e->getFile() . " - " . $e->getLine());
         }
     }
@@ -374,7 +376,7 @@ if (!function_exists('setting'))
         {
             if ($case->isEnabled())
             {
-                if(isset($case->connect()->config->use_integration_tax) &&
+                if (isset($case->connect()->config->use_integration_tax) &&
                     $case->connect()->config->use_integration_tax == 'Y')
                 {
                     return $case;
@@ -451,7 +453,8 @@ if (!function_exists('setting'))
         if (!$registryState)
         {
             $registryState = Integration::all();
-            cache([CommKey::GlobalIntegrationRegistry->value => $registryState], CommKey::GlobalIntegrationRegistry->getLifeTime());
+            cache([CommKey::GlobalIntegrationRegistry->value => $registryState],
+                CommKey::GlobalIntegrationRegistry->getLifeTime());
         }
         foreach (IntegrationRegistry::cases() as $case)
         {
@@ -664,7 +667,7 @@ if (!function_exists('setting'))
         $value = onlyNumbers($value);
         if (!$value) return 0;
         $value = $value * 100;
-        return (int) bcmul($value,1);
+        return (int)bcmul($value, 1);
     }
 
     /**

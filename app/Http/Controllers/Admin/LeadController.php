@@ -405,4 +405,14 @@ class LeadController extends Controller
         }
         return redirect()->back()->with('message', $count . " Leads Imported Successfully");
     }
+
+    /**
+     * Show projects for lead.
+     * @param Lead $lead
+     * @return View
+     */
+    public function projects(Lead $lead): View
+    {
+        return view('admin.leads.projects.index', ['lead' => $lead]);
+    }
 }

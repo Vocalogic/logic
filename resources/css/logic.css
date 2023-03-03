@@ -91,3 +91,7 @@
 .dataTables_wrapper .dataTables_filter input {
     color: var(--vz-dark);
 }
+
+.w-10 {
+    width: 10% !important;
+}

@@ -37,11 +37,11 @@
             @if(!$lead->quotes->count())
                 <div class="card mt-3">
                     <div class="card-body text-center">
-                        <img src="/assets/images/no-data.svg" class="w120" alt="No Data">
+                        <img src="/assets/images/no-data.svg" class="w-10" alt="No Data">
                         <div class="mt-4 mb-3">
                             <span class="text-muted">No quotes found.</span>
                         </div>
-                        <a class="btn btn-primary border lift live"
+                        <a class="btn btn-primary border lift live" data-title="Create new Quote"
                            href="/admin/quotes/create?lead_id={{$lead->id}}"><i class="fa fa-plus"></i>
                             Create New Quote</a>
                     </div>

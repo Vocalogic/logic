@@ -85,6 +85,13 @@
             <li>
 
 
+            <li class="nav-item">
+                <a class="nav-link menu-link" href="/admin/projects">
+                    <i class="ri-stack-line"></i> <span data-key="t-projects">Projects</span>
+                </a>
+            <li>
+
+
             <li class="menu-title"><span data-key="t-menu">Sales</span></li>
 
             <li class="nav-item">
