@@ -30,6 +30,7 @@ class TaxLocation extends Model
     {
         if (!$location) return 0;
         $location = self::where('location', $location)->first();
+        if (!$location) return 0;
         return $location->rate ?: 0;
     }
 
