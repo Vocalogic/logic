@@ -26,4 +26,13 @@ class ProjectTaskEntry extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * A task entry is assigned to an invoice when it is billed.
+     * @return BelongsTo
+     */
+    public function invoice(): BelongsTo
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

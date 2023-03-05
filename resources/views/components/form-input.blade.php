@@ -8,7 +8,7 @@
                 <div class="col-lg-8">
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="fa fa-{{$icon}}"></i></span>
-                        <textarea class="form-control" name="{{$name}}"
+                        <textarea rows="5" class="form-control" name="{{$name}}"
                                   placeholder="{{$placeholder}}">{{$value}}</textarea>
                     </div>
                     <span class="helper-text">{!! $slot !!}</span>
@@ -16,7 +16,7 @@
             </div>
         @else
             <div class="form-floating">
-                <textarea class="form-control" name="{{$name}}" placeholder="{{$placeholder}}">{{$value}}</textarea>
+                <textarea class="form-control" rows="5" name="{{$name}}" placeholder="{{$placeholder}}">{{$value}}</textarea>
                 <label>{{$label}}</label>
                 <span class="helper-text">{!! $slot !!}</span>
             </div>

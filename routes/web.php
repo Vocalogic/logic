@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\ProjectCategoryController;
 use App\Http\Controllers\Admin\ProjectCategoryItemController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ProjectTaskController;
+use App\Http\Controllers\Admin\ProjectTaskEntryController;
 use App\Http\Controllers\Admin\QuestionLogicController;
 use App\Http\Controllers\Admin\QuestionOptionController;
 use App\Http\Controllers\Admin\QuoteController;
@@ -563,6 +564,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::resource('projects.categories', ProjectCategoryController::class);
     Route::resource('projects.tasks', ProjectTaskController::class);
     Route::resource('projects.categories.items', ProjectCategoryItemController::class);
+    Route::resource('projects.tasks.entries', ProjectTaskEntryController::class);
     Route::get('projects/{project}/categories/{category}/items/add/{item}',
         [ProjectCategoryItemController::class, 'addItem']);
 

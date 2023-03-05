@@ -30,7 +30,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link" data-bs-toggle="tab" href="#time" role="tab">
-                                    Time Entries (9 hrs 13 min)
+                                    Time Entries ({{$task->time}})
                                 </a>
                             </li>
                         </ul>
@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="tab-pane" id="time">
-
+                            @include('admin.projects.tasks.entries.index')
                         </div>
                     </div>
                 </div>
