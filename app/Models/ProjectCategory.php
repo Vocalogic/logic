@@ -113,5 +113,25 @@ class ProjectCategory extends Model
         return $total;
     }
 
+    /**
+     * Return the number of completed tasks
+     * @return int
+     */
+    public function getCompletedTasksAttribute() : int
+    {
+        return $this->tasks()->where('completed', true)->count();
+    }
+
+    /**
+     * Get the percentage of complete tasks.
+     * @return int
+     */
+    public function getCompletedPercentageAttribute(): int
+    {
+        if ($this->tasks->count() == 0) return 0;
+        $val = $this->getCompletedTasksAttribute() / $this->tasks->count();
+        return round($val * 100);
+    }
+
 
 }

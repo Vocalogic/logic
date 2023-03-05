@@ -92,4 +92,17 @@ class ProjectTaskController extends Controller
         return ['callback' => "redirect:/admin/projects/$project->id"];
     }
 
+    /**
+     * Mark a task completed.
+     * @param Project     $project
+     * @param ProjectTask $task
+     * @return string[]
+     */
+    public function complete(Project $project, ProjectTask $task) : array
+    {
+        $task->update(['completed' => true]);
+        session()->flash('message', "Task #$task->id marked completed.");
+        return ['callback' => "redirect:/admin/projects/$project->id/tasks/$task->id"];
+    }
+
 }

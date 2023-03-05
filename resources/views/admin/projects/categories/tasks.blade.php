@@ -10,21 +10,21 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Est. Hours</th>
+                <th>Actual Hours</th>
                 <th>Assigned</th>
                 <th>Status</th>
-                <th>Method</th>
             </tr>
             </thead>
             <tbody>
             @foreach($category->tasks as $task)
-                <tr>
+                <tr class="{{$task->completed ? "table-success" : null}}">
                     <td>
                         <a class="link-info" href="/admin/projects/{{$project->id}}/tasks/{{$task->id}}">#{{$task->id}}</a>
                     </td>
                     <td>{{$task->name}}</td>
                     <td>{{$task->est_hours_min ?: "Not Set"}} - {{$task->est_hours_max ?: "Not Set"}}</td>
-                    <td>{{$task->assigned ? $task->assigned->name : "Unassigned"}}</td>
-                    <td>{{$task->status->value}}</td>
+                    <td>{{$task->time}}</td>
+                    <td>{{$task->assigned ? $task->assigned->short : "Unassigned"}}</td>
                     <td>{{$task->bill_method}}</td>
                 </tr>
             @endforeach

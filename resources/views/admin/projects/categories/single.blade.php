@@ -33,11 +33,11 @@
                         <div>Tasks</div>
                     </div>
                     <div class="flex-shrink-0">
-                        <div><i class="ri-list-check align-bottom me-1 text-muted"></i> 0/{{$category->tasks->count()}}</div>
+                        <div><i class="ri-list-check align-bottom me-1 text-muted"></i> {{$category->completedTasks}}/{{$category->tasks->count()}}</div>
                     </div>
                 </div>
                 <div class="progress progress-sm animated-progress">
-                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="34" aria-valuemin="0" aria-valuemax="100" style="width: 34%;"></div><!-- /.progress-bar -->
+                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="{{$category->completedPercentage}}" aria-valuemin="0" aria-valuemax="100" style="width: {{$category->completedPercentage}}%;"></div><!-- /.progress-bar -->
                 </div><!-- /.progress -->
             </div>
         </div>

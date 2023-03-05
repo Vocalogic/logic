@@ -52,6 +52,12 @@
                 Enter the maximum amount of hours estimated to complete.
             </x-form-input>
 
+            @props(['selectable' => $project->getAssignees()])
+            <x-form-select name="assigned_id" :options="$selectable" selected="{{$task->assigned_id}}"
+                           float="true" label="Assigned User">
+                Select the user assigned to this task
+            </x-form-select>
+
 
 
             <div class="row mt-3">
@@ -72,3 +78,10 @@
 
     </div>
 </div>
+@if(!$task->completed)
+<a class="mt-3 confirm btn btn-outline-info w-100" href="/admin/projects/{{$project->id}}/tasks/{{$task->id}}/complete"
+    data-method="GET"
+   data-message="Are you sure you want to mark this task complete?">
+    <i class="fa fa-hourglass"></i> Mark Task Complete
+</a>
+@endif

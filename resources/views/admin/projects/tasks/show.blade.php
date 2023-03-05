@@ -6,6 +6,17 @@
     ],
 ])
 @section('content')
+    @if($task->completed)
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="alert alert-primary alert-dismissible alert-label-icon rounded-label fade show" role="alert">
+                    <i class="ri-user-smile-line label-icon"></i><strong>Task Completed</strong> -
+                    This task has been marked completed. You can still add time to this task, but it will still be shown as completed to the customer.
+                </div>
+            </div>
+        </div>
+    @endif
+
 
     <div class="row">
         <div class="col-lg-9 col-xs-12">

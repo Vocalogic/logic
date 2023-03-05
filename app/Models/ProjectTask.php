@@ -123,6 +123,7 @@ class ProjectTask extends Model
             'parts'  => 2,
             'syntax' => CarbonInterface::DIFF_ABSOLUTE,
         ];
+        if ($end->diffInSeconds($start) < 60) return "None";
         return $end->diffForHumans($start, $options);
     }
 

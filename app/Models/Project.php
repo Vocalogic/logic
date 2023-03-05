@@ -140,4 +140,19 @@ class Project extends Model
         return $total;
     }
 
+    /**
+     * Get a selectable list of assignees for a task.
+     * @return array
+     */
+    public function getAssignees(): array
+    {
+        $users = [];
+        $users[0] = '-- Select Assignee --';
+        foreach (User::where('account_id', 1)->get() as $user)
+        {
+            $users[$user->id] = $user->name;
+        }
+        return $users;
+    }
+
 }
