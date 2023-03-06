@@ -44,6 +44,7 @@ class ThreadComponent extends Component
         $this->thread = Thread::where('type', $type->value)->where('refid', $this->object->id)->firstOrCreate([
             'type'    => $type->value,
             'refid'   => $this->object->id,
+            'user_id' => 0
         ]);
         if (!$this->thread->user_id)
         {
