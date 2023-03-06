@@ -17,17 +17,18 @@ use Livewire\WithFileUploads;
 class ThreadComponent extends Component
 {
     use WithFileUploads;
+
     /**
      * What are we working with?
      * @var Model
      */
     public Model  $object;
     public Thread $thread;
-    public bool $uploadVisible = false;
-    public int $commentReply = 0;
-    public string $newComment = '';
+    public bool   $uploadVisible   = false;
+    public int    $commentReply    = 0;
+    public string $newComment      = '';
     public string $newCommentReply = '';
-    public $file;
+    public        $file;
 
     public array $rules = [
         'newComment' => 'required'
@@ -43,8 +44,11 @@ class ThreadComponent extends Component
         $this->thread = Thread::where('type', $type->value)->where('refid', $this->object->id)->firstOrCreate([
             'type'    => $type->value,
             'refid'   => $this->object->id,
-            'user_id' => user()->id
         ]);
+        if (!$this->thread->user_id)
+        {
+            $this->thread->update(['user_id' => user() ? user()->id : 0]);
+        }
     }
 
 
@@ -87,7 +91,7 @@ class ThreadComponent extends Component
     public function toggleUpload(): void
     {
         $this->uploadVisible = !$this->uploadVisible;
-   }
+    }
 
     /**
      * Toggle Comment Reply Visibility
@@ -96,7 +100,10 @@ class ThreadComponent extends Component
      */
     public function toggleCommentReply(int $cid): void
     {
-        if ($this->commentReply == $cid) $this->commentReply = 0;
+        if ($this->commentReply == $cid)
+        {
+            $this->commentReply = 0;
+        }
         else $this->commentReply = $cid;
     }
 
@@ -110,9 +117,9 @@ class ThreadComponent extends Component
         if (!$this->newComment) return;
         $comment = $this->thread->comments()->create([
             'thread_comment_id' => null,
-            'user_id' => user()->id,
-            'comment' => $this->newComment,
-            'public' => true
+            'user_id'           => user() ? user()->id : 0,
+            'comment'           => $this->newComment,
+            'public'            => true
         ]);
         $this->newComment = '';
         $this->uploadVisible = false;
@@ -124,9 +131,9 @@ class ThreadComponent extends Component
         if (!$this->newCommentReply) return;
         $comment = $this->thread->comments()->create([
             'thread_comment_id' => $cid,
-            'user_id' => user()->id,
-            'comment' => $this->newCommentReply,
-            'public' => true
+            'user_id'           => user() ? user()->id : 0,
+            'comment'           => $this->newCommentReply,
+            'public'            => true
         ]);
         $this->newCommentReply = '';
         $this->commentReply = 0;
@@ -145,15 +152,15 @@ class ThreadComponent extends Component
      * @param ThreadComment $comment
      * @return void
      */
-    private function handleUpload(ThreadComment $comment) : void
+    private function handleUpload(ThreadComment $comment): void
     {
         if (!$this->file) return;
         $id = $this->saveFile();
         $comment->files()->create([
             'comment_id' => $comment->id,
-            'thread_id' => $this->thread->id,
-            'user_id' => user()->id,
-            'file_id' => $id
+            'thread_id'  => $this->thread->id,
+            'user_id'    => user()->id,
+            'file_id'    => $id
         ]);
         $this->file = null;
     }

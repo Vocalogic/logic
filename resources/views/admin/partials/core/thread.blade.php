@@ -19,12 +19,12 @@
         @foreach($thread->comments()->whereNull('thread_comment_id')->orderBy('created_at', 'DESC')->get() as $comment)
             <div class="d-flex mb-4">
                 <div class="flex-shrink-0">
-                    <img src="{{$comment->user->avatar}}" alt="" class="avatar-xs rounded-circle"/>
+                    <img src="{{$comment->user?->avatar}}" alt="" class="avatar-xs rounded-circle"/>
                 </div>
                 <div class="flex-grow-1 ms-3">
-                    <h5 class="fs-13"><a href="#">{{$comment->user->name}}</a> <small
+                    <h5 class="fs-13"><a href="#">{{$comment->user ? $comment->user->name : "Customer"}}</a> <small
                             class="text-muted">{{$comment->created_at->format("m/d/y h:ia")}}</small></h5>
-                    <p class="text-muted">{!! $comment->comment !!}</p>
+                    <p class="text-muted">{!! nl2br($comment->comment) !!}</p>
                     @if($comment->files()->count())
                         <div class="row g-2 mb-3">
                             @foreach($comment->files as $file)
@@ -67,12 +67,12 @@
                     @foreach($comment->children()->orderBy('created_at', 'DESC')->get() as $child)
                         <div class="d-flex mt-4">
                             <div class="flex-shrink-0">
-                                <img src="{{$child->user->avatar}}" alt="" class="avatar-xs rounded-circle"/>
+                                <img src="{{$child->user?->avatar}}" alt="" class="avatar-xs rounded-circle"/>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <h5 class="fs-13"><a href="#">{{$child->user->name}}</a> <small
+                                <h5 class="fs-13"><a href="#">{{$child->user? $child->user->name : "Customer"}}</a> <small
                                         class="text-muted">{{$child->created_at->format("m/d/y h:ia")}}</small></h5>
-                                <p class="text-muted">{!! $child->comment !!}</p>
+                                <p class="text-muted">{!! nl2br($child->comment) !!}</p>
                                 @if($child->files()->count())
                                     <div class="row g-2 mb-3">
                                         @foreach($child->files as $file)

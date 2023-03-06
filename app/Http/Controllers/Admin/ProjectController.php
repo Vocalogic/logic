@@ -55,6 +55,7 @@ class ProjectController extends Controller
             'lead_id'     => $request->lead_id ?: null,
             'account_id'  => $request->account_id ?: null,
             'leader_id'   => user()->id,
+            'hash'        => "PR-" . uniqid()
         ]);
         return redirect()->to("/admin/projects/$project->id")->with('message', "Project Created!");
     }

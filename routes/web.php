@@ -613,6 +613,7 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('presales/{slug}', [PresalesController::class, 'index']);
     Route::get('presales/{slug}/{qslug}', [PresalesController::class, 'quote']);
     Route::get('presales/{slug}/{qslug}/checkout', [CheckoutController::class, 'quoteCheckout']);
+    Route::get('presales/{slug}/projects/{hash}', [PresalesController::class, 'project']);
 
     // Guest Routes
     Route::get('confirm/{item}', [ShopController::class, 'showConfirmation']);

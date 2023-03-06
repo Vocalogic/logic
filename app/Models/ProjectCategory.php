@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Core\ThreadType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -131,6 +132,18 @@ class ProjectCategory extends Model
         if ($this->tasks->count() == 0) return 0;
         $val = $this->getCompletedTasksAttribute() / $this->tasks->count();
         return round($val * 100);
+    }
+
+    /**
+     * Get number of comments from a thread on this task.
+     * @return int
+     */
+    public function getCommentsAttribute(): int
+    {
+        $thread = Thread::where('type', ThreadType::getByModel($this::class))
+            ->where('refid', $this->id)->first();
+        if (!$thread) return 0;
+        return $thread->comments()->count();
     }
 
 

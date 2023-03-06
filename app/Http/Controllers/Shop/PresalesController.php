@@ -140,5 +140,21 @@ class PresalesController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Show project in pre-sales (lead)
+     * @param string $slug
+     * @param string $hash
+     * @return View
+     */
+    public function project(string $slug, string $hash) : View
+    {
+        $lead = Lead::where('hash', $slug)->first();
+        if (!$lead) abort(404);
+        if (!$lead->active) abort(404);
+        $project = $lead->projects()->where('hash', $hash)->first();
+        if (!$project) abort(404);
+        return view('shop.presales.projects.index', ['lead' => $lead, 'project' => $project]);
+    }
+
 
 }

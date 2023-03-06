@@ -2,6 +2,7 @@
 
 namespace App\Enums\Core;
 
+use App\Models\ProjectCategory;
 use App\Models\ProjectTask;
 
 enum ThreadType: string
@@ -21,6 +22,7 @@ enum ThreadType: string
         return match($class)
         {
             ProjectTask::class => self::ProjectTask,
+            ProjectCategory::class => self::ProjectCategory,
             default => null
         };
     }
