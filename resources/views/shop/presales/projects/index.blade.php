@@ -11,7 +11,9 @@
                     @include('shop.presales.menu')
                     @include('shop.presales.projects.stats')
 
-
+                    <a class="btn bg-primary text-white w-100" href="/shop/presales/{{$project->lead->hash}}/projects/{{$project->hash}}/execute">
+                        <i class="fa fa-clock"></i> &nbsp; Review MSA and Execute
+                    </a>
                 </div>
 
 

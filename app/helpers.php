@@ -212,6 +212,18 @@ if (!function_exists('setting'))
         }
     }
 
+    /**
+     * Template helper that simply either takes a template or raw content and replaces with model
+     * attributes.
+     * @param string|null $template
+     * @param array       $models
+     * @return string|null
+     */
+    function templateContent(?string $template = null, array $models = []) : ?string
+    {
+        $s = new STemplate(ident: $template, models: $models);
+        return $s->contentBody;
+    }
 
     /**
      * Autofire a templated email.

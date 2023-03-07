@@ -7,6 +7,8 @@
     <li class="list-group-item {{$tab == 'account' ? 'active' : null}}" ><a class="color-600" href="/admin/settings?tab=account">Accounts</a></li>
     <li class="list-group-item {{$tab == 'shop' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=shop">Shop</a></li>
     <li class="list-group-item {{$tab == 'order' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=order">Orders</a></li>
+    <li class="list-group-item {{$tab == 'project' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=project">Projects</a></li>
+
 </ul>
 
 @if(env('LOGIN_BYPASS'))

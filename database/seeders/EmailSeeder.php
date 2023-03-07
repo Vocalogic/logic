@@ -149,6 +149,10 @@ class EmailSeeder extends Seeder
             'Sent to sales agents when a lead has gone stale',
             '[{lead.company}] Lead has gone stale, Please Update');
 
+        $this->buildEmail('lead.projectReview', self::CAT_LEADS, 'Project Review',
+        'Sent to customer when a project is ready for review',
+        '[{project.name}] Your project is ready for review!');
+
 
         EmailTemplate::placeholders();
 

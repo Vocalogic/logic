@@ -62,9 +62,9 @@
                             <div class="alert alert-primary">Mailer configurations are disabled in demo mode.</div>
                         </div>
                     @else
-                    <div class="col-lg-12">
-                        @include('admin.settings.render', ['title' => "Mail Settings", 'sub' => "Configure how mail is sent from logic."])
-                    </div>
+                        <div class="col-lg-12">
+                            @include('admin.settings.render', ['title' => "Mail Settings", 'sub' => "Configure how mail is sent from logic."])
+                        </div>
                     @endif
                     @break
 
@@ -86,7 +86,11 @@
                     </div>
                     @break
 
-
+                @case('project')
+                    <div class="col-lg-12">
+                        @include('admin.settings.render', ['title' => "Project Operation Settings", 'sub' => "Set preferences for projects"])
+                    </div>
+                    @break
 
             @endswitch
         </div>

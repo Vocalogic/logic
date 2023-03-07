@@ -12,6 +12,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $categories
  * @property mixed $static_price
  * @property mixed $bill_method
+ * @property mixed $hash
+ * @property mixed $lead
+ * @property mixed $end_date
+ * @property mixed $start_date
+ * @property mixed $totalMax
+ * @property mixed $totalMin
+ * @property mixed $account
  */
 class Project extends Model
 {
@@ -87,6 +94,15 @@ class Project extends Model
         else return storage_path() . "/" . $pdf->saveFromData($data);
     }
 
+    /**
+     * Get company based on stage of project.
+     * @return string
+     */
+    public function getCompanyAttribute(): string
+    {
+        return $this->lead ? $this->lead->company : $this->account->name;
+    }
+
 
     /**
      * Get the total for the category
@@ -153,6 +169,60 @@ class Project extends Model
             $users[$user->id] = $user->name;
         }
         return $users;
+    }
+
+    /**
+     * Get start date for email template/msa
+     * @return string
+     */
+    public function getStartHumanAttribute(): string
+    {
+        return $this->start_date ? $this->start_date->format("M d, Y") : "Undefined";
+    }
+
+    /**
+     * Get end date for MSA/email templates
+     * @return string
+     */
+    public function getEndHumanAttribute(): string
+    {
+        return $this->end_date ? $this->end_date->format("M d, Y") : "Undefined";
+    }
+
+    public function getEstMinAttribute(): string
+    {
+        return "$". moneyFormat($this->totalMin);
+    }
+
+    public function getEstMaxAttribute(): string
+    {
+        return "$". moneyFormat($this->totalMax);
+    }
+
+    /**
+     * Send project for approval/review.
+     * @return void
+     */
+    public function send(): void
+    {
+        $this->update(['sent_on' => now()]);
+        if ($this->lead)
+        {
+            template('lead.projectReview', null, [$this], [$this->pdf(true)], $this->lead->email, $this->lead->contact);
+        }
+    }
+
+    /**
+     * Get a link for the email template.
+     * @return string
+     */
+    public function getLinkAttribute(): string
+    {
+        $host = setting('brand.url');
+        if ($this->lead)
+        {
+            return sprintf("%s/shop/presales/%s/projects/%s", $host, $this->lead->hash, $this->hash);
+        }
     }
 
 }

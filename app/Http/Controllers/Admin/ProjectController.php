@@ -90,6 +90,9 @@ class ProjectController extends Controller
         return redirect()->to("/admin/projects/$project->id")->with('message', "Project Updated");
     }
 
+
+
+
     /**
      * Download the Project Summary and SOW
      * @param Project $project
@@ -98,5 +101,40 @@ class ProjectController extends Controller
     public function download(Project $project): mixed
     {
         return $project->pdf();
+    }
+
+    public function send(Project $project): array
+    {
+        $project->send();
+        session()->flash('message', "Project has been sent for review.");
+        return ['callback' => "reload"];
+    }
+
+    /**
+     * Show MSA Editor
+     * @param Project $project
+     * @return View
+     */
+    public function msa(Project $project) : View
+    {
+        if (!$project->msa)
+        {
+            $project->update(['msa' => templateContent(setting('projects.msa'), [$project])]);
+            $project->fresh();
+        }
+        return view('admin.projects.msa', ['project' => $project]);
+    }
+
+    /**
+     * Update the MSA for this project
+     * @param Project $project
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function msaSave(Project $project, Request $request): RedirectResponse
+    {
+        $project->update(['msa' => $request->msa]);
+        session()->flash('message', "MSA Updated");
+        return redirect()->to("/admin/projects/$project->id");
     }
 }

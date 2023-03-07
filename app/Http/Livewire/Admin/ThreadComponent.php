@@ -41,11 +41,15 @@ class ThreadComponent extends Component
     public function mount(): void
     {
         $type = ThreadType::getByModel($this->object::class);
-        $this->thread = Thread::where('type', $type->value)->where('refid', $this->object->id)->firstOrCreate([
-            'type'    => $type->value,
-            'refid'   => $this->object->id,
-            'user_id' => 0
-        ]);
+        $this->thread = Thread::where('type', $type->value)->where('refid', $this->object->id)->first();
+        if (!$this->thread->id)
+        {
+            $this->thread = (new Thread)->create([
+                'type'    => $type->value,
+                'refid'   => $this->object->id,
+                'user_id' => 0
+            ]);
+        }
         if (!$this->thread->user_id)
         {
             $this->thread->update(['user_id' => user() ? user()->id : 0]);

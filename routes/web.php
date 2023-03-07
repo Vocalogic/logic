@@ -561,6 +561,12 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     // Project Routes
     Route::resource('projects', ProjectController::class);
     Route::get('projects/{project}/download', [ProjectController::class, 'download']);
+    Route::get('projects/{project}/send', [ProjectController::class, 'send']);
+    Route::get('projects/{project}/msa', [ProjectController::class, 'msa']);
+    Route::post('projects/{project}/msa', [ProjectController::class, 'msaSave']);
+
+
+
     Route::resource('projects.categories', ProjectCategoryController::class);
     Route::resource('projects.tasks', ProjectTaskController::class);
     Route::resource('projects.categories.items', ProjectCategoryItemController::class);

@@ -212,6 +212,10 @@ class SettingSeeder extends Seeder
             'How many days before an order goes stale without an update?');
         $this->buildSetting('shop.showCategories', 'Show All Items on Shop Landing Page?', 'select', 'No', 'Shop',
             'Show all your items in your shop in a carousel format on the front page?', 'Yes,No');
+
+        $this->buildSetting('projects.msa', 'Master Services Agreement', 'tinymce', $this->getProjectMSA(), 'Project',
+            'Enter the MSA and Agreement details for starting/completing a project.');
+
     }
 
 
@@ -314,6 +318,19 @@ shall not exceed the current GSA rates. Any subcontractor reimbursable expenses 
 markup not to exceed 10% of actual cost.
 ";
 
+    }
+
+    private function getProjectMSA() : string
+    {
+        return "
+The Agreement is made this day, {project.startHuman}, by and between <b>{setting.brand-name}</b> located at {setting.brand-address} {setting.brand-csz} (hereinafter known as \"Provider\"), and <b>{project.company}</b> (hereinafter known as \"Customer\").
+<br/><br/>
+WHEREAS, Customer has requested services from Provider specified in the following Statement of Work (SOW) and corresponding actionable items.
+<br/><br/>
+The project, defined as <b>\"{project.name}\"</b> is scheduled to have work beginning on {project.startHuman} and is expected to be completed on or before {project.endHuman}.
+<br/><br/>
+The project has an estimated cost ranging from {project.estMin} to {project.estMax}. The following items are to be completed for this project.
+        ";
     }
 
 }
