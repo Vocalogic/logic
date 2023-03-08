@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <h6 class="card-title">Services in Cart <a data-title="Add Service to Cart" class="live" href="/admin/cart/{{$cart->get('id')}}/add/service"><i class="fa fa-plus"></i></a></h6>
-        <table class="table table-sm">
+        <table class="table table-striped">
             <thead>
             <tr>
                 <th>Item</th>

@@ -32,10 +32,10 @@
         </div>
 
 
-        <div class="col-lg-6 mt-2">
-            <input type="submit" name="submit" value="Convert Cart" class="btn btn-{{bm()}}primary wait"
-                   data-anchor=".sModalArea">
-
+        <div class="col-lg-12 mt-2">
+            <button type="submit" name="submit" value="Convert Cart" class="btn btn-primary ladda btn-sm pull-right">
+                <i class="fa fa-dollar"></i> Convert to Quote
+            </button>
         </div>
     </form>
 

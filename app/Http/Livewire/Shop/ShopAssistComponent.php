@@ -52,10 +52,10 @@ class ShopAssistComponent extends Component
         $obj = sbus()->get($this->skey);
         if (is_null($obj))
         {
+            // Somehow our cart was lost in the cache.. Did it get cleared while someone was using it?
             sbus()->ping($this->skey); // Let the bus know we exist.
             return;
         } // No session built or has expired. Nothing to do here. Both above failed.
-
         if (!$obj->authorized) return; // Customer has not authorized any actions or requested help.
         // We want to make sure that our commands are enabled. We do this by the user clicking the help
         // icon at the top of the page. Since there's no way for the user to click the icon when the session

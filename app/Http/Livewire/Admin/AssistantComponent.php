@@ -28,7 +28,6 @@ class AssistantComponent extends Component
     public function live(): Redirector|null
     {
         $this->cart = collect(sbus()->get($this->cid));
-
         if (!$this->cart->get('id'))
         {
             return redirect()->to("/");

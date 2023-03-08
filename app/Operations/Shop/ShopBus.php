@@ -61,17 +61,26 @@ class ShopBus
         {
             if (preg_match("/$bot/i", app('request')->header('User-Agent'))) return;
         }
-
-        $obj = (object)[
-            'id'            => $uid,
-            'ip'            => app('request')->ip(),
-            'browser'       => app('request')->header('User-Agent'),
-            'page'          => app('request')->url(),
-            'last_activity' => now(),
-            'cart'          => $cart,
-            'code'          => mt_rand(1000, 9999),
-            'authorized'    => false
-        ];
+        $obj = $this->get($uid);
+        if (!$obj)
+        {
+            $obj = (object)[
+                'id'            => $uid,
+                'ip'            => app('request')->ip(),
+                'browser'       => app('request')->header('User-Agent'),
+                'page'          => app('request')->url(),
+                'last_activity' => now(),
+                'cart'          => $cart,
+                'code'          => mt_rand(1000, 9999),
+                'authorized'    => false
+            ];
+        }
+        else
+        {
+            $obj->last_activity = now();
+            $obj->cart = $cart;
+            $obj->page = app('request')->url();
+        }
         $this->carts[$uid] = $obj;
         $this->pack();
     }
@@ -83,7 +92,10 @@ class ShopBus
      */
     public function ping(string $uid): void
     {
-        if (!array_key_exists($uid, $this->carts)) return; // Cart not found.. Stray bullet
+        if (!array_key_exists($uid, $this->carts))
+        {
+            $this->receive($uid, cart()->getCart());
+        }
         $this->carts[$uid]->last_activity = now();
         $this->carts[$uid]->page = app('request')->url();
         $this->pack();
@@ -307,7 +319,7 @@ class ShopBus
      * @param string $uid
      * @return void
      */
-    public function authorize(string $uid) : void
+    public function authorize(string $uid): void
     {
         if (!array_key_exists($uid, $this->carts)) return;
         $this->carts[$uid]->authorized = true;

@@ -44,12 +44,14 @@
 
 
 
-        <div class="col-lg-6 mt-2">
-            <input type="submit" name="submit" value="Update Item" class="btn btn-{{bm()}}primary wait"
-                   data-anchor=".sModalArea">
-            <a class="btn btn-danger confirm" href="/admin/cart/{{$uid}}/item/{{$iid}}"
+        <div class="col-lg-12 mt-2">
+
+            <a class="btn btn-sm btn-outline-danger confirm" href="/admin/cart/{{$uid}}/item/{{$iid}}"
                data-method="DELETE"
                data-message="Are you sure you want to remove this item?"><i class="fa fa-trash"></i> Remove Item from Cart</a>
+            <button type="submit" name="submit" class="btn btn-primary pull-right btn-xs ladda" data-style="expand-left">
+                <i class="fa fa-edit"></i> Update Item</button>
+
         </div>
     </form>
 
