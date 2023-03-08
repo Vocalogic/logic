@@ -149,4 +149,16 @@ class ProjectController extends Controller
         $project->update(['status' => ProjectStatus::InProgress]);
         return redirect()->back()->with('message', "Project has been started!");
     }
+
+    /**
+     * Process all unbilled worked hours and create an invoice.
+     * @param Project $project
+     * @return string[]
+     */
+    public function processTime(Project $project) : array
+    {
+        $invoice = $project->processUnbilledTime();
+        session()->flash('message', "Invoice #$invoice->id created for unbilled time.");
+        return ['callback' => "redirect:/admin/invoices/$invoice->id"];
+    }
 }

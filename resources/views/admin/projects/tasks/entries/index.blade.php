@@ -11,6 +11,7 @@
         <th>Work Completed</th>
         <th>Hours</th>
         <th>By</th>
+        <th>Invoice</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
                 <td>{!! nl2br($entry->description) !!}</td>
                 <td>{{$entry->hours}}</td>
                 <td>{{$entry->user->short}}</td>
+                <td>{!! $entry->invoice ? "<a class='text-info' href='/admin/invoices/{$entry->invoice->id}'>#{$entry->invoice->id}" : "Unbilled"!!}</td>
             </tr>
         @endforeach
     </tbody>

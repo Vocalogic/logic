@@ -127,4 +127,18 @@ class ProjectTask extends Model
         return $end->diffForHumans($start, $options);
     }
 
+    /**
+     * Get the amount currently worked that has not been billed.
+     * @return int
+     */
+    public function getUnbilledTimeAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->entries()->whereNull('invoice_id')->get() as $entry)
+        {
+            $total += bcmul($entry->hours * $this->task_hourly_rate,1);
+        }
+        return $total;
+    }
+
 }

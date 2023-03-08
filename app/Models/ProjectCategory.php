@@ -146,5 +146,19 @@ class ProjectCategory extends Model
         return $thread->comments()->count();
     }
 
+    /**
+     * Get unbilled time by category
+     * @return int
+     */
+    public function getUnbilledTimeAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->unbilledTime;
+        }
+        return $total;
+    }
+
 
 }

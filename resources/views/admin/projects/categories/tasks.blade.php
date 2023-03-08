@@ -10,9 +10,9 @@
                 <th>#</th>
                 <th>Name</th>
                 <th>Est. Hours</th>
-                <th>Actual Hours</th>
+                <th>Hours Logged</th>
                 <th>Assigned</th>
-                <th>Status</th>
+                <th>Unbilled Amount</th>
             </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                     <td>{{$task->est_hours_min ?: "Not Set"}} - {{$task->est_hours_max ?: "Not Set"}}</td>
                     <td>{{$task->time}}</td>
                     <td>{{$task->assigned ? $task->assigned->short : "Unassigned"}}</td>
-                    <td>{{$task->bill_method}}</td>
+                    <td>${{moneyFormat($task->unbilledTime)}}</td>
                 </tr>
             @endforeach
             </tbody>

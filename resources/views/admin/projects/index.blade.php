@@ -16,6 +16,7 @@
                             <th>Name</th>
                             <th>Account</th>
                             <th>Status</th>
+                            <th>Unbilled</th>
 
                         </tr>
                         </thead>
@@ -24,7 +25,7 @@
                             <tr>
                                 <td>
                                     <a href="/admin/projects/{{$project->id}}">
-                                        <span class="badge badge-outline-primary">#{{$project->id}}</span>
+                                        <span class="badge badge-outline-info">#{{$project->id}}</span>
                                     </a>
                                 </td>
                                 <td>
@@ -44,6 +45,7 @@
                                     @endif
                                 </td>
                                 <td>{{$project->status->value}}</td>
+                                <td>${{moneyFormat($project->unbilledTime)}}</td>
                             </tr>
                         @endforeach
                         </tbody>

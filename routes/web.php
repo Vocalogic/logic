@@ -574,6 +574,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('projects/{project}/categories/{category}/items/add/{item}',
         [ProjectCategoryItemController::class, 'addItem']);
     Route::get('projects/{project}/tasks/{task}/complete', [ProjectTaskController::class, 'complete']);
+    Route::get('projects/{project}/processtime', [ProjectController::class, 'processTime']);
 });
 
 

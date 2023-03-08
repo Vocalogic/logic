@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Core\CommKey;
+use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\ProjectStatus;
 use App\Enums\Files\FileType;
 use App\Operations\Core\LoFileHandler;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $totalMin
  * @property mixed $account
  * @property mixed $id
+ * @property mixed $name
  */
 class Project extends Model
 {
@@ -193,14 +195,36 @@ class Project extends Model
         return $this->end_date ? $this->end_date->format("M d, Y") : "Undefined";
     }
 
+    /**
+     * Get the estimated total minimum cost of project
+     * @return string
+     */
     public function getEstMinAttribute(): string
     {
         return "$" . moneyFormat($this->totalMin);
     }
 
+    /**
+     * Get the estimated total maximum cost of project.
+     * @return string
+     */
     public function getEstMaxAttribute(): string
     {
         return "$" . moneyFormat($this->totalMax);
+    }
+
+    /**
+     * Get project's unbilled time.
+     * @return int
+     */
+    public function getUnbilledTimeAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->categories as $category)
+        {
+            $total += $category->unbilledTime;
+        }
+        return $total;
     }
 
     /**
@@ -267,11 +291,44 @@ class Project extends Model
         // Start Conversion Process from lead to an account.
         $account = $this->lead->createAccount();
         $this->lead->update([
-           'active' => 0,
+            'active' => 0,
         ]);
         $this->update(['account_id' => $account->id, 'lead_id' => null]);
         $this->refresh();
         template('account.projectActive', $account->admin, [$this], [$this->pdf()]);
+    }
+
+    /**
+     * Create a new invoice for all unbilled time on a project.
+     * @return Invoice
+     */
+    public function processUnbilledTime(): Invoice
+    {
+        $invoice = $this->account->invoices()->create([
+            'due_on'               => now()->addDays($this->account->net_terms),
+            'status'               => InvoiceStatus::DRAFT,
+            'title'                => $this->name,
+            'recurring'            => false,
+            'recurring_profile_id' => 0
+        ]);
+        foreach ($this->categories as $category)
+        {
+            foreach ($category->tasks as $task)
+            {
+                foreach ($task->entries()->whereNull('invoice_id')->get() as $entry)
+                {
+                    $invoice->items()->create([
+                        'code'        => "PROJECT",
+                        'name'        => $task->name,
+                        'description' => "$category->name :: " . $entry->description,
+                        'qty'         => $entry->hours,
+                        'price'       => $task->task_hourly_rate
+                    ]);
+                    $entry->update(['invoice_id' => $invoice->id]);
+                }
+            }
+        }
+        return $invoice;
     }
 
 }
