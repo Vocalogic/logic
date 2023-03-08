@@ -28,6 +28,12 @@
                             </div>
                         </div>
 
+                        @if($project->status == \App\Enums\Core\ProjectStatus::Approved)
+                            <div class="alert alert-success">
+                                This project has been approved and is pending admin acceptance and scheduling to begin starting work!
+                            </div>
+                        @endif
+
                         <ul class="nav nav-tabs shop-nav-tabs" it="myTab" role="tablist">
                             @foreach($project->categories as $category)
                                 <li class="nav-item">

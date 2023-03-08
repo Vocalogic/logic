@@ -258,7 +258,11 @@ class Project extends Model
         ]);
 
         // If this already has an account then there's nothing really we need to do here.
-        if ($this->account) return;
+        if ($this->account)
+        {
+            template('account.projectActive', $this->account->admin, [$this], [$this->pdf()]);
+            return;
+        }
 
         // Start Conversion Process from lead to an account.
         $account = $this->lead->createAccount();

@@ -602,6 +602,9 @@ Route::group(['prefix' => 'shop'], function () {
         Route::get('account/quotes', [ShopAccountController::class, 'quotes']);
         Route::get('account/projects', [ShopAccountController::class, 'projects']);
         Route::get('account/projects/{phash}', [ShopAccountController::class, 'showProject']);
+        Route::get('account/projects/{phash}/execute', [ShopAccountController::class, 'executeForm']);
+        Route::post('account/projects/{phash}/execute', [ShopAccountController::class, 'execute']);
+
         Route::get('account/quotes/{qhash}', [ShopAccountController::class, 'showQuote']);
 
 

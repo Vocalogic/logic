@@ -23,7 +23,7 @@ class ThreadComponent extends Component
      * @var Model
      */
     public Model  $object;
-    public Thread $thread;
+    public ?Thread $thread;
     public bool   $uploadVisible   = false;
     public int    $commentReply    = 0;
     public string $newComment      = '';
@@ -42,7 +42,7 @@ class ThreadComponent extends Component
     {
         $type = ThreadType::getByModel($this->object::class);
         $this->thread = Thread::where('type', $type->value)->where('refid', $this->object->id)->first();
-        if (!$this->thread->id)
+        if (!$this->thread || !$this->thread->id)
         {
             $this->thread = (new Thread)->create([
                 'type'    => $type->value,
@@ -50,7 +50,7 @@ class ThreadComponent extends Component
                 'user_id' => 0
             ]);
         }
-        if (!$this->thread->user_id)
+        if (!$this->thread || !$this->thread->user_id)
         {
             $this->thread->update(['user_id' => user() ? user()->id : 0]);
         }
