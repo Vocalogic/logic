@@ -331,4 +331,21 @@ class Project extends Model
         return $invoice;
     }
 
+    /**
+     * Does this project have unbilled items?
+     * @return int
+     */
+    public function getUnbilledItemsAttribute(): int
+    {
+        $count = 0;
+        foreach ($this->categories as $category)
+        {
+            foreach($category->items as $item)
+            {
+                if (!$item->invoice_id) $count++;
+            }
+        }
+        return $count;
+    }
+
 }

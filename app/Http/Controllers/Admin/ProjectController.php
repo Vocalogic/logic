@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Core\InvoiceStatus;
 use App\Enums\Core\ProjectStatus;
+use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Lead;
 use App\Models\Project;
+use App\Models\ProjectCategoryItem;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProjectController extends Controller
 {
@@ -92,8 +96,6 @@ class ProjectController extends Controller
     }
 
 
-
-
     /**
      * Download the Project Summary and SOW
      * @param Project $project
@@ -116,7 +118,7 @@ class ProjectController extends Controller
      * @param Project $project
      * @return View
      */
-    public function msa(Project $project) : View
+    public function msa(Project $project): View
     {
         if (!$project->msa)
         {
@@ -155,10 +157,66 @@ class ProjectController extends Controller
      * @param Project $project
      * @return string[]
      */
-    public function processTime(Project $project) : array
+    public function processTime(Project $project): array
     {
         $invoice = $project->processUnbilledTime();
         session()->flash('message', "Invoice #$invoice->id created for unbilled time.");
         return ['callback' => "redirect:/admin/invoices/$invoice->id"];
+    }
+
+    /**
+     * Show an unbilled list of items on a project with selectable items to bill
+     * @param Project $project
+     * @return View
+     */
+    public function unbilledItems(Project $project): View
+    {
+        return view('admin.projects.unbilled_items', ['project' => $project]);
+    }
+
+    /**
+     * Create a new invoice for the items selected.
+     * @param Project $project
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws LogicException
+     */
+    public function unbilledItemsInvoice(Project $project, Request $request): RedirectResponse
+    {
+        $items = 0; // Make sure we selected something, not just a blank invoice.
+        foreach ($request->all() as $key => $val)
+        {
+            if (preg_match("/i\_/i", $key))
+            {
+                $items++;
+            }
+        }
+        if (!$items) throw new LogicException("You must select at least one item to invoice.");
+        $invoice = $project->account->invoices()->create([
+            'due_on'               => now()->addDays($project->account->net_terms),
+            'status'               => InvoiceStatus::DRAFT,
+            'title'                => $project->name,
+            'recurring'            => false,
+            'recurring_profile_id' => 0
+        ]);
+        foreach ($request->all() as $key => $val)
+        {
+            if (preg_match("/i\_/i", $key))
+            {
+                $x = explode("i_", $key);
+                $item = ProjectCategoryItem::find($x[1]);
+                if (!$item) continue;
+                $invoice->items()->create([
+                    'bill_item_id' => $item->bill_item_id,
+                    'code'         => $item->code,
+                    'name'         => $item->name,
+                    'description'  => $item->description,
+                    'qty'          => $item->qty,
+                    'price'        => $item->price
+                ]);
+                $item->update(['invoice_id' => $invoice->id]);
+            }
+        }
+        return redirect()->to("/admin/invoices/$invoice->id")->with('message', "Invoice #$invoice->id Created");
     }
 }

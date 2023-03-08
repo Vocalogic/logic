@@ -29,7 +29,7 @@
                     <div>
                         <ul class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#discuss" role="tab">
+                                <a class="nav-link" data-bs-toggle="tab" href="#discuss" role="tab">
                                     Discussion ({{$task->comments}})
                                 </a>
                             </li>
@@ -40,7 +40,7 @@
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#time" role="tab">
+                                <a class="nav-link active" data-bs-toggle="tab" href="#time" role="tab">
                                     Time Entries ({{$task->time}})
                                 </a>
                             </li>
@@ -50,14 +50,13 @@
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="discuss" role="tabpanel">
+                        <div class="tab-pane" id="discuss" role="tabpanel">
                             @include('admin.projects.tasks.summary.threads')
                         </div>
                         <div class="tab-pane" id="attachments">
 
                         </div>
-
-                        <div class="tab-pane" id="time">
+                        <div class="tab-pane active" id="time">
                             @include('admin.projects.tasks.entries.index')
                         </div>
                     </div>

@@ -575,6 +575,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
         [ProjectCategoryItemController::class, 'addItem']);
     Route::get('projects/{project}/tasks/{task}/complete', [ProjectTaskController::class, 'complete']);
     Route::get('projects/{project}/processtime', [ProjectController::class, 'processTime']);
+    Route::get('projects/{project}/unbilled', [ProjectController::class, 'unbilledItems']);
+    Route::post('projects/{project}/unbilled', [ProjectController::class, 'unbilledItemsInvoice']);
+
 });
 
 

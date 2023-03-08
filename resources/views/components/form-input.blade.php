@@ -16,7 +16,7 @@
             </div>
         @else
             <div class="form-floating">
-                <textarea class="form-control" rows="5" name="{{$name}}" placeholder="{{$placeholder}}">{{$value}}</textarea>
+                <textarea style="height: 100px;" class="form-control" rows="5" name="{{$name}}" placeholder="{{$placeholder}}">{{$value}}</textarea>
                 <label>{{$label}}</label>
                 <span class="helper-text">{!! $slot !!}</span>
             </div>
@@ -30,14 +30,11 @@
                     <label class="form-label">{{$label}}</label>
                 </div>
                 <div class="col-lg-8">
-
-
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="fa fa-{{$icon}}"></i></span>
                         <input type="{{$type}}" class="form-control" name="{{$name}}" placeholder="{{$placeholder}}"
                                value="{{$value}}">
                     </div>
-
                     <span class="helper-text">{!! $slot !!}</span>
                 </div>
             </div>
