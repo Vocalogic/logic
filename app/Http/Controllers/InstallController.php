@@ -66,6 +66,8 @@ class InstallController extends Controller
         DB::statement("ALTER table invoices AUTO_INCREMENT=$start");
         DB::statement("ALTER table shipments AUTO_INCREMENT=$start");
         DB::statement("ALTER table orders AUTO_INCREMENT=$start");
+        DB::statement("ALTER table projects AUTO_INCREMENT=$start");
+
 
         $user->update(['account_id' => $account->id]);
         $user->authorizeIp();

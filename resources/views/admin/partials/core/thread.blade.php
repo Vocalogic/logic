@@ -1,4 +1,4 @@
-<div>
+<div wire:poll="poll">
         @if(!$commentReply)
         <div class="row">
             <div class="col-lg-12">

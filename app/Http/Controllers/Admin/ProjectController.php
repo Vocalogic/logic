@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Core\ProjectStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\Lead;
@@ -136,5 +137,16 @@ class ProjectController extends Controller
         $project->update(['msa' => $request->msa]);
         session()->flash('message', "MSA Updated");
         return redirect()->to("/admin/projects/$project->id");
+    }
+
+    /**
+     * Update status to start the project.
+     * @param Project $project
+     * @return RedirectResponse
+     */
+    public function start(Project $project): RedirectResponse
+    {
+        $project->update(['status' => ProjectStatus::InProgress]);
+        return redirect()->back()->with('message', "Project has been started!");
     }
 }

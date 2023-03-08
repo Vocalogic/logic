@@ -2,7 +2,7 @@
     <div class="card-header">
         <h5 class="card-title">Statement of Work
             <span class="small text-muted">| Introduction, Purpose and Scope of Work
-                @if(!app('request')->editsow)
+                @if(!app('request')->editsow && !$project->approved_on)
                     <a class="btn btn-primary btn-sm pull-right" href="/admin/projects/{{$project->id}}?editsow=true"><i class="fa fa-edit"></i> edit</a>
                 @endif
             </span></h5>

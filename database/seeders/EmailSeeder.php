@@ -153,6 +153,9 @@ class EmailSeeder extends Seeder
         'Sent to customer when a project is ready for review',
         '[{project.name}] Your project is ready for review!');
 
+        $this->buildEmail('account.projectActive', self::CAT_LEADS, 'Project Accepted',
+            'Sent to customer when a new project has been authorized',
+            '[{project.name}] Your project has been approved!');
 
         EmailTemplate::placeholders();
 

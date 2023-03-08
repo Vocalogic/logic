@@ -9,6 +9,7 @@ use App\Models\Account;
 use App\Models\AccountItem;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Project;
 use App\Operations\Integrations\Merchant\Merchant;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -241,5 +242,26 @@ class ShopAccountController extends Controller
         auth()->loginUsingId($account->admin->id);
         $account->update(['cc_reset_hash' => uniqid('RESET')]); // Only allow this once.
         return redirect()->to("/shop/account/profile");
+    }
+
+    /**
+     * Show projects for a customer.
+     * @return View
+     */
+    public function projects(): View
+    {
+        return view('shop.account.projects.index', ['account' => user()->account]);
+    }
+
+    /**
+     * Show project.
+     * @param string $phash
+     * @return View
+     */
+    public function showProject(string $phash) : View
+    {
+        $project = Project::where('hash', $phash)->first();
+        if (!$project) abort(404);
+        return view('shop.account.projects.show', ['project' => $project, 'account' => $project->account]);
     }
 }

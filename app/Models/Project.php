@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\Core\CommKey;
 use App\Enums\Core\ProjectStatus;
+use App\Enums\Files\FileType;
+use App\Operations\Core\LoFileHandler;
 use App\Operations\Core\MakePDF;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,6 +22,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $totalMax
  * @property mixed $totalMin
  * @property mixed $account
+ * @property mixed $id
  */
 class Project extends Model
 {
@@ -191,12 +195,12 @@ class Project extends Model
 
     public function getEstMinAttribute(): string
     {
-        return "$". moneyFormat($this->totalMin);
+        return "$" . moneyFormat($this->totalMin);
     }
 
     public function getEstMaxAttribute(): string
     {
-        return "$". moneyFormat($this->totalMax);
+        return "$" . moneyFormat($this->totalMax);
     }
 
     /**
@@ -223,6 +227,47 @@ class Project extends Model
         {
             return sprintf("%s/shop/presales/%s/projects/%s", $host, $this->lead->hash, $this->hash);
         }
+    }
+
+    /**
+     * This method will execute a project from either a lead or an account.
+     * It will not send any invoices and will be done from the administrative side
+     * once the project actually begins.
+     * @param string $name
+     * @param string $ip
+     * @return void
+     */
+    public function execute(string $name, string $ip): void
+    {
+        // Step 1: Update our Project to show signtuare/signed name and IP.
+        $signature = session(CommKey::LocalSignatureData->value);
+        if ($signature)
+        {
+            $lo = new LoFileHandler();
+            $x = explode(",", $signature);
+            $based = $x[1]; // everything after the base64,is the actual encoded part.
+            $file = $lo->create($this->id . "-signature.png", FileType::Image, $this->id, $based, 'image/png');
+            $this->update(['signature_id' => $file->id]);
+            CommKey::LocalSignatureData->clear();
+        }
+        $this->update([
+            'approved_on' => now(),
+            'signed_name' => $name,
+            'signed_ip'   => $ip,
+            'status'      => ProjectStatus::Approved
+        ]);
+
+        // If this already has an account then there's nothing really we need to do here.
+        if ($this->account) return;
+
+        // Start Conversion Process from lead to an account.
+        $account = $this->lead->createAccount();
+        $this->lead->update([
+           'active' => 0,
+        ]);
+        $this->update(['account_id' => $account->id, 'lead_id' => null]);
+        $this->refresh();
+        template('account.projectActive', $account->admin, [$this], [$this->pdf()]);
     }
 
 }

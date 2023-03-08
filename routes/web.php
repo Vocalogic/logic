@@ -564,7 +564,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('projects/{project}/send', [ProjectController::class, 'send']);
     Route::get('projects/{project}/msa', [ProjectController::class, 'msa']);
     Route::post('projects/{project}/msa', [ProjectController::class, 'msaSave']);
-
+    Route::get('projects/{project}/start', [ProjectController::class, 'start']);
 
 
     Route::resource('projects.categories', ProjectCategoryController::class);
@@ -600,6 +600,8 @@ Route::group(['prefix' => 'shop'], function () {
         Route::get('account/invoices', [ShopAccountController::class, 'invoices']);
         Route::get('account/orders', [ShopAccountController::class, 'orders']);
         Route::get('account/quotes', [ShopAccountController::class, 'quotes']);
+        Route::get('account/projects', [ShopAccountController::class, 'projects']);
+        Route::get('account/projects/{phash}', [ShopAccountController::class, 'showProject']);
         Route::get('account/quotes/{qhash}', [ShopAccountController::class, 'showQuote']);
 
 
@@ -620,6 +622,9 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('presales/{slug}/{qslug}', [PresalesController::class, 'quote']);
     Route::get('presales/{slug}/{qslug}/checkout', [CheckoutController::class, 'quoteCheckout']);
     Route::get('presales/{slug}/projects/{hash}', [PresalesController::class, 'project']);
+    Route::get('presales/{slug}/projects/{hash}/execute', [PresalesController::class, 'executeForm']);
+    Route::post('presales/{slug}/projects/{hash}/execute', [PresalesController::class, 'execute']);
+
 
     // Guest Routes
     Route::get('confirm/{item}', [ShopController::class, 'showConfirmation']);

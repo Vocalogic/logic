@@ -66,6 +66,15 @@
         </li>
 
         <li class="nav-item" role="presentation">
+            <a class="nav-link {{preg_match("/project/", app('request')->getUri()) ? "active" : null}}" href="/shop/account/projects" aria-controls="pills-wishlist" aria-selected="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                Projects ({{$account->projects()->count()}})</a>
+        </li>
+
+        <li class="nav-item" role="presentation">
             <a class="nav-link {{preg_match("/invoice/", app('request')->getUri()) ? "active" : null}}" href="/shop/account/invoices" aria-controls="pills-wishlist" aria-selected="false">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
                 Invoices

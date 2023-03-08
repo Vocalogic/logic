@@ -1,4 +1,4 @@
-@extends('layouts.admin', ['title' => $project->name, 'crumbs' => [
+@extends('layouts.admin', ['title' => $project->name . " | " . $project->company, 'crumbs' => [
      '/admin/projects' => "Projects",
      $project->name
     ],
@@ -7,6 +7,29 @@
 @section('content')
     <div class="row">
 
+        @if($project->status == \App\Enums\Core\ProjectStatus::Approved)
+            <div class="col-lg-12">
+                <div class="alert alert-primary alert-dismissible alert-additional fade show" role="alert">
+                    <div class="alert-body">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0 me-3">
+                                <i class="ri-error-warning-line fs-16 align-middle"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h5 class="alert-heading">Project has been Approved !</h5>
+                                <p class="mb-0">This project has been approved by the customer and is ready to
+                                    start.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert-content">
+                        <p class="mb-0">To begin, <a class='text-white text-decoration-underline' href="/admin/projects/{{$project->id}}/start">click here to
+                                start</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         <div class="col-lg-9 col-xs-12">
             @include('admin.projects.summary.description')
@@ -52,11 +75,12 @@
                href="/admin/projects/{{$project->id}}/download">
                 <i class="fa fa-download"></i> Download Project
             </a>
-
-            <a class="btn btn-outline-info w-100 ladda mt-3" data-style="zoom-in"
-               href="/admin/projects/{{$project->id}}/msa">
-                <i class="fa fa-building"></i> Edit MSA
-            </a>
+            @if(!$project->approved_on)
+                <a class="btn btn-outline-info w-100 ladda mt-3" data-style="zoom-in"
+                   href="/admin/projects/{{$project->id}}/msa">
+                    <i class="fa fa-building"></i> Edit MSA
+                </a>
+            @endif
 
             <a class="btn btn-outline-success w-100 confirm mt-3" href="/admin/projects/{{$project->id}}/send"
                data-method="GET"

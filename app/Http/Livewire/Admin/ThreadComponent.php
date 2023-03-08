@@ -56,6 +56,11 @@ class ThreadComponent extends Component
         }
     }
 
+    public function poll(): void
+    {
+
+    }
+
 
     /**
      * Save photo in LO File

@@ -290,6 +290,7 @@ class Lead extends Model
             'is_agent'   => 0
         ]);
         $user->authorizeIp();
+        $account->fresh();
         return $account;
     }
 

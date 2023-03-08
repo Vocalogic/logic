@@ -100,5 +100,21 @@
             Upon acceptance, this project is scheduled to begin on {{$project->start_date?->format("M d, Y")}} and
             is to be completed on or before {{$project->end_date?->format("M d, Y")}}.
         </p>
+
+        @if($project->approved_on)
+            <div class="panel panel-primary">
+                <div class="panel-body">
+                    {!! $project->msa !!}
+
+                            <img width="300" src="{!! _file($project->signature_id)?->internal !!}">
+                    <div class="pull-right">
+                            <b>Authorized By:</b> {{$project->signed_name}}
+                            <Br/>
+                            <b>Authorized From:</b> {{$project->signed_ip}}
+                    </div>
+                </div>
+            </div>
+        @endif
+
     </div>
 </div>
