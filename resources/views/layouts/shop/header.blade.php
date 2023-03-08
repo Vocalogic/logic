@@ -247,7 +247,7 @@
         </li>
 
         <li>
-            <a href="/shop/search" class="search-box live" href="/shop/authorize" data-title="Request Assistance">
+            <a class="search-box live" href="/shop/authorize" data-title="Request Assistance">
                 <i class="iconly-Search icli"></i>
                 <span>Assistance</span>
             </a>
