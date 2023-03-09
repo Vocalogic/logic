@@ -17,8 +17,8 @@
             <div class="d-flex mb-2">
                 <div class="flex-shrink-0 me-3">
                     <div class="avatar-sm">
-                        <span class="avatar-title bg-soft-warning rounded p-2">
-                            <img src="/assets/images/brands/slack.png" alt="" class="img-fluid p-1">
+                        <span class="avatar-title bg-soft-info rounded p-2">
+                            <i class="{{$category->icon}}"></i>
                         </span>
                     </div>
                 </div>

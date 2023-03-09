@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $bill_method
  * @property mixed $totalHoursMax
  * @property mixed $totalWorked
+ * @property mixed $completedTasks
  */
 class ProjectCategory extends Model
 {
@@ -196,6 +197,24 @@ class ProjectCategory extends Model
             ->where('refid', $this->id)->first();
         if (!$thread) return 0;
         return $thread->comments()->count();
+    }
+
+    /**
+     * Get the icon to show for the category depending on the state. 
+     * @return string
+     */
+    public function getIconAttribute(): string
+    {
+        $icon = 'ri-pencil-line';
+        if ($this->tasks->where('completed', false)->count() == 0)
+        {
+            $icon = 'ri-edit-2-fill';
+        }
+        if ($this->totalWorked > $this->totalHoursMax)
+        {
+            $icon = 'ri-archive-fill';
+        }
+        return $icon;
     }
 
     /**
