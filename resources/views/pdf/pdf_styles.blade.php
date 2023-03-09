@@ -27,6 +27,10 @@
         z-index: -1000;
     }
 
+    #watermark img {
+        width: 100%;
+    }
+
     html {
         margin: 0px
     }

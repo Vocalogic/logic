@@ -14,6 +14,10 @@
         z-index: -1000;
     }
 
+    #watermark img {
+        width: 100%;
+    }
+
     .footer {
         position: fixed;
         width: 100%;

@@ -14,6 +14,10 @@
         z-index: -1000;
     }
 
+    #watermark img {
+        width: 100%;
+    }
+
 </style>
 
 <html>
