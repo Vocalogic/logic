@@ -95,9 +95,8 @@ class ShopBus
         if (!array_key_exists($uid, $this->carts))
         {
             $this->receive($uid, cart()->getCart());
-            sleep(1); // Give it a second for cache to actually update.
         }
-
+        if (!isset($this->carts[$uid])) return; // Next ping should pick this up
         $this->carts[$uid]->last_activity = now();
         $this->carts[$uid]->page = app('request')->url();
         $this->pack();
