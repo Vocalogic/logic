@@ -230,6 +230,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('graph/{type}', [GraphController::class, 'show']);
 
     // Event Editor
+    Route::get('events/invoices', [EventController::class, 'invoices']);
     Route::get('events/{event}', [EventController::class, 'show']);
     Route::put('events/{event}', [EventController::class, 'update']);
     Route::get('events/leads/{lead}', [EventController::class, 'getLead']);
