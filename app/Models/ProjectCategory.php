@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $items
  * @property mixed $tasks
  * @property mixed $bill_method
+ * @property mixed $totalHoursMax
+ * @property mixed $totalWorked
  */
 class ProjectCategory extends Model
 {
@@ -91,6 +93,56 @@ class ProjectCategory extends Model
             $total += $task->totalMax;
         }
         return $total;
+    }
+
+    public function getTotalHoursMinAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->est_hours_min;
+        }
+        return $total;
+    }
+
+    public function getTotalHoursMaxAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->est_hours_max;
+        }
+        return $total;
+    }
+
+    public function getTotalWorkedAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->totalWorked;
+        }
+        return $total;
+    }
+
+    /**
+     * Get total billed amount for a category
+     * @return int
+     */
+    public function getTotalBilledAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->tasks as $task)
+        {
+            $total += $task->totalBilled;
+        }
+        return $total;
+    }
+
+    public function getProgressAttribute(): int
+    {
+        if (!$this->totalHoursMax) return 0;
+        return round($this->totalWorked / $this->totalHoursMax * 100);
     }
 
     /**

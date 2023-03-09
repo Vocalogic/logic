@@ -128,6 +128,34 @@ class ProjectTask extends Model
     }
 
     /**
+     * Get total hours worked on a task.
+     * @return float
+     */
+    public function getTotalWorkedAttribute(): float
+    {
+        $total = 0;
+        foreach ($this->entries as $entry)
+        {
+            $total += $entry->hours;
+        }
+        return $total;
+    }
+
+    /**
+     * Get total billed for a task.
+     * @return int
+     */
+    public function getTotalBilledAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->entries()->whereNotNull('invoice_id')->get() as $entry)
+        {
+            $total += bcmul($this->task_hourly_rate * $entry->hours,1);
+        }
+        return $total;
+    }
+
+    /**
      * Get the amount currently worked that has not been billed.
      * @return int
      */

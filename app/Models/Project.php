@@ -228,6 +228,20 @@ class Project extends Model
     }
 
     /**
+     * Get the amount that has been billed for this project.
+     * @return int
+     */
+    public function getTotalBilledAttribute(): int
+    {
+        $total = 0;
+        foreach ($this->categories as $category)
+        {
+            $total += $category->totalBilled;
+        }
+        return $total;
+    }
+
+    /**
      * Send project for approval/review.
      * @return void
      */

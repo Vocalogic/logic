@@ -40,12 +40,9 @@
         </span>
     </div>
     <div class="flex-grow-1 ms-3">
-        <p class="text-uppercase fw-medium text-muted mb-3">{{$project->name}} Expenses</p>
-        <h4 class="fs-5 mb-3">${{moneyFormat($project->totalExpenseMax)}}</h4>
-        <div class="d-flex justify-content-between">
-            <p class="text-muted mb-0">Min: <strong>${{moneyFormat($project->totalExpenseMin)}}</strong></p>
-            <p class="text-muted mb-0">Max: <strong>${{moneyFormat($project->totalExpenseMax)}}</strong></p>
-        </div>
+        <p class="text-uppercase fw-medium text-muted mb-3">Total Time Billed</p>
+        <h4 class="fs-5 mb-3">${{moneyFormat($project->totalBilled)}}</h4>
+
     </div>
     <div class="flex-shrink-0 align-self-center">
         <span class="badge badge-soft-success fs-12">
@@ -67,7 +64,7 @@
             @if($project->start_date && $project->end_date)
                 {{$project->start_date->diffForHumans($project->end_date, true)}}
             @else
-                Set Start/End Dates
+                Indefinite
             @endif
         </h4>
     </div>
