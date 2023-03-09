@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property mixed $task_hourly_rate
  * @property mixed $est_hours_max
  * @property mixed $entries
+ * @property mixed $totalWorked
  */
 class ProjectTask extends Model
 {
@@ -168,5 +169,16 @@ class ProjectTask extends Model
         }
         return $total;
     }
+
+    /**
+     * Get progress of task hours billed.
+     * @return int
+     */
+    public function getProgressAttribute(): int
+    {
+        if (!$this->est_hours_max) return 0;
+        return round($this->totalWorked / $this->est_hours_max * 100);
+    }
+
 
 }
