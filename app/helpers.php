@@ -92,6 +92,7 @@ if (!function_exists('setting'))
         else
         {
             $setting->update(['value' => $value]);
+            CommKey::GlobalSettings->clear();
             return $value;
         }
     }
