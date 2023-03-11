@@ -1,15 +1,14 @@
-<ul class="list-group list-group-custom">
-    <li class="list-group-item {{$tab == 'brand' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=brand">Brand</a></li>
-    <li class="list-group-item {{$tab == 'lead' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=lead">Leads</a></li>
-    <li class="list-group-item {{$tab == 'quote' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=quote">Quotes</a></li>
-    <li class="list-group-item {{$tab == 'invoice' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=invoice">Invoicing</a></li>
-    <li class="list-group-item {{$tab == 'mail' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=mail">Mail</a></li>
-    <li class="list-group-item {{$tab == 'account' ? 'active' : null}}" ><a class="color-600" href="/admin/settings?tab=account">Accounts</a></li>
-    <li class="list-group-item {{$tab == 'shop' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=shop">Shop</a></li>
-    <li class="list-group-item {{$tab == 'order' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=order">Orders</a></li>
-    <li class="list-group-item {{$tab == 'project' ? 'active' : null}}"><a class="color-600" href="/admin/settings?tab=project">Projects</a></li>
-
-</ul>
+<div class="list-group list-group-fill-primary mt-3">
+    <a class="list-group-item {{$tab == 'brand' ? 'active' : null}}" href="/admin/settings?tab=brand">Brand</a>
+    <a class="list-group-item {{$tab == 'lead' ? 'active' : null}}" href="/admin/settings?tab=lead">Leads</a>
+    <a class="list-group-item {{$tab == 'quote' ? 'active' : null}}" href="/admin/settings?tab=quote">Quotes</a>
+    <a class="list-group-item {{$tab == 'invoice' ? 'active' : null}}" href="/admin/settings?tab=invoice">Invoicing</a>
+    <a class="list-group-item {{$tab == 'mail' ? 'active' : null}}" href="/admin/settings?tab=mail">Mail</a>
+    <a class="list-group-item {{$tab == 'account' ? 'active' : null}}" href="/admin/settings?tab=account">Accounts</a>
+    <a class="list-group-item {{$tab == 'shop' ? 'active' : null}}" href="/admin/settings?tab=shop">Shop</a>
+    <a class="list-group-item {{$tab == 'order' ? 'active' : null}}" href="/admin/settings?tab=order">Orders</a>
+    <a class="list-group-item {{$tab == 'project' ? 'active' : null}}" href="/admin/settings?tab=project">Projects</a>
+</div>
 
 @if(env('LOGIN_BYPASS'))
 <div class="alert alert-info mt-5">
