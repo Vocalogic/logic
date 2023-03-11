@@ -31,16 +31,17 @@ class EnterpriseConfigCommand extends Command
         $le = new LogicEnterprise();
         try {
             $config = $le->getConfig();
+            if ($config->success == true)
+            {
+                file_put_contents(base_path() . "/" . ".env", $config->env);
+                $this->info("Configuration Set, License Updated..");
+            }
+            else $this->error($config->reason);
         } catch(\Exception $e)
         {
             $this->error($e->getMessage());
             return;
         }
-        if ($config->success == true)
-        {
-            file_put_contents(base_path() . "/" . ".env", $config->env);
-            setting('brand.license', $config->license);
-        }
-        else $this->error($config->reason);
+
     }
 }
