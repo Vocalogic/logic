@@ -17,6 +17,7 @@ use App\Models\Setting;
 use App\Models\User;
 use App\Operations\Admin\MorningStatus;
 use App\Operations\API\Control;
+use App\Operations\API\LogicEnterprise;
 use App\Operations\Shop\ShopBus;
 use App\Operations\Shop\ShopOperation;
 use App\Operations\Core\LogOperation;
@@ -614,21 +615,14 @@ if (!function_exists('setting'))
      */
     function license(): ?object
     {
-        if (!setting('brand.license')) return null;
-        $c = new Control();
-        try
-        {
-            $lic = $c->getLicense();
-        } catch (GuzzleException)
-        {
-            return null;
-        }
-        if (!$lic || !$lic->success) return null;
-        $obj = (object)[];
+        if (!env('LOGIC_LICENSE')) return null;
+        if (cache(CommKey::GlobalLicenseCache->value))
+            return CommKey::GlobalLicenseCache->value;
 
-        $obj->partner_code = $lic->partner_code;
-
-        return $obj;
+        $le = new LogicEnterprise();
+        $license = $le->getLicense();
+        cache([CommKey::GlobalLicenseCache->value => $license], CommKey::GlobalLicenseCache->getLifeTime());
+        return $license;
     }
 
     /**

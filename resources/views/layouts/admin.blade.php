@@ -325,7 +325,12 @@
                     </div>
                     <div class="col-sm-6">
                         <div class="text-sm-end d-none d-sm-block">
-
+                            @if(env('LOGIC_LICENSE'))
+                                Logic Enterprise Edition
+                            @else
+                                Logic Community Edition
+                            @endif
+                            <span class="badge badge-soft-primary text-primary">v{{currentVersion()->version}}</span>
                         </div>
                     </div>
                 </div>

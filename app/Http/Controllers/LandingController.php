@@ -40,8 +40,6 @@ class LandingController extends Controller
             {
                 return redirect()->to("admin/");
             }
-
-
             else
             {
                 return redirect()->to("shop/account");
@@ -59,8 +57,8 @@ class LandingController extends Controller
             : "Login to view your account, pay invoices and order additional products for your business.";
         seo()
             ->title("Login to " . setting('brand.name'))
-            ->image(_file((int)setting('brandImage.dark'))?->url)
-            ->description($desc);
+            ->description($desc)
+            ->image(_file((int)setting('brandImage.dark'))?->url);
         return view('login');
     }
 

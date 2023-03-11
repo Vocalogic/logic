@@ -32,5 +32,19 @@ class LogicEnterprise extends APICore
         ]);
     }
 
+    /**
+     * Get License/Validate License
+     * @return mixed
+     * @throws GuzzleException
+     * @throws LogicException
+     */
+    public function getLicense() : mixed
+    {
+        if (!env('LOGIC_LICENSE')) return null;
+        return $this->send($this->base . "enterprise/license", 'post', [
+            'license' => env('LOGIC_LICENSE')
+        ]);
+    }
+
 
 }
