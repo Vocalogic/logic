@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Enums\Core\ActivityType;
+use App\Enums\Core\CommKey;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\AccountItem;
 use App\Models\Invoice;
+use App\Models\Lead;
 use App\Models\Order;
+use App\Models\Project;
 use App\Operations\Integrations\Merchant\Merchant;
 use Exception;
 use Illuminate\Http\RedirectResponse;
@@ -241,5 +244,65 @@ class ShopAccountController extends Controller
         auth()->loginUsingId($account->admin->id);
         $account->update(['cc_reset_hash' => uniqid('RESET')]); // Only allow this once.
         return redirect()->to("/shop/account/profile");
+    }
+
+    /**
+     * Show projects for a customer.
+     * @return View
+     */
+    public function projects(): View
+    {
+        return view('shop.account.projects.index', ['account' => user()->account]);
+    }
+
+    /**
+     * Show project.
+     * @param string $phash
+     * @return View
+     */
+    public function showProject(string $phash) : View
+    {
+        $project = Project::where('hash', $phash)->first();
+        if (!$project) abort(404);
+        if (!$project->approved_on)
+        {
+            return view('shop.account.projects.unapproved', ['project' => $project, 'account' => $project->account]);
+        }
+        return view('shop.account.projects.show', ['project' => $project, 'account' => $project->account]);
+    }
+
+    /**
+     * Show execution form when in the context of an active account.
+     * @param string $phash
+     * @return View
+     */
+    public function executeForm(string $phash) : View
+    {
+        $project = Project::where('hash', $phash)->first();
+        if (!$project) abort(404);
+        return view('shop.account.projects.execute', ['project' => $project, 'account' => $project->account]);
+    }
+
+    /**
+     * Execute a project.
+     * @param string  $phash
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function execute(string $phash, Request $request): RedirectResponse
+    {
+        $project = Project::where('hash', $phash)->first();
+        if (!$project) abort(404);
+        $request->validate(['name' => 'required']);
+        $signature = session(CommKey::LocalSignatureData->value);
+        if (!$signature)
+        {
+            return redirect()->back()->with('error', "You must sign the signature with your mouse before proceeding.");
+        }
+
+        $project->execute($request->name, $request->ip());
+        // We should have an account now, so lets login as that account.
+        $project = Project::find($project->id); // Refresh everything.
+        return redirect()->to("/shop/account/projects/$project->hash");
     }
 }

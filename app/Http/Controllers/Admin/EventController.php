@@ -118,36 +118,6 @@ class EventController extends Controller
         }
         // Termination of services
 
-        // #241 - Get Invoices and Projected Recurring Invoices
-        foreach(Invoice::with(['items', 'account'])
-                    ->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])
-                    ->get() as $invoice)
-        {
-            $events[] = (object)[
-                'title' => "Invoice #{$invoice->id} due",
-                'start' => $invoice->due_on->format("Y-m-d"),
-                'url'   => sprintf("%s/admin/invoices/%d", setting('brand.url'), $invoice->id),
-                'color' => "#3FB84A",
-                'popup' => (object)[
-                    'title'  => $invoice->account->name,
-                    'descri' => "Total: $" . moneyFormat($invoice->total) . "<br/>Balance: $" . moneyFormat($invoice->balance)
-                ],
-            ];
-        }
-
-        foreach(Account::with(['items'])->whereNotNull('next_bill')->get() as $account)
-        {
-            $events[] = (object)[
-                'title' => "Recurring Invoice ($". moneyFormat($account->mrr).")",
-                'start' => $account->next_bill->format("Y-m-d"),
-                'url'   => sprintf("%s/admin/accounts/%d", setting('brand.url'), $account->id),
-                'color' => "#6590FF",
-                'popup' => (object)[
-                    'title'  => $account->name,
-                    'descri' => "New Recurring Invoice for $".moneyFormat($account->mrr) . " will be generated."
-                ],
-            ];
-        }
 
         return $events;
     }
@@ -219,6 +189,46 @@ class EventController extends Controller
                 'start' => $event->event->format("Y-m-d H:i"),
                 'url'   => sprintf("%s/admin/leads/%d", setting('brand.url'), $event->refid),
                 'color' => "#a1b2e3"
+            ];
+        }
+        return $events;
+    }
+
+    /**
+     * Get calendar for invoices for invoice page.
+     * @return array
+     */
+    public function invoices(): array
+    {
+        $events = [];
+        // #241 - Get Invoices and Projected Recurring Invoices
+        foreach(Invoice::with(['items', 'account'])
+                    ->whereIn('status', [InvoiceStatus::SENT, InvoiceStatus::PARTIAL])
+                    ->get() as $invoice)
+        {
+            $events[] = (object)[
+                'title' => "Invoice #{$invoice->id} due",
+                'start' => $invoice->due_on->format("Y-m-d"),
+                'url'   => sprintf("%s/admin/invoices/%d", setting('brand.url'), $invoice->id),
+                'color' => "#3FB84A",
+                'popup' => (object)[
+                    'title'  => $invoice->account->name,
+                    'descri' => "Total: $" . moneyFormat($invoice->total) . "<br/>Balance: $" . moneyFormat($invoice->balance)
+                ],
+            ];
+        }
+
+        foreach(Account::with(['items'])->whereNotNull('next_bill')->get() as $account)
+        {
+            $events[] = (object)[
+                'title' => "Recurring Invoice ($". moneyFormat($account->mrr).")",
+                'start' => $account->next_bill->format("Y-m-d"),
+                'url'   => sprintf("%s/admin/accounts/%d", setting('brand.url'), $account->id),
+                'color' => "#6590FF",
+                'popup' => (object)[
+                    'title'  => $account->name,
+                    'descri' => "New Recurring Invoice for $".moneyFormat($account->mrr) . " will be generated."
+                ],
             ];
         }
         return $events;

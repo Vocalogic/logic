@@ -1,6 +1,6 @@
 <div>
     @if(!$float)
-        <div class="row mt-3">
+        <div class="row mb-3">
             <div class="col-lg-4">
                 <label class="form-label">{{$label}}</label>
             </div>

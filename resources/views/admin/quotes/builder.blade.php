@@ -90,8 +90,8 @@
                 <a class="btn btn-primary confirm w-100 mt-3" href="/admin/quotes/{{$quote->id}}/send"
                    data-message="Are you sure you want to send this quote? This will also mark this quote as 'presentable' and will be available for review in the contact's discovery page."
                    data-method="GET"><i class="fa fa-send"></i> Send Quote</a>
-                <a class="btn btn-info wait w-100 mt-3" data-message="Generating Quote.." data-anchor=".rightpanel"
-                   href="/admin/quotes/{{$quote->id}}/download"><i class="fa fa-download"></i> Download</a>
+                <a class="btn btn-info ladda w-100 mt-3" data-style="zoom-in"
+                        href="/admin/quotes/{{$quote->id}}/download"><i class="fa fa-download"></i> Download</a>
                 @if(!$quote->presentable)
                     <a class="btn btn-outline-danger w-100 mt-3" href="/admin/quotes/{{$quote->id}}/presentable"><i
                             class="fa fa-exclamation"></i> Not Presentable</a>

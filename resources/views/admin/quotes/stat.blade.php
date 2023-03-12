@@ -6,10 +6,9 @@
             the deal meets minimum profit expectations.</p>
         <span class="h2 d-block mb-3">${{moneyFormat($quote->analysis->profit,2)}}</span>
         <!-- Progress -->
-        <div class="progress rounded-pill mb-2" style="height: 4px;">
-            <div class="progress-bar {{$quote->bar->color}}" role="progressbar" style="width: {{$quote->bar->width}}%" aria-valuenow="{{$quote->bar->width}}" aria-valuemin="0"
+        <div class="progress animated-progress mb-2">
+            <div class="progress-bar  {{$quote->bar->color}}" role="progressbar" style="width: {{$quote->bar->width}}%" aria-valuenow="{{$quote->bar->width}}" aria-valuemin="0"
                  aria-valuemax="{{setting('quotes.margin')}}">
-
             </div>
         </div>
 

@@ -1019,5 +1019,15 @@ class AccountController extends Controller
         session()->flash('message', "Recurring profile removed");
         return ['callback' => 'reload'];
     }
+
+    /**
+     * Show projects for an account
+     * @param Account $account
+     * @return View
+     */
+    public function projects(Account $account) : View
+    {
+        return view('admin.accounts.projects.index', ['account' => $account]);
+    }
 }
 

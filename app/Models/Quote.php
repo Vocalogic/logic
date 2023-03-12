@@ -648,10 +648,7 @@ class Quote extends Model
      */
     public function getMsaContentAttribute(): string
     {
-        $content = setting('quotes.msa');
-        $models = [$this];
-        $s = new STemplate(ident: $content, models: $models);
-        return $s->contentBody;
+        return templateContent('quotes.msa', [$this]);
     }
 
     /**

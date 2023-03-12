@@ -245,14 +245,13 @@
                 <span>Category</span>
             </a>
         </li>
-<!--
+
         <li>
-            <a href="/shop/search" class="search-box">
+            <a class="search-box live" href="/shop/authorize" data-title="Request Assistance">
                 <i class="iconly-Search icli"></i>
-                <span>Search</span>
+                <span>Assistance</span>
             </a>
         </li>
--->
 
 
         <li>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\EnterpriseController;
 use App\Http\Controllers\API\PartnerAccountController;
 use App\Http\Controllers\API\PartnerInviteController;
 use App\Http\Controllers\API\PartnerLeadController;
@@ -31,7 +32,4 @@ Route::post('partners/{code}/commission/request', [PartnerAccountController::cla
 Route::get('partners/{code}/commissions', [PartnerAccountController::class, 'getCommissions']);
 Route::get('partners/{code}/commissions/{id}', [PartnerAccountController::class, 'getCommission']);
 
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('enterprise/usage', [EnterpriseController::class, 'getUsage']);

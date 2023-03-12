@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Enums\Core\CommKey;
 use App\Exceptions\LogicException;
 use App\Http\Controllers\Controller;
 use App\Models\Lead;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -140,5 +142,63 @@ class PresalesController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Show project in pre-sales (lead)
+     * @param string $slug
+     * @param string $hash
+     * @return View
+     */
+    public function project(string $slug, string $hash) : View
+    {
+        $lead = Lead::where('hash', $slug)->first();
+        if (!$lead) abort(404);
+        if (!$lead->active) abort(404);
+        $project = $lead->projects()->where('hash', $hash)->first();
+        if (!$project) abort(404);
+        return view('shop.presales.projects.index', ['lead' => $lead, 'project' => $project]);
+    }
+
+    /**
+     * Show execution and signing.
+     * @param string $slug
+     * @param string $hash
+     * @return View
+     */
+    public function executeForm(string $slug, string $hash): View
+    {
+        $lead = Lead::where('hash', $slug)->first();
+        if (!$lead) abort(404);
+        if (!$lead->active) abort(404);
+        $project = $lead->projects()->where('hash', $hash)->first();
+        if (!$project) abort(404);
+        return view('shop.presales.projects.execute', ['lead' => $lead, 'project' => $project]);
+    }
+
+    /**
+     * Execute a project, create the account
+     * @param string  $slug
+     * @param string  $hash
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function execute(string $slug, string $hash, Request $request): RedirectResponse
+    {
+        $request->validate(['name' => 'required']);
+        $signature = session(CommKey::LocalSignatureData->value);
+        if (!$signature)
+        {
+            return redirect()->back()->with('error', "You must sign the signature with your mouse before proceeding.");
+        }
+        $lead = Lead::where('hash', $slug)->first();
+        if (!$lead) abort(404);
+        if (!$lead->active) abort(404);
+        $project = $lead->projects()->where('hash', $hash)->first();
+
+        $project->execute($request->name, $request->ip());
+        // We should have an account now, so lets login as that account.
+        $project = Project::find($project->id); // Refresh everything.
+        auth()->loginUsingId($project->account->admin->id);
+        return redirect()->to("/shop/account/projects/$project->hash");
+    }
 
 }

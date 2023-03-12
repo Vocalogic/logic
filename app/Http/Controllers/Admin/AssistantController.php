@@ -87,8 +87,8 @@ class AssistantController extends Controller
                 break;
             case 'request' :
                 $message =
-                    "<h3>".user()->name. " has joined your session!</h3>
-                    <br/><p><b>".user()->first . "</b> is here to assist you live through the navigation process. Please note that
+                    "<h3>" . user()->name . " has joined your session!</h3>
+                    <br/><p><b>" . user()->first . "</b> is here to assist you live through the navigation process. Please note that
                 these assisted functions will cease to function when you leave the site. <Br/><br/>This is intended to help guide you
                 through our products and services without the need to locate items yourself.</p>";
                 sbus()->sendMessage($uid, $message);
@@ -124,7 +124,7 @@ class AssistantController extends Controller
      * @param Request $request
      * @return RedirectResponse
      */
-    public function updateItem(string $uid, string $id, Request $request) : RedirectResponse
+    public function updateItem(string $uid, string $id, Request $request): RedirectResponse
     {
         $cart = sbus()->get($uid);
         foreach ($cart->cart->get('items') as $citem)
@@ -195,18 +195,18 @@ class AssistantController extends Controller
      * @param Request $request
      * @return Quote
      */
-    private function createQuote(string $cid, Request $request) : Quote
+    private function createQuote(string $cid, Request $request): Quote
     {
         $lead = (new Lead)->create([
-            'company'       => $request->company,
-            'contact'       => $request->contact,
-            'email'         => $request->email,
-            'active'        => true,
-            'hash'          => uniqid('D-'),
+            'company'        => $request->company,
+            'contact'        => $request->contact,
+            'email'          => $request->email,
+            'active'         => true,
+            'hash'           => uniqid('D-'),
             'agent_id'       => user()->id,
-            'lead_type_id'  => 0,
-            'guest_created' => 1,
-            'status'        => LeadStatus::QuoteSent
+            'lead_type_id'   => 0,
+            'lead_status_id' => 1,
+            'guest_created'  => 1,
         ]);
         $lead->refresh();
         $quote = $lead->quotes()->create([

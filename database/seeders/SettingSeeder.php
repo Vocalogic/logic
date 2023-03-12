@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Core\CommKey;
 use App\Models\Setting;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -66,14 +67,16 @@ class SettingSeeder extends Seeder
             'Enter a list of months that are available to choose from');
 
         $this->buildSetting('quotes.assumedTerm', 'Assumed Months Uncontracted', 'number', 12, 'Quote',
-            'Enter the number of months (if uncontracted) to assume account will live for profitability report.', '1|36');
+            'Enter the number of months (if uncontracted) to assume account will live for profitability report.',
+            '1|36');
 
         $this->buildSetting('quotes.pricingMethod', 'Auto-Price Based on MSRP or Cost?', 'select', 'Cost', 'Quote',
             'Select if you would like auto-pricing to either discount MSRP or Increase based on cost', 'Cost,MSRP');
         $this->buildSetting('quotes.desiredPerc', 'Auto-Selling Price Percentage', 'number', 20, 'Quote',
             'Enter the percentage to set pricing above cost or below MSRP by default', '0|200');
         $this->buildSetting('quotes.variancePerc', 'Auto-Selling Price Variance Percentage', 'number', 20, 'Quote',
-            'When setting low/high sales pricing, this percentage will dictate how much of the desired price can be modified lower or higher', '0|200');
+            'When setting low/high sales pricing, this percentage will dictate how much of the desired price can be modified lower or higher',
+            '0|200');
         $this->buildSetting('quotes.openai', 'OpenAI Key', 'password', null, 'Quote',
             'Enter your OpenAI API Key for Product Definition Assistance (BETA)');
         $this->buildSetting('quotes.subtractExpense', 'Subtract Expenses before Commission?', 'select', 'No', 'Quote',
@@ -91,9 +94,11 @@ class SettingSeeder extends Seeder
 
         $this->buildSetting('invoices.pastdue', 'Number of Days to Send Past Due Notice', 'number', 7, 'Invoice',
             'Enter the number of days between sending a past due invoice notification.', '0|30');
-        $this->buildSetting('invoices.suspensionDays', 'Number of Days Past Due before Suspension', 'number', 45, 'Invoice',
+        $this->buildSetting('invoices.suspensionDays', 'Number of Days Past Due before Suspension', 'number', 45,
+            'Invoice',
             'Enter the number of days until services are to be suspended for non-payment.', '0|120');
-        $this->buildSetting('invoices.terminationDays', 'Number of Days Past Due before Termination', 'number', 60, 'Invoice',
+        $this->buildSetting('invoices.terminationDays', 'Number of Days Past Due before Termination', 'number', 60,
+            'Invoice',
             'Enter the number of days until services are to be terminated for non-payment.', '0|120');
 
         $this->buildSetting('invoices.default', 'Default Payment Type', 'select', 'Credit Card', 'Invoice',
@@ -110,7 +115,8 @@ class SettingSeeder extends Seeder
         $this->buildSetting('invoices.lateFeePercentage', 'Default Late Fee Percentage?', 'input', '2.5',
             'Invoice',
             'What is the default late fee percentage to apply to a invoice if assessed?');
-        $this->buildSetting('invoices.lateFeeVerbiage', 'Late fee Description?', 'input', 'Standard Late Fee Charge for Past Due Invoice',
+        $this->buildSetting('invoices.lateFeeVerbiage', 'Late fee Description?', 'input',
+            'Standard Late Fee Charge for Past Due Invoice',
             'Invoice',
             'When adding the line item for a past due charge, enter the description for this line item');
         $this->buildSetting('invoices.help', 'Invoice Help Area', 'textarea', $this->getInvoiceHelp(), 'Invoice',
@@ -156,7 +162,8 @@ class SettingSeeder extends Seeder
             'Enter the number of days that 2FA should be forced even if same IP', '1|90');
 
         $this->buildSetting('account.term_payoff', 'Account Contract Payoff Percentage', 'number', '80', 'Account',
-            'Enter the percentage of contracted amount that must be paid off during cancellation (default 80% of remainder)', '1|99');
+            'Enter the percentage of contracted amount that must be paid off during cancellation (default 80% of remainder)',
+            '1|99');
         $this->buildSetting('account.maps_key', 'Google Maps API Key', 'password', '', 'Account',
             'Enter your Google Maps API for Address Validation');
 
@@ -212,6 +219,13 @@ class SettingSeeder extends Seeder
             'How many days before an order goes stale without an update?');
         $this->buildSetting('shop.showCategories', 'Show All Items on Shop Landing Page?', 'select', 'No', 'Shop',
             'Show all your items in your shop in a carousel format on the front page?', 'Yes,No');
+
+        $this->buildSetting('projects.msa', 'Master Services Agreement', 'tinymce', $this->getProjectMSA(), 'Project',
+            'Enter the MSA and Agreement details for starting/completing a project.');
+
+
+        CommKey::GlobalSettings->clear();
+
     }
 
 
@@ -314,6 +328,19 @@ shall not exceed the current GSA rates. Any subcontractor reimbursable expenses 
 markup not to exceed 10% of actual cost.
 ";
 
+    }
+
+    private function getProjectMSA(): string
+    {
+        return "
+The Agreement is made this day, {project.startHuman}, by and between <b>{setting.brand-name}</b> located at {setting.brand-address} {setting.brand-csz} (hereinafter known as \"Provider\"), and <b>{project.company}</b> (hereinafter known as \"Customer\").
+<br/><br/>
+WHEREAS, Customer has requested services from Provider specified in the following Statement of Work (SOW) and corresponding actionable items.
+<br/><br/>
+The project, defined as <b>\"{project.name}\"</b> is scheduled to have work beginning on {project.startHuman} and is expected to be completed on or before {project.endHuman}.
+<br/><br/>
+The project has an estimated cost ranging from {project.estMin} to {project.estMax}. The following items are to be completed for this project.
+        ";
     }
 
 }

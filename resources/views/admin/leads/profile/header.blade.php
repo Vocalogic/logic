@@ -99,6 +99,12 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/leads/{{$lead->id}}/projects" role="tab">
+                <i class="fa fa-bars"></i> <span class="d-none d-md-inline-block ms-2">Projects</span>
+            </a>
+        </li>
+
         {!! moduleHook('admin.leads.tabs', ['lead' => $lead]) !!}
 
 

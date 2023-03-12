@@ -27,6 +27,8 @@
        href="/admin/accounts/{{$account->id}}/profile">Profile</a>
     <a class="list-group-item {{preg_match("/pricing/i", app('request')->getUri()) ? "active" : null}}"
        href="/admin/accounts/{{$account->id}}/pricing">Pricing</a>
+    <a class="list-group-item {{preg_match("/project/i", app('request')->getUri()) ? "active" : null}}"
+       href="/admin/accounts/{{$account->id}}/projects">Projects</a>
     <a class="list-group-item {{preg_match("/files/i", app('request')->getUri()) ? "active" : null}}"
        href="/admin/accounts/{{$account->id}}/files">Files</a>
 

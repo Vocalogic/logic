@@ -29,6 +29,11 @@ use App\Http\Controllers\Admin\PackageSectionController;
 use App\Http\Controllers\Admin\PackageSectionQuestionController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ProjectCategoryController;
+use App\Http\Controllers\Admin\ProjectCategoryItemController;
+use App\Http\Controllers\Admin\ProjectController;
+use App\Http\Controllers\Admin\ProjectTaskController;
+use App\Http\Controllers\Admin\ProjectTaskEntryController;
 use App\Http\Controllers\Admin\QuestionLogicController;
 use App\Http\Controllers\Admin\QuestionOptionController;
 use App\Http\Controllers\Admin\QuoteController;
@@ -225,6 +230,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::get('graph/{type}', [GraphController::class, 'show']);
 
     // Event Editor
+    Route::get('events/invoices', [EventController::class, 'invoices']);
     Route::get('events/{event}', [EventController::class, 'show']);
     Route::put('events/{event}', [EventController::class, 'update']);
     Route::get('events/leads/{lead}', [EventController::class, 'getLead']);
@@ -312,9 +318,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('category/{cat}/items/{item}/category', [BillItemController::class, 'changeCategory']);
 
 
-
-
-
     Route::get('category/{cat}/items/{item}/addons/create', [BillItemController::class, 'createGroupModal']);
     Route::get('category/{cat}/items/{item}/addons/{addon}/add', [BillItemController::class, 'addOptionModal']);
     Route::get('category/{cat}/items/{item}/addons/{addon}', [BillItemController::class, 'updateGroupModal']);
@@ -394,11 +397,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::delete('accounts/{account}/profiles/{profile}', [AccountController::class, 'destroyProfile']);
 
     Route::post('accounts/{account}/invoices', [AccountController::class, 'storeInvoice']);
-
-
-
-
     Route::post('accounts/{account}/method/add', [AccountController::class, 'addPaymentMethod']);
+
+    Route::get('accounts/{account}/projects', [AccountController::class, 'projects']);
+
 
     // Orders
     Route::get('orders', [OrderController::class, 'index']);
@@ -529,8 +531,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     Route::post('leads/{lead}/rating', [LeadController::class, 'rating']);
     Route::get('leads/{lead}/discovery/send', [LeadController::class, 'sendDiscovery']);
 
+    Route::get('leads/{lead}/projects', [LeadController::class, 'projects']);
 
-// Quotes from Lead Context
+    // Quotes from Lead Context
     Route::get('leads/{lead}/quotes', [QuoteController::class, 'leadIndex']);
 
     Route::put('quotes/{quote}', [QuoteController::class, 'update']);
@@ -555,6 +558,26 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin', '2fa']], fu
     // Logs page
     Route::get('logs/{model}/{id}', [LogsController::class, 'show']);
     Route::get('logs/{model}/{id}/extended', [LogsController::class, 'extendedView']);
+
+    // Project Routes
+    Route::resource('projects', ProjectController::class);
+    Route::get('projects/{project}/download', [ProjectController::class, 'download']);
+    Route::get('projects/{project}/send', [ProjectController::class, 'send']);
+    Route::get('projects/{project}/msa', [ProjectController::class, 'msa']);
+    Route::post('projects/{project}/msa', [ProjectController::class, 'msaSave']);
+    Route::get('projects/{project}/start', [ProjectController::class, 'start']);
+
+
+    Route::resource('projects.categories', ProjectCategoryController::class);
+    Route::resource('projects.tasks', ProjectTaskController::class);
+    Route::resource('projects.categories.items', ProjectCategoryItemController::class);
+    Route::resource('projects.tasks.entries', ProjectTaskEntryController::class);
+    Route::get('projects/{project}/categories/{category}/items/add/{item}',
+        [ProjectCategoryItemController::class, 'addItem']);
+    Route::get('projects/{project}/tasks/{task}/complete', [ProjectTaskController::class, 'complete']);
+    Route::get('projects/{project}/processtime', [ProjectController::class, 'processTime']);
+    Route::get('projects/{project}/unbilled', [ProjectController::class, 'unbilledItems']);
+    Route::post('projects/{project}/unbilled', [ProjectController::class, 'unbilledItemsInvoice']);
 
 });
 
@@ -582,6 +605,11 @@ Route::group(['prefix' => 'shop'], function () {
         Route::get('account/invoices', [ShopAccountController::class, 'invoices']);
         Route::get('account/orders', [ShopAccountController::class, 'orders']);
         Route::get('account/quotes', [ShopAccountController::class, 'quotes']);
+        Route::get('account/projects', [ShopAccountController::class, 'projects']);
+        Route::get('account/projects/{phash}', [ShopAccountController::class, 'showProject']);
+        Route::get('account/projects/{phash}/execute', [ShopAccountController::class, 'executeForm']);
+        Route::post('account/projects/{phash}/execute', [ShopAccountController::class, 'execute']);
+
         Route::get('account/quotes/{qhash}', [ShopAccountController::class, 'showQuote']);
 
 
@@ -601,6 +629,10 @@ Route::group(['prefix' => 'shop'], function () {
     Route::get('presales/{slug}', [PresalesController::class, 'index']);
     Route::get('presales/{slug}/{qslug}', [PresalesController::class, 'quote']);
     Route::get('presales/{slug}/{qslug}/checkout', [CheckoutController::class, 'quoteCheckout']);
+    Route::get('presales/{slug}/projects/{hash}', [PresalesController::class, 'project']);
+    Route::get('presales/{slug}/projects/{hash}/execute', [PresalesController::class, 'executeForm']);
+    Route::post('presales/{slug}/projects/{hash}/execute', [PresalesController::class, 'execute']);
+
 
     // Guest Routes
     Route::get('confirm/{item}', [ShopController::class, 'showConfirmation']);

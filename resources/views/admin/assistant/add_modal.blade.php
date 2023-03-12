@@ -7,10 +7,10 @@
             <div class="col-md-8 col-8">
                 <div class="form-floating">
                     @if($type == 'product')
-                    {!! Form::select('product_id', \App\Models\BillItem::productSelectable(), null, ['class' => 'form-select']) !!}
-                    <label>Select Product</label>
-                    <span class="helper-text">Select Product to Add</span>
-                        @else
+                        {!! Form::select('product_id', \App\Models\BillItem::productSelectable(), null, ['class' => 'form-select']) !!}
+                        <label>Select Product</label>
+                        <span class="helper-text">Select Product to Add</span>
+                    @else
                         {!! Form::select('service_id', \App\Models\BillItem::serviceSelectable(), null, ['class' => 'form-select']) !!}
                         <label>Select Service</label>
                         <span class="helper-text">Select Service to Add</span>
@@ -30,13 +30,10 @@
         </div>
 
 
-
-
-
-
-        <div class="col-lg-6 mt-2">
-            <input type="submit" name="submit" value="Add to Cart" class="btn btn-{{bm()}}primary wait"
-                   data-anchor=".sModalArea">
+        <div class="col-lg-12 mt-2">
+            <button type="submit" name="submit" value="Add to Cart" class="btn btn-sm pull-right btn-primary wait ladda"
+                    data-style="expand-left"><i class="fa fa-plus"></i> Add to Cart
+            </button>
 
         </div>
     </form>
