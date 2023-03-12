@@ -9,14 +9,14 @@
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="fa fa-{{$icon}}"></i></span>
                         <textarea rows="5" class="form-control" name="{{$name}}"
-                                  placeholder="{{$placeholder}}">{{$value}}</textarea>
+                                  placeholder="{{$placeholder}}">{!! $value !!}</textarea>
                     </div>
                     <span class="helper-text">{!! $slot !!}</span>
                 </div>
             </div>
         @else
             <div class="form-floating">
-                <textarea style="height: 100px;" class="form-control" rows="5" name="{{$name}}" placeholder="{{$placeholder}}">{{$value}}</textarea>
+                <textarea style="height: 100px;" class="form-control" rows="5" name="{{$name}}" placeholder="{{$placeholder}}">{!! $value !!}</textarea>
                 <label>{{$label}}</label>
                 <span class="helper-text">{!! $slot !!}</span>
             </div>
@@ -33,14 +33,14 @@
                     <div class="input-group flex-nowrap">
                         <span class="input-group-text" id="addon-wrapping"><i class="fa fa-{{$icon}}"></i></span>
                         <input type="{{$type}}" class="form-control" name="{{$name}}" placeholder="{{$placeholder}}"
-                               value="{{$value}}">
+                               value="{!! $value !!}">
                     </div>
                     <span class="helper-text">{!! $slot !!}</span>
                 </div>
             </div>
         @else
             <div class="form-floating">
-                <input type="{{$type}}" class="form-control" name="{{$name}}" value="{{$value}}">
+                <input type="{{$type}}" class="form-control" name="{{$name}}" value="{!! $value !!}">
                 <label>{{$label}}</label>
                 <span class="helper-text">{!! $slot !!}</span>
             </div>
