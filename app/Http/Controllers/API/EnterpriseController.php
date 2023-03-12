@@ -48,7 +48,7 @@ class EnterpriseController extends Controller
         $this->validateSource();
         return [
             'users'    => User::where('active', true)->where('account_id', 1)->count(),
-            'accounts' => Account::where('active', true)->count(),
+            'accounts' => Account::where('active', true)->count() - 1, // don't include admin account
             'space'    => $this->getSpaceInGB()
         ];
     }
@@ -57,7 +57,7 @@ class EnterpriseController extends Controller
      * Get space used in storage.
      * @return float
      */
-    private function getSpaceInGB() : float
+    private function getSpaceInGB(): float
     {
         $path = storage_path();
         $bytestotal = 0;
@@ -70,7 +70,7 @@ class EnterpriseController extends Controller
                 $bytestotal += $object->getSize();
             }
         }
-        return round($bytestotal / 1024 / 1024 / 1024,2);
+        return round($bytestotal / 1024 / 1024 / 1024, 2);
     }
 
 }
